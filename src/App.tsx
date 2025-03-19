@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -8,9 +7,9 @@ import { AuthProvider } from "./hooks/useAuth";
 import { SubscriptionProvider } from "./hooks/useSubscription";
 import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
-import Pricing from "./pages/Pricing";
 import Admin from "./pages/Admin";
 import Subscriptions from "./pages/Subscriptions";
+import Checkout from "./pages/Checkout";
 import NotFound from "./pages/NotFound";
 import { PrivateRoute } from "./components/auth/PrivateRoute";
 import { AdminRoute } from "./components/auth/AdminRoute";
@@ -29,30 +28,37 @@ const App = () => (
             <AnimatePresence mode="wait">
               <Routes>
                 <Route path="/" element={<Index />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route 
-                  path="/dashboard" 
+                <Route
+                  path="/dashboard"
                   element={
                     <PrivateRoute>
                       <Dashboard />
                     </PrivateRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/admin" 
+                <Route
+                  path="/checkout"
+                  element={
+                    <PrivateRoute>
+                      <Checkout />
+                    </PrivateRoute>
+                  }
+                />
+                <Route
+                  path="/admin"
                   element={
                     <AdminRoute>
                       <Admin />
                     </AdminRoute>
-                  } 
+                  }
                 />
-                <Route 
-                  path="/subscriptions" 
+                <Route
+                  path="/subscriptions"
                   element={
                     <AdminRoute>
                       <Subscriptions />
                     </AdminRoute>
-                  } 
+                  }
                 />
                 <Route path="*" element={<NotFound />} />
               </Routes>

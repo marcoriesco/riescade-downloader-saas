@@ -1,18 +1,19 @@
-
-import { useSubscription } from '@/hooks/useSubscription';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { 
-  CheckCircle2, 
-  AlertCircle, 
+import { useSubscription } from "@/hooks/useSubscription";
+import { Button } from "@/components/ui/button";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  CheckCircle2,
+  AlertCircle,
   Clock,
-  CalendarClock, 
-  CalendarX 
-} from 'lucide-react';
-import { format } from 'date-fns';
+  CalendarX,
+  CreditCard,
+} from "lucide-react";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 export default function SubscriptionStatus() {
   const { subscription, isLoading, isActive } = useSubscription();
+  const navigate = useNavigate();
 
   if (isLoading) {
     return (
@@ -29,54 +30,81 @@ export default function SubscriptionStatus() {
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
         <div className="flex items-center mb-4">
           <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />
-          <h3 className="text-lg font-medium">No Subscription</h3>
+          <h3 className="text-lg font-medium">Sem Assinatura</h3>
         </div>
-        <p className="text-gray-600 dark:text-gray-300 mb-4">
-          You don't have an active subscription. Subscribe to access premium features.
+        <p className="text-gray-600 dark:text-gray-300 mb-6">
+          Você não tem uma assinatura ativa. Assine o RIESCADE Downloader para
+          acessar todos os recursos e fazer downloads.
         </p>
-        <Link to="/pricing">
-          <Button>View Plans</Button>
-        </Link>
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <Button
+            onClick={() => navigate("/checkout")}
+            className="flex items-center gap-1"
+          >
+            <CreditCard className="h-4 w-4 mr-1" />
+            Assinar Agora
+          </Button>
+          <Link to="/">
+            <Button variant="outline">Ver Detalhes do Plano</Button>
+          </Link>
+        </div>
       </div>
     );
   }
 
   const getStatusDetails = () => {
     switch (subscription.status) {
-      case 'active':
+      case "active":
         return {
           icon: <CheckCircle2 className="h-5 w-5 text-green-500 mr-2" />,
-          title: 'Active Subscription',
-          description: 'Your subscription is active and in good standing.',
-          className: 'border-green-100 dark:border-green-900/20 bg-green-50/50 dark:bg-green-900/10',
+          title: "Assinatura Ativa",
+          description: "Sua assinatura está ativa e em dia.",
+          className:
+            "border-green-100 dark:border-green-900/20 bg-green-50/50 dark:bg-green-900/10",
         };
-      case 'trialing':
+      case "trialing":
         return {
           icon: <Clock className="h-5 w-5 text-blue-500 mr-2" />,
-          title: 'Trial Period',
-          description: `Your trial will end on ${subscription.trial_end ? format(new Date(subscription.trial_end), 'MMMM d, yyyy') : 'soon'}.`,
-          className: 'border-blue-100 dark:border-blue-900/20 bg-blue-50/50 dark:bg-blue-900/10',
+          title: "Período de Teste",
+          description: `Seu período de teste terminará em ${
+            subscription.trial_end
+              ? format(
+                  new Date(subscription.trial_end),
+                  "d 'de' MMMM 'de' yyyy",
+                  { locale: ptBR }
+                )
+              : "breve"
+          }.`,
+          className:
+            "border-blue-100 dark:border-blue-900/20 bg-blue-50/50 dark:bg-blue-900/10",
         };
-      case 'past_due':
+      case "past_due":
         return {
           icon: <AlertCircle className="h-5 w-5 text-amber-500 mr-2" />,
-          title: 'Payment Past Due',
-          description: 'We were unable to process your last payment. Please update your payment method.',
-          className: 'border-amber-100 dark:border-amber-900/20 bg-amber-50/50 dark:bg-amber-900/10',
+          title: "Pagamento Atrasado",
+          description:
+            "Não conseguimos processar seu último pagamento. Por favor, atualize seu método de pagamento.",
+          className:
+            "border-amber-100 dark:border-amber-900/20 bg-amber-50/50 dark:bg-amber-900/10",
         };
-      case 'canceled':
+      case "canceled":
         return {
           icon: <CalendarX className="h-5 w-5 text-red-500 mr-2" />,
-          title: 'Subscription Canceled',
-          description: `Your subscription has been canceled. Access will end on ${format(new Date(subscription.end_date), 'MMMM d, yyyy')}.`,
-          className: 'border-red-100 dark:border-red-900/20 bg-red-50/50 dark:bg-red-900/10',
+          title: "Assinatura Cancelada",
+          description: `Sua assinatura foi cancelada. O acesso terminará em ${format(
+            new Date(subscription.end_date),
+            "d 'de' MMMM 'de' yyyy",
+            { locale: ptBR }
+          )}.`,
+          className:
+            "border-red-100 dark:border-red-900/20 bg-red-50/50 dark:bg-red-900/10",
         };
       default:
         return {
           icon: <AlertCircle className="h-5 w-5 text-gray-500 mr-2" />,
-          title: 'Subscription Status',
+          title: "Status da Assinatura",
           description: `Status: ${subscription.status}`,
-          className: '',
+          className: "",
         };
     }
   };
@@ -89,29 +117,43 @@ export default function SubscriptionStatus() {
         {status.icon}
         <h3 className="text-lg font-medium">{status.title}</h3>
       </div>
-      <p className="text-gray-600 dark:text-gray-300 mb-4">{status.description}</p>
-      
+      <p className="text-gray-600 dark:text-gray-300 mb-4">
+        {status.description}
+      </p>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Plan</p>
-          <p className="font-medium">{subscription.plan_id || 'Standard'}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Plano</p>
+          <p className="font-medium">{subscription.plan_id || "Padrão"}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Billing Period</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Período de Cobrança
+          </p>
           <p className="font-medium">
-            {format(new Date(subscription.start_date), 'MMM d, yyyy')} - {format(new Date(subscription.end_date), 'MMM d, yyyy')}
+            {format(new Date(subscription.start_date), "d MMM yyyy", {
+              locale: ptBR,
+            })}{" "}
+            -{" "}
+            {format(new Date(subscription.end_date), "d MMM yyyy", {
+              locale: ptBR,
+            })}
           </p>
         </div>
       </div>
-      
-      <div className="flex gap-3">
-        <Link to="/pricing">
-          <Button variant="outline" size="sm">Change Plan</Button>
-        </Link>
-        <Button variant="outline" size="sm" className="text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10">
-          Cancel Subscription
+
+      {/* Botões de renovação ou atualização de pagamento para assinaturas com problemas */}
+      {subscription.status === "past_due" && (
+        <Button onClick={() => navigate("/checkout")} className="mt-2">
+          Atualizar Pagamento
         </Button>
-      </div>
+      )}
+
+      {subscription.status === "canceled" && (
+        <Button onClick={() => navigate("/checkout")} className="mt-2">
+          Renovar Assinatura
+        </Button>
+      )}
     </div>
   );
 }

@@ -1,56 +1,63 @@
-
-import { motion } from 'framer-motion';
-import { 
-  CreditCard, 
-  BarChart3, 
-  Users, 
-  Zap, 
-  ShieldCheck, 
-  Globe, 
-  Clock, 
-  Repeat 
-} from 'lucide-react';
+import { motion } from "framer-motion";
+import {
+  CreditCard,
+  BarChart3,
+  Users,
+  Zap,
+  ShieldCheck,
+  Globe,
+  Clock,
+  Repeat,
+} from "lucide-react";
 
 const features = [
   {
     icon: CreditCard,
-    title: 'Flexible Billing',
-    description: 'Support for multiple pricing models, including subscriptions, metered billing, and one-time charges.',
+    title: "Flexible Billing",
+    description:
+      "Support for multiple pricing models, including subscriptions, metered billing, and one-time charges.",
   },
   {
     icon: Users,
-    title: 'Customer Management',
-    description: 'Comprehensive customer profiles with subscription history and payment methods.',
+    title: "Customer Management",
+    description:
+      "Comprehensive customer profiles with subscription history and payment methods.",
   },
   {
     icon: BarChart3,
-    title: 'Detailed Analytics',
-    description: 'Track revenue, growth, and churn with real-time dashboards and reports.',
+    title: "Detailed Analytics",
+    description:
+      "Track revenue, growth, and churn with real-time dashboards and reports.",
   },
   {
     icon: Zap,
-    title: 'Automated Workflows',
-    description: 'Automate subscription renewals, notifications, and payment retry logic.',
+    title: "Automated Workflows",
+    description:
+      "Automate subscription renewals, notifications, and payment retry logic.",
   },
   {
     icon: ShieldCheck,
-    title: 'Secure & Compliant',
-    description: 'PCI DSS compliant with robust security features to protect sensitive data.',
+    title: "Secure & Compliant",
+    description:
+      "PCI DSS compliant with robust security features to protect sensitive data.",
   },
   {
     icon: Globe,
-    title: 'Global Support',
-    description: 'Accept payments in multiple currencies with localized billing formats.',
+    title: "Global Support",
+    description:
+      "Accept payments in multiple currencies with localized billing formats.",
   },
   {
     icon: Clock,
-    title: 'Trial Management',
-    description: 'Flexible trial periods with automated conversion and notifications.',
+    title: "Trial Management",
+    description:
+      "Flexible trial periods with automated conversion and notifications.",
   },
   {
     icon: Repeat,
-    title: 'Seamless Integration',
-    description: 'Connects with your existing tools through our extensive API and webhooks.',
+    title: "Seamless Integration",
+    description:
+      "Connects with your existing tools through our extensive API and webhooks.",
   },
 ];
 
@@ -63,7 +70,8 @@ export default function Features() {
             Everything You Need in One Platform
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            Our comprehensive solution handles the complexity of subscription management so you can focus on growing your business.
+            Our comprehensive solution handles the complexity of subscription
+            management so you can focus on growing your business.
           </p>
         </div>
 
@@ -81,7 +89,9 @@ export default function Features() {
                 <feature.icon className="h-6 w-6 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-              <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+              <p className="text-gray-600 dark:text-gray-300">
+                {feature.description}
+              </p>
             </motion.div>
           ))}
         </div>
