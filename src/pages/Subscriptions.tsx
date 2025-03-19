@@ -11,11 +11,10 @@ import { format } from 'date-fns';
 import { Badge } from '@/components/ui/badge';
 import { Check, X, Clock } from 'lucide-react';
 
+// Update the type definition to match the actual data structure
 type SubscriptionWithUser = Subscription & {
-  auth: {
-    users: {
-      email: string;
-    }
+  auth_users: {
+    email: string;
   }
 };
 
@@ -29,7 +28,8 @@ export default function Subscriptions() {
       setIsLoading(true);
       try {
         const data = await getActiveSubscriptions();
-        setSubscriptions(data as SubscriptionWithUser[]);
+        // Cast the data to the correct type
+        setSubscriptions(data as unknown as SubscriptionWithUser[]);
       } catch (error) {
         console.error('Error fetching subscriptions:', error);
       } finally {
@@ -106,7 +106,7 @@ export default function Subscriptions() {
                       <TableBody>
                         {subscriptions.map((subscription) => (
                           <TableRow key={subscription.id}>
-                            <TableCell className="font-medium">{subscription.auth.users.email}</TableCell>
+                            <TableCell className="font-medium">{subscription.auth_users?.email || 'Unknown'}</TableCell>
                             <TableCell>{subscription.plan_id || 'Standard'}</TableCell>
                             <TableCell>{getStatusBadge(subscription.status)}</TableCell>
                             <TableCell>

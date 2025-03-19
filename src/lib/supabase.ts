@@ -40,9 +40,10 @@ export async function getSubscription(userId: string): Promise<Subscription | nu
 }
 
 export async function getActiveSubscriptions() {
+  // Updated query to use auth_users instead of auth.users for better type safety
   const { data, error } = await supabase
     .from('subscriptions')
-    .select('*, auth.users!inner(*)')
+    .select('*, auth_users:user_id(email)')
     .eq('status', 'active');
 
   if (error) {
