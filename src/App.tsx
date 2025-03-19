@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Dashboard from "./pages/Dashboard";
 import Pricing from "./pages/Pricing";
 import Admin from "./pages/Admin";
+import Subscriptions from "./pages/Subscriptions";
 import NotFound from "./pages/NotFound";
 import { PrivateRoute } from "./components/auth/PrivateRoute";
 import { AdminRoute } from "./components/auth/AdminRoute";
@@ -42,6 +43,14 @@ const App = () => (
                   element={
                     <AdminRoute>
                       <Admin />
+                    </AdminRoute>
+                  } 
+                />
+                <Route 
+                  path="/subscriptions" 
+                  element={
+                    <AdminRoute>
+                      <Subscriptions />
                     </AdminRoute>
                   } 
                 />

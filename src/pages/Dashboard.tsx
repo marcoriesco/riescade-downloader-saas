@@ -6,10 +6,15 @@ import Footer from '@/components/layout/Footer';
 import SubscriptionStatus from '@/components/dashboard/SubscriptionStatus';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, CreditCard, User, Settings, Bell } from 'lucide-react';
+import { BarChart3, CreditCard, User, Settings, Bell, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 const Dashboard = () => {
   const { user } = useAuth();
+
+  // Admin check - this is a simple check, in a real app you would have proper roles
+  const isAdmin = user?.email?.endsWith('@admin.com') || false;
 
   return (
     <motion.div
@@ -22,11 +27,22 @@ const Dashboard = () => {
       <main className="min-h-screen pt-28 pb-16">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
-              <p className="text-gray-600 dark:text-gray-300">
-                Welcome, {user?.email}
-              </p>
+            <div className="mb-8 flex justify-between items-center">
+              <div>
+                <h1 className="text-3xl font-bold mb-2">Dashboard</h1>
+                <p className="text-gray-600 dark:text-gray-300">
+                  Welcome, {user?.email}
+                </p>
+              </div>
+              
+              {isAdmin && (
+                <Link to="/subscriptions">
+                  <Button variant="outline" className="gap-2">
+                    <Users className="h-4 w-4" />
+                    Manage Subscriptions
+                  </Button>
+                </Link>
+              )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
