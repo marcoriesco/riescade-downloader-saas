@@ -2,8 +2,9 @@
 import { createClient } from '@supabase/supabase-js';
 import { Database } from '../types/supabase';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+// Use the Supabase URL and key from the integrations/supabase/client.ts file
+const supabaseUrl = "https://tmbwwpjbucndwbmefgyl.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtYnd3cGpidWNuZHdibWVmZ3lsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIzMzk5MTcsImV4cCI6MjA1NzkxNTkxN30.xy9HGYr6a54QkFPtsCxAPF_ksSLc2hb7Ry4hfeKAmLU";
 
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 
