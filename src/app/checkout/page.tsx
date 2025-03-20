@@ -13,6 +13,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import { User } from "@supabase/supabase-js";
+import { Header } from "@/components/Header";
 import { Gamepad2, Zap, Shield, ArrowLeft } from "lucide-react";
 
 const stripePromise = loadStripe(
@@ -131,11 +132,13 @@ function CheckoutForm() {
 
   return (
     <div className="min-h-screen bg-gray-900 px-4 py-8 relative overflow-hidden">
+      <Header />
+      
       {/* Background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff0884]/10 via-gray-900 to-gray-900 z-0"></div>
       <div className="absolute inset-0 bg-grid-white/5 bg-[size:30px_30px] z-0"></div>
       
-      <div className="max-w-4xl mx-auto relative z-10">
+      <div className="max-w-4xl mx-auto relative z-10 mt-8">
         <div className="mb-8">
           <Link
             href="/dashboard"

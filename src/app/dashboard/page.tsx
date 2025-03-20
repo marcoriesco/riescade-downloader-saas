@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
@@ -6,6 +5,7 @@ import Link from "next/link";
 import { supabase, type Subscription } from "@/lib/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { User } from "@supabase/supabase-js";
+import { Header } from "@/components/Header";
 import { Gamepad2, Zap, Trophy, Flame, Shield, User as UserIcon, Swords } from "lucide-react";
 
 export default function Dashboard() {
@@ -194,33 +194,7 @@ export default function Dashboard() {
       {/* Background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gamer-dark via-black to-black opacity-90 z-0"></div>
       
-      <header className="relative z-10 bg-black/60 backdrop-blur-md border-b border-[#ff0884]/20 shadow-[0_0_15px_rgba(255,8,132,0.2)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <Link href="/" className="flex items-center space-x-2">
-            <Gamepad2 className="h-7 w-7 text-[#ff0884]" />
-            <span className="text-xl font-bold text-white">
-              <span className="text-[#ff0884]">Game</span>Platform
-            </span>
-          </Link>
-          
-          {user && (
-            <div className="flex items-center space-x-4">
-              <div className="hidden md:flex items-center mr-4">
-                <div className="w-8 h-8 rounded-full bg-[#ff0884]/20 border border-[#ff0884]/50 flex items-center justify-center mr-2">
-                  <UserIcon className="h-4 w-4 text-[#ff0884]" />
-                </div>
-                <span className="text-gray-200">{user.email}</span>
-              </div>
-              <button
-                onClick={handleSignOut}
-                className="px-4 py-2 text-sm font-medium rounded-md border border-[#ff0884]/50 text-white hover:bg-[#ff0884]/10 transition-all duration-300"
-              >
-                Sign Out
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
+      <Header />
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {success && (
