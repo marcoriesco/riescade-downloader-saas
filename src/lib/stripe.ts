@@ -1,69 +1,79 @@
-import { supabase } from "./supabase";
-import { simulateWebhookEvent } from "@/integrations/stripe";
+import { loadStripe } from "@stripe/stripe-js";
+import Stripe from "stripe";
 
-// Replace with your actual Stripe publishable key
-export const STRIPE_KEY =
-  "pk_live_51R491BCTgguXlFqctJPUJwyTBcKwiLU5YU5U5GLQ6aDngF4mvOmlxT0SwDRMdnIx4tisJBJ3ycihu8KiSwQafFs200E3eOSUzF";
+export const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
-// Fixed price for the subscription (R$30.00)
-export const SUBSCRIPTION_PRICE_ID = "price_monthly_subscription";
-export const SUBSCRIPTION_PRICE_AMOUNT = 30.0;
-export const SUBSCRIPTION_CURRENCY = "brl";
+// Server-only Stripe client
+let stripe: Stripe | null = null;
 
-// Create Stripe checkout session for subscription
-export async function createCheckoutSession(userId: string) {
-  try {
-    // In a real implementation, this would call your backend API to create a Stripe checkout session
-    const response = await fetch("/api/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId,
-        priceId: SUBSCRIPTION_PRICE_ID,
-      }),
+export const getStripe = () => {
+  if (
+    typeof window === "undefined" &&
+    !stripe &&
+    typeof process.env.STRIPE_SECRET_KEY === "string"
+  ) {
+    stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: "2025-02-24.acacia",
     });
-
-    const { sessionId, error } = await response.json();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return { sessionId };
-  } catch (error) {
-    console.error("Error creating checkout session:", error);
-    throw error;
+    console.log("Stripe client initialized");
+  } else if (!stripe) {
+    console.warn(
+      "Stripe secret key not available or not in server environment"
+    );
   }
+  return stripe;
+};
+
+export async function createCheckoutSession(
+  customerId: string,
+  priceId: string
+) {
+  const stripe = getStripe();
+
+  if (!stripe) {
+    throw new Error("Stripe client not initialized");
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    customer: customerId,
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1,
+      },
+    ],
+    mode: "subscription",
+    success_url: `${process.env.NEXTAUTH_URL}/dashboard?success=true`,
+    cancel_url: `${process.env.NEXTAUTH_URL}/dashboard?canceled=true`,
+  });
+
+  return session;
 }
 
-// Create a mock function for simulation when there's no backend
-export async function mockCreateCheckoutSession(userId: string) {
-  console.log(
-    `Creating checkout session for user ${userId} with price ${SUBSCRIPTION_PRICE_ID}`
-  );
+export async function createCustomer(email: string, name?: string) {
+  const stripe = getStripe();
 
-  // Simulate API call
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  if (!stripe) {
+    throw new Error("Stripe client not initialized");
+  }
 
-  // Simulate successful subscription creation by triggering webhook event
-  await simulateWebhookEvent(userId, "active");
+  const customer = await stripe.customers.create({
+    email,
+    name,
+  });
 
-  // In a real application, this would redirect to Stripe Checkout
-  console.log("Subscription activated successfully");
-
-  return { sessionId: "mock_session_id" };
+  return customer;
 }
 
-// Update subscription status in Supabase
-export async function updateSubscriptionStatus(userId: string, status: string) {
-  try {
-    // Simulate a webhook event
-    await simulateWebhookEvent(userId, status);
-    return true;
-  } catch (error) {
-    console.error("Error updating subscription status:", error);
-    throw error;
+export async function getSubscription(subscriptionId: string) {
+  const stripe = getStripe();
+
+  if (!stripe) {
+    throw new Error("Stripe client not initialized");
   }
+
+  return await stripe.subscriptions.retrieve(subscriptionId);
 }
