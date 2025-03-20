@@ -1,6 +1,6 @@
 
 import Link from "next/link";
-import { Zap, Gamepad2, Trophy, Flame } from "lucide-react";
+import { Zap, Gamepad2, Trophy, Flame, Swords, Shield, User } from "lucide-react";
 
 export default function Home() {
   return (
@@ -63,9 +63,9 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-[#ff0884]/20 to-gray-900/80"></div>
                   <div className="p-8 flex items-center justify-center text-white text-xl">
                     <img 
-                      src="/game-controller.webp" 
-                      alt="Gaming Controller"
-                      className="w-full h-full object-cover opacity-70 mix-blend-luminosity" 
+                      src="/public/lovable-uploads/28bf26a4-4d5d-497b-87e2-605c216cd37f.png" 
+                      alt="Gaming Mascot"
+                      className="h-40 object-contain mx-auto z-10 filter drop-shadow-[0_0_8px_rgba(255,8,132,0.8)]" 
                     />
                     <div className="absolute inset-0 flex items-center justify-center flex-col">
                       <div className="px-6 py-3 bg-black/50 backdrop-blur-sm rounded-lg border border-[#ff0884]/30">
@@ -131,7 +131,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Pricing Section */}
+        {/* Pricing Section - Updated to show only one plan at R$30.00 */}
         <div className="py-20 bg-[#13111C] relative">
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -140,80 +140,69 @@ export default function Home() {
                 <span className="text-[#ff0884]">POWER UP</span> YOUR GAME
               </h2>
               <p className="max-w-2xl mx-auto text-xl text-gray-400">
-                Choose the plan that fits your gaming style
+                The ultimate gaming experience awaits
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  name: "NOOB",
-                  price: 19,
-                  features: ["Basic matchmaking", "Standard gear", "10 games per day"]
-                },
-                {
-                  name: "PRO GAMER",
-                  price: 38,
-                  features: ["Priority matchmaking", "Rare gear unlocks", "Unlimited games", "Custom tournaments", "Discord access"]
-                },
-                {
-                  name: "LEGEND",
-                  price: 57,
-                  features: ["VIP matchmaking", "Legendary gear", "Unlimited everything", "Private tournaments", "Pro coaching sessions", "Exclusive merch"]
-                }
-              ].map((plan, i) => (
-                <div
-                  key={plan.name}
-                  className={`relative bg-gray-800/40 backdrop-blur-sm p-8 rounded-lg ${
-                    i === 1 ? "border-2 border-[#ff0884] transform scale-105 z-10 shadow-[0_0_30px_rgba(255,8,132,0.3)]" : "border border-gray-700"
-                  } overflow-hidden`}
-                >
-                  {i === 1 && (
-                    <span className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#ff0884] text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg">
-                      MOST POPULAR
-                    </span>
-                  )}
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#ff0884]/20 via-transparent to-transparent rounded-bl-full"></div>
-                  
-                  <h3 className="text-xl font-bold text-white mb-4">
-                    {plan.name}
-                  </h3>
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold text-white">${plan.price}</span>
-                    <span className="text-gray-400">/month</span>
-                  </div>
-                  <ul className="space-y-3 mb-8">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center">
-                        <svg
-                          className="h-5 w-5 text-[#ff0884] mr-2 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M5 13l4 4L19 7"
-                          ></path>
-                        </svg>
-                        <span className="text-gray-300">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href="/dashboard"
-                    className={`w-full block text-center px-6 py-3 rounded-md font-bold ${
-                      i === 1
-                        ? "bg-[#ff0884] text-white hover:bg-[#ff0884]/90 shadow-[0_0_15px_rgba(255,8,132,0.4)]"
-                        : "bg-gray-700 text-white hover:bg-gray-600"
-                    } transition-all duration-300 transform hover:scale-105`}
-                  >
-                    SELECT PLAN
-                  </Link>
+            
+            {/* Single plan centered */}
+            <div className="max-w-md mx-auto">
+              <div className="relative bg-gray-800/40 backdrop-blur-sm p-8 rounded-lg border-2 border-[#ff0884] shadow-[0_0_30px_rgba(255,8,132,0.3)] overflow-hidden">
+                <span className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#ff0884] text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg">
+                  PREMIUM PLAN
+                </span>
+                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#ff0884]/20 via-transparent to-transparent rounded-bl-full"></div>
+                
+                <div className="flex items-center justify-center mb-6">
+                  <img 
+                    src="/public/lovable-uploads/96caf5b3-ec7d-4b1f-80d9-1ab8188eafef.png" 
+                    alt="Gaming Logo" 
+                    className="h-20 w-20 object-contain mb-2"
+                  />
                 </div>
-              ))}
+                
+                <h3 className="text-2xl font-bold text-white mb-4 text-center">
+                  GAMER PRO
+                </h3>
+                <div className="mb-6 text-center">
+                  <span className="text-4xl font-bold text-white">R$30</span>
+                  <span className="text-gray-400">/mês</span>
+                </div>
+                <ul className="space-y-3 mb-8">
+                  {[
+                    "Acesso a todos os jogos",
+                    "Matchmaking prioritário",
+                    "Equipamentos raros exclusivos",
+                    "Jogos ilimitados",
+                    "Torneios personalizados",
+                    "Acesso ao Discord VIP",
+                    "Suporte 24/7"
+                  ].map((feature, index) => (
+                    <li key={index} className="flex items-center">
+                      <svg
+                        className="h-5 w-5 text-[#ff0884] mr-2 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M5 13l4 4L19 7"
+                        ></path>
+                      </svg>
+                      <span className="text-gray-300">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href="/dashboard"
+                  className="w-full block text-center px-6 py-3 rounded-md font-bold bg-[#ff0884] text-white hover:bg-[#ff0884]/90 shadow-[0_0_15px_rgba(255,8,132,0.4)] transition-all duration-300 transform hover:scale-105 animate-pulse-glow"
+                >
+                  ASSINAR AGORA
+                </Link>
+              </div>
             </div>
           </div>
         </div>

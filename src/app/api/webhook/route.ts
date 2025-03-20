@@ -1,291 +1,74 @@
-import { NextResponse } from "next/server";
 
-import { Stripe } from "stripe";
-import { getStripe } from "@/lib/stripe";
-import { createClient } from "@supabase/supabase-js";
+import { headers } from "next/headers";
+import Stripe from "stripe";
+import { supabase } from "@/lib/supabase";
 
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: "2023-10-16",
+});
+
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: Request) {
-  try {
-    const body = await req.text();
-    const signature = req.headers.get("stripe-signature");
+  const body = await req.text();
+  // Fixed: Get headers synchronously instead of as a Promise
+  const headersList = headers();
+  const signature = headersList.get("stripe-signature");
 
-    if (!signature) {
-      console.error("Webhook Error: Stripe signature missing");
-      return new NextResponse(
-        JSON.stringify({ error: "Webhook Error: Stripe signature missing" }),
-        { status: 400 }
-      );
-    }
-
-    const stripe = getStripe();
-    if (!stripe) {
-      console.error("Stripe client not initialized");
-      return new NextResponse(
-        JSON.stringify({ error: "Stripe client not initialized" }),
-        { status: 500 }
-      );
-    }
-
-    let event: Stripe.Event;
-    try {
-      event = stripe.webhooks.constructEvent(
-        body,
-        signature,
-        process.env.STRIPE_WEBHOOK_SECRET!
-      );
-      console.log(`✅ Evento recebido: ${event.type}`);
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error(`Webhook Error: ${error.message}`);
-      return new NextResponse(
-        JSON.stringify({ error: `Webhook Error: ${error.message}` }),
-        { status: 400 }
-      );
-    }
-
-    // Processando eventos específicos
-    try {
-      switch (event.type) {
-        case "customer.subscription.created":
-        case "customer.subscription.updated":
-        case "customer.subscription.deleted":
-          const subscription = event.data.object as Stripe.Subscription;
-          console.log(
-            `Processando subscription ${event.type} para ID: ${subscription.id}`
-          );
-          await updateSubscription(stripe, subscription);
-          break;
-
-        case "invoice.payment_succeeded":
-          // Quando um pagamento é bem sucedido, encontre a subscription associada e atualize
-          const invoice = event.data.object as Stripe.Invoice;
-          console.log(`Pagamento bem-sucedido para fatura: ${invoice.id}`);
-
-          if (invoice.subscription) {
-            const subscriptionId =
-              typeof invoice.subscription === "string"
-                ? invoice.subscription
-                : invoice.subscription.id;
-
-            const subscription = await stripe.subscriptions.retrieve(
-              subscriptionId
-            );
-            console.log(
-              `Atualizando subscription após pagamento: ${subscription.id}`
-            );
-            await updateSubscription(stripe, subscription);
-          }
-          break;
-
-        case "invoice.payment_failed":
-          // Quando um pagamento falha, pode precisar atualizar o status
-          const failedInvoice = event.data.object as Stripe.Invoice;
-          console.log(`Pagamento falhou para fatura: ${failedInvoice.id}`);
-
-          if (failedInvoice.subscription) {
-            const subscriptionId =
-              typeof failedInvoice.subscription === "string"
-                ? failedInvoice.subscription
-                : failedInvoice.subscription.id;
-
-            const subscription = await stripe.subscriptions.retrieve(
-              subscriptionId
-            );
-            console.log(
-              `Atualizando subscription após falha de pagamento: ${subscription.id}`
-            );
-            await updateSubscription(stripe, subscription);
-          }
-          break;
-
-        case "customer.deleted":
-          // Quando um cliente é excluído, marque todas as suas subscriptions como canceladas
-          const customer = event.data.object as Stripe.Customer;
-          console.log(`Cliente excluído: ${customer.id}`);
-
-          const { error } = await supabaseAdmin
-            .from("subscriptions")
-            .update({ status: "canceled" })
-            .eq("customer_id", customer.id);
-
-          if (error) {
-            console.error(
-              `Erro ao atualizar subscriptions para cliente excluído: ${error.message}`
-            );
-          } else {
-            console.log(
-              `Subscriptions atualizadas para cliente excluído: ${customer.id}`
-            );
-          }
-          break;
-
-        default:
-          console.log(`Evento não processado: ${event.type}`);
-      }
-
-      return NextResponse.json({ received: true });
-    } catch (err: unknown) {
-      const error = err as Error;
-      console.error(`Erro processando webhook: ${error.message}`);
-      return new NextResponse(
-        JSON.stringify({ error: `Erro processando webhook: ${error.message}` }),
-        { status: 500 }
-      );
-    }
-  } catch (err: unknown) {
-    const error = err as Error;
-    console.error(`Erro processando webhook: ${error.message}`);
-    return new NextResponse(
-      JSON.stringify({ error: `Erro processando webhook: ${error.message}` }),
-      { status: 500 }
-    );
+  if (!signature) {
+    return new Response("Missing stripe-signature header", { status: 400 });
   }
-}
-
-async function updateSubscription(
-  stripe: Stripe,
-  subscription: Stripe.Subscription
-) {
-  console.log(`Iniciando atualização da subscription: ${subscription.id}`);
-  console.log(`Status da subscription: ${subscription.status}`);
 
   try {
-    // Obtém o ID de preço do primeiro item (assumindo que temos apenas um item)
-    const priceId = subscription.items.data[0]?.price.id || "";
-    console.log(`Price ID: ${priceId}`);
+    const event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      webhookSecret
+    );
 
-    // Obtém o ID do cliente da subscription
-    const customerId = subscription.customer as string;
-    console.log(`Customer ID: ${customerId}`);
+    // Handle the event
+    switch (event.type) {
+      case "customer.subscription.created":
+      case "customer.subscription.updated":
+        const subscription = event.data.object as Stripe.Subscription;
+        
+        // Update subscription in Supabase
+        const { error } = await supabase.from("subscriptions").upsert({
+          subscription_id: subscription.id,
+          user_id: subscription.metadata.userId,
+          status: subscription.status,
+          price_id: subscription.items.data[0].price.id,
+          start_date: new Date(subscription.current_period_start * 1000).toISOString(),
+          end_date: new Date(subscription.current_period_end * 1000).toISOString(),
+          trial_start: subscription.trial_start 
+            ? new Date(subscription.trial_start * 1000).toISOString() 
+            : null,
+          trial_end: subscription.trial_end 
+            ? new Date(subscription.trial_end * 1000).toISOString() 
+            : null,
+          customer_id: subscription.customer as string,
+          updated_at: new Date().toISOString(),
+        });
 
-    // Tenta encontrar o user_id baseado no customer_id
-    const { data: existingSubscriptionData } = await supabaseAdmin
-      .from("subscriptions")
-      .select("user_id, id")
-      .eq("subscription_id", subscription.id)
-      .maybeSingle();
-
-    let userId = existingSubscriptionData?.user_id;
-    const existingRowId = existingSubscriptionData?.id;
-
-    // Se não encontrar o user_id, tenta obter dos metadados do cliente
-    if (!userId) {
-      console.log(
-        `Nenhum user_id encontrado para customer_id: ${customerId}, buscando metadados do cliente`
-      );
-
-      try {
-        const customer = (await stripe.customers.retrieve(
-          customerId
-        )) as Stripe.Customer;
-        userId = (customer.metadata?.userId ||
-          customer.metadata?.user_id) as string;
-        console.log(`User ID obtido dos metadados do cliente: ${userId}`);
-      } catch (err: unknown) {
-        const error = err as Error;
-        console.error(`Erro ao buscar cliente: ${error.message}`);
-      }
-    }
-
-    if (!userId) {
-      console.error(
-        `Não foi possível determinar user_id para subscription: ${subscription.id}`
-      );
-      return;
-    }
-
-    // O status da subscription no Stripe (active, canceled, etc)
-    const status = subscription.status;
-
-    // Antes de atualizar, verificar se já existe alguma outra assinatura para este usuário
-    // Se existir e não for a atual, vamos excluí-la para manter apenas uma
-    const { data: existingSubscriptions } = await supabaseAdmin
-      .from("subscriptions")
-      .select("id")
-      .eq("user_id", userId)
-      .neq("subscription_id", subscription.id);
-
-    if (existingSubscriptions && existingSubscriptions.length > 0) {
-      console.log(
-        `Encontradas ${existingSubscriptions.length} assinaturas antigas para o usuário ${userId}. Removendo...`
-      );
-
-      for (const existingSub of existingSubscriptions) {
-        const { error: deleteError } = await supabaseAdmin
-          .from("subscriptions")
-          .delete()
-          .eq("id", existingSub.id);
-
-        if (deleteError) {
-          console.error(
-            `Erro ao remover assinatura antiga ${existingSub.id}: ${deleteError.message}`
-          );
-        } else {
-          console.log(
-            `Assinatura antiga ${existingSub.id} removida com sucesso`
-          );
+        if (error) {
+          console.error("Error updating subscription:", error);
+          return new Response(`Webhook error: ${error.message}`, { 
+            status: 400 
+          });
         }
-      }
+        break;
+      default:
+        console.log(`Unhandled event type ${event.type}`);
     }
 
-    // Preparar os dados para upsert
-    const subscriptionUpdateData = {
-      subscription_id: subscription.id,
-      user_id: userId,
-      customer_id: customerId,
-      price_id: priceId,
-      status: status,
-      plan_id: priceId, // Opcionalmente, se você tem um mapeamento diferente para plan_id
-      updated_at: new Date().toISOString(),
-    };
-
-    // Se temos um ID existente, atualizamos este registro
-    if (existingRowId) {
-      const { data, error } = await supabaseAdmin
-        .from("subscriptions")
-        .update(subscriptionUpdateData)
-        .eq("id", existingRowId)
-        .select()
-        .single();
-
-      if (error) {
-        console.error(
-          `Erro ao atualizar subscription no Supabase: ${error.message}`
-        );
-      } else {
-        console.log(
-          `Subscription atualizada com sucesso no Supabase: ${data.subscription_id}`
-        );
-        console.log(`Status definido como: ${data.status}`);
-      }
-    } else {
-      // Caso contrário, inserimos um novo registro (Supabase gerará um UUID automaticamente)
-      const { data, error } = await supabaseAdmin
-        .from("subscriptions")
-        .insert(subscriptionUpdateData)
-        .select()
-        .single();
-
-      if (error) {
-        console.error(
-          `Erro ao criar subscription no Supabase: ${error.message}`
-        );
-      } else {
-        console.log(
-          `Subscription criada com sucesso no Supabase: ${data.subscription_id}`
-        );
-        console.log(`Status definido como: ${data.status}`);
-      }
-    }
-  } catch (err: unknown) {
-    const error = err as Error;
-    console.error(
-      `Erro no processo de atualização da subscription: ${error.message}`
+    return new Response(JSON.stringify({ received: true }), {
+      status: 200,
+    });
+  } catch (err) {
+    console.error(`Webhook error: ${err instanceof Error ? err.message : "Unknown error"}`);
+    return new Response(
+      `Webhook error: ${err instanceof Error ? err.message : "Unknown error"}`,
+      { status: 400 }
     );
   }
 }
