@@ -6,7 +6,15 @@ import { supabase, type Subscription } from "@/lib/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { Header } from "@/components/Header";
-import { Gamepad2, Zap, Trophy, Flame, Shield, User as UserIcon, Swords } from "lucide-react";
+import {
+  Gamepad2,
+  Zap,
+  Trophy,
+  Flame,
+  Shield,
+  User as UserIcon,
+  Swords,
+} from "lucide-react";
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -159,6 +167,8 @@ export default function Dashboard() {
           priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || "price_1",
           userId: user.id,
           userEmail: user.email,
+          userName:
+            user.user_metadata?.full_name || user.user_metadata?.name || "",
         }),
       });
 
@@ -193,7 +203,7 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
       {/* Background elements */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gamer-dark via-black to-black opacity-90 z-0"></div>
-      
+
       <Header />
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -236,7 +246,8 @@ export default function Dashboard() {
                   d="M6 18L18 6M6 6l12 12"
                 ></path>
               </svg>
-              Pagamento cancelado. Se tiver dúvidas, entre em contato com o suporte.
+              Pagamento cancelado. Se tiver dúvidas, entre em contato com o
+              suporte.
             </p>
           </div>
         )}
@@ -246,9 +257,11 @@ export default function Dashboard() {
           <div className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
               <UserIcon className="w-5 h-5 text-[#ff0884] mr-2" />
-              <h2 className="text-lg font-medium text-white">Perfil do Jogador</h2>
+              <h2 className="text-lg font-medium text-white">
+                Perfil do Jogador
+              </h2>
             </div>
-            
+
             <div className="p-6">
               {user && (
                 <div>
@@ -257,11 +270,11 @@ export default function Dashboard() {
                       <UserIcon className="h-10 w-10 text-[#ff0884]" />
                     </div>
                     <h3 className="text-xl text-white font-bold">
-                      {user.email?.split('@')[0] || 'Gamer'}
+                      {user.email?.split("@")[0] || "Gamer"}
                     </h3>
                     <p className="text-gray-400 text-sm">{user.email}</p>
                   </div>
-                  
+
                   <div className="grid grid-cols-3 gap-3 mb-6">
                     <div className="bg-black/30 rounded p-3 text-center border border-gray-700">
                       <div className="text-2xl font-bold text-white">0</div>
@@ -276,11 +289,16 @@ export default function Dashboard() {
                       <div className="text-xs text-gray-400">Ranking</div>
                     </div>
                   </div>
-                  
+
                   <div className="mb-4">
-                    <div className="text-sm font-medium text-gray-400 mb-1">Level</div>
+                    <div className="text-sm font-medium text-gray-400 mb-1">
+                      Level
+                    </div>
                     <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-[#ff0884] to-purple-500 h-2 rounded-full" style={{ width: '10%' }}></div>
+                      <div
+                        className="bg-gradient-to-r from-[#ff0884] to-purple-500 h-2 rounded-full"
+                        style={{ width: "10%" }}
+                      ></div>
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
                       <span>1</span>
@@ -291,14 +309,16 @@ export default function Dashboard() {
               )}
             </div>
           </div>
-          
+
           {/* Subscription Card */}
           <div className="lg:col-span-2 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
             <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
               <Shield className="w-5 h-5 text-[#ff0884] mr-2" />
-              <h2 className="text-lg font-medium text-white">Status da Assinatura</h2>
+              <h2 className="text-lg font-medium text-white">
+                Status da Assinatura
+              </h2>
             </div>
-            
+
             <div className="p-6">
               {subscription ? (
                 <div className="space-y-6">
@@ -308,35 +328,44 @@ export default function Dashboard() {
                         <Trophy className="w-5 h-5 text-[#ff0884] mr-2" />
                         GAMER PRO
                       </h3>
-                      <span 
+                      <span
                         className={`px-3 py-1 rounded-full text-xs font-medium 
-                        ${subscription.status === "active" 
-                          ? "bg-green-900/50 text-green-400 border border-green-500/50" 
-                          : "bg-amber-900/50 text-amber-400 border border-amber-500/50"}`}
+                        ${
+                          subscription.status === "active"
+                            ? "bg-green-900/50 text-green-400 border border-green-500/50"
+                            : "bg-amber-900/50 text-amber-400 border border-amber-500/50"
+                        }`}
                       >
                         {subscription.status === "active" ? "ATIVO" : "INATIVO"}
                       </span>
                     </div>
-                    
+
                     <div className="bg-black/40 rounded-lg p-4 border border-gray-700 mb-4">
-                      <h4 className="text-sm font-medium text-gray-400 mb-2">Período atual</h4>
+                      <h4 className="text-sm font-medium text-gray-400 mb-2">
+                        Período atual
+                      </h4>
                       <p className="text-white">
-                        {new Date(subscription.start_date).toLocaleDateString()} -{" "}
-                        {new Date(subscription.end_date).toLocaleDateString()}
+                        {new Date(subscription.start_date).toLocaleDateString()}{" "}
+                        - {new Date(subscription.end_date).toLocaleDateString()}
                       </p>
                     </div>
-                    
+
                     <div className="space-y-3">
-                      <h4 className="text-sm font-medium text-gray-400">Benefícios incluídos:</h4>
+                      <h4 className="text-sm font-medium text-gray-400">
+                        Benefícios incluídos:
+                      </h4>
                       {[
                         "Acesso a todos os jogos",
                         "Matchmaking prioritário",
                         "Equipamentos raros exclusivos",
                         "Jogos ilimitados",
                         "Torneios personalizados",
-                        "Acesso ao Discord VIP"
+                        "Acesso ao Discord VIP",
                       ].map((benefit, i) => (
-                        <div key={i} className="flex items-center text-gray-300">
+                        <div
+                          key={i}
+                          className="flex items-center text-gray-300"
+                        >
                           <svg
                             className="h-5 w-5 text-[#ff0884] mr-2 flex-shrink-0"
                             fill="none"
@@ -356,7 +385,7 @@ export default function Dashboard() {
                       ))}
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0">
                     {subscription.status === "active" ? (
                       <button
@@ -403,8 +432,8 @@ export default function Dashboard() {
                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                           ></path>
                         </svg>
-                        <strong>Atenção:</strong> Sua assinatura não está ativa. O
-                        download só estará disponível após a renovação da sua
+                        <strong>Atenção:</strong> Sua assinatura não está ativa.
+                        O download só estará disponível após a renovação da sua
                         assinatura.
                       </p>
                     </div>
@@ -413,22 +442,25 @@ export default function Dashboard() {
               ) : (
                 <div className="space-y-6">
                   <div className="bg-black/30 p-6 rounded-lg border border-gray-700 text-center">
-                    <img 
-                      src="/public/lovable-uploads/96caf5b3-ec7d-4b1f-80d9-1ab8188eafef.png" 
-                      alt="Gaming Logo" 
+                    <img
+                      src="/public/lovable-uploads/96caf5b3-ec7d-4b1f-80d9-1ab8188eafef.png"
+                      alt="Gaming Logo"
                       className="h-20 w-20 object-contain mx-auto mb-4"
                     />
                     <h3 className="text-2xl font-bold text-white mb-3">
                       GAMER PRO
                     </h3>
                     <div className="mb-4 text-center">
-                      <span className="text-3xl font-bold text-white">R$30</span>
+                      <span className="text-3xl font-bold text-white">
+                        R$30
+                      </span>
                       <span className="text-gray-400">/mês</span>
                     </div>
                     <p className="text-gray-300 mb-6">
-                      Você ainda não tem uma assinatura ativa. Assine agora para desbloquear recursos exclusivos!
+                      Você ainda não tem uma assinatura ativa. Assine agora para
+                      desbloquear recursos exclusivos!
                     </p>
-                    
+
                     <ul className="space-y-2 text-left mb-6">
                       {[
                         "Acesso a todos os jogos",
@@ -436,9 +468,12 @@ export default function Dashboard() {
                         "Equipamentos raros exclusivos",
                         "Jogos ilimitados",
                         "Torneios personalizados",
-                        "Acesso ao Discord VIP"
+                        "Acesso ao Discord VIP",
                       ].map((feature, index) => (
-                        <li key={index} className="flex items-center text-gray-300">
+                        <li
+                          key={index}
+                          className="flex items-center text-gray-300"
+                        >
                           <svg
                             className="h-5 w-5 text-[#ff0884] mr-2 flex-shrink-0"
                             fill="none"
@@ -457,7 +492,7 @@ export default function Dashboard() {
                         </li>
                       ))}
                     </ul>
-                    
+
                     <button
                       onClick={handleCheckout}
                       className="w-full bg-[#ff0884] hover:bg-[#ff0884]/90 text-white font-bold py-3 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff0884]/50 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 transform hover:scale-105 flex items-center justify-center shadow-[0_0_15px_rgba(255,8,132,0.3)] animate-pulse-glow"
@@ -471,14 +506,16 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-        
+
         {/* Games Section */}
         <div className="mt-8 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
             <Swords className="w-5 h-5 text-[#ff0884] mr-2" />
-            <h2 className="text-lg font-medium text-white">Jogos Disponíveis</h2>
+            <h2 className="text-lg font-medium text-white">
+              Jogos Disponíveis
+            </h2>
           </div>
-          
+
           <div className="p-6">
             {subscription && subscription.status === "active" ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -486,31 +523,35 @@ export default function Dashboard() {
                   {
                     title: "Cyber Assault",
                     image: "https://via.placeholder.com/150",
-                    genre: "FPS"
+                    genre: "FPS",
                   },
                   {
                     title: "Neon Raiders",
                     image: "https://via.placeholder.com/150",
-                    genre: "RPG"
+                    genre: "RPG",
                   },
                   {
                     title: "Shadow Protocol",
                     image: "https://via.placeholder.com/150",
-                    genre: "Stealth"
-                  }
+                    genre: "Stealth",
+                  },
                 ].map((game, i) => (
-                  <div 
-                    key={i} 
+                  <div
+                    key={i}
                     className="bg-black/30 rounded-lg overflow-hidden border border-gray-700 hover:border-[#ff0884]/50 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(255,8,132,0.2)]"
                   >
                     <div className="aspect-video bg-gray-800 relative">
                       <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xl font-bold text-white">{game.title}</span>
+                        <span className="text-xl font-bold text-white">
+                          {game.title}
+                        </span>
                       </div>
                     </div>
                     <div className="p-4">
                       <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-sm">{game.genre}</span>
+                        <span className="text-gray-400 text-sm">
+                          {game.genre}
+                        </span>
                         <button className="text-xs bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] px-2 py-1 rounded border border-[#ff0884]/30 transition-colors duration-200">
                           JOGAR
                         </button>
@@ -522,8 +563,12 @@ export default function Dashboard() {
             ) : (
               <div className="text-center py-10">
                 <Flame className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-400 mb-2">Acesso Bloqueado</h3>
-                <p className="text-gray-500 mb-6">Assine o plano para desbloquear o acesso a todos os jogos.</p>
+                <h3 className="text-xl font-medium text-gray-400 mb-2">
+                  Acesso Bloqueado
+                </h3>
+                <p className="text-gray-500 mb-6">
+                  Assine o plano para desbloquear o acesso a todos os jogos.
+                </p>
                 <button
                   onClick={handleCheckout}
                   className="px-6 py-2 bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] rounded-md border border-[#ff0884]/30 transition-colors duration-200"

@@ -11,12 +11,13 @@ const supabaseAdmin = createClient(
 
 export async function POST(request: Request) {
   try {
-    const { priceId, userId, userEmail } = await request.json();
+    const { priceId, userId, userEmail, userName } = await request.json();
 
     console.log("Creating checkout session for:", {
       priceId,
       userId,
       userEmail,
+      userName,
     });
 
     if (!priceId || !userId || !userEmail) {
@@ -68,11 +69,20 @@ export async function POST(request: Request) {
     if (!customerId) {
       const customer = await stripe.customers.create({
         email: userEmail,
+        name: userName || undefined,
         metadata: {
           userId,
+          fullName: userName || "",
         },
       });
       customerId = customer.id;
+    } else if (userName) {
+      await stripe.customers.update(customerId, {
+        name: userName,
+        metadata: {
+          fullName: userName,
+        },
+      });
     }
 
     // Create checkout session
