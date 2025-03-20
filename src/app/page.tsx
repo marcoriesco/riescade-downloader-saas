@@ -3,15 +3,6 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white">
-      {/* Adicionando um componente de teste com cores bem visíveis */}
-      <div className="bg-red-500 p-4 m-4 rounded-lg shadow-lg">
-        <h1 className="text-2xl font-bold text-white">Teste do Tailwind CSS</h1>
-        <p className="text-white">
-          Se você está vendo este texto em um fundo vermelho, o Tailwind CSS
-          está funcionando!
-        </p>
-      </div>
-
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
