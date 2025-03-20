@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -48,7 +49,7 @@ function CheckoutForm() {
 
   const plan = {
     id: "price_1",
-    name: "GAMER PRO",
+    name: "MEMBRO RIESCADE",
     price: "R$30/mês",
     features: [
       "Acesso a todos os jogos",
@@ -75,10 +76,10 @@ function CheckoutForm() {
       const cardElement = elements.getElement(CardElement);
 
       if (!cardElement) {
-        throw new Error("Card element not found");
+        throw new Error("Elemento de cartão não encontrado");
       }
 
-      // Create payment method
+      // Criar método de pagamento
       const { error: stripeError, paymentMethod } =
         await stripe.createPaymentMethod({
           type: "card",
@@ -89,7 +90,7 @@ function CheckoutForm() {
         throw new Error(stripeError.message);
       }
 
-      // Call your API to create a subscription
+      // Chamar API para criar uma assinatura
       const response = await fetch("/api/create-subscription", {
         method: "POST",
         headers: {
@@ -106,13 +107,13 @@ function CheckoutForm() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Something went wrong");
+        throw new Error(data.message || "Algo deu errado");
       }
 
-      // Handle subscription success
+      // Lidar com sucesso da assinatura
       router.push("/dashboard?success=true");
     } catch (err: Error | unknown) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : "Algo deu errado");
     } finally {
       setLoading(false);
     }
@@ -123,7 +124,7 @@ function CheckoutForm() {
       <div className="flex min-h-screen items-center justify-center bg-gray-900">
         <div className="text-center">
           <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-          <p className="text-lg text-gray-300">Loading...</p>
+          <p className="text-lg text-gray-300">Carregando...</p>
         </div>
       </div>
     );
@@ -161,8 +162,8 @@ function CheckoutForm() {
               <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
                 <div className="flex items-center">
                   <Image
-                    src="/images/logos.png"
-                    alt="Gaming Logo"
+                    src="/lovable-uploads/ddfc12ca-84bd-41d0-b7d8-fea61305958e.png"
+                    alt="RIESCADE Mascot"
                     className="h-16 w-16 object-contain mr-4"
                     width={90}
                     height={90}
