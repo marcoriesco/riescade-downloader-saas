@@ -1,0 +1,7 @@
+Registrar este webhook no dashboard do Stripe:
+ 1. Acesse o Dashboard do Stripe
+ 2. Vá para Developers > Webhooks
+ 3. Clique em "Add endpoint"
+ 4. Insira a mesma URL que você colocou no .env.local
+ 5. Selecione os eventos que deseja receber (pelo menos customer.subscription.* e invoice.*)
+ 6. Copie a "Signing Secret" gerada e coloque no seu .env.local como STRIPE_WEBHOOK_SECRET

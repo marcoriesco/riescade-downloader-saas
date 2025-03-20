@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { supabase, type Subscription } from "@/lib/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -16,6 +16,84 @@ export default function Dashboard() {
   const success = searchParams.get("success");
   const canceled = searchParams.get("canceled");
   const sessionId = searchParams.get("session_id");
+
+  // Função para buscar assinatura
+  const fetchSubscription = useCallback(async (userId: string) => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("subscriptions")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching subscription:", error);
+        setSubscription(null);
+      } else {
+        console.log("Subscription data:", data);
+        setSubscription(data);
+      }
+    } catch (error) {
+      console.error("Error in fetchSubscription:", error);
+      setSubscription(null);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Handle sign in with OAuth
+  const handleSignIn = useCallback(async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/dashboard`,
+      },
+    });
+  }, []);
+
+  // Verificar a sessão do checkout do Stripe
+  const verifyCheckoutSession = useCallback(
+    async (sessionId: string) => {
+      setVerifyingSession(true);
+      try {
+        console.log("Verificando sessão:", sessionId);
+        const response = await fetch("/api/verify-session", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            sessionId,
+            userId: user?.id, // Enviar o userId para a API
+          }),
+        });
+
+        const responseData = await response.json();
+
+        if (response.ok) {
+          console.log("Sessão verificada com sucesso:", responseData);
+          // Atualizar a subscriptionInfo após a verificação
+          await fetchSubscription(user?.id || "");
+
+          // Remover parâmetros da URL para evitar verificações repetidas
+          router.replace("/dashboard");
+        } else {
+          console.error("Falha ao verificar sessão:", responseData.message);
+          // Remover parâmetros da URL mesmo em caso de erro
+          // para evitar múltiplas tentativas
+          router.replace("/dashboard");
+        }
+      } catch (error) {
+        console.error("Erro ao verificar sessão:", error);
+        // Remover parâmetros da URL em caso de erro
+        router.replace("/dashboard");
+      } finally {
+        setVerifyingSession(false);
+      }
+    },
+    [user, router, fetchSubscription]
+  );
 
   useEffect(() => {
     const checkUser = async () => {
@@ -35,63 +113,34 @@ export default function Dashboard() {
     };
 
     checkUser();
-  }, []);
+  }, [handleSignIn, fetchSubscription]);
 
   // Efeito para verificar a sessão quando o usuário retorna do checkout
   useEffect(() => {
     if (success && sessionId && user && !verifyingSession) {
-      verifyCheckoutSession(sessionId, user.id);
+      console.log("Sessão detectada, verificando...");
+      verifyCheckoutSession(sessionId);
+    } else if (success && sessionId && !verifyingSession) {
+      // Se temos parâmetros de sucesso mas o usuário ainda não está disponível,
+      // vamos remover os parâmetros para evitar loops de verificação
+      console.log(
+        "Parâmetros de sucesso encontrados, mas usuário não disponível ainda"
+      );
+      setTimeout(() => {
+        if (!user) {
+          console.log("Removendo parâmetros da URL após timeout");
+          router.replace("/dashboard");
+        }
+      }, 5000); // 5 segundos para o usuário carregar
     }
-  }, [success, sessionId, user, verifyingSession]);
-
-  const fetchSubscription = async (userId: string) => {
-    // Fetch subscription info
-    const { data, error } = await supabase
-      .from("subscriptions")
-      .select("*")
-      .eq("user_id", userId)
-      .single();
-
-    if (!error && data) {
-      setSubscription(data);
-    }
-  };
-
-  const verifyCheckoutSession = async (sessionId: string, userId: string) => {
-    setVerifyingSession(true);
-    try {
-      const response = await fetch("/api/verify-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ sessionId }),
-      });
-
-      if (response.ok) {
-        // Atualizar a subscriptionInfo após a verificação
-        await fetchSubscription(userId);
-
-        // Remover parâmetros da URL para evitar verificações repetidas
-        router.replace("/dashboard");
-      } else {
-        console.error("Failed to verify session");
-      }
-    } catch (error) {
-      console.error("Error verifying session:", error);
-    } finally {
-      setVerifyingSession(false);
-    }
-  };
-
-  const handleSignIn = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    });
-  };
+  }, [
+    success,
+    sessionId,
+    user,
+    verifyingSession,
+    router,
+    verifyCheckoutSession,
+  ]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -241,14 +290,41 @@ export default function Dashboard() {
                   </p>
                 </div>
 
-                <div className="pt-4">
-                  <button
-                    onClick={downloadProduct}
-                    className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                  >
-                    Download Product
-                  </button>
+                <div className="pt-4 flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0">
+                  {subscription.status === "active" ? (
+                    <button
+                      onClick={downloadProduct}
+                      className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    >
+                      Download Product
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        disabled
+                        className="w-full sm:w-auto bg-gray-400 text-white font-medium py-2 px-4 rounded cursor-not-allowed"
+                      >
+                        Download Indisponível
+                      </button>
+                      <button
+                        onClick={handleCheckout}
+                        className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Renovar Assinatura
+                      </button>
+                    </>
+                  )}
                 </div>
+
+                {subscription.status !== "active" && (
+                  <div className="mt-2 p-3 bg-amber-50 text-amber-800 rounded-md text-sm">
+                    <p>
+                      <strong>Atenção:</strong> Sua assinatura não está ativa. O
+                      download só estará disponível após a renovação da sua
+                      assinatura.
+                    </p>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-6">

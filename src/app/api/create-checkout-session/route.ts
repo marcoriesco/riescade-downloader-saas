@@ -26,6 +26,27 @@ export async function POST(request: Request) {
       );
     }
 
+    // Verificar se o usuário já tem uma assinatura ativa
+    const { data: existingSubscriptions, error: subError } = await supabaseAdmin
+      .from("subscriptions")
+      .select("*")
+      .eq("user_id", userId)
+      .eq("status", "active");
+
+    if (subError) {
+      console.error("Erro ao verificar assinaturas existentes:", subError);
+    } else if (existingSubscriptions && existingSubscriptions.length > 0) {
+      console.log(`Usuário ${userId} já possui uma assinatura ativa`);
+
+      // Redirecionar para a página de sucesso, sem criar nova assinatura
+      // Isso evita duplicatas mas permite que o usuário "tente comprar" novamente
+      return NextResponse.json({
+        message: "Assinatura ativa encontrada",
+        url: `${process.env.NEXTAUTH_URL}/dashboard?success=true&existing=true`,
+        subscription: existingSubscriptions[0],
+      });
+    }
+
     // Check if we have a Stripe customer already
     const { data: customerData } = await supabaseAdmin
       .from("subscriptions")

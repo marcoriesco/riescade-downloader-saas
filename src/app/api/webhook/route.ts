@@ -1,212 +1,283 @@
+import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+
+import { Stripe } from "stripe";
 import { getStripe } from "@/lib/stripe";
 import { createClient } from "@supabase/supabase-js";
-import Stripe from "stripe";
 
-// Cliente Supabase com permissões de serviço
 const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || "",
-  { auth: { persistSession: false } }
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function POST(request: Request) {
-  const body = await request.text();
-  const signature = request.headers.get("stripe-signature") || "";
+export async function POST(req: Request) {
+  const body = await req.text();
+  const signature = headers().get("stripe-signature") ?? "";
 
   if (!signature) {
-    return NextResponse.json(
-      { message: "No signature found" },
+    console.error("Webhook Error: Stripe signature missing");
+    return new NextResponse(
+      JSON.stringify({ error: "Webhook Error: Stripe signature missing" }),
       { status: 400 }
     );
   }
 
   const stripe = getStripe();
   if (!stripe) {
-    return NextResponse.json(
-      { message: "Stripe client not initialized" },
+    console.error("Stripe client not initialized");
+    return new NextResponse(
+      JSON.stringify({ error: "Stripe client not initialized" }),
       { status: 500 }
     );
   }
 
   let event: Stripe.Event;
-
   try {
-    // Verify the webhook signature
     event = stripe.webhooks.constructEvent(
       body,
       signature,
-      process.env.STRIPE_WEBHOOK_SECRET || ""
+      process.env.STRIPE_WEBHOOK_SECRET!
     );
-  } catch (err) {
-    console.error("Webhook signature verification failed:", err);
-    return NextResponse.json(
-      { message: "Webhook signature verification failed" },
+    console.log(`✅ Evento recebido: ${event.type}`);
+  } catch (err: unknown) {
+    const error = err as Error;
+    console.error(`Webhook Error: ${error.message}`);
+    return new NextResponse(
+      JSON.stringify({ error: `Webhook Error: ${error.message}` }),
       { status: 400 }
     );
   }
 
+  // Processando eventos específicos
   try {
-    console.log(`Webhook received: ${event.type}`);
-
-    // Handle the event
     switch (event.type) {
       case "customer.subscription.created":
       case "customer.subscription.updated":
-      case "customer.subscription.paused":
-      case "customer.subscription.resumed":
-      case "customer.subscription.pending_update_applied":
-      case "customer.subscription.pending_update_expired":
-      case "customer.subscription.trial_will_end":
       case "customer.subscription.deleted":
         const subscription = event.data.object as Stripe.Subscription;
         console.log(
-          `Processing subscription: ${subscription.id}, Status: ${subscription.status}`
+          `Processando subscription ${event.type} para ID: ${subscription.id}`
         );
-        await updateSubscription(subscription, stripe);
+        await updateSubscription(stripe, subscription);
         break;
 
       case "invoice.payment_succeeded":
+        // Quando um pagamento é bem sucedido, encontre a subscription associada e atualize
         const invoice = event.data.object as Stripe.Invoice;
+        console.log(`Pagamento bem-sucedido para fatura: ${invoice.id}`);
+
         if (invoice.subscription) {
-          console.log(
-            `Invoice payment succeeded for subscription: ${invoice.subscription}`
-          );
+          const subscriptionId =
+            typeof invoice.subscription === "string"
+              ? invoice.subscription
+              : invoice.subscription.id;
+
           const subscription = await stripe.subscriptions.retrieve(
-            invoice.subscription as string
+            subscriptionId
           );
-          await updateSubscription(subscription, stripe);
+          console.log(
+            `Atualizando subscription após pagamento: ${subscription.id}`
+          );
+          await updateSubscription(stripe, subscription);
         }
         break;
 
       case "invoice.payment_failed":
+        // Quando um pagamento falha, pode precisar atualizar o status
         const failedInvoice = event.data.object as Stripe.Invoice;
+        console.log(`Pagamento falhou para fatura: ${failedInvoice.id}`);
+
         if (failedInvoice.subscription) {
-          console.log(
-            `Invoice payment failed for subscription: ${failedInvoice.subscription}`
-          );
+          const subscriptionId =
+            typeof failedInvoice.subscription === "string"
+              ? failedInvoice.subscription
+              : failedInvoice.subscription.id;
+
           const subscription = await stripe.subscriptions.retrieve(
-            failedInvoice.subscription as string
+            subscriptionId
           );
-          await updateSubscription(subscription, stripe);
+          console.log(
+            `Atualizando subscription após falha de pagamento: ${subscription.id}`
+          );
+          await updateSubscription(stripe, subscription);
         }
         break;
 
       case "customer.deleted":
+        // Quando um cliente é excluído, marque todas as suas subscriptions como canceladas
         const customer = event.data.object as Stripe.Customer;
-        console.log(`Customer deleted: ${customer.id}`);
-        // Atualizar todas as assinaturas deste cliente para canceladas
-        const { data } = await supabaseAdmin
+        console.log(`Cliente excluído: ${customer.id}`);
+
+        const { error } = await supabaseAdmin
           .from("subscriptions")
-          .select("subscription_id")
+          .update({ status: "canceled" })
           .eq("customer_id", customer.id);
 
-        if (data && data.length > 0) {
-          for (const sub of data) {
-            await supabaseAdmin
-              .from("subscriptions")
-              .update({
-                status: "canceled",
-                updated_at: new Date().toISOString(),
-              })
-              .eq("subscription_id", sub.subscription_id);
-          }
+        if (error) {
+          console.error(
+            `Erro ao atualizar subscriptions para cliente excluído: ${error.message}`
+          );
+        } else {
+          console.log(
+            `Subscriptions atualizadas para cliente excluído: ${customer.id}`
+          );
         }
         break;
+
+      default:
+        console.log(`Evento não processado: ${event.type}`);
     }
 
     return NextResponse.json({ received: true });
-  } catch (error) {
-    console.error("Error handling webhook event:", error);
-    return NextResponse.json(
-      { message: "Error handling webhook event" },
+  } catch (err: unknown) {
+    const error = err as Error;
+    console.error(`Erro processando webhook: ${error.message}`);
+    return new NextResponse(
+      JSON.stringify({ error: `Erro processando webhook: ${error.message}` }),
       { status: 500 }
     );
   }
 }
 
 async function updateSubscription(
-  subscription: Stripe.Subscription,
-  stripe: Stripe
+  stripe: Stripe,
+  subscription: Stripe.Subscription
 ) {
+  console.log(`Iniciando atualização da subscription: ${subscription.id}`);
+  console.log(`Status da subscription: ${subscription.status}`);
+
   try {
-    // Verificar se temos registro desta assinatura
-    const { data: existingSubscription } = await supabaseAdmin
-      .from("subscriptions")
-      .select("user_id, customer_id")
-      .eq("subscription_id", subscription.id)
-      .single();
+    // Obtém o ID de preço do primeiro item (assumindo que temos apenas um item)
+    const priceId = subscription.items.data[0]?.price.id || "";
+    console.log(`Price ID: ${priceId}`);
 
-    let userId = existingSubscription?.user_id;
+    // Obtém o ID do cliente da subscription
     const customerId = subscription.customer as string;
+    console.log(`Customer ID: ${customerId}`);
 
-    // Se não encontrarmos a assinatura, tentamos encontrar o usuário pelo customer_id
-    if (!userId && customerId) {
-      const { data: customerData } = await supabaseAdmin
-        .from("subscriptions")
-        .select("user_id")
-        .eq("customer_id", customerId)
-        .single();
+    // Tenta encontrar o user_id baseado no customer_id
+    const { data: existingSubscriptionData } = await supabaseAdmin
+      .from("subscriptions")
+      .select("user_id, id")
+      .eq("subscription_id", subscription.id)
+      .maybeSingle();
 
-      userId = customerData?.user_id;
-    }
+    let userId = existingSubscriptionData?.user_id;
+    const existingRowId = existingSubscriptionData?.id;
 
-    // Se ainda não temos userId, tentamos obter dos metadados do cliente
+    // Se não encontrar o user_id, tenta obter dos metadados do cliente
     if (!userId) {
+      console.log(
+        `Nenhum user_id encontrado para customer_id: ${customerId}, buscando metadados do cliente`
+      );
+
       try {
         const customer = (await stripe.customers.retrieve(
           customerId
         )) as Stripe.Customer;
-        userId = customer.metadata.userId;
-      } catch (error) {
-        console.error("Error retrieving customer:", error);
+        userId = (customer.metadata?.userId ||
+          customer.metadata?.user_id) as string;
+        console.log(`User ID obtido dos metadados do cliente: ${userId}`);
+      } catch (err: unknown) {
+        const error = err as Error;
+        console.error(`Erro ao buscar cliente: ${error.message}`);
       }
     }
 
     if (!userId) {
-      console.error(`Could not find user for subscription: ${subscription.id}`);
+      console.error(
+        `Não foi possível determinar user_id para subscription: ${subscription.id}`
+      );
       return;
     }
 
-    // Obter detalhes do plano
-    let priceId = null;
-    let planId = null;
+    // O status da subscription no Stripe (active, canceled, etc)
+    const status = subscription.status;
 
-    if (subscription.items.data.length > 0) {
-      const item = subscription.items.data[0];
-      priceId = item.price.id;
-      planId = item.plan?.id || item.price.id;
-    }
+    // Antes de atualizar, verificar se já existe alguma outra assinatura para este usuário
+    // Se existir e não for a atual, vamos excluí-la para manter apenas uma
+    const { data: existingSubscriptions } = await supabaseAdmin
+      .from("subscriptions")
+      .select("id")
+      .eq("user_id", userId)
+      .neq("subscription_id", subscription.id);
 
-    // Atualizar a assinatura no Supabase
-    const { error } = await supabaseAdmin.from("subscriptions").upsert({
-      user_id: userId,
-      subscription_id: subscription.id,
-      customer_id: customerId,
-      status: subscription.status,
-      price_id: priceId,
-      plan_id: planId,
-      start_date: new Date(
-        subscription.current_period_start * 1000
-      ).toISOString(),
-      end_date: new Date(subscription.current_period_end * 1000).toISOString(),
-      trial_start: subscription.trial_start
-        ? new Date(subscription.trial_start * 1000).toISOString()
-        : null,
-      trial_end: subscription.trial_end
-        ? new Date(subscription.trial_end * 1000).toISOString()
-        : null,
-      updated_at: new Date().toISOString(),
-    });
-
-    if (error) {
-      console.error("Error updating subscription in Supabase:", error);
-    } else {
+    if (existingSubscriptions && existingSubscriptions.length > 0) {
       console.log(
-        `Subscription ${subscription.id} updated successfully. Status: ${subscription.status}`
+        `Encontradas ${existingSubscriptions.length} assinaturas antigas para o usuário ${userId}. Removendo...`
       );
+
+      for (const existingSub of existingSubscriptions) {
+        const { error: deleteError } = await supabaseAdmin
+          .from("subscriptions")
+          .delete()
+          .eq("id", existingSub.id);
+
+        if (deleteError) {
+          console.error(
+            `Erro ao remover assinatura antiga ${existingSub.id}: ${deleteError.message}`
+          );
+        } else {
+          console.log(
+            `Assinatura antiga ${existingSub.id} removida com sucesso`
+          );
+        }
+      }
     }
-  } catch (error) {
-    console.error("Error in updateSubscription:", error);
+
+    // Preparar os dados para upsert
+    const subscriptionUpdateData = {
+      subscription_id: subscription.id,
+      user_id: userId,
+      customer_id: customerId,
+      price_id: priceId,
+      status: status,
+      plan_id: priceId, // Opcionalmente, se você tem um mapeamento diferente para plan_id
+      updated_at: new Date().toISOString(),
+    };
+
+    // Se temos um ID existente, atualizamos este registro
+    if (existingRowId) {
+      const { data, error } = await supabaseAdmin
+        .from("subscriptions")
+        .update(subscriptionUpdateData)
+        .eq("id", existingRowId)
+        .select()
+        .single();
+
+      if (error) {
+        console.error(
+          `Erro ao atualizar subscription no Supabase: ${error.message}`
+        );
+      } else {
+        console.log(
+          `Subscription atualizada com sucesso no Supabase: ${data.subscription_id}`
+        );
+        console.log(`Status definido como: ${data.status}`);
+      }
+    } else {
+      // Caso contrário, inserimos um novo registro (Supabase gerará um UUID automaticamente)
+      const { data, error } = await supabaseAdmin
+        .from("subscriptions")
+        .insert(subscriptionUpdateData)
+        .select()
+        .single();
+
+      if (error) {
+        console.error(
+          `Erro ao criar subscription no Supabase: ${error.message}`
+        );
+      } else {
+        console.log(
+          `Subscription criada com sucesso no Supabase: ${data.subscription_id}`
+        );
+        console.log(`Status definido como: ${data.status}`);
+      }
+    }
+  } catch (err: unknown) {
+    const error = err as Error;
+    console.error(
+      `Erro no processo de atualização da subscription: ${error.message}`
+    );
   }
 }
