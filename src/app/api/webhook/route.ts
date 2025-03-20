@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 import { Stripe } from "stripe";
@@ -11,124 +10,133 @@ const supabaseAdmin = createClient(
 );
 
 export async function POST(req: Request) {
-  const body = await req.text();
-  const signature = headers().get("stripe-signature") ?? "";
-
-  if (!signature) {
-    console.error("Webhook Error: Stripe signature missing");
-    return new NextResponse(
-      JSON.stringify({ error: "Webhook Error: Stripe signature missing" }),
-      { status: 400 }
-    );
-  }
-
-  const stripe = getStripe();
-  if (!stripe) {
-    console.error("Stripe client not initialized");
-    return new NextResponse(
-      JSON.stringify({ error: "Stripe client not initialized" }),
-      { status: 500 }
-    );
-  }
-
-  let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
-    console.log(`✅ Evento recebido: ${event.type}`);
-  } catch (err: unknown) {
-    const error = err as Error;
-    console.error(`Webhook Error: ${error.message}`);
-    return new NextResponse(
-      JSON.stringify({ error: `Webhook Error: ${error.message}` }),
-      { status: 400 }
-    );
-  }
+    const body = await req.text();
+    const signature = req.headers.get("stripe-signature");
 
-  // Processando eventos específicos
-  try {
-    switch (event.type) {
-      case "customer.subscription.created":
-      case "customer.subscription.updated":
-      case "customer.subscription.deleted":
-        const subscription = event.data.object as Stripe.Subscription;
-        console.log(
-          `Processando subscription ${event.type} para ID: ${subscription.id}`
-        );
-        await updateSubscription(stripe, subscription);
-        break;
-
-      case "invoice.payment_succeeded":
-        // Quando um pagamento é bem sucedido, encontre a subscription associada e atualize
-        const invoice = event.data.object as Stripe.Invoice;
-        console.log(`Pagamento bem-sucedido para fatura: ${invoice.id}`);
-
-        if (invoice.subscription) {
-          const subscriptionId =
-            typeof invoice.subscription === "string"
-              ? invoice.subscription
-              : invoice.subscription.id;
-
-          const subscription = await stripe.subscriptions.retrieve(
-            subscriptionId
-          );
-          console.log(
-            `Atualizando subscription após pagamento: ${subscription.id}`
-          );
-          await updateSubscription(stripe, subscription);
-        }
-        break;
-
-      case "invoice.payment_failed":
-        // Quando um pagamento falha, pode precisar atualizar o status
-        const failedInvoice = event.data.object as Stripe.Invoice;
-        console.log(`Pagamento falhou para fatura: ${failedInvoice.id}`);
-
-        if (failedInvoice.subscription) {
-          const subscriptionId =
-            typeof failedInvoice.subscription === "string"
-              ? failedInvoice.subscription
-              : failedInvoice.subscription.id;
-
-          const subscription = await stripe.subscriptions.retrieve(
-            subscriptionId
-          );
-          console.log(
-            `Atualizando subscription após falha de pagamento: ${subscription.id}`
-          );
-          await updateSubscription(stripe, subscription);
-        }
-        break;
-
-      case "customer.deleted":
-        // Quando um cliente é excluído, marque todas as suas subscriptions como canceladas
-        const customer = event.data.object as Stripe.Customer;
-        console.log(`Cliente excluído: ${customer.id}`);
-
-        const { error } = await supabaseAdmin
-          .from("subscriptions")
-          .update({ status: "canceled" })
-          .eq("customer_id", customer.id);
-
-        if (error) {
-          console.error(
-            `Erro ao atualizar subscriptions para cliente excluído: ${error.message}`
-          );
-        } else {
-          console.log(
-            `Subscriptions atualizadas para cliente excluído: ${customer.id}`
-          );
-        }
-        break;
-
-      default:
-        console.log(`Evento não processado: ${event.type}`);
+    if (!signature) {
+      console.error("Webhook Error: Stripe signature missing");
+      return new NextResponse(
+        JSON.stringify({ error: "Webhook Error: Stripe signature missing" }),
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json({ received: true });
+    const stripe = getStripe();
+    if (!stripe) {
+      console.error("Stripe client not initialized");
+      return new NextResponse(
+        JSON.stringify({ error: "Stripe client not initialized" }),
+        { status: 500 }
+      );
+    }
+
+    let event: Stripe.Event;
+    try {
+      event = stripe.webhooks.constructEvent(
+        body,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET!
+      );
+      console.log(`✅ Evento recebido: ${event.type}`);
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error(`Webhook Error: ${error.message}`);
+      return new NextResponse(
+        JSON.stringify({ error: `Webhook Error: ${error.message}` }),
+        { status: 400 }
+      );
+    }
+
+    // Processando eventos específicos
+    try {
+      switch (event.type) {
+        case "customer.subscription.created":
+        case "customer.subscription.updated":
+        case "customer.subscription.deleted":
+          const subscription = event.data.object as Stripe.Subscription;
+          console.log(
+            `Processando subscription ${event.type} para ID: ${subscription.id}`
+          );
+          await updateSubscription(stripe, subscription);
+          break;
+
+        case "invoice.payment_succeeded":
+          // Quando um pagamento é bem sucedido, encontre a subscription associada e atualize
+          const invoice = event.data.object as Stripe.Invoice;
+          console.log(`Pagamento bem-sucedido para fatura: ${invoice.id}`);
+
+          if (invoice.subscription) {
+            const subscriptionId =
+              typeof invoice.subscription === "string"
+                ? invoice.subscription
+                : invoice.subscription.id;
+
+            const subscription = await stripe.subscriptions.retrieve(
+              subscriptionId
+            );
+            console.log(
+              `Atualizando subscription após pagamento: ${subscription.id}`
+            );
+            await updateSubscription(stripe, subscription);
+          }
+          break;
+
+        case "invoice.payment_failed":
+          // Quando um pagamento falha, pode precisar atualizar o status
+          const failedInvoice = event.data.object as Stripe.Invoice;
+          console.log(`Pagamento falhou para fatura: ${failedInvoice.id}`);
+
+          if (failedInvoice.subscription) {
+            const subscriptionId =
+              typeof failedInvoice.subscription === "string"
+                ? failedInvoice.subscription
+                : failedInvoice.subscription.id;
+
+            const subscription = await stripe.subscriptions.retrieve(
+              subscriptionId
+            );
+            console.log(
+              `Atualizando subscription após falha de pagamento: ${subscription.id}`
+            );
+            await updateSubscription(stripe, subscription);
+          }
+          break;
+
+        case "customer.deleted":
+          // Quando um cliente é excluído, marque todas as suas subscriptions como canceladas
+          const customer = event.data.object as Stripe.Customer;
+          console.log(`Cliente excluído: ${customer.id}`);
+
+          const { error } = await supabaseAdmin
+            .from("subscriptions")
+            .update({ status: "canceled" })
+            .eq("customer_id", customer.id);
+
+          if (error) {
+            console.error(
+              `Erro ao atualizar subscriptions para cliente excluído: ${error.message}`
+            );
+          } else {
+            console.log(
+              `Subscriptions atualizadas para cliente excluído: ${customer.id}`
+            );
+          }
+          break;
+
+        default:
+          console.log(`Evento não processado: ${event.type}`);
+      }
+
+      return NextResponse.json({ received: true });
+    } catch (err: unknown) {
+      const error = err as Error;
+      console.error(`Erro processando webhook: ${error.message}`);
+      return new NextResponse(
+        JSON.stringify({ error: `Erro processando webhook: ${error.message}` }),
+        { status: 500 }
+      );
+    }
   } catch (err: unknown) {
     const error = err as Error;
     console.error(`Erro processando webhook: ${error.message}`);
