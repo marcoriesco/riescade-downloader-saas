@@ -1,21 +1,22 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { supabase, type Subscription } from "@/lib/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { Header } from "@/components/Header";
 import {
   Zap,
-  Trophy,
   Flame,
   Shield,
   User as UserIcon,
-  Swords,
+  DownloadIcon,
+  AlertCircleIcon,
 } from "lucide-react";
 import Image from "next/image";
 
-export default function Dashboard() {
+// Componente que usa useSearchParams
+function DashboardContent() {
   const [user, setUser] = useState<User | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
@@ -177,8 +178,8 @@ export default function Dashboard() {
     }
   };
 
-  const downloadProduct = () => {
-    alert("Product download started");
+  const downloadProduct = (downloadUrl: string) => {
+    alert("Download: " + downloadUrl);
   };
 
   if (loading) {
@@ -186,7 +187,7 @@ export default function Dashboard() {
       <div className="flex min-h-screen items-center justify-center bg-gamer-dark">
         <div className="text-center">
           <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-          <p className="text-lg text-gray-300">Loading...</p>
+          <p className="text-lg text-gray-300">Carregando...</p>
         </div>
       </div>
     );
@@ -263,34 +264,19 @@ export default function Dashboard() {
                       <UserIcon className="h-10 w-10 text-[#ff0884]" />
                     </div>
                     <h3 className="text-xl text-white font-bold">
-                      {user.email?.split("@")[0] || "Gamer"}
+                      {user.user_metadata?.full_name || "Gamer"}
                     </h3>
                     <p className="text-gray-400 text-sm">{user.email}</p>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-3 mb-6">
-                    <div className="bg-black/30 rounded p-3 text-center border border-gray-700">
-                      <div className="text-2xl font-bold text-white">0</div>
-                      <div className="text-xs text-gray-400">Partidas</div>
-                    </div>
-                    <div className="bg-black/30 rounded p-3 text-center border border-gray-700">
-                      <div className="text-2xl font-bold text-white">0</div>
-                      <div className="text-xs text-gray-400">Vitórias</div>
-                    </div>
-                    <div className="bg-black/30 rounded p-3 text-center border border-gray-700">
-                      <div className="text-2xl font-bold text-[#ff0884]">0</div>
-                      <div className="text-xs text-gray-400">Ranking</div>
-                    </div>
-                  </div>
-
                   <div className="mb-4">
                     <div className="text-sm font-medium text-gray-400 mb-1">
-                      Level
+                      Temporada
                     </div>
                     <div className="w-full bg-gray-700 rounded-full h-2">
                       <div
                         className="bg-gradient-to-r from-[#ff0884] to-purple-500 h-2 rounded-full"
-                        style={{ width: "10%" }}
+                        style={{ width: "52%" }}
                       ></div>
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
@@ -312,14 +298,13 @@ export default function Dashboard() {
               </h2>
             </div>
 
-            <div className="p-6">
+            <div className="p-6 pb-0">
               {subscription ? (
                 <div className="space-y-6">
                   <div className="bg-black/30 p-4 rounded-lg border border-gray-700">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-bold text-white flex items-center">
-                        <Trophy className="w-5 h-5 text-[#ff0884] mr-2" />
-                        GAMER PRO
+                      <h3 className="text-lg font-bold text-white flex items-center ml-2">
+                        RIESCADE MEMBRO
                       </h3>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium 
@@ -333,7 +318,14 @@ export default function Dashboard() {
                       </span>
                     </div>
 
-                    <div className="bg-black/40 rounded-lg p-4 border border-gray-700 mb-4">
+                    <div className="bg-black/40 rounded-lg p-4 border border-gray-700 mb-1">
+                      <h4 className="text-sm font-medium text-gray-400 mb-2">
+                        Criado em
+                      </h4>
+                      <p className="text-white mb-4">
+                        {new Date(subscription.created_at).toLocaleDateString()}
+                      </p>
+
                       <h4 className="text-sm font-medium text-gray-400 mb-2">
                         Período atual
                       </h4>
@@ -342,51 +334,10 @@ export default function Dashboard() {
                         - {new Date(subscription.end_date).toLocaleDateString()}
                       </p>
                     </div>
-
-                    <div className="space-y-3">
-                      <h4 className="text-sm font-medium text-gray-400">
-                        Benefícios incluídos:
-                      </h4>
-                      {[
-                        "Acesso a todos os jogos",
-                        "Matchmaking prioritário",
-                        "Jogos ilimitados",
-                        "Acesso ao Discord VIP",
-                      ].map((benefit, i) => (
-                        <div
-                          key={i}
-                          className="flex items-center text-gray-300"
-                        >
-                          <svg
-                            className="h-5 w-5 text-[#ff0884] mr-2 flex-shrink-0"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            ></path>
-                          </svg>
-                          {benefit}
-                        </div>
-                      ))}
-                    </div>
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0">
-                    {subscription.status === "active" ? (
-                      <button
-                        onClick={downloadProduct}
-                        className="w-full sm:w-auto bg-[#ff0884] hover:bg-[#ff0884]/90 text-white font-medium py-3 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff0884]/50 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 transform hover:scale-105 flex items-center justify-center shadow-[0_0_15px_rgba(255,8,132,0.3)]"
-                      >
-                        <Flame className="w-5 h-5 mr-2" />
-                        Baixar Jogo
-                      </button>
-                    ) : (
+                    {subscription.status !== "active" && (
                       <>
                         <button
                           disabled
@@ -407,25 +358,11 @@ export default function Dashboard() {
                   </div>
 
                   {subscription.status !== "active" && (
-                    <div className="p-4 bg-amber-900/20 text-amber-400 rounded-md text-sm border border-amber-500/30">
-                      <p className="flex items-center">
-                        <svg
-                          className="h-5 w-5 mr-2 text-amber-400"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                          ></path>
-                        </svg>
-                        <strong>Atenção:</strong> Sua assinatura não está ativa.
-                        O download só estará disponível após a renovação da sua
-                        assinatura.
+                    <div className="p-4 bg-amber-900/20 text-amber-400 rounded-md text-sm border border-amber-500/30 !mb-6 ">
+                      <p className="flex items-start">
+                        <AlertCircleIcon className="w-5 h-5 mr-2" />
+                        Sua assinatura não está ativa. O download só estará
+                        disponível após a renovação.
                       </p>
                     </div>
                   )}
@@ -503,9 +440,9 @@ export default function Dashboard() {
         {/* Games Section */}
         <div className="mt-8 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
-            <Swords className="w-5 h-5 text-[#ff0884] mr-2" />
+            <DownloadIcon className="w-5 h-5 text-[#ff0884] mr-2" />
             <h2 className="text-lg font-medium text-white">
-              Jogos Disponíveis
+              Downloads Disponíveis
             </h2>
           </div>
 
@@ -514,19 +451,22 @@ export default function Dashboard() {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {[
                   {
-                    title: "Cyber Assault",
-                    image: "https://via.placeholder.com/150",
-                    genre: "FPS",
+                    title: "RIESCADE DOWNLOADER",
+                    image: "/images/logo.png",
+                    downloadUrl: "/images/logo.png",
+                    genre: "APP",
                   },
                   {
-                    title: "Neon Raiders",
-                    image: "https://via.placeholder.com/150",
-                    genre: "RPG",
+                    title: "RIESCADE BASE",
+                    image: "/images/logo.png",
+                    downloadUrl: "/images/logo.png",
+                    genre: "EmulationStation",
                   },
                   {
-                    title: "Shadow Protocol",
-                    image: "https://via.placeholder.com/150",
-                    genre: "Stealth",
+                    title: "DOWNLOADER + BASE",
+                    image: "/images/logo.png",
+                    downloadUrl: "/images/logo.png",
+                    genre: "APP",
                   },
                 ].map((game, i) => (
                   <div
@@ -545,8 +485,11 @@ export default function Dashboard() {
                         <span className="text-gray-400 text-sm">
                           {game.genre}
                         </span>
-                        <button className="text-xs bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] px-2 py-1 rounded border border-[#ff0884]/30 transition-colors duration-200">
-                          JOGAR
+                        <button
+                          className="text-xs bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] px-2 py-1 rounded border border-[#ff0884]/30 transition-colors duration-200"
+                          onClick={() => downloadProduct(game.downloadUrl)}
+                        >
+                          DOWNLOAD
                         </button>
                       </div>
                     </div>
@@ -560,13 +503,13 @@ export default function Dashboard() {
                   Acesso Bloqueado
                 </h3>
                 <p className="text-gray-500 mb-6">
-                  Assine o plano para desbloquear o acesso a todos os jogos.
+                  Assine o plano para desbloquear o acesso a todos os downloads.
                 </p>
                 <button
                   onClick={handleCheckout}
                   className="px-6 py-2 bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] rounded-md border border-[#ff0884]/30 transition-colors duration-200"
                 >
-                  Ver Plano
+                  Assinar agora
                 </button>
               </div>
             )}
@@ -574,5 +517,23 @@ export default function Dashboard() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Componente principal que envolve o conteúdo com Suspense
+export default function Dashboard() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-gamer-dark">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">Carregando...</p>
+          </div>
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
   );
 }
