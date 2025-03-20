@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Header } from "@/components/Header";
-import { Zap, Gamepad2, Trophy, Flame, Swords, Shield, User } from "lucide-react";
+import { Zap, Gamepad2, Trophy, Flame } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -12,17 +13,25 @@ export default function Home() {
         <div className="relative bg-gray-900 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff0884]/20 via-gray-900 to-gray-900"></div>
           <div className="absolute inset-0 bg-grid-white/5 bg-[size:30px_30px]"></div>
-          
+
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
             <div className="md:flex md:items-center md:space-x-12">
               <div className="md:w-1/2 mb-12 md:mb-0 animate-fade-in">
                 <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
-                  <span className="text-white drop-shadow-[0_0_25px_rgba(255,8,132,0.8)]">POWER UP</span><br />
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff0884] to-purple-500">YOUR GAMING</span>
+                  <span className="text-white drop-shadow-[0_0_25px_rgba(255,8,132,0.8)]">
+                    POWER UP
+                  </span>
+                  <br />
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff0884] to-purple-500">
+                    YOUR GAMING
+                  </span>
                 </h1>
                 <p className="text-xl text-gray-300 mb-8 max-w-lg">
-                  Unleash the ultimate gaming experience with our next-gen platform. 
-                  <span className="block mt-3 font-semibold text-[#ff0884]">Level up. Dominate. Conquer.</span>
+                  Unleash the ultimate gaming experience with our next-gen
+                  platform.
+                  <span className="block mt-3 font-semibold text-[#ff0884]">
+                    Level up. Dominate. Conquer.
+                  </span>
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <Link
@@ -44,14 +53,11 @@ export default function Home() {
                 <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-[#ff0884]/30 shadow-[0_0_30px_rgba(255,8,132,0.3)] transform rotate-1 hover:rotate-0 transition-all duration-500">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-[#ff0884]/20 to-gray-900/80"></div>
                   <div className="p-8 flex items-center justify-center text-white text-xl">
-                    <img 
-                      src="/public/lovable-uploads/28bf26a4-4d5d-497b-87e2-605c216cd37f.png" 
-                      alt="Gaming Mascot"
-                      className="h-40 object-contain mx-auto z-10 filter drop-shadow-[0_0_8px_rgba(255,8,132,0.8)]" 
-                    />
                     <div className="absolute inset-0 flex items-center justify-center flex-col">
                       <div className="px-6 py-3 bg-black/50 backdrop-blur-sm rounded-lg border border-[#ff0884]/30">
-                        <span className="text-2xl font-bold text-white">GAME <span className="text-[#ff0884]">ON</span></span>
+                        <span className="text-2xl font-bold text-white">
+                          GAME <span className="text-[#ff0884]">ON</span>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -81,18 +87,21 @@ export default function Home() {
                 {
                   icon: <Zap className="w-8 h-8 text-[#ff0884]" />,
                   title: "Ultra Performance",
-                  description: "Experience lightning-fast gameplay with our optimized network infrastructure."
+                  description:
+                    "Experience lightning-fast gameplay with our optimized network infrastructure.",
                 },
                 {
                   icon: <Trophy className="w-8 h-8 text-[#ff0884]" />,
                   title: "Global Rankings",
-                  description: "Compete with players worldwide and climb the leaderboards to glory."
+                  description:
+                    "Compete with players worldwide and climb the leaderboards to glory.",
                 },
                 {
                   icon: <Flame className="w-8 h-8 text-[#ff0884]" />,
                   title: "Epic Rewards",
-                  description: "Unlock exclusive content and rewards as you dominate the competition."
-                }
+                  description:
+                    "Unlock exclusive content and rewards as you dominate the competition.",
+                },
               ].map((feature, i) => (
                 <div
                   key={i}
@@ -104,9 +113,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-white mb-4">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-400">
-                    {feature.description}
-                  </p>
+                  <p className="text-gray-400">{feature.description}</p>
                 </div>
               ))}
             </div>
@@ -125,25 +132,24 @@ export default function Home() {
                 The ultimate gaming experience awaits
               </p>
             </div>
-            
+
             {/* Single plan centered */}
             <div className="max-w-md mx-auto">
               <div className="relative bg-gray-800/40 backdrop-blur-sm p-8 rounded-lg border-2 border-[#ff0884] shadow-[0_0_30px_rgba(255,8,132,0.3)] overflow-hidden">
-                <span className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#ff0884] text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg">
-                  PREMIUM PLAN
-                </span>
                 <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#ff0884]/20 via-transparent to-transparent rounded-bl-full"></div>
-                
+
                 <div className="flex items-center justify-center mb-6">
-                  <img 
-                    src="/public/lovable-uploads/96caf5b3-ec7d-4b1f-80d9-1ab8188eafef.png" 
-                    alt="Gaming Logo" 
+                  <Image
+                    src="/images/logos.png"
+                    alt="Gaming Logo"
                     className="h-20 w-20 object-contain mb-2"
+                    width={120}
+                    height={120}
                   />
                 </div>
-                
+
                 <h3 className="text-2xl font-bold text-white mb-4 text-center">
-                  GAMER PRO
+                  MEMBRO
                 </h3>
                 <div className="mb-6 text-center">
                   <span className="text-4xl font-bold text-white">R$30</span>
@@ -153,11 +159,9 @@ export default function Home() {
                   {[
                     "Acesso a todos os jogos",
                     "Matchmaking prioritário",
-                    "Equipamentos raros exclusivos",
                     "Jogos ilimitados",
-                    "Torneios personalizados",
                     "Acesso ao Discord VIP",
-                    "Suporte 24/7"
+                    "Acesso a Comunidade WhatsApp",
                   ].map((feature, index) => (
                     <li key={index} className="flex items-center">
                       <svg
@@ -212,7 +216,10 @@ export default function Home() {
                 "Support",
               ].map((item) => (
                 <div key={item} className="mb-4">
-                  <Link href="#" className="text-gray-400 hover:text-[#ff0884] transition-colors duration-200">
+                  <Link
+                    href="#"
+                    className="text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                  >
                     {item}
                   </Link>
                 </div>

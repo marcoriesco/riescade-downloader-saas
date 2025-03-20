@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
 import { supabase, type Subscription } from "@/lib/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { Header } from "@/components/Header";
 import {
-  Gamepad2,
   Zap,
   Trophy,
   Flame,
@@ -15,6 +13,7 @@ import {
   User as UserIcon,
   Swords,
 } from "lucide-react";
+import Image from "next/image";
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -142,12 +141,6 @@ export default function Dashboard() {
     router,
     verifyCheckoutSession,
   ]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    setUser(null);
-    router.push("/");
-  };
 
   const handleCheckout = async () => {
     if (!user) return;
@@ -357,9 +350,7 @@ export default function Dashboard() {
                       {[
                         "Acesso a todos os jogos",
                         "Matchmaking prioritário",
-                        "Equipamentos raros exclusivos",
                         "Jogos ilimitados",
-                        "Torneios personalizados",
                         "Acesso ao Discord VIP",
                       ].map((benefit, i) => (
                         <div
@@ -442,13 +433,15 @@ export default function Dashboard() {
               ) : (
                 <div className="space-y-6">
                   <div className="bg-black/30 p-6 rounded-lg border border-gray-700 text-center">
-                    <img
-                      src="/public/lovable-uploads/96caf5b3-ec7d-4b1f-80d9-1ab8188eafef.png"
+                    <Image
+                      src="/images/logos.png"
                       alt="Gaming Logo"
                       className="h-20 w-20 object-contain mx-auto mb-4"
+                      width={120}
+                      height={120}
                     />
                     <h3 className="text-2xl font-bold text-white mb-3">
-                      GAMER PRO
+                      VIRAR MEMBRO
                     </h3>
                     <div className="mb-4 text-center">
                       <span className="text-3xl font-bold text-white">

@@ -1,63 +1,62 @@
-
 "use client";
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Gamepad2, Zap, User as UserIcon } from "lucide-react";
+import { Gamepad2, Zap } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
+import Image from "next/image";
 
 export function Header() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  
+
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       setUser(session?.user || null);
       setLoading(false);
-      
+
       // Set up auth state listener
-      const { data: { subscription } } = supabase.auth.onAuthStateChange(
-        (event, session) => {
-          setUser(session?.user || null);
-        }
-      );
-      
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((event, session) => {
+        setUser(session?.user || null);
+      });
+
       return () => subscription.unsubscribe();
     };
-    
+
     checkUser();
   }, []);
-  
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     router.push("/");
   };
 
   return (
-    <header className="bg-black/60 backdrop-blur-md border-b border-pink-600/20 sticky top-0 z-50">
+    <header className="bg-black/60 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2">
-          <Gamepad2 className="h-6 w-6 text-[#ff0884]" />
-          <span className="text-xl font-bold text-white">
-            <span className="text-[#ff0884]">Game</span>Platform
-          </span>
+          <Image src="/images/logo.png" alt="Logo" width={240} height={40} />
         </Link>
-        
+
         <div className="flex items-center space-x-4">
-          {!loading && (
-            user ? (
+          {!loading &&
+            (user ? (
               <>
                 <div className="hidden md:flex items-center mr-4">
                   <div className="w-8 h-8 rounded-full bg-[#ff0884]/20 border border-[#ff0884]/50 flex items-center justify-center mr-2">
-                    <UserIcon className="h-4 w-4 text-[#ff0884]" />
+                    <Gamepad2 className="h-4 w-4 text-[#ff0884]" />
                   </div>
                   <span className="text-gray-200">{user.email}</span>
                 </div>
-                <Link 
+                <Link
                   href="/dashboard"
                   className="px-4 py-2 border border-[#ff0884]/50 text-sm font-medium rounded-md text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 transition-all duration-300"
                 >
@@ -78,8 +77,7 @@ export function Header() {
                 <Zap className="h-4 w-4" />
                 Login
               </Link>
-            )
-          )}
+            ))}
         </div>
       </div>
     </header>
