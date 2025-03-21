@@ -1,8 +1,15 @@
-
 import Link from "next/link";
 import { Header } from "@/components/Header";
-import { Zap, Gamepad2, Trophy, Flame } from "lucide-react";
+import { Zap, Trophy, Flame } from "lucide-react";
 import Image from "next/image";
+
+import { Roboto_Condensed } from "next/font/google";
+import { Video } from "@/components/Video";
+
+const robotoCondensed = Roboto_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 export default function Home() {
   return (
@@ -23,14 +30,18 @@ export default function Home() {
                     RIESCADE
                   </span>
                   <br />
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff0884] to-purple-500">
-                    +220 PLATAFORMAS
+                  <span
+                    className={`${robotoCondensed.className} bg-clip-text text-transparent bg-gradient-to-r from-[#ff0884] to-purple-500`}
+                  >
+                    +250 PLATAFORMAS
                   </span>
                 </h1>
-                <p className="text-xl text-gray-300 mb-8 max-w-lg">
-                  Tenha acesso à mais de 220 plataformas de jogos em um único lugar.
+                <p
+                  className={`${robotoCondensed.className} text-xl text-gray-300 mb-8 max-w-lg`}
+                >
+                  Acesso à mais de 250 plataformas de jogos em um único lugar.
                   <span className="block mt-3 font-semibold text-[#ff0884]">
-                    Template Premium Completo
+                    +5 Temas Premium
                   </span>
                 </p>
                 <div className="flex flex-wrap gap-4">
@@ -43,7 +54,7 @@ export default function Home() {
                   </Link>
                   <Link
                     href="#features"
-                    className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884]/70 text-base font-bold rounded-md text-white bg-transparent hover:bg-[#ff0884]/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300"
+                    className={`${robotoCondensed.className} inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884]/70 text-base font-bold rounded-md text-white bg-transparent hover:bg-[#ff0884]/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300`}
                   >
                     Explorar Recursos
                   </Link>
@@ -51,21 +62,16 @@ export default function Home() {
               </div>
               <div className="md:w-1/2">
                 <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-[#ff0884]/30 shadow-[0_0_30px_rgba(255,8,132,0.3)] transform rotate-1 hover:rotate-0 transition-all duration-500">
-                  <Image 
-                    src="/lovable-uploads/62841482-3f7d-4a10-aa0e-fda7bb088cf9.png"
-                    alt="RIESCADE Interface"
-                    className="object-cover"
-                    fill
-                    priority
-                  />
+                  <Video video="/video/intro.mp4" />
+
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-[#ff0884]/20 to-gray-900/80"></div>
-                  <div className="absolute bottom-4 right-4 flex items-center justify-center">
-                    <Image 
-                      src="/lovable-uploads/ddfc12ca-84bd-41d0-b7d8-fea61305958e.png" 
-                      alt="RIESCADE Mascot"
+                  <div className="absolute -bottom-6 right-4 flex items-center justify-center">
+                    <Image
+                      src="/images/logos.png"
+                      alt="RIESCADE logo"
                       width={100}
                       height={100}
-                      className="drop-shadow-[0_0_8px_rgba(255,8,132,0.8)]"
+                      className="drop-shadow-[0_0_8px_rgba(255,8,132,0.8)] rotate-12"
                     />
                   </div>
                 </div>
@@ -85,7 +91,9 @@ export default function Home() {
                   <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-[#ff0884] to-purple-500"></span>
                 </span>
               </h2>
-              <p className="max-w-2xl mx-auto text-xl text-gray-400">
+              <p
+                className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+              >
                 Projetado para gamers que exigem o melhor
               </p>
             </div>
@@ -95,19 +103,19 @@ export default function Home() {
                   icon: <Zap className="w-8 h-8 text-[#ff0884]" />,
                   title: "Alto Desempenho",
                   description:
-                    "Experimente uma jogabilidade ultrarrápida com nossa infraestrutura de rede otimizada.",
+                    "Experimente uma jogabilidade ultrarrápida com nossa plataforma otimizada.",
                 },
                 {
                   icon: <Trophy className="w-8 h-8 text-[#ff0884]" />,
-                  title: "+220 Plataformas",
+                  title: "+250 Plataformas",
                   description:
-                    "Acesso a jogos de mais de 220 plataformas diferentes em um único lugar.",
+                    "Acesso a jogos de mais de 250 plataformas diferentes em um único lugar.",
                 },
                 {
                   icon: <Flame className="w-8 h-8 text-[#ff0884]" />,
                   title: "Comunidade VIP",
                   description:
-                    "Acesso exclusivo à nossa comunidade no Discord e WhatsApp para suporte 24/7.",
+                    "Acesso à nossa comunidade no Discord, WhatsApp e Telegram para suporte.",
                 },
               ].map((feature, i) => (
                 <div
@@ -120,7 +128,9 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-white mb-4">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-400">{feature.description}</p>
+                  <p className={`${robotoCondensed.className} text-gray-400`}>
+                    {feature.description}
+                  </p>
                 </div>
               ))}
             </div>
@@ -131,36 +141,84 @@ export default function Home() {
         <div className="py-20 bg-black relative overflow-hidden">
           <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5"></div>
           <div className="absolute inset-0 bg-grid-white/5 bg-[size:30px_30px]"></div>
-          
+
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="text-[#ff0884]">JOGOS</span> CLÁSSICOS
+                <span className="text-[#ff0884]">MULTISISTEMA</span> COMPLETO
               </h2>
-              <p className="max-w-2xl mx-auto text-xl text-gray-400">
-                Reviva os melhores jogos de todas as gerações
+              <p
+                className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+              >
+                Mais de 250 sistemas em um único lugar
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
                 {
-                  title: "God of War II",
-                  console: "PlayStation 2",
-                  image: "/lovable-uploads/28aa7d1d-0ae3-4599-a909-6aaa558d95d4.png",
+                  title: "Loading",
+                  console: "RIESCADE",
+                  image: "/screenshots/loading.jpg",
                 },
                 {
-                  title: "Super Mario Bros U Deluxe",
+                  title: "Jogos",
+                  console: "RIESCADE",
+                  image: "/screenshots/allgames.jpg",
+                },
+                {
+                  title: "Emuladores",
+                  console: "RIESCADE",
+                  image: "/screenshots/emulators.jpg",
+                },
+                {
+                  title: "Arcade",
+                  console: "RIESCADE",
+                  image: "/screenshots/arcade.jpg",
+                },
+                {
+                  title: "Street Fighter III",
+                  console: "RIESCADE",
+                  image: "/screenshots/sf3.jpg",
+                },
+
+                {
+                  title: "Nintendo Switch",
+                  console: "Consoles",
+                  image: "/screenshots/switch.jpg",
+                },
+                {
+                  title: "Super Mario Bros. Wonder",
                   console: "Nintendo Switch",
-                  image: "/lovable-uploads/36cb9de2-956b-4fee-ae90-911a1aff9b0a.png",
+                  image: "/screenshots/mariowonder.jpg",
                 },
                 {
-                  title: "Red Dead Redemption",
-                  console: "Xbox 360",
-                  image: "/lovable-uploads/f508018a-99a2-43b8-a779-cb50697f9dc9.png",
+                  title: "Windows",
+                  console: "PC Gamer",
+                  image: "/screenshots/windows.jpg",
+                },
+                {
+                  title: "Nintendo 64 Disk",
+                  console: "Extensões",
+                  image: "/screenshots/n64dd.jpg",
+                },
+                {
+                  title: "PS Vita",
+                  console: "Portáteis",
+                  image: "/screenshots/psvita.jpg",
+                },
+                {
+                  title: "Pinball M",
+                  console: "Pinballs",
+                  image: "/screenshots/pinballm.jpg",
+                },
+                {
+                  title: "DOOM 3",
+                  console: "Ports",
+                  image: "/screenshots/doom3.jpg",
                 },
               ].map((game, index) => (
-                <div 
+                <div
                   key={index}
                   className="relative bg-gray-800/20 rounded-lg overflow-hidden border border-gray-700 hover:border-[#ff0884]/50 transition-all duration-300 group"
                 >
@@ -175,7 +233,9 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="text-xl font-bold text-white mb-1">{game.title}</h3>
+                    <h3 className="text-xl font-bold text-white mb-1">
+                      {game.title}
+                    </h3>
                     <p className="text-sm text-[#ff0884]">{game.console}</p>
                   </div>
                 </div>
@@ -190,9 +250,12 @@ export default function Home() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="text-[#ff0884]">POTENCIALIZE</span> SUA EXPERIÊNCIA
+                <span className="text-[#ff0884]">POTENCIALIZE</span> SUA
+                EXPERIÊNCIA
               </h2>
-              <p className="max-w-2xl mx-auto text-xl text-gray-400">
+              <p
+                className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+              >
                 A melhor experiência de jogos retro aguarda por você
               </p>
             </div>
@@ -204,7 +267,7 @@ export default function Home() {
 
                 <div className="flex items-center justify-center mb-6">
                   <Image
-                    src="/lovable-uploads/ddfc12ca-84bd-41d0-b7d8-fea61305958e.png"
+                    src="/images/logos.png"
                     alt="RIESCADE Mascot"
                     className="h-20 w-20 object-contain mb-2"
                     width={120}
@@ -216,7 +279,9 @@ export default function Home() {
                   MEMBRO
                 </h3>
                 <div className="mb-6 text-center">
-                  <span className="text-4xl font-bold text-white">R$30</span>
+                  <span className="text-4xl font-bold text-white">
+                    Apenas R$ 30
+                  </span>
                   <span className="text-gray-400">/mês</span>
                 </div>
                 <ul className="space-y-3 mb-8">
@@ -252,7 +317,7 @@ export default function Home() {
                   href="/dashboard"
                   className="w-full block text-center px-6 py-3 rounded-md font-bold bg-[#ff0884] text-white hover:bg-[#ff0884]/90 shadow-[0_0_15px_rgba(255,8,132,0.4)] transition-all duration-300 transform hover:scale-105 animate-pulse-glow"
                 >
-                  ASSINAR AGORA
+                  ASSINE AGORA
                 </Link>
               </div>
             </div>
@@ -265,10 +330,12 @@ export default function Home() {
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="text-[#ff0884]">MULTISISTEMA</span> COMPLETO
+                <span className="text-[#ff0884]">JOGOS</span> CLÁSSICOS
               </h2>
-              <p className="max-w-2xl mx-auto text-xl text-gray-400">
-                Mais de 220 sistemas em um único lugar
+              <p
+                className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+              >
+                Reviva os melhores jogos de todas as gerações
               </p>
             </div>
 
@@ -279,8 +346,8 @@ export default function Home() {
                 "/lovable-uploads/9a3d2d4a-7d88-411b-be79-e288daba9662.png",
                 "/lovable-uploads/acb3142e-a375-4d94-af66-507f512f9022.png",
               ].map((img, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="bg-gray-800/30 rounded-lg overflow-hidden border border-gray-700 aspect-video relative group"
                 >
                   <Image
@@ -318,17 +385,19 @@ export default function Home() {
           <div className="md:flex md:justify-between">
             <div className="mb-8 md:mb-0">
               <div className="flex items-center space-x-2">
-                <Image 
-                  src="/lovable-uploads/ddfc12ca-84bd-41d0-b7d8-fea61305958e.png" 
-                  alt="RIESCADE Mascot" 
-                  width={40} 
-                  height={40} 
+                <Image
+                  src="/lovable-uploads/ddfc12ca-84bd-41d0-b7d8-fea61305958e.png"
+                  alt="RIESCADE Mascot"
+                  width={40}
+                  height={40}
                 />
                 <h3 className="text-xl font-bold">
                   <span className="text-[#ff0884]">RIES</span>CADE
                 </h3>
               </div>
-              <p className="text-gray-400 mt-2">Domine. Conquiste. Prevaleça.</p>
+              <p className="text-gray-400 mt-2">
+                Domine. Conquiste. Prevaleça.
+              </p>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
               {[
