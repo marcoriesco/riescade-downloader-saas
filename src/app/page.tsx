@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Zap, Trophy, Flame } from "lucide-react";
@@ -11,6 +13,9 @@ import {
   faTelegramPlane,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
+
+import { useCallback } from "react";
+import { supabase } from "@/lib/supabase";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -80,6 +85,20 @@ export default function Home() {
       image: "/screenshots/doom3.jpg",
     },
   ];
+
+  const handleLoginRedirect = useCallback(async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
+    } catch (error) {
+      console.error("Error signing in:", error);
+    }
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
@@ -302,12 +321,12 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-                <Link
-                  href="/dashboard"
+                <button
+                  onClick={handleLoginRedirect}
                   className="w-full block text-center px-6 py-3 rounded-md font-bold bg-[#ff0884] text-white hover:bg-[#ff0884]/90 shadow-[0_0_15px_rgba(255,8,132,0.4)] transition-all duration-300 transform hover:scale-105 animate-pulse-glow"
                 >
                   ASSINE AGORA
-                </Link>
+                </button>
               </div>
             </div>
           </div>

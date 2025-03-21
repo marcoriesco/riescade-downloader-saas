@@ -14,12 +14,15 @@ import {
   AlertCircleIcon,
 } from "lucide-react";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 // Componente que usa useSearchParams
 function DashboardContent() {
   const [user, setUser] = useState<User | null>(null);
   const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
+  const [authRedirecting, setAuthRedirecting] = useState(false);
   const [verifyingSession, setVerifyingSession] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -54,12 +57,20 @@ function DashboardContent() {
 
   // Handle sign in with OAuth
   const handleSignIn = useCallback(async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/dashboard`,
-      },
-    });
+    setAuthRedirecting(true);
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
+      // Note: This function won't return after redirect to Google
+      // We need to handle the return in the useEffect
+    } catch (error) {
+      console.error("Error signing in:", error);
+      setAuthRedirecting(false);
+    }
   }, []);
 
   // Verify checkout session
@@ -99,24 +110,32 @@ function DashboardContent() {
     [user, router, fetchSubscription]
   );
 
+  // Effect to check if user is authenticated
   useEffect(() => {
     const checkUser = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
-      if (session?.user) {
-        setUser(session.user);
-        await fetchSubscription(session.user.id);
-      } else {
-        await handleSignIn();
+        if (session?.user) {
+          console.log("User authenticated:", session.user.email);
+          setUser(session.user);
+          await fetchSubscription(session.user.id);
+        } else {
+          console.log("No authenticated user found");
+          // Don't automatically redirect to login
+          // Allow the UI to show the login prompt
+        }
+      } catch (error) {
+        console.error("Error checking user session:", error);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     checkUser();
-  }, [handleSignIn, fetchSubscription]);
+  }, [fetchSubscription]);
 
   // Effect to verify session when user returns from checkout
   useEffect(() => {
@@ -182,17 +201,65 @@ function DashboardContent() {
     alert("Download: " + downloadUrl);
   };
 
+  // Show loading state while checking auth
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gamer-dark">
-        <div className="text-center">
-          <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-          <p className="text-lg text-gray-300">Carregando...</p>
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">Verificando autenticação...</p>
+          </div>
         </div>
       </div>
     );
   }
 
+  // Show redirecting state when auth is in progress
+  if (authRedirecting) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">
+              Redirecionando para autenticação...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Show "Acesso Negado" message if not authenticated
+  if (!user) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center p-8 bg-black/30 rounded-lg border border-red-800/50 max-w-md">
+            <AlertCircleIcon className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">Acesso Negado</h2>
+            <p className="text-gray-300 mb-6">
+              É necessário fazer login para acessar o dashboard.
+            </p>
+            <button
+              onClick={handleSignIn}
+              disabled={authRedirecting}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
+            >
+              <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
+              Login com Google
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Main dashboard content - only shown when authenticated
   return (
     <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
       {/* Background elements */}
@@ -525,10 +592,13 @@ export default function Dashboard() {
   return (
     <Suspense
       fallback={
-        <div className="flex min-h-screen items-center justify-center bg-gamer-dark">
-          <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-gray-300">Carregando...</p>
+        <div className="flex min-h-screen flex-col bg-gamer-dark">
+          <Header />
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+              <p className="text-lg text-gray-300">Carregando...</p>
+            </div>
           </div>
         </div>
       }

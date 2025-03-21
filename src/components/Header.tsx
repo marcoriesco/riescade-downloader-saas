@@ -14,6 +14,7 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 export function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +37,21 @@ export function Header() {
 
     checkUser();
   }, []);
+
+  const handleSignIn = async () => {
+    setIsLoggingIn(true);
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/dashboard`,
+        },
+      });
+    } catch (error) {
+      console.error("Error signing in:", error);
+      setIsLoggingIn(false);
+    }
+  };
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -81,17 +97,29 @@ export function Header() {
                 </button>
               </>
             ) : (
-              <Link
-                href="/dashboard"
-                className={`inline-flex items-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]`}
+              <button
+                onClick={handleSignIn}
+                disabled={isLoggingIn}
+                className={`inline-flex items-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)] ${
+                  isLoggingIn ? "opacity-70 cursor-not-allowed" : ""
+                }`}
               >
-                <FontAwesomeIcon
-                  icon={faGoogle}
-                  size="xl"
-                  className="h-4 w-4"
-                />
-                Login com Google
-              </Link>
+                {isLoggingIn ? (
+                  <>
+                    <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-[#ff0884] border-opacity-50"></div>
+                    <span>Carregando...</span>
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon
+                      icon={faGoogle}
+                      size="xl"
+                      className="h-4 w-4"
+                    />
+                    Login com Google
+                  </>
+                )}
+              </button>
             ))}
         </div>
       </div>
