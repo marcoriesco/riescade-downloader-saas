@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Zap, Trophy, Flame } from "lucide-react";
 import Image from "next/image";
+import { ImageSlider } from "@/components/ImageSlider";
+import { PlatformIcons } from "@/components/PlatformIcons";
 
 import { Roboto_Condensed } from "next/font/google";
 import { Video } from "@/components/Video";
@@ -12,6 +14,69 @@ const robotoCondensed = Roboto_Condensed({
 });
 
 export default function Home() {
+  const gameImages = [
+    {
+      title: "Loading",
+      console: "RIESCADE",
+      image: "/screenshots/loading.jpg",
+    },
+    {
+      title: "Jogos",
+      console: "RIESCADE",
+      image: "/screenshots/allgames.jpg",
+    },
+    {
+      title: "Emuladores",
+      console: "RIESCADE",
+      image: "/screenshots/emulators.jpg",
+    },
+    {
+      title: "Arcade",
+      console: "RIESCADE",
+      image: "/screenshots/arcade.jpg",
+    },
+    {
+      title: "Street Fighter III",
+      console: "RIESCADE",
+      image: "/screenshots/sf3.jpg",
+    },
+    {
+      title: "Nintendo Switch",
+      console: "Consoles",
+      image: "/screenshots/switch.jpg",
+    },
+    {
+      title: "Super Mario Bros. Wonder",
+      console: "Nintendo Switch",
+      image: "/screenshots/mariowonder.jpg",
+    },
+    {
+      title: "Windows",
+      console: "PC Gamer",
+      image: "/screenshots/windows.jpg",
+    },
+    {
+      title: "Nintendo 64 Disk",
+      console: "Extensões",
+      image: "/screenshots/n64dd.jpg",
+    },
+    {
+      title: "PS Vita",
+      console: "Portáteis",
+      image: "/screenshots/psvita.jpg",
+    },
+    {
+      title: "Pinball M",
+      console: "Pinballs",
+      image: "/screenshots/pinballm.jpg",
+    },
+    {
+      title: "DOOM 3",
+      console: "Ports",
+      image: "/screenshots/doom3.jpg",
+    },
+  ];
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Header />
@@ -154,93 +219,8 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[
-                {
-                  title: "Loading",
-                  console: "RIESCADE",
-                  image: "/screenshots/loading.jpg",
-                },
-                {
-                  title: "Jogos",
-                  console: "RIESCADE",
-                  image: "/screenshots/allgames.jpg",
-                },
-                {
-                  title: "Emuladores",
-                  console: "RIESCADE",
-                  image: "/screenshots/emulators.jpg",
-                },
-                {
-                  title: "Arcade",
-                  console: "RIESCADE",
-                  image: "/screenshots/arcade.jpg",
-                },
-                {
-                  title: "Street Fighter III",
-                  console: "RIESCADE",
-                  image: "/screenshots/sf3.jpg",
-                },
-
-                {
-                  title: "Nintendo Switch",
-                  console: "Consoles",
-                  image: "/screenshots/switch.jpg",
-                },
-                {
-                  title: "Super Mario Bros. Wonder",
-                  console: "Nintendo Switch",
-                  image: "/screenshots/mariowonder.jpg",
-                },
-                {
-                  title: "Windows",
-                  console: "PC Gamer",
-                  image: "/screenshots/windows.jpg",
-                },
-                {
-                  title: "Nintendo 64 Disk",
-                  console: "Extensões",
-                  image: "/screenshots/n64dd.jpg",
-                },
-                {
-                  title: "PS Vita",
-                  console: "Portáteis",
-                  image: "/screenshots/psvita.jpg",
-                },
-                {
-                  title: "Pinball M",
-                  console: "Pinballs",
-                  image: "/screenshots/pinballm.jpg",
-                },
-                {
-                  title: "DOOM 3",
-                  console: "Ports",
-                  image: "/screenshots/doom3.jpg",
-                },
-              ].map((game, index) => (
-                <div
-                  key={index}
-                  className="relative bg-gray-800/20 rounded-lg overflow-hidden border border-gray-700 hover:border-[#ff0884]/50 transition-all duration-300 group"
-                >
-                  <div className="h-64 overflow-hidden">
-                    <Image
-                      src={game.image}
-                      alt={game.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition-all duration-500"
-                      width={500}
-                      height={300}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <h3 className="text-xl font-bold text-white mb-1">
-                      {game.title}
-                    </h3>
-                    <p className="text-sm text-[#ff0884]">{game.console}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {/* Slider de Sistemas */}
+            <ImageSlider images={gameImages} slidesPerView={3} />
           </div>
         </div>
 
@@ -323,62 +303,20 @@ export default function Home() {
             </div>
           </div>
         </div>
-
-        {/* Emulators Showcase */}
-        <div className="py-20 bg-black relative">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-[#13111C] via-black to-black"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="text-[#ff0884]">JOGOS</span> CLÁSSICOS
-              </h2>
-              <p
-                className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
-              >
-                Reviva os melhores jogos de todas as gerações
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                "/lovable-uploads/1b5b7c52-1e0e-40c8-945b-36ee7f52f2ab.png",
-                "/lovable-uploads/8748853f-dc48-4348-b90c-f528f08f145c.png",
-                "/lovable-uploads/9a3d2d4a-7d88-411b-be79-e288daba9662.png",
-                "/lovable-uploads/acb3142e-a375-4d94-af66-507f512f9022.png",
-              ].map((img, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-800/30 rounded-lg overflow-hidden border border-gray-700 aspect-video relative group"
-                >
-                  <Image
-                    src={img}
-                    alt={`Emulator interface ${index + 1}`}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
-                    <div className="p-3">
-                      <span className="text-xs px-2 py-1 bg-[#ff0884]/80 rounded-full text-white">
-                        Sistema {index + 1}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884] text-base font-bold rounded-md shadow-[0_0_20px_rgba(255,8,132,0.4)] text-white bg-[#ff0884] hover:bg-[#ff0884]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 transform hover:scale-105"
-              >
-                <Flame className="h-5 w-5" />
-                EXPLORAR AGORA
-              </Link>
-            </div>
-          </div>
-        </div>
       </main>
+
+      {/* Plataformas Suportadas */}
+      <div className="bg-black relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#13111C] via-black to-black"></div>
+        <div className="relative max-w mx-auto">
+          <div className="text-center py-8">
+            <h2 className="text-2xl font-bold text-white mb-2">
+              <span className="text-[#ff0884]">PLATAFORMAS</span> SUPORTADAS
+            </h2>
+          </div>
+          <PlatformIcons speed={90} />
+        </div>
+      </div>
 
       <footer className="bg-black text-white py-12 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -386,54 +324,70 @@ export default function Home() {
             <div className="mb-8 md:mb-0">
               <div className="flex items-center space-x-2">
                 <Image
-                  src="/lovable-uploads/ddfc12ca-84bd-41d0-b7d8-fea61305958e.png"
-                  alt="RIESCADE Mascot"
-                  width={40}
-                  height={40}
+                  src="/images/logos.png"
+                  alt="RIESCADE Logo"
+                  width={35}
+                  height={35}
                 />
                 <h3 className="text-xl font-bold">
                   <span className="text-[#ff0884]">RIES</span>CADE
                 </h3>
               </div>
-              <p className="text-gray-400 mt-2">
-                Domine. Conquiste. Prevaleça.
+              <p className={`${robotoCondensed.className} text-gray-400 mt-2`}>
+                RetroGames e Games, sempre emulando...
               </p>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-              {[
-                "Sobre",
-                "Recursos",
-                "Preços",
-                "Contato",
-                "Blog",
-                "Suporte",
-              ].map((item) => (
-                <div key={item} className="mb-4">
-                  <Link
-                    href="#"
-                    className="text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+
+            {/* Redes Sociais */}
+            <div className="mt-8 flex flex-col space-y-4">
+              <div className="flex space-x-6">
+                <Link
+                  href="https://facebook.com/riescade"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 320 512"
+                    className="h-6 w-6 mr-2 fill-current"
                   >
-                    {item}
-                  </Link>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center md:text-left md:flex md:justify-between">
-            <p className="text-gray-500">
-              © 2024 RIESCADE. Todos os direitos reservados.
-            </p>
-            <div className="mt-4 md:mt-0">
-              <div className="flex space-x-6 justify-center md:justify-end">
-                {["Twitter", "Discord", "Twitch"].map((social) => (
-                  <Link
-                    key={social}
-                    href="#"
-                    className="text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                    <path d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z" />
+                  </svg>
+                  <span>Facebook</span>
+                </Link>
+
+                <Link
+                  href="https://instagram.com/riescade"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512"
+                    className="h-6 w-6 mr-2 fill-current"
                   >
-                    {social}
-                  </Link>
-                ))}
+                    <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+                  </svg>
+                  <span>Instagram</span>
+                </Link>
+
+                <Link
+                  href="https://youtube.com/@riescade"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 576 512"
+                    className="h-6 w-6 mr-2 fill-current"
+                  >
+                    <path d="M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781 64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284 48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281 23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321 42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51 213.508V175.185l142.739 81.205-142.739 81.201z" />
+                  </svg>
+                  <span>YouTube</span>
+                </Link>
               </div>
             </div>
           </div>
