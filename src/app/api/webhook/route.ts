@@ -1,4 +1,3 @@
-
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { supabase } from "@/lib/supabase";
@@ -31,6 +30,7 @@ export async function POST(request: Request) {
         signature,
         process.env.STRIPE_WEBHOOK_SECRET
       );
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       return NextResponse.json(
         { message: `Webhook Error: ${err.message}` },
@@ -45,7 +45,11 @@ export async function POST(request: Request) {
         console.log("Checkout session completed:", session);
 
         // Atualiza o banco de dados
-        if (session.customer && session.subscription && session.client_reference_id) {
+        if (
+          session.customer &&
+          session.subscription &&
+          session.client_reference_id
+        ) {
           const { error } = await supabase.from("subscriptions").upsert({
             user_id: session.client_reference_id,
             subscription_id: session.subscription,
@@ -71,13 +75,14 @@ export async function POST(request: Request) {
       case "customer.subscription.deleted":
         const subscription = event.data.object;
         const status = subscription.status;
-        
+
         // Encontrar o usuário associado a esta inscrição
-        const { data: subscriptionData, error: subscriptionError } = await supabase
-          .from("subscriptions")
-          .select("*")
-          .eq("subscription_id", subscription.id)
-          .single();
+        const { data: subscriptionData, error: subscriptionError } =
+          await supabase
+            .from("subscriptions")
+            .select("*")
+            .eq("subscription_id", subscription.id)
+            .single();
 
         if (subscriptionError || !subscriptionData) {
           console.error("Error finding subscription:", subscriptionError);
