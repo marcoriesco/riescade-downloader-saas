@@ -8,23 +8,12 @@ import { supabase } from "@/lib/supabase";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 import Image from "next/image";
 
-import { Roboto_Condensed } from "next/font/google";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faWhatsapp,
-  faTelegramPlane,
-  faGoogle,
-} from "@fortawesome/free-brands-svg-icons";
-
-const robotoCondensed = Roboto_Condensed({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 export function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [menuOpen, setMenuOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -68,48 +57,6 @@ export function Header() {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-6">
-          <Link
-            href="/"
-            className="text-gray-300 hover:text-white transition-colors"
-          >
-            Início
-          </Link>
-          <Link
-            href="#features"
-            className="text-gray-300 hover:text-white transition-colors"
-          >
-            Recursos
-          </Link>
-          <Link
-            href="#screenshots"
-            className="text-gray-300 hover:text-white transition-colors pr-6"
-          >
-            Games
-          </Link>
-          <Link
-            href="#"
-            className={`${robotoCondensed.className} text-gray-300 hover:text-white transition-colors`}
-            target="_blank"
-          >
-            <FontAwesomeIcon
-              icon={faTelegramPlane}
-              size="xl"
-              className="mr-2"
-            />
-            Telegram
-          </Link>
-          <Link
-            href="https://chat.whatsapp.com/Kn2eA8g8FIp0aTYV0iNYSe"
-            className={`${robotoCondensed.className} text-gray-300 hover:text-white transition-colors`}
-            target="_blank"
-          >
-            <FontAwesomeIcon icon={faWhatsapp} size="xl" className="mr-2" />
-            WhatsApp
-          </Link>
-        </div>
-
         <div className="flex items-center space-x-4">
           {!loading &&
             (user ? (
@@ -136,7 +83,7 @@ export function Header() {
             ) : (
               <Link
                 href="/dashboard"
-                className={`${robotoCondensed.className} inline-flex items-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]`}
+                className={`inline-flex items-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]`}
               >
                 <FontAwesomeIcon
                   icon={faGoogle}
@@ -146,69 +93,8 @@ export function Header() {
                 Login com Google
               </Link>
             ))}
-
-          {/* Mobile menu button */}
-          <button
-            className="md:hidden rounded-md p-2 text-gray-400 hover:bg-gray-800 hover:text-white"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {menuOpen ? (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              ) : (
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              )}
-            </svg>
-          </button>
         </div>
       </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-gray-800/90 backdrop-blur-md border-t border-gray-700">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link
-              href="/"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
-            >
-              Início
-            </Link>
-            <Link
-              href="#features"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
-            >
-              Recursos
-            </Link>
-            <Link
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
-            >
-              Planos
-            </Link>
-            <Link
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-gray-700"
-            >
-              Suporte
-            </Link>
-          </div>
-        </div>
-      )}
     </header>
   );
 }

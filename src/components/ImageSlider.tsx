@@ -10,6 +10,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-fade";
+import { Roboto_Condensed } from "next/font/google";
+
+const robotoCondensed = Roboto_Condensed({
+  subsets: ["latin"],
+  weight: ["400"],
+});
 
 type GameImage = {
   title: string;
@@ -96,7 +102,11 @@ export function ImageSlider({
                 <h3 className="text-xl font-bold text-white mb-1">
                   {item.title}
                 </h3>
-                <p className="text-sm text-[#ff0884]">{item.console}</p>
+                <p
+                  className={`${robotoCondensed.className} text-sm text-[#ff0884]`}
+                >
+                  {item.console}
+                </p>
               </div>
             </div>
           </SwiperSlide>
