@@ -104,7 +104,10 @@ export async function POST(request: Request) {
       }/dashboard?canceled=true`,
       metadata: {
         userId,
+        price_id: priceId,
+        fullName: userName || "",
       },
+      client_reference_id: userId,
     });
 
     // Salvar relação inicial no banco de dados

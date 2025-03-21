@@ -1,3 +1,81 @@
+# RIESCADE Downloader
+
+Plataforma para gerenciamento de assinaturas para acesso a conteúdo exclusivo.
+
+## Funcionalidades
+
+- Autenticação com Google
+- Processamento de pagamentos com Stripe
+- Gerenciamento de assinaturas
+- Integração automática com Google Drive para conceder acesso a pastas compartilhadas
+
+## Configuração
+
+### Variáveis de Ambiente
+
+1. Copie o arquivo `.env.example` para `.env.local`:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+2. Preencha as variáveis com seus valores:
+   - **Supabase**: Credenciais do seu projeto Supabase
+   - **Stripe**: Credenciais do Stripe para processamento de pagamentos
+   - **Google Drive**: Credenciais da conta de serviço e ID da pasta para conceder acesso
+
+### Configuração do Google Drive
+
+Para a integração com o Google Drive funcionar corretamente:
+
+1. Crie uma conta de serviço no [Google Cloud Console](https://console.cloud.google.com/)
+2. Habilite a API do Google Drive para o seu projeto
+3. Crie uma chave JSON para sua conta de serviço
+4. Compartilhe a pasta do Drive com a conta de serviço e dê permissões de gerenciamento
+5. Adicione as seguintes variáveis ao seu `.env.local`:
+   ```
+   GOOGLE_CLIENT_EMAIL=sua-conta-de-servico@seu-projeto.iam.gserviceaccount.com
+   GOOGLE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nsua-chave-privada\n-----END PRIVATE KEY-----\n"
+   GOOGLE_PROJECT_ID=seu-id-do-projeto
+   GOOGLE_DRIVE_FOLDER_ID=id-da-pasta-do-drive
+   ```
+
+### Configuração do Supabase
+
+Para o Supabase Admin funcionar corretamente:
+
+1. Obtenha a Service Role Key do seu projeto Supabase
+2. Adicione ao `.env.local`:
+   ```
+   SUPABASE_SERVICE_ROLE_KEY=sua-chave-de-servico
+   ```
+
+## Desenvolvimento
+
+```bash
+# Instalar dependências
+npm install
+
+# Iniciar servidor de desenvolvimento
+npm run dev
+```
+
+## Fluxo de Assinaturas
+
+1. Usuário se autentica com Google
+2. Usuário assina via Stripe
+3. O webhook do Stripe atualiza o status da assinatura no Supabase
+4. Quando uma assinatura se torna ativa, o sistema adiciona o email do usuário na pasta compartilhada do Google Drive
+5. Quando uma assinatura é cancelada, o acesso é removido automaticamente
+
+## Webhook do Stripe
+
+Para testar o webhook localmente, use o Stripe CLI:
+
+```bash
+stripe listen --forward-to localhost:3000/api/webhook
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
