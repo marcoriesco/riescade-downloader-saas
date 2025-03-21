@@ -12,10 +12,18 @@ import {
   User as UserIcon,
   DownloadIcon,
   AlertCircleIcon,
+  XCircle,
 } from "lucide-react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { CancelSubscriptionModal } from "@/components/CancelSubscriptionModal";
+import { Roboto_Condensed } from "next/font/google";
+
+const robotoCondensed = Roboto_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
 
 // Componente que usa useSearchParams
 function DashboardContent() {
@@ -24,6 +32,8 @@ function DashboardContent() {
   const [loading, setLoading] = useState(true);
   const [authRedirecting, setAuthRedirecting] = useState(false);
   const [verifyingSession, setVerifyingSession] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancellingSubscription, setCancellingSubscription] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const success = searchParams.get("success");
@@ -65,8 +75,6 @@ function DashboardContent() {
           redirectTo: `${window.location.origin}/dashboard`,
         },
       });
-      // Note: This function won't return after redirect to Google
-      // We need to handle the return in the useEffect
     } catch (error) {
       console.error("Error signing in:", error);
       setAuthRedirecting(false);
@@ -124,8 +132,6 @@ function DashboardContent() {
           await fetchSubscription(session.user.id);
         } else {
           console.log("No authenticated user found");
-          // Don't automatically redirect to login
-          // Allow the UI to show the login prompt
         }
       } catch (error) {
         console.error("Error checking user session:", error);
@@ -201,6 +207,55 @@ function DashboardContent() {
     alert("Download: " + downloadUrl);
   };
 
+  // Adicionar função para cancelar assinatura
+  const handleCancelSubscription = async () => {
+    if (!user || !subscription) return;
+
+    setCancellingSubscription(true);
+    try {
+      const response = await fetch("/api/cancel-subscription", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subscriptionId: subscription.subscription_id,
+          userId: user.id,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        // Atualizar subscription local
+        setSubscription({
+          ...subscription,
+          status: "canceled",
+        });
+
+        // Fechar modal
+        setShowCancelModal(false);
+
+        // Atualizar a página após um breve delay para mostrar o status atualizado
+        setTimeout(() => {
+          router.refresh();
+        }, 1000);
+      } else {
+        console.error("Erro ao cancelar assinatura:", result);
+        alert(
+          "Erro ao cancelar sua assinatura. Por favor, tente novamente ou entre em contato com o suporte."
+        );
+      }
+    } catch (error) {
+      console.error("Erro na requisição de cancelamento:", error);
+      alert(
+        "Erro ao processar sua solicitação. Por favor, verifique sua conexão e tente novamente."
+      );
+    } finally {
+      setCancellingSubscription(false);
+    }
+  };
+
   // Show loading state while checking auth
   if (loading) {
     return (
@@ -267,6 +322,15 @@ function DashboardContent() {
 
       <Header />
 
+      {/* Modal de Cancelamento */}
+      <CancelSubscriptionModal
+        isOpen={showCancelModal}
+        userEmail={user?.email || ""}
+        onClose={() => setShowCancelModal(false)}
+        onConfirm={handleCancelSubscription}
+        isSubmitting={cancellingSubscription}
+      />
+
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {success && (
           <div className="mb-8 p-4 bg-green-900/20 border border-green-500/30 rounded-md backdrop-blur-sm animate-fade-in">
@@ -330,10 +394,14 @@ function DashboardContent() {
                     <div className="w-20 h-20 rounded-full bg-[#ff0884]/20 border-2 border-[#ff0884]/50 flex items-center justify-center mb-3 animate-pulse-glow">
                       <UserIcon className="h-10 w-10 text-[#ff0884]" />
                     </div>
-                    <h3 className="text-xl text-white font-bold">
-                      {user.user_metadata?.full_name || "Gamer"}
+                    <h3 className="text-xl text-white font-bold m-1">
+                      {user.user_metadata?.full_name || "User"}
                     </h3>
-                    <p className="text-gray-400 text-sm">{user.email}</p>
+                    <p
+                      className={`${robotoCondensed.className} text-gray-400 text-sm`}
+                    >
+                      {user.email}
+                    </p>
                   </div>
 
                   <div className="mb-4">
@@ -403,16 +471,20 @@ function DashboardContent() {
                     </div>
                   </div>
 
-                  <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0">
-                    {subscription.status !== "active" && (
+                  <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0 pb-4">
+                    {subscription.status === "active" ? (
                       <>
+                        {/* Botão Cancelar Assinatura */}
                         <button
-                          disabled
-                          className="w-full sm:w-auto bg-gray-700 text-gray-400 font-medium py-3 px-6 rounded-md cursor-not-allowed flex items-center justify-center"
+                          onClick={() => setShowCancelModal(true)}
+                          className="w-full sm:w-auto bg-gray-800 hover:bg-red-900/70 text-gray-300 hover:text-white font-medium py-3 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 flex items-center justify-center border border-gray-700 hover:border-red-800"
                         >
-                          <Flame className="w-5 h-5 mr-2" />
-                          Download Indisponível
+                          <XCircle className="w-5 h-5 mr-2 text-red-500" />
+                          Cancelar Assinatura
                         </button>
+                      </>
+                    ) : (
+                      <>
                         <button
                           onClick={handleCheckout}
                           className="w-full sm:w-auto bg-[#ff0884] hover:bg-[#ff0884]/90 text-white font-medium py-3 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-[#ff0884]/50 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 transform hover:scale-105 flex items-center justify-center shadow-[0_0_15px_rgba(255,8,132,0.3)]"
@@ -504,7 +576,7 @@ function DashboardContent() {
           </div>
         </div>
 
-        {/* Games Section */}
+        {/* Download Section */}
         <div className="mt-8 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
             <DownloadIcon className="w-5 h-5 text-[#ff0884] mr-2" />

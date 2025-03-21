@@ -40,6 +40,9 @@ body {
   }
 
   .rounded-lg {
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
+  }
+  .rounded-md {
+    border-radius: 1rem;
   }
 }

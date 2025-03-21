@@ -11,6 +11,13 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
+import { Roboto_Condensed } from "next/font/google";
+
+const robotoCondensed = Roboto_Condensed({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
 export function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -81,7 +88,11 @@ export function Header() {
                   <div className="w-8 h-8 rounded-full bg-[#ff0884]/20 border border-[#ff0884]/50 flex items-center justify-center mr-2">
                     <User className="h-4 w-4 text-[#ff0884]" />
                   </div>
-                  <span className="text-gray-200">{user.email}</span>
+                  <span
+                    className={`${robotoCondensed.className} text-gray-200`}
+                  >
+                    {user.email}
+                  </span>
                 </div>
                 <Link
                   href="/dashboard"
