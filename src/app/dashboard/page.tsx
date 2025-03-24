@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useCallback, Suspense } from "react";
@@ -762,4 +763,46 @@ function DashboardContent() {
                         >
                           <Download className="w-4 h-4" />
                           {item.buttonText}
-                        </button
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-black/30 p-6 rounded-lg border border-gray-700 text-center">
+                <Lock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-white mb-2">Downloads Bloqueados</h3>
+                <p className="text-gray-300 mb-6">
+                  Torne-se membro para acessar conteúdo exclusivo, incluindo mais de 12TB de jogos no Google Drive.
+                </p>
+                <button
+                  onClick={handleCheckout}
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#ff0884]/80 hover:bg-[#ff0884] text-white rounded-lg transition-all duration-300 font-medium"
+                >
+                  <Zap className="w-5 h-5" />
+                  ASSINAR AGORA
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+// Wrapper exportado para usar o Suspense
+export default function Dashboard() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen w-full items-center justify-center bg-black">
+          <div className="h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884]"></div>
+        </div>
+      }
+    >
+      <DashboardContent />
+    </Suspense>
+  );
+}
