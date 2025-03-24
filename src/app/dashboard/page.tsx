@@ -1,26 +1,28 @@
-
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
-import { supabase, type Subscription, addDriveAccessForUser } from "@/lib/supabase";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
+import {
+  supabase,
+  type Subscription,
+  addDriveAccessForUser,
+} from "@/lib/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { Header } from "@/components/Header";
 import {
   Zap,
-  Flame,
   Shield,
   User as UserIcon,
   Download,
   Cloud,
-  ExternalLink,
   Lock,
-  Gamepad2,
   HardDrive,
-  AlertCircle,
   XCircle,
-  FolderOpen,
   Folder,
+  AlertCircleIcon,
+  Gamepad2Icon,
+  CloudAlertIcon,
+  LucideProps,
 } from "lucide-react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -28,33 +30,44 @@ import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { CancelSubscriptionModal } from "@/components/CancelSubscriptionModal";
 import { Roboto_Condensed } from "next/font/google";
 import { toast } from "sonner";
-import { getUserEmailById } from "@/lib/supabase-admin";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
   weight: ["400", "700"],
 });
 
+type DownloadType = {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ComponentType<LucideProps>;
+  url: string;
+  buttonText: string;
+  highlight?: boolean;
+  category: string;
+};
+
 // Array de downloads disponíveis
 const DOWNLOADS = [
   {
     id: "google-drive",
     title: "ACESSO GOOGLE DRIVE MEMBROS",
-    description: "Acesso ao drive com mais de 12TB de jogos exclusivos para membros",
-    icon: Cloud,
+    description:
+      "Acesso ao drive com mais de 12TB de jogos exclusivos para membros",
+    icon: CloudAlertIcon,
     url: "https://bit.ly/riescade-base",
     buttonText: "ACESSAR DRIVE",
     highlight: true,
-    category: "COMPLETO"
+    category: "COMPLETO",
   },
   {
     id: "riescade-base-membros",
     title: "RIESCADE BASE MEMBROS",
     description: "1 jogo por plataforma para membros",
-    icon: Gamepad2,
+    icon: Gamepad2Icon,
     url: "https://drive.google.com/drive/folders/1zte41dcZ3hIUE5JU8S4KPsk8bB03u4lR",
     buttonText: "BAIXAR AGORA",
-    category: "BASE DE JOGOS"
+    category: "BASE DE JOGOS",
   },
   {
     id: "riescade-base-free",
@@ -63,7 +76,7 @@ const DOWNLOADS = [
     icon: Folder,
     url: "https://bit.ly/riescade-base",
     buttonText: "BAIXAR VERSÃO FREE",
-    category: "GRÁTIS"
+    category: "GRÁTIS",
   },
   {
     id: "riescade-apps",
@@ -72,8 +85,8 @@ const DOWNLOADS = [
     icon: HardDrive,
     url: "https://bit.ly/riescade-apps",
     buttonText: "BAIXAR ARQUIVOS",
-    category: "ESSENCIAIS"
-  }
+    category: "ESSENCIAIS",
+  },
 ];
 
 // Componente que usa useSearchParams
@@ -92,7 +105,9 @@ function DashboardContent() {
   const sessionId = searchParams.get("session_id");
 
   // Novo estado para controlar o status de acesso ao Google Drive
-  const [driveAccessStatus, setDriveAccessStatus] = useState<"pending" | "granted" | "failed" | null>(null);
+  const [driveAccessStatus, setDriveAccessStatus] = useState<
+    "pending" | "granted" | "failed" | null
+  >(null);
 
   // Fetch subscription function
   const fetchSubscription = useCallback(async (userId: string) => {
@@ -138,17 +153,19 @@ function DashboardContent() {
   // Nova função para conceder acesso ao Google Drive
   const grantDriveAccess = useCallback(async () => {
     if (!user || !user.email) return;
-    
+
     setDriveAccessStatus("pending");
     try {
       const result = await addDriveAccessForUser(user.email);
-      
+
       if (result) {
         setDriveAccessStatus("granted");
         toast.success("Acesso ao Google Drive concedido com sucesso!");
       } else {
         setDriveAccessStatus("failed");
-        toast.error("Falha ao conceder acesso ao Google Drive. Tente novamente.");
+        toast.error(
+          "Falha ao conceder acesso ao Google Drive. Tente novamente."
+        );
       }
     } catch (error) {
       console.error("Erro ao conceder acesso ao Drive:", error);
@@ -280,7 +297,7 @@ function DashboardContent() {
   };
 
   // Adicionar função para lidar com downloads
-  const handleDownload = (item) => {
+  const handleDownload = (item: DownloadType) => {
     if (item.id === "google-drive" && subscription?.status === "active") {
       // Se for o Drive e o usuário tem assinatura ativa, conceder acesso
       grantDriveAccess();
@@ -663,7 +680,9 @@ function DashboardContent() {
         <div className="mt-8 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
             <Download className="w-5 h-5 text-[#ff0884] mr-2" />
-            <h2 className="text-lg font-medium text-white">Downloads Exclusivos</h2>
+            <h2 className="text-lg font-medium text-white">
+              Downloads Exclusivos
+            </h2>
           </div>
 
           <div className="p-6">
@@ -673,7 +692,7 @@ function DashboardContent() {
                 <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 rounded-lg p-6 border border-purple-500/30 relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full filter blur-2xl animate-pulse"></div>
                   <div className="absolute bottom-0 left-0 w-24 h-24 bg-purple-500/10 rounded-full filter blur-xl animate-pulse-slow"></div>
-                  
+
                   <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
                     <div className="flex-1">
                       <h3 className="text-xl md:text-2xl font-bold text-white mb-2 flex items-center">
@@ -681,7 +700,8 @@ function DashboardContent() {
                         ACESSO COMPLETO GOOGLE DRIVE
                       </h3>
                       <p className="text-gray-300 mb-4">
-                        Como membro ativo, você tem acesso exclusivo a mais de 12TB de conteúdo premium no nosso Google Drive!
+                        Como membro ativo, você tem acesso exclusivo a mais de
+                        12TB de conteúdo premium no nosso Google Drive!
                       </p>
                       <div className="flex flex-wrap gap-2 mb-4">
                         <span className="px-3 py-1 bg-purple-900/50 text-purple-300 rounded-full text-xs border border-purple-500/30">
@@ -695,15 +715,16 @@ function DashboardContent() {
                         </span>
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-col items-center">
                       <button
                         onClick={() => handleDownload(DOWNLOADS[0])}
                         disabled={driveAccessStatus === "pending"}
                         className={`relative overflow-hidden group px-6 py-3 rounded-lg flex items-center space-x-2 font-bold text-white 
-                          ${driveAccessStatus === "pending" 
-                            ? "bg-gray-700 cursor-wait" 
-                            : "bg-gradient-to-r from-[#ff0884] to-purple-600 hover:from-[#ff0884]/90 hover:to-purple-700 transition-all duration-300"
+                          ${
+                            driveAccessStatus === "pending"
+                              ? "bg-gray-700 cursor-wait"
+                              : "bg-gradient-to-r from-[#ff0884] to-purple-600 hover:from-[#ff0884]/90 hover:to-purple-700 transition-all duration-300"
                           }`}
                       >
                         <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
@@ -719,14 +740,14 @@ function DashboardContent() {
                           </>
                         )}
                       </button>
-                      
+
                       {driveAccessStatus === "granted" && (
                         <p className="text-green-400 text-xs mt-2 flex items-center">
                           <span className="w-2 h-2 bg-green-400 rounded-full mr-1"></span>
                           Acesso concedido com sucesso!
                         </p>
                       )}
-                      
+
                       {driveAccessStatus === "failed" && (
                         <p className="text-red-400 text-xs mt-2 flex items-center">
                           <span className="w-2 h-2 bg-red-400 rounded-full mr-1"></span>
@@ -736,11 +757,11 @@ function DashboardContent() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Grid com os outros downloads */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {DOWNLOADS.slice(1).map((item) => (
-                    <div 
+                    <div
                       key={item.id}
                       className="bg-gray-800/60 hover:bg-gray-800/80 border border-gray-700 hover:border-[#ff0884]/30 rounded-lg overflow-hidden shadow-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(255,8,132,0.2)]"
                     >
@@ -753,10 +774,14 @@ function DashboardContent() {
                             {item.category}
                           </span>
                         </div>
-                        
-                        <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
-                        <p className="text-gray-400 text-sm mb-5 min-h-[40px]">{item.description}</p>
-                        
+
+                        <h3 className="text-lg font-bold text-white mb-2">
+                          {item.title}
+                        </h3>
+                        <p className="text-gray-400 text-sm mb-5 min-h-[40px]">
+                          {item.description}
+                        </p>
+
                         <button
                           onClick={() => handleDownload(item)}
                           className="w-full inline-flex items-center justify-center gap-2 py-2 px-4 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors duration-200 font-medium text-sm border border-gray-600"
@@ -772,9 +797,12 @@ function DashboardContent() {
             ) : (
               <div className="bg-black/30 p-6 rounded-lg border border-gray-700 text-center">
                 <Lock className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-white mb-2">Downloads Bloqueados</h3>
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Downloads Bloqueados
+                </h3>
                 <p className="text-gray-300 mb-6">
-                  Torne-se membro para acessar conteúdo exclusivo, incluindo mais de 12TB de jogos no Google Drive.
+                  Torne-se membro para acessar conteúdo exclusivo, incluindo
+                  mais de 12TB de jogos no Google Drive.
                 </p>
                 <button
                   onClick={handleCheckout}
