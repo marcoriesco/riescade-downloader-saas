@@ -43,3 +43,5 @@ app_logs.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel

@@ -1,6 +1,6 @@
 {
-  "name": "app",
-  "version": "0.1.0",
+  "name": "riescade-saas",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -14,6 +14,7 @@
     "@stripe/react-stripe-js": "^3.5.1",
     "@stripe/stripe-js": "^6.1.0",
     "@supabase/supabase-js": "^2.49.1",
+    "googleapis": "^148.0.0",
     "lucide-react": "^0.483.0",
     "next": "15.2.3",
     "next-auth": "^4.24.11",
