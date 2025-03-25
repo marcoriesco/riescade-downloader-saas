@@ -1594,5 +1594,11 @@
     "image": "/images/platform/atari800.webp",
     "url": "https://drive.google.com/drive/folders/1MoLazhICVW1awn6YqE0DqnStTmFTrUJ7",
     "fullName": "Atari 800"
+  },
+  {
+    "name": "corsixth",
+    "image": "/images/platform/corsixth.webp",
+    "url": "https://drive.google.com/drive/folders/1MoLazhICVW1awn6YqE0DqnStTmFTrUJ7",
+    "fullName": "Corsixth Theme Hospital"
   }
 ]
