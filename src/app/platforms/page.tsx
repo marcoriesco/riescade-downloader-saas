@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase, type Subscription } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import Image from "next/image";
 import platformsData from "@/data/platforms.json";
-import { Search } from "lucide-react";
+import { Search, Flame } from "lucide-react";
 
 import { Roboto_Condensed } from "next/font/google";
 
@@ -18,10 +18,33 @@ const robotoCondensed = Roboto_Condensed({
 
 export default function PlatformsPage() {
   const [user, setUser] = useState<User | null>(null);
+  const [subscription, setSubscription] = useState<Subscription | null>(null);
   const [loading, setLoading] = useState(true);
   const [authRedirecting, setAuthRedirecting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
+
+  // Fetch subscription function
+  const fetchSubscription = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("subscriptions")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Error fetching subscription:", error);
+        setSubscription(null);
+      } else {
+        console.log("Subscription data:", data);
+        setSubscription(data);
+      }
+    } catch (error) {
+      console.error("Error in fetchSubscription:", error);
+      setSubscription(null);
+    }
+  };
 
   // Verificar autenticação
   useEffect(() => {
@@ -33,6 +56,7 @@ export default function PlatformsPage() {
 
         if (session?.user) {
           setUser(session.user);
+          await fetchSubscription(session.user.id);
         } else {
           console.log("Redirecionando para login (sem sessão)");
           router.push("/");
@@ -64,10 +88,39 @@ export default function PlatformsPage() {
     }
   };
 
-  // Filtrar plataformas com base no termo de pesquisa
-  const filteredPlatforms = platformsData.filter((platform) =>
-    platform.fullName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  // Handle checkout para renovar assinatura
+  const handleCheckout = async () => {
+    if (!user) return;
+
+    try {
+      const response = await fetch("/api/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || "price_1",
+          userId: user.id,
+          userEmail: user.email,
+        }),
+      });
+
+      const session = await response.json();
+
+      if (session.url) {
+        window.location.href = session.url;
+      }
+    } catch (error) {
+      console.error("Error during checkout:", error);
+    }
+  };
+
+  // Filtrar plataformas com base no termo de pesquisa e ordenar alfabeticamente
+  const filteredPlatforms = platformsData
+    .filter((platform) =>
+      platform.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => a.fullName.localeCompare(b.fullName));
 
   // Loading state
   if (loading) {
@@ -144,6 +197,33 @@ export default function PlatformsPage() {
             </button>
           </div>
         </div>
+      </div>
+    );
+  }
+
+  // Usuário autenticado, mas sem assinatura ativa
+  if (!subscription || subscription.status !== "active") {
+    return (
+      <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gamer-dark via-black to-black opacity-90 z-0"></div>
+        <Header />
+        <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="text-center py-10">
+            <Flame className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+            <h3 className="text-xl font-medium text-gray-400 mb-2">
+              Acesso Bloqueado
+            </h3>
+            <p className="text-gray-500 mb-6">
+              Assine o plano para desbloquear o acesso a todas as plataformas.
+            </p>
+            <button
+              onClick={handleCheckout}
+              className="px-6 py-2 bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] rounded-md border border-[#ff0884]/30 transition-colors duration-200"
+            >
+              Assinar agora!
+            </button>
+          </div>
+        </main>
       </div>
     );
   }
