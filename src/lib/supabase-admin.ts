@@ -1,4 +1,3 @@
-
 import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -50,25 +49,5 @@ export async function getUserEmailFromProfile(
   } catch (error) {
     console.error("Erro ao acessar perfil do usuário:", error);
     return null;
-  }
-}
-
-// Adiciona informações de assinatura para um usuário específico
-export async function updateUserSubscriptionStatus(userId: string, status: string): Promise<boolean> {
-  try {
-    const { error } = await supabaseAdmin
-      .from("subscriptions")
-      .update({ status, updated_at: new Date().toISOString() })
-      .eq("user_id", userId);
-
-    if (error) {
-      console.error("Erro ao atualizar status da assinatura:", error);
-      return false;
-    }
-    
-    return true;
-  } catch (error) {
-    console.error("Erro ao atualizar assinatura:", error);
-    return false;
   }
 }
