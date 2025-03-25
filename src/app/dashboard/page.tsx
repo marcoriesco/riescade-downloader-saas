@@ -216,7 +216,11 @@ function DashboardContent() {
   };
 
   const handleOpenLink = (url: string) => {
-    window.open(url, "_blank", "noopener,noreferrer");
+    if (url.startsWith("/")) {
+      router.push(url);
+    } else {
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
   };
 
   const handleCancelSubscription = async () => {
@@ -349,12 +353,12 @@ function DashboardContent() {
     },
     {
       id: "base-free",
-      title: "RIESCADE BASE Free",
-      description: "Conteúdo gratuito para todos os usuários",
-      url: "https://bit.ly/riescade-base",
+      title: "Plataformas",
+      description: "Lista completa de plataformas disponíveis",
+      url: "/platforms",
       icon: faDice,
       highlight: false,
-      badge: "Grátis",
+      badge: "Novo",
       bgClass: "bg-gradient-to-br from-green-900/60 to-emerald-900/60",
     },
     {
@@ -565,7 +569,7 @@ function DashboardContent() {
                 <div className="space-y-6">
                   <div className="bg-black/30 p-6 rounded-lg border border-gray-700 text-center">
                     <Image
-                      src="/images/logos.png"
+                      src="/images/logos.webp"
                       alt="Gaming Logo"
                       className="h-20 w-20 object-contain mx-auto mb-4"
                       width={120}
@@ -646,7 +650,7 @@ function DashboardContent() {
                 {/* Banner destacado para Drive de Membro */}
                 <div className="relative overflow-hidden rounded-lg border border-[#ff0884]/30 group">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-[#ff0884]/30 to-blue-900/40 group-hover:opacity-75 transition-opacity duration-300"></div>
-                  <div className="absolute inset-0 bg-[url('/images/logos.png')] bg-no-repeat bg-right-bottom opacity-10"></div>
+                  <div className="absolute inset-0 bg-[url('/images/logos.webp')] bg-no-repeat bg-right-bottom opacity-10"></div>
 
                   <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row items-center">
                     <div className="mb-6 sm:mb-0 sm:mr-8 flex-shrink-0 bg-black/30 p-4 rounded-full border border-[#ff0884]/50 shadow-[0_0_15px_rgba(255,8,132,0.3)]">
@@ -716,7 +720,9 @@ function DashboardContent() {
                         className="w-full py-2 px-4 bg-black/30 hover:bg-[#ff0884]/20 border border-gray-700 hover:border-[#ff0884]/50 rounded-md text-white transition-colors duration-200 flex items-center justify-center"
                       >
                         <ExternalLink className="w-4 h-4 mr-2" />
-                        Acessar Link
+                        {item.id === "base-free"
+                          ? "Acessar Plataformas"
+                          : "Acessar Link"}
                       </button>
                     </div>
                   ))}

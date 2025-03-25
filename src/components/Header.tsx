@@ -71,7 +71,7 @@ export function Header() {
         <Link href="/" className="flex items-center space-x-2">
           <div className="flex items-center">
             <Image
-              src="/images/logo.png"
+              src="/images/logo.webp"
               alt="RIESCADE Logo"
               width={240}
               height={40}

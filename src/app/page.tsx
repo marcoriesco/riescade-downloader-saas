@@ -27,62 +27,62 @@ export default function Home() {
     {
       title: "Loading",
       console: "RIESCADE",
-      image: "/screenshots/loading.jpg",
+      image: "/screenshots/loading.webp",
     },
     {
       title: "Jogos",
       console: "RIESCADE",
-      image: "/screenshots/allgames.jpg",
+      image: "/screenshots/allgames.webp",
     },
     {
       title: "Emuladores",
       console: "RIESCADE",
-      image: "/screenshots/emulators.jpg",
+      image: "/screenshots/emulators.webp",
     },
     {
       title: "Arcade",
       console: "RIESCADE",
-      image: "/screenshots/arcade.jpg",
+      image: "/screenshots/arcade.webp",
     },
     {
       title: "Street Fighter III",
       console: "Arcade",
-      image: "/screenshots/sf3.jpg",
+      image: "/screenshots/sf3.webp",
     },
     {
       title: "Nintendo Switch",
       console: "Consoles",
-      image: "/screenshots/switch.jpg",
+      image: "/screenshots/switch.webp",
     },
     {
       title: "Super Mario Bros. Wonder",
       console: "Nintendo Switch",
-      image: "/screenshots/mariowonder.jpg",
+      image: "/screenshots/mariowonder.webp",
     },
     {
       title: "Windows",
       console: "PC Gamer",
-      image: "/screenshots/windows.jpg",
+      image: "/screenshots/windows.webp",
     },
     {
       title: "Nintendo 64 Disk",
       console: "Extensões",
-      image: "/screenshots/n64dd.jpg",
+      image: "/screenshots/n64dd.webp",
     },
     {
       title: "PS Vita",
       console: "Portáteis",
-      image: "/screenshots/psvita.jpg",
+      image: "/screenshots/psvita.webp",
     },
     {
       title: "Pinball M",
       console: "Pinballs",
-      image: "/screenshots/pinballm.jpg",
+      image: "/screenshots/pinballm.webp",
     },
     {
       title: "DOOM 3",
       console: "Ports",
-      image: "/screenshots/doom3.jpg",
+      image: "/screenshots/doom3.webp",
     },
   ];
 
@@ -151,7 +151,7 @@ export default function Home() {
               <div className="md:w-1/2">
                 <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-[#ff0884]/30 shadow-[0_0_30px_rgba(255,8,132,0.3)] transform rotate-1 hover:rotate-0 transition-all duration-500">
                   <Image
-                    src="/video/intro.gif"
+                    src="/video/intro.webm"
                     alt="Animated gif"
                     width={100}
                     height={60}
@@ -162,7 +162,7 @@ export default function Home() {
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-[#ff0884]/20 to-gray-900/80"></div>
                   <div className="absolute -bottom-6 right-4 flex items-center justify-center">
                     <Image
-                      src="/images/logos.png"
+                      src="/images/logos.webp"
                       alt="RIESCADE logo"
                       width={100}
                       height={100}
@@ -234,7 +234,7 @@ export default function Home() {
 
         {/* Game Showcase Section */}
         <div className="py-20 bg-black relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5"></div>
+          <div className="absolute inset-0 bg-[url('/noise.webp')] opacity-5"></div>
           <div className="absolute inset-0 bg-grid-white/5 bg-[size:30px_30px]"></div>
 
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -256,7 +256,7 @@ export default function Home() {
 
         {/* Pricing Section - Mostrando apenas um plano a R$30.00 */}
         <div className="py-20 bg-[#13111C] relative">
-          <div className="absolute inset-0 bg-[url('/noise.png')] opacity-5"></div>
+          <div className="absolute inset-0 bg-[url('/noise.webp')] opacity-5"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
@@ -277,7 +277,7 @@ export default function Home() {
 
                 <div className="flex items-center justify-center mb-6">
                   <Image
-                    src="/images/logos.png"
+                    src="/images/logos.webp"
                     alt="RIESCADE Mascot"
                     className="h-20 w-20 object-contain mb-2"
                     width={120}
@@ -352,7 +352,7 @@ export default function Home() {
             <div className="mb-8 md:mb-0">
               <div className="flex items-center space-x-2">
                 <Image
-                  src="/images/logos.png"
+                  src="/images/logos.webp"
                   alt="RIESCADE Logo"
                   width={35}
                   height={35}

@@ -1,0 +1,1598 @@
+[
+  {
+    "name": "doom3",
+    "image": "/images/platform/doom3.webp",
+    "url": "https://drive.google.com/drive/folders/1M433EgfA5TB8VZjJSjzW_y2s3Yg77BxU",
+    "fullName": "Doom 3"
+  },
+  {
+    "name": "fc",
+    "image": "/images/platform/fc.webp",
+    "url": "https://drive.google.com/drive/folders/16iApVmsaG0Q6pCcJtzIraz18F-EoXhAg",
+    "fullName": "Famicom"
+  },
+  {
+    "name": "p2000t",
+    "image": "/images/platform/p2000t.webp",
+    "url": "https://drive.google.com/drive/folders/1s6FX48KxVGftxkyRMoeXmPwZeNpmE_Hi",
+    "fullName": "Philips P2000T"
+  },
+  {
+    "name": "starship",
+    "image": "/images/platform/starship.webp",
+    "url": "https://drive.google.com/drive/folders/1SSiJENekyjQR7QWLoeJrmH5RgKlzt-S9",
+    "fullName": "Starship Titanic"
+  },
+  {
+    "name": "nesh",
+    "image": "/images/platform/nesh.webp",
+    "url": "https://drive.google.com/drive/folders/1k24Y0b2yw0uTW5HUc6yX99uE_e_FDysA",
+    "fullName": "NES Hacks"
+  },
+  {
+    "name": "nesb",
+    "image": "/images/platform/nesb.webp",
+    "url": "https://drive.google.com/drive/folders/1k_Zc3obS4INNa1_BtUYjG26-vjJSr4CS",
+    "fullName": "NES Bootlegs"
+  },
+  {
+    "name": "fruit",
+    "image": "/images/platform/fruit.webp",
+    "url": "https://drive.google.com/drive/folders/1wWGrkAG3cx8ZWnWb248q50l3Uydw4PjI",
+    "fullName": "Fruit Machine"
+  },
+  {
+    "name": "cdogs",
+    "image": "/images/platform/cdogs.webp",
+    "url": "https://drive.google.com/drive/folders/11JXkvzQJqJaff6cJhp4gYEjIVqHf_zmu",
+    "fullName": "C-Dogs"
+  },
+  {
+    "name": "aquarius",
+    "image": "/images/platform/aquarius.webp",
+    "url": "https://drive.google.com/drive/folders/1oadfm0VVDl7HqNUDYpleee-oK6Hf4Cxh",
+    "fullName": "Mattel Aquarius"
+  },
+  {
+    "name": "openjazz",
+    "image": "/images/platform/openjazz.webp",
+    "url": "https://drive.google.com/drive/folders/17lbvFg71qUrCGcfeuhS7CTcr5C8tVyOP",
+    "fullName": "OpenJazz"
+  },
+  {
+    "name": "pdark",
+    "image": "/images/platform/pdark.webp",
+    "url": "https://drive.google.com/drive/folders/1wrq_WrO4bSlL8EhFfPuMd-irRSk4dGEh",
+    "fullName": "Perfect Dark"
+  },
+  {
+    "name": "wiih",
+    "image": "/images/platform/wiih.webp",
+    "url": "https://drive.google.com/drive/folders/18NPFTEhJwCWwMsuvEncEcvB7BnpjAfKM",
+    "fullName": "Wii Hacks"
+  },
+  {
+    "name": "vg5k",
+    "image": "/images/platform/vg5k.webp",
+    "url": "https://drive.google.com/drive/folders/1hnL5OqqRkLp6Gbe9so8KpwDRa6meeOLY",
+    "fullName": "Philips VG-5000"
+  },
+  {
+    "name": "soh",
+    "image": "/images/platform/soh.webp",
+    "url": "https://drive.google.com/drive/folders/1EQo4DV-sCx9w50JmhqD2xc-FwfWvf742",
+    "fullName": "Ship of Harkinian"
+  },
+  {
+    "name": "raze",
+    "image": "/images/platform/raze.webp",
+    "url": "https://drive.google.com/drive/folders/1lxVkTeckmjUbS4hsmCKX-11fdrmxXyvf",
+    "fullName": "Raze"
+  },
+  {
+    "name": "cgenius",
+    "image": "/images/platform/cgenius.webp",
+    "url": "https://drive.google.com/drive/folders/1nhi0srI0VxsDNLzp8awLq-DCtlo5TLbf",
+    "fullName": "Commander Genius"
+  },
+  {
+    "name": "vircon32",
+    "image": "/images/platform/vircon32.webp",
+    "url": "https://drive.google.com/drive/folders/1atyEaIqLUrTnAx8y459TDG4AMdEqckZh",
+    "fullName": "Vircon32"
+  },
+  {
+    "name": "ps3br",
+    "image": "/images/platform/ps3br.webp",
+    "url": "https://drive.google.com/drive/folders/11-LrwMCMXRQxEFQG4oCES8CZx9fu-z7r",
+    "fullName": "PlayStation 3 Brazil"
+  },
+  {
+    "name": "ps2h",
+    "image": "/images/platform/ps2h.webp",
+    "url": "https://drive.google.com/drive/folders/1Rpq9jTuiYG34Z7XYcbKVHIB-BQ2yhxBI",
+    "fullName": "PlayStation 2 Hacks"
+  },
+  {
+    "name": "ps4",
+    "image": "/images/platform/ps4.webp",
+    "url": "https://drive.google.com/drive/folders/1Th2LvmcXMcdi_6fPjVLJj319e6DO-qIu",
+    "fullName": "PlayStation 4"
+  },
+  {
+    "name": "ps2br",
+    "image": "/images/platform/ps2br.webp",
+    "url": "https://drive.google.com/drive/folders/1CuGtedqvc31BOIGE9d8PWOap-rWudRwq",
+    "fullName": "PlayStation 2 Brazil"
+  },
+  {
+    "name": "prboom",
+    "image": "/images/platform/prboom.webp",
+    "url": "https://drive.google.com/drive/folders/1PzxG5cip8UwneBgmBOMocG7eLkpu68WN",
+    "fullName": "PrBoom"
+  },
+  {
+    "name": "ports",
+    "image": "/images/platform/ports.webp",
+    "url": "https://drive.google.com/drive/folders/1s0n9E4w-QJYQZOgy4Wqt8Ep8bAo2_WEs",
+    "fullName": "Ports"
+  },
+  {
+    "name": "tic80",
+    "image": "/images/platform/tic80.webp",
+    "url": "https://drive.google.com/drive/folders/17p6gg36y3fL1_TcCyOWacI5cRG77zt1_",
+    "fullName": "TIC-80"
+  },
+  {
+    "name": "ti99",
+    "image": "/images/platform/ti99.webp",
+    "url": "https://drive.google.com/drive/folders/1H90laZmrfO4UkV4uf3WT-TqnbeODcVQj",
+    "fullName": "Texas Instruments TI-99"
+  },
+  {
+    "name": "thomson",
+    "image": "/images/platform/thomson.webp",
+    "url": "https://drive.google.com/drive/folders/1VqetF_MdUbaZfcTA7MWn-2soP74o-r3n",
+    "fullName": "Thomson"
+  },
+  {
+    "name": "theforceengine",
+    "image": "/images/platform/theforceengine.webp",
+    "url": "https://drive.google.com/drive/folders/101IyfHwvmMoK4tDBlQsSSc_92Zxq8LkA",
+    "fullName": "The Force Engine"
+  },
+  {
+    "name": "tg16cd",
+    "image": "/images/platform/tg16cd.webp",
+    "url": "https://drive.google.com/drive/folders/1x1JcNR6t0k5HQjQqpvIMAv1XmeWB_HmC",
+    "fullName": "TurboGrafx-16 CD"
+  },
+  {
+    "name": "tg16",
+    "image": "/images/platform/tg16.webp",
+    "url": "https://drive.google.com/drive/folders/1s_XLIglbT1IkNFVR5jBTDIB_2O9us9Gu",
+    "fullName": "TurboGrafx-16"
+  },
+  {
+    "name": "sgb",
+    "image": "/images/platform/sgb.webp",
+    "url": "https://drive.google.com/drive/folders/1Q0xY9WgwdBYMnpetkpk32ojQND0xNC2F",
+    "fullName": "Super Game Boy"
+  },
+  {
+    "name": "sg1000",
+    "image": "/images/platform/sg1000.webp",
+    "url": "https://drive.google.com/drive/folders/1SMzAbAxa1_k6rCvH5KFZHXN-aKWhUnTo",
+    "fullName": "Sega SG-1000"
+  },
+  {
+    "name": "sfc",
+    "image": "/images/platform/sfc.webp",
+    "url": "https://drive.google.com/drive/folders/1jBe1PxZzTxOmTe3MHZivmn4YnKqesl5V",
+    "fullName": "Super Famicom"
+  },
+  {
+    "name": "segastv",
+    "image": "/images/platform/segastv.webp",
+    "url": "https://drive.google.com/drive/folders/1MTDCmt8o-SbFwGQ-nRPGjCWF0AaD-P5L",
+    "fullName": "Sega Saturn"
+  },
+  {
+    "name": "segacd",
+    "image": "/images/platform/segacd.webp",
+    "url": "https://drive.google.com/drive/folders/1us-4FZVnYM-3wecE33149RDite48lBf6",
+    "fullName": "Sega CD"
+  },
+  {
+    "name": "sega32x",
+    "image": "/images/platform/sega32x.webp",
+    "url": "https://drive.google.com/drive/folders/14vVF3giSKkHfq-eEziES_SnQGDxovegt",
+    "fullName": "Sega 32X"
+  },
+  {
+    "name": "scv",
+    "image": "/images/platform/scv.webp",
+    "url": "https://drive.google.com/drive/folders/1Z38PLaNbgVqYDVa6hxH_lrdDuXYCniG2",
+    "fullName": "Super Cassette Vision"
+  },
+  {
+    "name": "neogeoaes",
+    "image": "/images/platform/neogeoaes.webp",
+    "url": "https://drive.google.com/drive/folders/18il5XY25zjI0zszOAn5Iv-9Ik1sw95Ns",
+    "fullName": "Neo Geo AES"
+  },
+  {
+    "name": "pokemini",
+    "image": "/images/platform/pokemini.webp",
+    "url": "https://drive.google.com/drive/folders/1IAFKLet5twHckdRHerYRW6V3Qcu1l8lm",
+    "fullName": "Pokemon Mini"
+  },
+  {
+    "name": "pinballm",
+    "image": "/images/platform/pinballm.webp",
+    "url": "https://drive.google.com/drive/folders/1bt6OMUsOVd9ZrGCQkyJpDScGET7ZzS1e",
+    "fullName": "Pinball Machines"
+  },
+  {
+    "name": "pinballfx2",
+    "image": "/images/platform/pinballfx2.webp",
+    "url": "https://drive.google.com/drive/folders/11WanEPVUt5M24kRQnEnLw0FZ_yiAkMj3",
+    "fullName": "Pinball FX2"
+  },
+  {
+    "name": "pinballfx",
+    "image": "/images/platform/pinballfx.webp",
+    "url": "https://drive.google.com/drive/folders/1xi81tDQGyG7xSQKx0IvFMOOzOZ5Lp1kj",
+    "fullName": "Pinball FX"
+  },
+  {
+    "name": "pico8",
+    "image": "/images/platform/pico8.webp",
+    "url": "https://drive.google.com/drive/folders/1hpsBdIRBCgokzPXFkziAYJHFrF08ATLe",
+    "fullName": "PICO-8"
+  },
+  {
+    "name": "pegasus",
+    "image": "/images/platform/pegasus.webp",
+    "url": "https://drive.google.com/drive/folders/104PB5witD9tzOjkAqzfJFyfUeFhAxgy5",
+    "fullName": "Pegasus"
+  },
+  {
+    "name": "pcfx",
+    "image": "/images/platform/pcfx.webp",
+    "url": "https://drive.google.com/drive/folders/1rUewubv7k2vFWmf-J6TO5SImOObzz-Gz",
+    "fullName": "PC-FX"
+  },
+  {
+    "name": "pcenginecd",
+    "image": "/images/platform/pcenginecd.webp",
+    "url": "https://drive.google.com/drive/folders/10pSN2uo2fZpsIsUUJaQYBOr_jIiZb6QK",
+    "fullName": "PC Engine CD"
+  },
+  {
+    "name": "pcengine",
+    "image": "/images/platform/pcengine.webp",
+    "url": "https://drive.google.com/drive/folders/1cyNGZvTPGD04jzk31-IGjwlFs_0gdIq6",
+    "fullName": "PC Engine"
+  },
+  {
+    "name": "pc98",
+    "image": "/images/platform/pc98.webp",
+    "url": "https://drive.google.com/drive/folders/1MtlkPw9pjXYTYroQyAunWh5JdLXMwzEt",
+    "fullName": "PC-98"
+  },
+  {
+    "name": "pc88",
+    "image": "/images/platform/pc88.webp",
+    "url": "https://drive.google.com/drive/folders/1N7I9Okg7az12gTKylemPp39KAuqs0gRb",
+    "fullName": "PC-88"
+  },
+  {
+    "name": "palm",
+    "image": "/images/platform/palm.webp",
+    "url": "https://drive.google.com/drive/folders/1vWkDgjYFZ9nu4x2c_eM-hYdHKk2F7s90",
+    "fullName": "Palm OS"
+  },
+  {
+    "name": "oricatmos",
+    "image": "/images/platform/oricatmos.webp",
+    "url": "https://drive.google.com/drive/folders/1qpz20OF7H-xRNCO8CRNaC9EFvK8kmM_p",
+    "fullName": "Oric Atmos"
+  },
+  {
+    "name": "openbor",
+    "image": "/images/platform/openbor.webp",
+    "url": "https://drive.google.com/drive/folders/1sc4y-cYPQQOqtqReNtA_clIL1nHr7-gn",
+    "fullName": "OpenBOR"
+  },
+  {
+    "name": "o2em",
+    "image": "/images/platform/o2em.webp",
+    "url": "https://drive.google.com/drive/folders/1701TilCEt4mJ-BDW9efd329qWz-M1y9H",
+    "fullName": "Odyssey 2"
+  },
+  {
+    "name": "ngpc",
+    "image": "/images/platform/ngpc.webp",
+    "url": "https://drive.google.com/drive/folders/1U2eQ7h3bBvzKawUf-CmABn6JW5OytcIA",
+    "fullName": "Neo Geo Pocket Color"
+  },
+  {
+    "name": "ngp",
+    "image": "/images/platform/ngp.webp",
+    "url": "https://drive.google.com/drive/folders/1wo9GUMN8Vn7DKUuV6VAFV9Aw1O6nntVb",
+    "fullName": "Neo Geo Pocket"
+  },
+  {
+    "name": "neshd",
+    "image": "/images/platform/neshd.webp",
+    "url": "https://drive.google.com/drive/folders/1DeChmWvtER8K3wr6l8yQRYzws9sBlIUg",
+    "fullName": "NES HD"
+  },
+  {
+    "name": "nes3d",
+    "image": "/images/platform/nes3d.webp",
+    "url": "https://drive.google.com/drive/folders/140K-MX2EgxXXHsK-2OpYU4P61kbZduA_",
+    "fullName": "NES 3D"
+  },
+  {
+    "name": "neogeoh",
+    "image": "/images/platform/neogeoh.webp",
+    "url": "https://drive.google.com/drive/folders/1TB3hhDWhRr2mdjKn8evDQpCUx243-iiI",
+    "fullName": "Neo Geo Hacks"
+  },
+  {
+    "name": "nds",
+    "image": "/images/platform/nds.webp",
+    "url": "https://drive.google.com/drive/folders/1I51DlYSXm3_hoYRsvOvt99CnGK27Dvmf",
+    "fullName": "Nintendo DS"
+  },
+  {
+    "name": "naomi2",
+    "image": "/images/platform/naomi2.webp",
+    "url": "https://drive.google.com/drive/folders/1qfCXgHCmEwb1J7MNI5qDklQo3cS_k_6y",
+    "fullName": "Naomi 2"
+  },
+  {
+    "name": "teknoparrot",
+    "image": "/images/platform/teknoparrot.webp",
+    "url": "https://drive.google.com/drive/folders/1TZB_KaWm3fdlmJYnMQnLUVg3xgzIQUUC",
+    "fullName": "TeknoParrot"
+  },
+  {
+    "name": "thextech",
+    "image": "/images/platform/thextech.webp",
+    "url": "https://drive.google.com/drive/folders/1PQwOE8kWF_YGIynVJ1QQ8F5h_xR5WfFR",
+    "fullName": "TheXTech"
+  },
+  {
+    "name": "tiger",
+    "image": "/images/platform/tiger.webp",
+    "url": "https://drive.google.com/drive/folders/1NzsfrvG0mQkYFxLpQJWlkPQHvRxXMxEi",
+    "fullName": "Tiger Electronics"
+  },
+  {
+    "name": "namco2x6",
+    "image": "/images/platform/namco2x6.webp",
+    "url": "https://drive.google.com/drive/folders/1CEBZb3MwHodo6VjCsAScCc0hOAAjkVcj",
+    "fullName": "Namco System 2x6"
+  },
+  {
+    "name": "n64j",
+    "image": "/images/platform/n64j.webp",
+    "url": "https://drive.google.com/drive/folders/1HFN5Uh7RUXKX31gujpU6MIdB2D9yjzbu",
+    "fullName": "Nintendo 64 Japan"
+  },
+  {
+    "name": "n64h",
+    "image": "/images/platform/n64h.webp",
+    "url": "https://drive.google.com/drive/folders/16KZnp_FUpdisaXuRtOQGaKfTFt8UgO1x",
+    "fullName": "Nintendo 64 Hacks"
+  },
+  {
+    "name": "multivision",
+    "image": "/images/platform/multivision.webp",
+    "url": "https://drive.google.com/drive/folders/19k5cj4sMWsHBGbnGT0TJ1cInxbZvoyng",
+    "fullName": "Othello Multivision"
+  },
+  {
+    "name": "msxturbor",
+    "image": "/images/platform/msxturbor.webp",
+    "url": "https://drive.google.com/drive/folders/1Nf6pdxR8cjw63YWmWmivj5AWGv-14TNY",
+    "fullName": "MSX Turbo R"
+  },
+  {
+    "name": "msx2+",
+    "image": "/images/platform/msx2+.webp",
+    "url": "https://drive.google.com/drive/folders/1ZHXAMOO1tArC7rh3F4AG8mSSbYOyayrj",
+    "fullName": "MSX2+"
+  },
+  {
+    "name": "msx2",
+    "image": "/images/platform/msx2.webp",
+    "url": "https://drive.google.com/drive/folders/1xutEUr5-cp5udimOmTGOSEaY3GuZfScB",
+    "fullName": "MSX2"
+  },
+  {
+    "name": "msx1",
+    "image": "/images/platform/msx1.webp",
+    "url": "https://drive.google.com/drive/folders/12o_wU1MbmSe_1g4TUPnNS9oW9HWuInv8",
+    "fullName": "MSX1"
+  },
+  {
+    "name": "megaduck",
+    "image": "/images/platform/megaduck.webp",
+    "url": "https://drive.google.com/drive/folders/1CDu4HJcdyWvQ0uqA_piAxLWiPbirj8RS",
+    "fullName": "Mega Duck"
+  },
+  {
+    "name": "megadrive-msu",
+    "image": "/images/platform/megadrive-msu.webp",
+    "url": "https://drive.google.com/drive/folders/1VHg9jtNO-CvolDgy3YEMVvLi5tN6OSr9",
+    "fullName": "Mega Drive MSU"
+  },
+  {
+    "name": "megadriveh",
+    "image": "/images/platform/megadriveh.webp",
+    "url": "https://drive.google.com/drive/folders/16N0xqzwQw6KWDCUQPBAhl7twcaXX2RcI",
+    "fullName": "Mega Drive Hacks"
+  },
+  {
+    "name": "mastersystemfm",
+    "image": "/images/platform/mastersystemfm.webp",
+    "url": "https://drive.google.com/drive/folders/1p2-oF_QktSnt-nQODSMjBoaf7qT6ce2C",
+    "fullName": "Master System FM"
+  },
+  {
+    "name": "magazine",
+    "image": "/images/platform/magazine.webp",
+    "url": "https://drive.google.com/drive/folders/16H7DeoJeljtfqP07A8NDoMcktZR4dST2",
+    "fullName": "Magazine"
+  },
+  {
+    "name": "lutro",
+    "image": "/images/platform/lutro.webp",
+    "url": "https://drive.google.com/drive/folders/1xkiW0vvEglZq0VEp2sBVFy3MBmeIs6DE",
+    "fullName": "Lutro"
+  },
+  {
+    "name": "love",
+    "image": "/images/platform/love.webp",
+    "url": "https://drive.google.com/drive/folders/1NHmI89ajxdYRD399lzuHsCOb_4GBpbe6",
+    "fullName": "LÖVE"
+  },
+  {
+    "name": "lcdgames",
+    "image": "/images/platform/lcdgames.webp",
+    "url": "https://drive.google.com/drive/folders/1t0sFUmAV5cN1pdLHDWPicTdzh2F2E3tS",
+    "fullName": "LCD Games"
+  },
+  {
+    "name": "konamih",
+    "image": "/images/platform/konamih.webp",
+    "url": "https://drive.google.com/drive/folders/1812T4jOp5fzf0azYW6WwlukeGwL1nn0u",
+    "fullName": "Konami Hacks"
+  },
+  {
+    "name": "karaoke",
+    "image": "/images/platform/karaoke.webp",
+    "url": "https://drive.google.com/drive/folders/1t8ZdhcWM-B_7TqpS4Wx7R05irjyFE08c",
+    "fullName": "Karaoke"
+  },
+  {
+    "name": "namco357",
+    "image": "/images/platform/namco357.webp",
+    "url": "https://drive.google.com/drive/folders/1Qr_NysG0xx0AvIJBSeT1CgmYBZyXg7dP",
+    "fullName": "Namco System 357"
+  },
+  {
+    "name": "ouya",
+    "image": "/images/platform/ouya.webp",
+    "url": "https://drive.google.com/drive/folders/11v_apOMr3VVDmNMSu2IKG5nVMDjm0wZP",
+    "fullName": "OUYA"
+  },
+  {
+    "name": "mugen",
+    "image": "/images/platform/mugen.webp",
+    "url": "https://drive.google.com/drive/folders/1QniqQH3OhjNfQSt0InCn8TYZKo1-oYav",
+    "fullName": "M.U.G.E.N"
+  },
+  {
+    "name": "opengoal",
+    "image": "/images/platform/opengoal.webp",
+    "url": "https://drive.google.com/drive/folders/1KEP7BjGX13AIbasgMMKtgViuh1SkWJFH",
+    "fullName": "OpenGOAL"
+  },
+  {
+    "name": "ngage",
+    "image": "/images/platform/ngage.webp",
+    "url": "https://drive.google.com/drive/folders/1btKqv__O9qCXW2UVgfIRenzLbIaDexBY",
+    "fullName": "N-Gage"
+  },
+  {
+    "name": "naomi",
+    "image": "/images/platform/naomi.webp",
+    "url": "https://drive.google.com/drive/folders/1Q9nd9clOdXeEd0LzD8sgAOrxIUFE-OfB",
+    "fullName": "Naomi"
+  },
+  {
+    "name": "pet",
+    "image": "/images/platform/pet.webp",
+    "url": "https://drive.google.com/drive/folders/1NKnTm2_Hu6ptPQzwb_oSzW5F5nvPiKzD",
+    "fullName": "Commodore PET"
+  },
+  {
+    "name": "openlara",
+    "image": "/images/platform/openlara.webp",
+    "url": "https://drive.google.com/drive/folders/1PjGp5JJRtAbSzz7xJUaBhGEyFHftEqw6",
+    "fullName": "OpenLara"
+  },
+  {
+    "name": "mastersystemh",
+    "image": "/images/platform/mastersystemh.webp",
+    "url": "https://drive.google.com/drive/folders/1A-B8PlIgjgEn3H4HugBkFpRrrrPji4Bj",
+    "fullName": "Master System Hacks"
+  },
+  {
+    "name": "mame",
+    "image": "/images/platform/mame.webp",
+    "url": "https://drive.google.com/drive/folders/1hRmU_DRC2nAFWPyAmFidQeYvNwGb1WeE",
+    "fullName": "MAME"
+  },
+  {
+    "name": "lynx",
+    "image": "/images/platform/lynx.webp",
+    "url": "https://drive.google.com/drive/folders/1PwXLH-prfgsgklhPWe2RlgIdDrGyolVV",
+    "fullName": "Atari Lynx"
+  },
+  {
+    "name": "lowresnx",
+    "image": "/images/platform/lowresnx.webp",
+    "url": "https://drive.google.com/drive/folders/1vAOQTxRrcgOBCJ1rwSpU8laYOYS0mttk",
+    "fullName": "LowRes NX"
+  },
+  {
+    "name": "java",
+    "image": "/images/platform/java.webp",
+    "url": "https://drive.google.com/drive/folders/14Lg88HpZhEfMKHByXEKbbCMTiOqKaKEJ",
+    "fullName": "Java"
+  },
+  {
+    "name": "ique",
+    "image": "/images/platform/ique.webp",
+    "url": "https://drive.google.com/drive/folders/16ZYIqgYv5fOTbTfPozjCvFem9tejteDD",
+    "fullName": "iQue"
+  },
+  {
+    "name": "intellivision",
+    "image": "/images/platform/intellivision.webp",
+    "url": "https://drive.google.com/drive/folders/1AfBtSSUk4ndmk_CrmgcTmQcJLcr7Uzjy",
+    "fullName": "Intellivision"
+  },
+  {
+    "name": "hikaru",
+    "image": "/images/platform/hikaru.webp",
+    "url": "https://drive.google.com/drive/folders/1iKJrEs3ZBpbLGJ2qNY8-YxM87YsdTNDg",
+    "fullName": "Hikaru"
+  },
+  {
+    "name": "gzdoom",
+    "image": "/images/platform/gzdoom.webp",
+    "url": "https://drive.google.com/drive/folders/1x-4Bu692SGHuCwKNmuezYfQ54U9D9ofp",
+    "fullName": "GZDoom"
+  },
+  {
+    "name": "gx4000",
+    "image": "/images/platform/gx4000.webp",
+    "url": "https://drive.google.com/drive/folders/1Ec2_1Zo4-AJn82lmiYc71T4GJBKSZRIB",
+    "fullName": "Amstrad GX4000"
+  },
+  {
+    "name": "gp32",
+    "image": "/images/platform/gp32.webp",
+    "url": "https://drive.google.com/drive/folders/14jvQBgmC0RhUAtroorLQoVepoGmssBwE",
+    "fullName": "GamePark 32"
+  },
+  {
+    "name": "gmaster",
+    "image": "/images/platform/gmaster.webp",
+    "url": "https://drive.google.com/drive/folders/1NSCUewZ_AUJp69tTllA3M-g3P9Ao-dtQ",
+    "fullName": "Game Master"
+  },
+  {
+    "name": "genesis",
+    "image": "/images/platform/genesis.webp",
+    "url": "https://drive.google.com/drive/folders/1PuIHf1X8Yjf8FdBC9kHwf5u1PIoYbM5e",
+    "fullName": "Sega Genesis"
+  },
+  {
+    "name": "gb-msu",
+    "image": "/images/platform/gb-msu.webp",
+    "url": "https://drive.google.com/drive/folders/1S4MukacrOwXTIdhlcvXJVb7yQLM5mdXx",
+    "fullName": "Game Boy MSU"
+  },
+  {
+    "name": "gbc2players",
+    "image": "/images/platform/gbc2players.webp",
+    "url": "https://drive.google.com/drive/folders/1NL_rW6EczGkdNp-Qu5scYpwdpGRwLbas",
+    "fullName": "Game Boy Color 2 Players"
+  },
+  {
+    "name": "gbc",
+    "image": "/images/platform/gbc.webp",
+    "url": "https://drive.google.com/drive/folders/1sDd6qVB2ETyfBWxoo-9-b_URnXMBLmMm",
+    "fullName": "Game Boy Color"
+  },
+  {
+    "name": "gba2players",
+    "image": "/images/platform/gba2players.webp",
+    "url": "https://drive.google.com/drive/folders/1kuC5NvTbPKrRzmhM3fmR_hKpm3_Z-ZWI",
+    "fullName": "Game Boy Advance 2 Players"
+  },
+  {
+    "name": "gb2players",
+    "image": "/images/platform/gb2players.webp",
+    "url": "https://drive.google.com/drive/folders/1aOHy1x1ip8qMJMGz4_Ivd6jyzrU9pZyV",
+    "fullName": "Game Boy 2 Players"
+  },
+  {
+    "name": "gamepock",
+    "image": "/images/platform/gamepock.webp",
+    "url": "https://drive.google.com/drive/folders/1LYS9wFzozUCxvl_7WO3zNi-uxKW9TTOu",
+    "fullName": "Epoch Game Pocket Computer"
+  },
+  {
+    "name": "gamegear",
+    "image": "/images/platform/gamegear.webp",
+    "url": "https://drive.google.com/drive/folders/1hd5zvyZBZxPOyE3ycdcHt2od_YLiegVy",
+    "fullName": "Sega Game Gear"
+  },
+  {
+    "name": "gamecom",
+    "image": "/images/platform/gamecom.webp",
+    "url": "https://drive.google.com/drive/folders/1ymaYuXOUpD_bezmDmzqVF68ApX5IRSoP",
+    "fullName": "Tiger Game.com"
+  },
+  {
+    "name": "cinematronics",
+    "image": "/images/platform/cinematronics.webp",
+    "url": "https://drive.google.com/drive/folders/1NIbqujLC3NVMYrnLuLwo5dzUSNMANBw-",
+    "fullName": "Cinematronics"
+  },
+  {
+    "name": "channelf",
+    "image": "/images/platform/channelf.webp",
+    "url": "https://drive.google.com/drive/folders/1hpzJJft64kCTJCIhfF4qV0Rg4qnVklZZ",
+    "fullName": "Fairchild Channel F"
+  },
+  {
+    "name": "cavestory",
+    "image": "/images/platform/cavestory.webp",
+    "url": "https://drive.google.com/drive/folders/19FxNzh0VilyhpbkLn_5A2pXLoeM09M1C",
+    "fullName": "Cave Story"
+  },
+  {
+    "name": "ikemen",
+    "image": "/images/platform/ikemen.webp",
+    "url": "https://drive.google.com/drive/folders/15kkfUX-jwPGNaEcr2PKRUeZanO5qXbFR",
+    "fullName": "IKEMEN"
+  },
+  {
+    "name": "hbmame",
+    "image": "/images/platform/hbmame.webp",
+    "url": "https://drive.google.com/drive/folders/1K3SDOhT2CF1f8K7bsOMfee6VYR_3dWNq",
+    "fullName": "HBMAME"
+  },
+  {
+    "name": "gemrb",
+    "image": "/images/platform/gemrb.webp",
+    "url": "https://drive.google.com/drive/folders/1a_tJkljNW9O-C-UrwFPWb6uWz8ApgV_4",
+    "fullName": "GemRB"
+  },
+  {
+    "name": "gba",
+    "image": "/images/platform/gba.webp",
+    "url": "https://drive.google.com/drive/folders/1p7-Lufn3fSySgR0Yu8KG0a4akcqgfrJj",
+    "fullName": "Game Boy Advance"
+  },
+  {
+    "name": "gb",
+    "image": "/images/platform/gb.webp",
+    "url": "https://drive.google.com/drive/folders/1gPEhbv5bzJiPk2NCTXGcC8rCcQ1ImrGC",
+    "fullName": "Game Boy"
+  },
+  {
+    "name": "gamecube",
+    "image": "/images/platform/gamecube.webp",
+    "url": "https://drive.google.com/drive/folders/1SWBEfSI7aRd3gA0hDqeR3SWUHMyFjQG4",
+    "fullName": "Nintendo GameCube"
+  },
+  {
+    "name": "dreamcast",
+    "image": "/images/platform/dreamcast.webp",
+    "url": "https://drive.google.com/drive/folders/1Bm6xLwdR6TSSClcbIuFwgGcNt6HQwhPf",
+    "fullName": "Sega Dreamcast"
+  },
+  {
+    "name": "chero",
+    "image": "/images/platform/chero.webp",
+    "url": "https://drive.google.com/drive/folders/1We8G_mStwovHIoyKPU3j1KqrS7NB85u1",
+    "fullName": "Guitar Hero"
+  },
+  {
+    "name": "cave",
+    "image": "/images/platform/cave.webp",
+    "url": "https://drive.google.com/drive/folders/1DO0O7J9JpKB5Zsih0apSj6Dl4aLwwPjN",
+    "fullName": "Cave"
+  },
+  {
+    "name": "cannonball",
+    "image": "/images/platform/cannonball.webp",
+    "url": "https://drive.google.com/drive/folders/1HxZWIA815jE069CQY-wIhQ9Y_Go8r0Pg",
+    "fullName": "Cannonball"
+  },
+  {
+    "name": "camplynx",
+    "image": "/images/platform/camplynx.webp",
+    "url": "https://drive.google.com/drive/folders/1AB-FizqoFDGY6tze9fnLfdfMErbmclAK",
+    "fullName": "Camputers Lynx"
+  },
+  {
+    "name": "c128",
+    "image": "/images/platform/c128.webp",
+    "url": "https://drive.google.com/drive/folders/16PEngWzkSSLppR3X1a6t4Hz7ZZsG-p5S",
+    "fullName": "Commodore 128"
+  },
+  {
+    "name": "c64",
+    "image": "/images/platform/c64.webp",
+    "url": "https://drive.google.com/drive/folders/11RV18CZoq1JSo6A0quskuVKGAYP6qRXb",
+    "fullName": "Commodore 64"
+  },
+  {
+    "name": "windows",
+    "image": "/images/platform/windows.webp",
+    "url": "https://drive.google.com/drive/folders/1THY_STm0NAezxIJkl0zTuULjSwr-44X4",
+    "fullName": "Windows"
+  },
+  {
+    "name": "c20",
+    "image": "/images/platform/c20.webp",
+    "url": "https://drive.google.com/drive/folders/1eA6UvyIUDjDB7I7H2TD-58r2yrWp1sgk",
+    "fullName": "Commodore VIC-20"
+  },
+  {
+    "name": "boom3",
+    "image": "/images/platform/boom3.webp",
+    "url": "https://drive.google.com/drive/folders/1Nd34o5wRPDNqiDQcAsObRSGcGPm_pubN",
+    "fullName": "Boom 3"
+  },
+  {
+    "name": "3do",
+    "image": "/images/platform/3do.webp",
+    "url": "https://drive.google.com/drive/folders/1txsQvVrmi2AyM95K_2Upeyh_zM_BX9qC",
+    "fullName": "3DO Interactive Multiplayer"
+  },
+  {
+    "name": "arcade",
+    "image": "/images/platform/arcade.webp",
+    "url": "https://drive.google.com/drive/folders/1hEUecEKGM_XUVKKCnjE6rpEoIVUftrJI",
+    "fullName": "Arcade"
+  },
+  {
+    "name": "xbla",
+    "image": "/images/platform/xbla.webp",
+    "url": "https://drive.google.com/drive/folders/12GVW_cHkTE4C-SoNNmFxSATwLOmGCM3s",
+    "fullName": "Xbox Live Arcade"
+  },
+  {
+    "name": "xbox",
+    "image": "/images/platform/xbox.webp",
+    "url": "https://drive.google.com/drive/folders/1A2PW1Ilq9OY6HaDzhkfZPt-pHORQdWTC",
+    "fullName": "Xbox"
+  },
+  {
+    "name": "xbox360",
+    "image": "/images/platform/xbox360.webp",
+    "url": "https://drive.google.com/drive/folders/1qfLR7VNnQu7bX4NURy23kA83Nlw3ATcn",
+    "fullName": "Xbox 360"
+  },
+  {
+    "name": "snes",
+    "image": "/images/platform/snes.webp",
+    "url": "https://drive.google.com/drive/folders/1w-Nw_V5S9cKDDCR9YJO8WSqKK2v5oyyB",
+    "fullName": "Super Nintendo Entertainment System"
+  },
+  {
+    "name": "ps2",
+    "image": "/images/platform/ps2.webp",
+    "url": "https://drive.google.com/drive/folders/1P_RBMS2ZEUGrfTwkXYLbq8VsMo50LTBR",
+    "fullName": "PlayStation 2"
+  },
+  {
+    "name": "ps3",
+    "image": "/images/platform/ps3.webp",
+    "url": "https://drive.google.com/drive/folders/10gFP7Os4mJ78HyzQn-N0R1bBsfaZr6_U",
+    "fullName": "PlayStation 3"
+  },
+  {
+    "name": "psx",
+    "image": "/images/platform/psx.webp",
+    "url": "https://drive.google.com/drive/folders/1G9HxF4kL-7eOJ8awcsboIIijWTvZ2Z53",
+    "fullName": "PlayStation"
+  },
+  {
+    "name": "wiiu",
+    "image": "/images/platform/wiiu.webp",
+    "url": "https://drive.google.com/drive/folders/1BEsyxaJ6MABh-rHSrogMYN5K_RgCjNAN",
+    "fullName": "Wii U"
+  },
+  {
+    "name": "switch",
+    "image": "/images/platform/switch.webp",
+    "url": "https://drive.google.com/drive/folders/1UYJfJEnW542h1PqFV0GrcUYREU97jqTD",
+    "fullName": "Nintendo Switch"
+  },
+  {
+    "name": "3ds",
+    "image": "/images/platform/3ds.webp",
+    "url": "https://drive.google.com/drive/folders/1yx-rMuJAWXZ83PUyfw-Vkp-ZN0Spyynz",
+    "fullName": "Nintendo 3DS"
+  },
+  {
+    "name": "nes",
+    "image": "/images/platform/nes.webp",
+    "url": "https://drive.google.com/drive/folders/1ae9ICyP2rUL-qvQXmUwijcBcReCjbjnI",
+    "fullName": "Nintendo Entertainment System"
+  },
+  {
+    "name": "mastersystem",
+    "image": "/images/platform/mastersystem.webp",
+    "url": "https://drive.google.com/drive/folders/1fiwvYPbaOldNSwsNV4YJFmMg0NYZhWzD",
+    "fullName": "Sega Master System"
+  },
+  {
+    "name": "megadrive",
+    "image": "/images/platform/megadrive.webp",
+    "url": "https://drive.google.com/drive/folders/1Iw2rxedJHgqGcbVKAtDkKMww5R6QVH-t",
+    "fullName": "Sega Mega Drive"
+  },
+  {
+    "name": "wiiware",
+    "image": "/images/platform/wiiware.webp",
+    "url": "https://drive.google.com/drive/folders/1VHYtR8GxexYG2UQziuiQoQjFAkv1XRKp",
+    "fullName": "WiiWare"
+  },
+  {
+    "name": "scummvm",
+    "image": "/images/platform/scummvm.webp",
+    "url": "https://drive.google.com/drive/folders/1KAE3HBhkbE22xC9zPVFoI7j8Cve8ilTe",
+    "fullName": "ScummVM"
+  },
+  {
+    "name": "saturn",
+    "image": "/images/platform/saturn.webp",
+    "url": "https://drive.google.com/drive/folders/1eYCW3UiL4pH54jpCvWk8Xc-TlLdD8jq9",
+    "fullName": "Sega Saturn"
+  },
+  {
+    "name": "satellaview",
+    "image": "/images/platform/satellaview.webp",
+    "url": "https://drive.google.com/drive/folders/1a8i95hvAp-lDXc8gbprS4obi9g1VXOTR",
+    "fullName": "Satellaview"
+  },
+  {
+    "name": "samcoupe",
+    "image": "/images/platform/samcoupe.webp",
+    "url": "https://drive.google.com/drive/folders/1_W2rccnVmIaiRLNatgjErDeMtlXsU7-l",
+    "fullName": "SAM Coupé"
+  },
+  {
+    "name": "reminiscence",
+    "image": "/images/platform/reminiscence.webp",
+    "url": "https://drive.google.com/drive/folders/1frdMJOhbFtwOaWj8nmABQHH7XQYGUOYg",
+    "fullName": "REminiscence"
+  },
+  {
+    "name": "pv1000",
+    "image": "/images/platform/pv1000.webp",
+    "url": "https://drive.google.com/drive/folders/1mAjYsx7EX708FEm5I8CRsSJAA9HGNfvR",
+    "fullName": "Casio PV-1000"
+  },
+  {
+    "name": "psxh",
+    "image": "/images/platform/psxh.webp",
+    "url": "https://drive.google.com/drive/folders/1LKBRXfya67DcEbXm02t5Qa00rIcQn6qn",
+    "fullName": "PlayStation Hacks"
+  },
+  {
+    "name": "pspminis",
+    "image": "/images/platform/pspminis.webp",
+    "url": "https://drive.google.com/drive/folders/1SQJWcWMj6G_eeBgz6YTOW4py9UzRTCmi",
+    "fullName": "PlayStation Portable Minis"
+  },
+  {
+    "name": "popcap",
+    "image": "/images/platform/popcap.webp",
+    "url": "https://drive.google.com/drive/folders/1j_m9h-mOkG1xLfjBwU_vxnrsiWvuWuj4",
+    "fullName": "PopCap Games"
+  },
+  {
+    "name": "pinballfx3",
+    "image": "/images/platform/pinballfx3.webp",
+    "url": "https://drive.google.com/drive/folders/1I5h6Ka7n1YpHDt8etAN7DtABzmjpHY3O",
+    "fullName": "Pinball FX3"
+  },
+  {
+    "name": "psvita",
+    "image": "/images/platform/psvita.webp",
+    "url": "https://drive.google.com/drive/folders/1zgDCyR4R4A6jN9yTqVwYDCGwFFrPR0o-",
+    "fullName": "PlayStation Vita"
+  },
+  {
+    "name": "psp",
+    "image": "/images/platform/psp.webp",
+    "url": "https://drive.google.com/drive/folders/15sn6xzxuyFN6ZNlXVtoBFEBOKD-F9W91",
+    "fullName": "PlayStation Portable"
+  },
+  {
+    "name": "supracan",
+    "image": "/images/platform/supracan.webp",
+    "url": "https://drive.google.com/drive/folders/1Os9xaCehOoUGq3zjOqo57-UHxbbKdo86",
+    "fullName": "Funtech Super A'Can"
+  },
+  {
+    "name": "supervision",
+    "image": "/images/platform/supervision.webp",
+    "url": "https://drive.google.com/drive/folders/1Okm_fEgI4HjLB3GFvWI_p9CktYMRxwFR",
+    "fullName": "Watara Supervision"
+  },
+  {
+    "name": "supergrafx",
+    "image": "/images/platform/supergrafx.webp",
+    "url": "https://drive.google.com/drive/folders/1Ev04Fqn7ivy4kLv1fstlBAzlBOvINDBC",
+    "fullName": "PC Engine SuperGrafx"
+  },
+  {
+    "name": "superbroswar",
+    "image": "/images/platform/superbroswar.webp",
+    "url": "https://drive.google.com/drive/folders/1jjB1R30pBbD1SV85xh7zCpWpg7YXRVPN",
+    "fullName": "Super Mario Bros War"
+  },
+  {
+    "name": "sufami",
+    "image": "/images/platform/sufami.webp",
+    "url": "https://drive.google.com/drive/folders/1dkxZ9tN0feyVWVdBQ5n5ghQ2c56yMpib",
+    "fullName": "Sufami Turbo"
+  },
+  {
+    "name": "spectravideo",
+    "image": "/images/platform/spectravideo.webp",
+    "url": "https://drive.google.com/drive/folders/1GY8S7MVRnC7eNeGzUw4bcuIeZmp5OwBB",
+    "fullName": "Spectravideo"
+  },
+  {
+    "name": "sordm5",
+    "image": "/images/platform/sordm5.webp",
+    "url": "https://drive.google.com/drive/folders/1mfwTIOhAnbG0zyIh535YnMdfZrz1Tja0",
+    "fullName": "SORD M5"
+  },
+  {
+    "name": "sonicretro",
+    "image": "/images/platform/sonicretro.webp",
+    "url": "https://drive.google.com/drive/folders/1t18Rj3lQ8Ar9MF_LcsCSHpXm7U4XevNP",
+    "fullName": "Sonic Retro"
+  },
+  {
+    "name": "sonicmania",
+    "image": "/images/platform/sonicmania.webp",
+    "url": "https://drive.google.com/drive/folders/1WN5kXy7x34XFghUWputGILg30BWR2evY",
+    "fullName": "Sonic Mania"
+  },
+  {
+    "name": "sonic3air",
+    "image": "/images/platform/sonic3air.webp",
+    "url": "https://drive.google.com/drive/folders/1vSZhH_CpzxDVM0kawQG-QPdaF5GoTfCm",
+    "fullName": "Sonic 3 A.I.R."
+  },
+  {
+    "name": "solarus",
+    "image": "/images/platform/solarus.webp",
+    "url": "https://drive.google.com/drive/folders/1t6z80Fa5mhKYs73CnMPRvr1PeAzaIRp_",
+    "fullName": "Solarus"
+  },
+  {
+    "name": "snes-msu",
+    "image": "/images/platform/snes-msu.webp",
+    "url": "https://drive.google.com/drive/folders/12hAqMgUop4loY54bxamriHXdXH9QGgsr",
+    "fullName": "SNES MSU"
+  },
+  {
+    "name": "snesh",
+    "image": "/images/platform/snesh.webp",
+    "url": "https://drive.google.com/drive/folders/1vMMiNPyRBezonYYmh6FJEsTBlBJEG5fs",
+    "fullName": "SNES Hacks"
+  },
+  {
+    "name": "wasm4",
+    "image": "/images/platform/wasm4.webp",
+    "url": "https://drive.google.com/drive/folders/10OBOm3s_c38mQ0Gn_I3vnO7fRq32C0YB",
+    "fullName": "WASM-4"
+  },
+  {
+    "name": "vsmile",
+    "image": "/images/platform/vsmile.webp",
+    "url": "https://drive.google.com/drive/folders/1iSVDVPMTfGoDVprDIPZu0cIRpFsSU8w7",
+    "fullName": "V.Smile"
+  },
+  {
+    "name": "vpinball",
+    "image": "/images/platform/vpinball.webp",
+    "url": "https://drive.google.com/drive/folders/16QZhbVpkP3SWcH6GUc-_hpBPYBa5FM4N",
+    "fullName": "Visual Pinball"
+  },
+  {
+    "name": "vitaquake2",
+    "image": "/images/platform/vitaquake2.webp",
+    "url": "https://drive.google.com/drive/folders/1T9uu9pWiHOLQnJ5Au2H9-xdXUvNnhQz3",
+    "fullName": "Vita Quake 2"
+  },
+  {
+    "name": "virtualboy",
+    "image": "/images/platform/virtualboy.webp",
+    "url": "https://drive.google.com/drive/folders/1SiEBt7nIOh5W8OzU_TjfXtLBuZekQyeC",
+    "fullName": "Virtual Boy"
+  },
+  {
+    "name": "vectrex",
+    "image": "/images/platform/vectrex.webp",
+    "url": "https://drive.google.com/drive/folders/1wDQn3VC6EF-8E_-ePJwkVtc-7lQY3ny2",
+    "fullName": "Vectrex"
+  },
+  {
+    "name": "vc4000",
+    "image": "/images/platform/vc4000.webp",
+    "url": "https://drive.google.com/drive/folders/1aQgUsH082FdApt3Yn50hhcu5CQAkhL07",
+    "fullName": "Interton VC 4000"
+  },
+  {
+    "name": "uzebox",
+    "image": "/images/platform/uzebox.webp",
+    "url": "https://drive.google.com/drive/folders/1ZBUgmLMFAXDhzjOP_AzJQujTWOCMccZO",
+    "fullName": "Uzebox"
+  },
+  {
+    "name": "unity",
+    "image": "/images/platform/unity.webp",
+    "url": "https://drive.google.com/drive/folders/1_a90pQAIAl_8OwMQ-07xnZrDSPBEnOBL",
+    "fullName": "Unity"
+  },
+  {
+    "name": "tyrquake",
+    "image": "/images/platform/tyrquake.webp",
+    "url": "https://drive.google.com/drive/folders/1CzylxocV55A6G48pLTKaQkkXW1delOXU",
+    "fullName": "TyrQuake"
+  },
+  {
+    "name": "tvgames",
+    "image": "/images/platform/tvgames.webp",
+    "url": "https://drive.google.com/drive/folders/1kjEv6ER0hVZsRh3y1sZTYF7nrPoAKkrR",
+    "fullName": "TV Games"
+  },
+  {
+    "name": "tutor",
+    "image": "/images/platform/tutor.webp",
+    "url": "https://drive.google.com/drive/folders/18By0_JoeZbBMSwY3RZvNqjWdtH5Xx5GQ",
+    "fullName": "Tomy Tutor"
+  },
+  {
+    "name": "triforce",
+    "image": "/images/platform/triforce.webp",
+    "url": "https://drive.google.com/drive/folders/1hNT9CPNcOD_fonWx_cRKSDU263DlZzyZ",
+    "fullName": "Triforce"
+  },
+  {
+    "name": "tigerrz",
+    "image": "/images/platform/tigerrz.webp",
+    "url": "https://drive.google.com/drive/folders/1JraThGAlAiGVe_khGqnO3NsAw9woy07R",
+    "fullName": "Tiger R-Zone"
+  },
+  {
+    "name": "wii",
+    "image": "/images/platform/wii.webp",
+    "url": "https://drive.google.com/drive/folders/1MV3OO6yfrOipY-K78j9YZ_uzZ2h08YsP",
+    "fullName": "Nintendo Wii"
+  },
+  {
+    "name": "xegs",
+    "image": "/images/platform/xegs.webp",
+    "url": "https://drive.google.com/drive/folders/1YfbeBzhuXq9m7lgt-X7I-PhEl_LrV-E1",
+    "fullName": "Atari XEGS"
+  },
+  {
+    "name": "x68000",
+    "image": "/images/platform/x68000.webp",
+    "url": "https://drive.google.com/drive/folders/1miqtmOyMIxb5zAQdw2IKSWiOHWyZNBM8",
+    "fullName": "Sharp X68000"
+  },
+  {
+    "name": "x1",
+    "image": "/images/platform/x1.webp",
+    "url": "https://drive.google.com/drive/folders/1nzpYezp4VljztCD3bAaHXiym0OErNL3f",
+    "fullName": "Sharp X1"
+  },
+  {
+    "name": "wswanc",
+    "image": "/images/platform/wswanc.webp",
+    "url": "https://drive.google.com/drive/folders/1KZWL2KfA8cr6SNHYA6iTiV49EnR3HTOs",
+    "fullName": "WonderSwan Color"
+  },
+  {
+    "name": "turboduo",
+    "image": "/images/platform/turboduo.webp",
+    "url": "https://drive.google.com/drive/folders/1jsG1jn37hsO31TZRpig9T__sC4BdT63q",
+    "fullName": "TurboDuo"
+  },
+  {
+    "name": "wiiu-sky",
+    "image": "/images/platform/wiiu-sky.webp",
+    "url": "https://drive.google.com/drive/folders/1CUa80-Get9s_XGPA9XvNluNqn8Q8Kczd",
+    "fullName": "Wii U Sky"
+  },
+  {
+    "name": "wswan",
+    "image": "/images/platform/wswan.webp",
+    "url": "https://drive.google.com/drive/folders/1KZ5KKjzYkZM0EOWcxcohj6Jur6fMVhVM",
+    "fullName": "WonderSwan"
+  },
+  {
+    "name": "zxspectrum",
+    "image": "/images/platform/zxspectrum.webp",
+    "url": "https://drive.google.com/drive/folders/1xJmt9iqCHI2tNM_8ZikYDHj3CCHuBOY0",
+    "fullName": "ZX Spectrum"
+  },
+  {
+    "name": "zx81",
+    "image": "/images/platform/zx81.webp",
+    "url": "https://drive.google.com/drive/folders/1IOEpOV4vyJpFrkT2kHmUGAaeNJ5N9dgY",
+    "fullName": "ZX81"
+  },
+  {
+    "name": "zinc",
+    "image": "/images/platform/zinc.webp",
+    "url": "https://drive.google.com/drive/folders/1PYajQH2tmQOwv72pyOaq1zXeSkCfaJgA",
+    "fullName": "Zinc"
+  },
+  {
+    "name": "zeebo",
+    "image": "/images/platform/zeebo.webp",
+    "url": "https://drive.google.com/drive/folders/1YaETvBwoighCe44wfAZb-yE3ZL7rK5b-",
+    "fullName": "Zeebo"
+  },
+  {
+    "name": "zaccariapinball",
+    "image": "/images/platform/zaccariapinball.webp",
+    "url": "https://drive.google.com/drive/folders/1ZsmE-DsedmCxCQvDFiU9_itf5i9nBRjl",
+    "fullName": "Zaccaria Pinball"
+  },
+  {
+    "name": "gameandwatch",
+    "image": "/images/platform/gameandwatch.webp",
+    "url": "https://drive.google.com/drive/folders/1YlGnz-KLzu6ZQNPG1I5n99kD--Bcwmx3",
+    "fullName": "Game & Watch"
+  },
+  {
+    "name": "gamate",
+    "image": "/images/platform/gamate.webp",
+    "url": "https://drive.google.com/drive/folders/1b6PzUvKdAhfDPyeH_6Oafz55x8pT4Lkv",
+    "fullName": "Gamate"
+  },
+  {
+    "name": "gaelco",
+    "image": "/images/platform/gaelco.webp",
+    "url": "https://drive.google.com/drive/folders/10dOBbs8I4EPoC3syE-H5GfNM4aP48Src",
+    "fullName": "Gaelco"
+  },
+  {
+    "name": "fpinball",
+    "image": "/images/platform/fpinball.webp",
+    "url": "https://drive.google.com/drive/folders/1M1XkLjazhHMbhz5Qxf3v8GAihEMm9Wo2",
+    "fullName": "Future Pinball"
+  },
+  {
+    "name": "fmtowns",
+    "image": "/images/platform/fmtowns.webp",
+    "url": "https://drive.google.com/drive/folders/18_T6vICXPkozURfPRWRTNfMjjr2Zu_dD",
+    "fullName": "FM Towns"
+  },
+  {
+    "name": "fm7",
+    "image": "/images/platform/fm7.webp",
+    "url": "https://drive.google.com/drive/folders/1T1Hld_9v3PMiNegNAC2TR6OH1Wuye_Bu",
+    "fullName": "Fujitsu FM-7"
+  },
+  {
+    "name": "fds",
+    "image": "/images/platform/fds.webp",
+    "url": "https://drive.google.com/drive/folders/1OwzRseCF1_fruK_GAnFaRRS5PhZws5b-",
+    "fullName": "Famicom Disk System"
+  },
+  {
+    "name": "fbneo",
+    "image": "/images/platform/fbneo.webp",
+    "url": "https://drive.google.com/drive/folders/1JjFsFTAN0W9WyH3sFdaZb4-RYEc-ArlS",
+    "fullName": "FinalBurn Neo"
+  },
+  {
+    "name": "elektronika",
+    "image": "/images/platform/elektronika.webp",
+    "url": "https://drive.google.com/drive/folders/1kDIhIzntiR5UjDEz398xbU42qEqFkR9Y",
+    "fullName": "Elektronika"
+  },
+  {
+    "name": "electron",
+    "image": "/images/platform/electron.webp",
+    "url": "https://drive.google.com/drive/folders/1wzC8o1Y-WvTiLKzt4wKAetMfl5emkIAf",
+    "fullName": "Acorn Electron"
+  },
+  {
+    "name": "eduke32",
+    "image": "/images/platform/eduke32.webp",
+    "url": "https://drive.google.com/drive/folders/1x1uJ9yNYav0AD-Pt9VYe7Xv7W19hdiW1",
+    "fullName": "EDuke32"
+  },
+  {
+    "name": "ecwolf",
+    "image": "/images/platform/ecwolf.webp",
+    "url": "https://drive.google.com/drive/folders/1DWqAbamsaMfIfPxPemWdIPgBFtoeVLJz",
+    "fullName": "ECWolf"
+  },
+  {
+    "name": "easyrpg",
+    "image": "/images/platform/easyrpg.webp",
+    "url": "https://drive.google.com/drive/folders/1Tnnasw-jNszUunW7BiWeuWw6sKNZSDjY",
+    "fullName": "EasyRPG"
+  },
+  {
+    "name": "dragon32",
+    "image": "/images/platform/dragon32.webp",
+    "url": "https://drive.google.com/drive/folders/1fWQFGicgLcD2MT3vMz3_txTGT8eHAeKb",
+    "fullName": "Dragon 32"
+  },
+  {
+    "name": "fightcade",
+    "image": "/images/platform/fightcade.webp",
+    "url": "https://drive.google.com/drive/folders/17G2WEzw9KOiuDCsOkghjwJoc4xeXqIlQ",
+    "fullName": "FightCade"
+  },
+  {
+    "name": "flash",
+    "image": "/images/platform/flash.webp",
+    "url": "https://drive.google.com/drive/folders/17Qgc1Kj5I48Sgt1NKMn0Lic_rjXSLvSG",
+    "fullName": "Flash"
+  },
+  {
+    "name": "dos",
+    "image": "/images/platform/dos.webp",
+    "url": "https://drive.google.com/drive/folders/1xdgZ4lAAAm2dn1HwDcTkDhcJ8qkvYHxl",
+    "fullName": "DOS"
+  },
+  {
+    "name": "dinothawr",
+    "image": "/images/platform/dinothawr.webp",
+    "url": "https://drive.google.com/drive/folders/1XjfZuvFjcplvgSVqEXV2cqyblNQD9Rt-",
+    "fullName": "Dinothawr"
+  },
+  {
+    "name": "devilutionx",
+    "image": "/images/platform/devilutionx.webp",
+    "url": "https://drive.google.com/drive/folders/1U7tQdjl05hvccu8CdnQohC8lqj8NmSOJ",
+    "fullName": "DevilutionX"
+  },
+  {
+    "name": "daphne-singe2",
+    "image": "/images/platform/daphne-singe2.webp",
+    "url": "https://drive.google.com/drive/folders/1dSGiJT1ALlEPFaTx0vk-3EZ1dze4Lp_t",
+    "fullName": "Daphne Singe 2"
+  },
+  {
+    "name": "crvision",
+    "image": "/images/platform/crvision.webp",
+    "url": "https://drive.google.com/drive/folders/1tfFnMZcOZVt58gn8DD90ZyJxHbZUBNFn",
+    "fullName": "CreatiVision"
+  },
+  {
+    "name": "cps3",
+    "image": "/images/platform/cps3.webp",
+    "url": "https://drive.google.com/drive/folders/1VZLLDAAnlSajJ5UR2Mv8USmaZjzL75EL",
+    "fullName": "CPS3"
+  },
+  {
+    "name": "cps2",
+    "image": "/images/platform/cps2.webp",
+    "url": "https://drive.google.com/drive/folders/1PP9ox97TImleOArITTO0yKALkPP0nCiP",
+    "fullName": "CPS2"
+  },
+  {
+    "name": "cps1",
+    "image": "/images/platform/cps1.webp",
+    "url": "https://drive.google.com/drive/folders/1mXTODJEIEGBuOf1SrFyUNMnfEF8peIIN",
+    "fullName": "CPS1"
+  },
+  {
+    "name": "cplus4",
+    "image": "/images/platform/cplus4.webp",
+    "url": "https://drive.google.com/drive/folders/1tUx9V4m72CbNsihJgrdMIfO5J8dP0QxD",
+    "fullName": "Commodore Plus/4"
+  },
+  {
+    "name": "coco",
+    "image": "/images/platform/coco.webp",
+    "url": "https://drive.google.com/drive/folders/1Wv302InfRLgZShhZE59l0RRWTg3D5mnl",
+    "fullName": "Color Computer"
+  },
+  {
+    "name": "chihiro",
+    "image": "/images/platform/chihiro.webp",
+    "url": "https://drive.google.com/drive/folders/1WAwnzePDxyZUxFRMJQwWr6Z8hjm3TEhe",
+    "fullName": "Chihiro"
+  },
+  {
+    "name": "casloopy",
+    "image": "/images/platform/casloopy.webp",
+    "url": "https://drive.google.com/drive/folders/1y0fLb7SOPJ-wSstAQF3ls1FLrQSZsxfN",
+    "fullName": "Casio Loopy"
+  },
+  {
+    "name": "daphne",
+    "image": "/images/platform/daphne.webp",
+    "url": "https://drive.google.com/drive/folders/1wIKLeLEc8q_r0nln-HX6sbEnNh_YqXrX",
+    "fullName": "Daphne"
+  },
+  {
+    "name": "cdi",
+    "image": "/images/platform/cdi.webp",
+    "url": "https://drive.google.com/drive/folders/1asrVAAhOhQM0ynfNPh82d0x5II8nMJG4",
+    "fullName": "Philips CD-i"
+  },
+  {
+    "name": "colecovision",
+    "image": "/images/platform/colecovision.webp",
+    "url": "https://drive.google.com/drive/folders/1jbtlnWMMvxOPEW4gSO0mjc5mO06ec8WH",
+    "fullName": "ColecoVision"
+  },
+  {
+    "name": "bbcmicro",
+    "image": "/images/platform/bbcmicro.webp",
+    "url": "https://drive.google.com/drive/folders/1p9gM2ffqJC_bMXowd3QQ3r9eriRASq8s",
+    "fullName": "BBC Micro"
+  },
+  {
+    "name": "atomiswave",
+    "image": "/images/platform/atomiswave.webp",
+    "url": "https://drive.google.com/drive/folders/15fatzJv0y_2NZ0Ny2ZChMN5Yw67VvOqh",
+    "fullName": "Atomiswave"
+  },
+  {
+    "name": "atom",
+    "image": "/images/platform/atom.webp",
+    "url": "https://drive.google.com/drive/folders/1y7ypZ8cH-r2uiZHBwYCs5YQ3dN4_2aq7",
+    "fullName": "Acorn Atom"
+  },
+  {
+    "name": "astrocade",
+    "image": "/images/platform/astrocade.webp",
+    "url": "https://drive.google.com/drive/folders/1Il1bSDIEXyTdgQOCBFGCbyrWOyxoBi7Z",
+    "fullName": "Bally Astrocade"
+  },
+  {
+    "name": "arduboy",
+    "image": "/images/platform/arduboy.webp",
+    "url": "https://drive.google.com/drive/folders/1XDpnGumzREUFcnfacIhanTEN8ct9lwFo",
+    "fullName": "Arduboy"
+  },
+  {
+    "name": "archimedes",
+    "image": "/images/platform/archimedes.webp",
+    "url": "https://drive.google.com/drive/folders/1guKAXy_zp7YBUvQ7Iu5OKvRLd5DkQMpG",
+    "fullName": "Acorn Archimedes"
+  },
+  {
+    "name": "arcadia",
+    "image": "/images/platform/arcadia.webp",
+    "url": "https://drive.google.com/drive/folders/1FGTNDN2EO4wriRhdk1kRZJAk2RxNDREI",
+    "fullName": "Arcadia"
+  },
+  {
+    "name": "apple2gs",
+    "image": "/images/platform/apple2gs.webp",
+    "url": "https://drive.google.com/drive/folders/1UoHIwaxlTC_LFMw_DoeyzR4QGcT-bbsY",
+    "fullName": "Apple IIGS"
+  },
+  {
+    "name": "apple2",
+    "image": "/images/platform/apple2.webp",
+    "url": "https://drive.google.com/drive/folders/1lotiO-ncWvPwvwKpIHzjiDZma91Fo0Sv",
+    "fullName": "Apple II"
+  },
+  {
+    "name": "apfm1000",
+    "image": "/images/platform/apfm1000.webp",
+    "url": "https://drive.google.com/drive/folders/1Q2bsk6bjR9_ATE86nGpc5tuLpdsdnzXO",
+    "fullName": "APF-M1000"
+  },
+  {
+    "name": "amstradcpc",
+    "image": "/images/platform/amstradcpc.webp",
+    "url": "https://drive.google.com/drive/folders/1HHSfosIc6G7ICrse7zN84VpZsvWObjpI",
+    "fullName": "Amstrad CPC"
+  },
+  {
+    "name": "amigacdtv",
+    "image": "/images/platform/amigacdtv.webp",
+    "url": "https://drive.google.com/drive/folders/1mLd_u3t54bVATKNjboa91lmGXKY71yfV",
+    "fullName": "Amiga CDTV"
+  },
+  {
+    "name": "amigacd32",
+    "image": "/images/platform/amigacd32.webp",
+    "url": "https://drive.google.com/drive/folders/1vO-dqFH2u3s8F2O9wg_doBtNcX-APZNf",
+    "fullName": "Amiga CD32"
+  },
+  {
+    "name": "amiga4000",
+    "image": "/images/platform/amiga4000.webp",
+    "url": "https://drive.google.com/drive/folders/1p0yuYttKjJZPQaYcjuRQaFXsGgHG4UmA",
+    "fullName": "Amiga 4000"
+  },
+  {
+    "name": "amiga1200",
+    "image": "/images/platform/amiga1200.webp",
+    "url": "https://drive.google.com/drive/folders/1SyR6C9YUYbT6LKNHPnHLU3G5CkdZLVFT",
+    "fullName": "Amiga 1200"
+  },
+  {
+    "name": "amiga500",
+    "image": "/images/platform/amiga500.webp",
+    "url": "https://drive.google.com/drive/folders/1B5th2_8C9Aw2gvgGfIHx53YxBOaNKENN",
+    "fullName": "Amiga 500"
+  },
+  {
+    "name": "advision",
+    "image": "/images/platform/advision.webp",
+    "url": "https://drive.google.com/drive/folders/1BsZjLm0U4XcQvuFxoPZzp1F6MpPrP3Cm",
+    "fullName": "Adventure Vision"
+  },
+  {
+    "name": "adam",
+    "image": "/images/platform/adam.webp",
+    "url": "https://drive.google.com/drive/folders/1tZRRMtdAXvT8_FuDMAXV9210Lo7D4w85",
+    "fullName": "Coleco Adam"
+  },
+  {
+    "name": "actionmax",
+    "image": "/images/platform/actionmax.webp",
+    "url": "https://drive.google.com/drive/folders/1TLbEjJakf01HdWq1e6pvP6Lp1-_cauPe",
+    "fullName": "Action Max"
+  },
+  {
+    "name": "aae",
+    "image": "/images/platform/aae.webp",
+    "url": "https://drive.google.com/drive/folders/1xbBZZZGEuqyvUr8Lo5FZ4sMzhl8V8eL0",
+    "fullName": "Another Arcade Emulator"
+  },
+  {
+    "name": "bigfish",
+    "image": "/images/platform/bigfish.webp",
+    "url": "https://drive.google.com/drive/folders/1jjX4RoZiUoTBxd76Ayt3p1-gVVNJNYqj",
+    "fullName": "Big Fish Games"
+  },
+  {
+    "name": "3do-japan",
+    "image": "/images/platform/3do-japan.webp",
+    "url": "https://drive.google.com/drive/folders/1K8R5_4xyv5OECv9uzya4sJobAkrM0Xv4",
+    "fullName": "3DO Japan"
+  },
+  {
+    "name": "3dnes",
+    "image": "/images/platform/3dnes.webp",
+    "url": "https://drive.google.com/drive/folders/1MHoY0vJH9VL_eOpz1V7GWS9Xq7-4qQq7",
+    "fullName": "3DNes"
+  },
+  {
+    "name": "jaguarcd",
+    "image": "/images/platform/jaguarcd.webp",
+    "url": "https://drive.google.com/drive/folders/1TSHmxegOD2e_DClDNI4JuCH2IHeX7RbA",
+    "fullName": "Atari Jaguar CD"
+  },
+  {
+    "name": "jaguar",
+    "image": "/images/platform/jaguar.webp",
+    "url": "https://drive.google.com/drive/folders/1RLfvZo5j8ArZ4gFerS9RBm7fAMRPSK1x",
+    "fullName": "Atari Jaguar"
+  },
+  {
+    "name": "model3",
+    "image": "/images/platform/model3.webp",
+    "url": "https://drive.google.com/drive/folders/1xFj3ndq_fLNM1zdRcNtZc_sYosUstMGO",
+    "fullName": "Model 3"
+  },
+  {
+    "name": "model2",
+    "image": "/images/platform/model2.webp",
+    "url": "https://drive.google.com/drive/folders/1Y_gZV2T3GAWjik4DVrcyvH_FLNaTxvXu",
+    "fullName": "Model 2"
+  },
+  {
+    "name": "n64dd",
+    "image": "/images/platform/n64dd.webp",
+    "url": "https://drive.google.com/drive/folders/1nEoV6-jkvtI5mlOW3AJ2z0qRO46IwnqY",
+    "fullName": "Nintendo 64DD"
+  },
+  {
+    "name": "jakks",
+    "image": "/images/platform/jakks.webp",
+    "url": "https://drive.google.com/drive/folders/1OIJ4ju28jGQo_LkxYVm1aN17tzWgYKLx",
+    "fullName": "JAKKS Pacific"
+  },
+  {
+    "name": "locomalito",
+    "image": "/images/platform/locomalito.webp",
+    "url": "https://drive.google.com/drive/folders/1N8uK6RxXQiuRXcsfIg0dvZEBv26fPvtY",
+    "fullName": "Locomalito"
+  },
+  {
+    "name": "n64",
+    "image": "/images/platform/n64.webp",
+    "url": "https://drive.google.com/drive/folders/1iDgiN6nlF2ffzUYj7Zy7ScUkDDSYH5wY",
+    "fullName": "Nintendo 64"
+  },
+  {
+    "name": "neogeocd",
+    "image": "/images/platform/neogeocd.webp",
+    "url": "https://drive.google.com/drive/folders/1IByVOCVf3QD43DIos0PljwVK5rfcbVC0",
+    "fullName": "Neo Geo CD"
+  },
+  {
+    "name": "neogeo",
+    "image": "/images/platform/neogeo.webp",
+    "url": "https://drive.google.com/drive/folders/1t85AwDwqPSTy-A5UpxhGD2SmjLrrdlG4",
+    "fullName": "Neo Geo"
+  },
+  {
+    "name": "neogeo64",
+    "image": "/images/platform/neogeo64.webp",
+    "url": "https://drive.google.com/drive/folders/1CBGi8dqAgLf7OzleOlWHd7R0s2CJhcTp",
+    "fullName": "Neo Geo 64"
+  },
+  {
+    "name": "atarist",
+    "image": "/images/platform/atarist.webp",
+    "url": "https://drive.google.com/drive/folders/1rgTzYPYk-mtuC37p3czofLjr9036qxCB",
+    "fullName": "Atari ST"
+  },
+  {
+    "name": "atari7800",
+    "image": "/images/platform/atari7800.webp",
+    "url": "https://drive.google.com/drive/folders/1k0OlA9YnScBQZi11H0qJYMKtwnJzW_6E",
+    "fullName": "Atari 7800"
+  },
+  {
+    "name": "atari2600",
+    "image": "/images/platform/atari2600.webp",
+    "url": "https://drive.google.com/drive/folders/1eKHwp-gYkXifljC6Caq3vSVa2G1aPz5T",
+    "fullName": "Atari 2600"
+  },
+  {
+    "name": "atari5200",
+    "image": "/images/platform/atari5200.webp",
+    "url": "https://drive.google.com/drive/folders/15nFOQSDzKmQ3lA_LT1Yv6SkyiBoRLkPY",
+    "fullName": "Atari 5200"
+  },
+  {
+    "name": "atari800",
+    "image": "/images/platform/atari800.webp",
+    "url": "https://drive.google.com/drive/folders/1MoLazhICVW1awn6YqE0DqnStTmFTrUJ7",
+    "fullName": "Atari 800"
+  }
+]
