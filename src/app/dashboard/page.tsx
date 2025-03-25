@@ -10,9 +10,14 @@ import {
   Flame,
   Shield,
   User as UserIcon,
-  DownloadIcon,
-  AlertCircleIcon,
+  Download,
+  AlertCircle,
   XCircle,
+  ExternalLink,
+  HardDrive,
+  Database,
+  FileArchive,
+  Files,
 } from "lucide-react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -203,8 +208,8 @@ function DashboardContent() {
     }
   };
 
-  const downloadProduct = (downloadUrl: string) => {
-    alert("Download: " + downloadUrl);
+  const handleOpenLink = (url: string) => {
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   // Adicionar função para cancelar assinatura
@@ -295,7 +300,7 @@ function DashboardContent() {
         <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center p-8 bg-black/30 rounded-lg border border-red-800/50 max-w-md">
-            <AlertCircleIcon className="h-12 w-12 text-red-500 mx-auto mb-4" />
+            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
             <h2 className="text-xl font-bold text-white mb-2">Acesso Negado</h2>
             <p className="text-gray-300 mb-6">
               É necessário fazer login para acessar o dashboard.
@@ -313,6 +318,50 @@ function DashboardContent() {
       </div>
     );
   }
+
+  // Downloads section data
+  const downloadOptions = [
+    {
+      id: "drive-membro",
+      title: "Google Drive de Membro",
+      description: "Acesso completo a 12TB de conteúdo exclusivo para membros",
+      url: "https://bit.ly/riescade-base",
+      icon: HardDrive,
+      highlight: true,
+      badge: "12TB",
+      bgClass: "bg-gradient-to-br from-purple-900/60 to-[#ff0884]/60",
+    },
+    {
+      id: "base-membros",
+      title: "RIESCADE BASE Membros",
+      description: "1 jogo por Plataforma - Coleção curada para membros",
+      url: "https://drive.google.com/drive/folders/1zte41dcZ3hIUE5JU8S4KPsk8bB03u4lR",
+      icon: Database,
+      highlight: false,
+      badge: "Premium",
+      bgClass: "bg-gradient-to-br from-blue-900/60 to-indigo-900/60",
+    },
+    {
+      id: "base-free",
+      title: "RIESCADE BASE Free",
+      description: "Conteúdo gratuito para todos os usuários",
+      url: "https://bit.ly/riescade-base",
+      icon: Files,
+      highlight: false,
+      badge: "Grátis",
+      bgClass: "bg-gradient-to-br from-green-900/60 to-emerald-900/60",
+    },
+    {
+      id: "apps-necessarios",
+      title: "Arquivos Necessários",
+      description: "Aplicativos e ferramentas essenciais para o RIESCADE",
+      url: "https://bit.ly/riescade-apps",
+      icon: FileArchive,
+      highlight: false,
+      badge: "Essencial",
+      bgClass: "bg-gradient-to-br from-amber-900/60 to-orange-900/60",
+    },
+  ];
 
   // Main dashboard content - only shown when authenticated
   return (
@@ -499,7 +548,7 @@ function DashboardContent() {
                   {subscription.status !== "active" && (
                     <div className="p-4 bg-amber-900/20 text-amber-400 rounded-md text-sm border border-amber-500/30 !mb-6 ">
                       <p className="flex items-start">
-                        <AlertCircleIcon className="w-5 h-5 mr-2" />
+                        <AlertCircle className="w-5 h-5 mr-2" />
                         Sua assinatura não está ativa. O download só estará
                         disponível após a renovação.
                       </p>
@@ -576,10 +625,10 @@ function DashboardContent() {
           </div>
         </div>
 
-        {/* Download Section */}
+        {/* Download Section - ATUALIZADO */}
         <div className="mt-8 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
           <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
-            <DownloadIcon className="w-5 h-5 text-[#ff0884] mr-2" />
+            <Download className="w-5 h-5 text-[#ff0884] mr-2" />
             <h2 className="text-lg font-medium text-white">
               Downloads Disponíveis
             </h2>
@@ -587,53 +636,104 @@ function DashboardContent() {
 
           <div className="p-6">
             {subscription && subscription.status === "active" ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {[
-                  {
-                    title: "RIESCADE DOWNLOADER",
-                    image: "/images/logo.png",
-                    downloadUrl: "/images/logo.png",
-                    genre: "APP",
-                  },
-                  {
-                    title: "RIESCADE BASE",
-                    image: "/images/logo.png",
-                    downloadUrl: "/images/logo.png",
-                    genre: "EmulationStation",
-                  },
-                  {
-                    title: "DOWNLOADER + BASE",
-                    image: "/images/logo.png",
-                    downloadUrl: "/images/logo.png",
-                    genre: "APP",
-                  },
-                ].map((game, i) => (
-                  <div
-                    key={i}
-                    className="bg-black/30 rounded-lg overflow-hidden border border-gray-700 hover:border-[#ff0884]/50 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_15px_rgba(255,8,132,0.2)]"
-                  >
-                    <div className="aspect-video bg-gray-800 relative">
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-xl font-bold text-white">
-                          {game.title}
-                        </span>
-                      </div>
+              <div className="space-y-8">
+                {/* Banner destacado para Drive de Membro */}
+                <div className="relative overflow-hidden rounded-lg border border-[#ff0884]/30 group">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-[#ff0884]/30 to-blue-900/40 group-hover:opacity-75 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-[url('/images/logo.png')] bg-no-repeat bg-center opacity-10"></div>
+                  
+                  <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row items-center">
+                    <div className="mb-6 sm:mb-0 sm:mr-8 flex-shrink-0 bg-black/30 p-4 rounded-full border border-[#ff0884]/50 shadow-[0_0_15px_rgba(255,8,132,0.3)]">
+                      <HardDrive className="h-10 w-10 sm:h-16 sm:w-16 text-[#ff0884]" />
                     </div>
-                    <div className="p-4">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-sm">
-                          {game.genre}
-                        </span>
-                        <button
-                          className="text-xs bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] px-2 py-1 rounded border border-[#ff0884]/30 transition-colors duration-200"
-                          onClick={() => downloadProduct(game.downloadUrl)}
-                        >
-                          DOWNLOAD
-                        </button>
+                    
+                    <div className="text-center sm:text-left flex-grow">
+                      <div className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#ff0884]/20 text-[#ff0884] border border-[#ff0884]/30 mb-2">
+                        12TB DE CONTEÚDO
                       </div>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+                        Google Drive de Membro
+                      </h3>
+                      <p className="text-gray-300 mb-4 max-w-2xl">
+                        Acesso completo à nossa biblioteca exclusiva para membros com mais de 12TB de conteúdo. Atualizações regulares com os últimos lançamentos.
+                      </p>
+                      
+                      <button
+                        onClick={() => handleOpenLink("https://bit.ly/riescade-base")}
+                        className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#ff0884] hover:bg-[#ff0884]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-colors duration-200 shadow-[0_0_10px_rgba(255,8,132,0.4)]"
+                      >
+                        <ExternalLink className="w-5 h-5 mr-2" />
+                        Acessar Drive de Membro
+                      </button>
                     </div>
                   </div>
-                ))}
+                </div>
+                
+                {/* Grid de opções de download */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {downloadOptions.slice(1).map((item) => (
+                    <div
+                      key={item.id}
+                      className={`${item.bgClass} rounded-lg border border-gray-700/50 p-5 flex flex-col hover:border-[#ff0884]/30 hover:shadow-[0_0_15px_rgba(255,8,132,0.15)] transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden`}
+                    >
+                      <div className="absolute top-2 right-2 z-10">
+                        <span className="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-black/30 text-white border border-gray-700/50">
+                          {item.badge}
+                        </span>
+                      </div>
+                      
+                      <div className="mb-4 flex items-center justify-center">
+                        <div className="p-3 rounded-full bg-black/30 border border-gray-700/50">
+                          <item.icon className="h-8 w-8 text-[#ff0884]" />
+                        </div>
+                      </div>
+                      
+                      <h3 className="text-xl font-bold text-white text-center mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-300 mb-4 text-center text-sm flex-grow">
+                        {item.description}
+                      </p>
+                      
+                      <button
+                        onClick={() => handleOpenLink(item.url)}
+                        className="w-full py-2 px-4 bg-black/30 hover:bg-[#ff0884]/20 border border-gray-700 hover:border-[#ff0884]/50 rounded-md text-white transition-colors duration-200 flex items-center justify-center"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Acessar Link
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Seção de instruções */}
+                <div className="bg-black/30 rounded-lg border border-gray-700 p-6">
+                  <h3 className="text-xl font-bold text-white mb-4 flex items-center">
+                    <AlertCircle className="w-5 h-5 mr-2 text-[#ff0884]" />
+                    Instruções para Download
+                  </h3>
+                  
+                  <div className="space-y-4">
+                    <div className="bg-black/20 p-4 rounded-md border border-gray-700/50">
+                      <h4 className="text-lg font-medium text-white mb-2">Como acessar o conteúdo:</h4>
+                      <ol className="list-decimal list-inside space-y-2 text-gray-300">
+                        <li>Clique no botão "Acessar Drive de Membro" para abrir o Google Drive</li>
+                        <li>Faça login com sua conta Google se solicitado</li>
+                        <li>Navegue pelas pastas para encontrar o conteúdo desejado</li>
+                        <li>Para baixar, selecione os arquivos e clique com o botão direito → Fazer download</li>
+                      </ol>
+                    </div>
+                    
+                    <div className="bg-[#ff0884]/10 p-4 rounded-md border border-[#ff0884]/30">
+                      <h4 className="text-lg font-medium text-white mb-2">Importante:</h4>
+                      <ul className="list-disc list-inside space-y-2 text-gray-300">
+                        <li>O acesso ao conteúdo é exclusivo para membros com assinatura ativa</li>
+                        <li>Não compartilhe os links com não-membros</li>
+                        <li>Para problemas de acesso, contate o suporte</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="text-center py-10">
@@ -679,3 +779,4 @@ export default function Dashboard() {
     </Suspense>
   );
 }
+
