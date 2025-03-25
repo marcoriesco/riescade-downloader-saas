@@ -768,7 +768,7 @@ function DashboardContent() {
                   onClick={handleCheckout}
                   className="px-6 py-2 bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] rounded-md border border-[#ff0884]/30 transition-colors duration-200"
                 >
-                  Assinar agora
+                  Assinar agora!
                 </button>
               </div>
             )}
