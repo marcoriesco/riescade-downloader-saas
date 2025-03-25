@@ -14,16 +14,13 @@ import {
   AlertCircle,
   XCircle,
   ExternalLink,
-  HardDrive,
-  Database,
-  FileArchive,
-  Files,
 } from "lucide-react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle, faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 import { CancelSubscriptionModal } from "@/components/CancelSubscriptionModal";
 import { Roboto_Condensed } from "next/font/google";
+import { faDice, faFile, faGamepad } from "@fortawesome/free-solid-svg-icons";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -44,6 +41,16 @@ function DashboardContent() {
   const success = searchParams.get("success");
   const canceled = searchParams.get("canceled");
   const sessionId = searchParams.get("session_id");
+
+  const now = new Date();
+  const currentYear = now.getFullYear();
+  const startOfYear = new Date(currentYear, 0, 1);
+  const endOfYear = new Date(currentYear, 11, 31);
+  const totalDaysInYear =
+    (endOfYear.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24) + 1;
+  const daysSoFar =
+    (now.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24) + 1;
+  const percentage = (daysSoFar / totalDaysInYear) * 100;
 
   // Fetch subscription function
   const fetchSubscription = useCallback(async (userId: string) => {
@@ -212,7 +219,6 @@ function DashboardContent() {
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  // Adicionar função para cancelar assinatura
   const handleCancelSubscription = async () => {
     if (!user || !subscription) return;
 
@@ -325,8 +331,8 @@ function DashboardContent() {
       id: "drive-membro",
       title: "Google Drive de Membro",
       description: "Acesso completo a 12TB de conteúdo exclusivo para membros",
-      url: "https://bit.ly/riescade-base",
-      icon: HardDrive,
+      url: "https://bit.ly/gamecc-drive",
+      icon: faGoogleDrive,
       highlight: true,
       badge: "12TB",
       bgClass: "bg-gradient-to-br from-purple-900/60 to-[#ff0884]/60",
@@ -334,9 +340,9 @@ function DashboardContent() {
     {
       id: "base-membros",
       title: "RIESCADE BASE Membros",
-      description: "1 jogo por Plataforma - Coleção curada para membros",
+      description: "1 jogo por Plataforma - Coleção criada para membros",
       url: "https://drive.google.com/drive/folders/1zte41dcZ3hIUE5JU8S4KPsk8bB03u4lR",
-      icon: Database,
+      icon: faGamepad,
       highlight: false,
       badge: "Premium",
       bgClass: "bg-gradient-to-br from-blue-900/60 to-indigo-900/60",
@@ -346,7 +352,7 @@ function DashboardContent() {
       title: "RIESCADE BASE Free",
       description: "Conteúdo gratuito para todos os usuários",
       url: "https://bit.ly/riescade-base",
-      icon: Files,
+      icon: faDice,
       highlight: false,
       badge: "Grátis",
       bgClass: "bg-gradient-to-br from-green-900/60 to-emerald-900/60",
@@ -356,7 +362,7 @@ function DashboardContent() {
       title: "Arquivos Necessários",
       description: "Aplicativos e ferramentas essenciais para o RIESCADE",
       url: "https://bit.ly/riescade-apps",
-      icon: FileArchive,
+      icon: faFile,
       highlight: false,
       badge: "Essencial",
       bgClass: "bg-gradient-to-br from-amber-900/60 to-orange-900/60",
@@ -460,12 +466,12 @@ function DashboardContent() {
                     <div className="w-full bg-gray-700 rounded-full h-2">
                       <div
                         className="bg-gradient-to-r from-[#ff0884] to-purple-500 h-2 rounded-full"
-                        style={{ width: "52%" }}
+                        style={{ width: `${percentage.toFixed(2)}%` }}
                       ></div>
                     </div>
                     <div className="flex justify-between text-xs text-gray-500 mt-1">
                       <span>1</span>
-                      <span>2</span>
+                      <span>12</span>
                     </div>
                   </div>
                 </div>
@@ -640,15 +646,18 @@ function DashboardContent() {
                 {/* Banner destacado para Drive de Membro */}
                 <div className="relative overflow-hidden rounded-lg border border-[#ff0884]/30 group">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-[#ff0884]/30 to-blue-900/40 group-hover:opacity-75 transition-opacity duration-300"></div>
-                  <div className="absolute inset-0 bg-[url('/images/logo.png')] bg-no-repeat bg-center opacity-10"></div>
+                  <div className="absolute inset-0 bg-[url('/images/logos.png')] bg-no-repeat bg-right-bottom opacity-10"></div>
 
                   <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row items-center">
                     <div className="mb-6 sm:mb-0 sm:mr-8 flex-shrink-0 bg-black/30 p-4 rounded-full border border-[#ff0884]/50 shadow-[0_0_15px_rgba(255,8,132,0.3)]">
-                      <HardDrive className="h-10 w-10 sm:h-16 sm:w-16 text-[#ff0884]" />
+                      <FontAwesomeIcon
+                        icon={faGoogleDrive}
+                        className="h-10 w-10 sm:h-16 sm:w-16 text-[#ff0884]"
+                      />
                     </div>
 
                     <div className="text-center sm:text-left flex-grow">
-                      <div className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#ff0884]/20 text-[#ff0884] border border-[#ff0884]/30 mb-2">
+                      <div className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#ff0884]/20 text-[#ff0884] border border-[#ff0884]/30 mb-8">
                         12TB DE CONTEÚDO
                       </div>
                       <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
@@ -662,12 +671,12 @@ function DashboardContent() {
 
                       <button
                         onClick={() =>
-                          handleOpenLink("https://bit.ly/riescade-base")
+                          handleOpenLink("https://bit.ly/gamecc-drive")
                         }
                         className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#ff0884] hover:bg-[#ff0884]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-colors duration-200 shadow-[0_0_10px_rgba(255,8,132,0.4)]"
                       >
                         <ExternalLink className="w-5 h-5 mr-2" />
-                        Acessar Drive de Membro
+                        Acessar Google Drive
                       </button>
                     </div>
                   </div>
@@ -688,7 +697,10 @@ function DashboardContent() {
 
                       <div className="mb-4 flex items-center justify-center">
                         <div className="p-3 rounded-full bg-black/30 border border-gray-700/50">
-                          <item.icon className="h-8 w-8 text-[#ff0884]" />
+                          <FontAwesomeIcon
+                            icon={item.icon}
+                            className="h-8 w-8 text-[#ff0884]"
+                          />
                         </div>
                       </div>
 
@@ -724,10 +736,13 @@ function DashboardContent() {
                       </h4>
                       <ol className="list-decimal list-inside space-y-2 text-gray-300">
                         <li>
-                          Clique no botão &quot;Acessar Drive de Membro&ldquo;
-                          para abrir o Google Drive
+                          Clique no botão &quot;Acessar Google Drive&ldquo; para
+                          abrir o Google Drive
                         </li>
-                        <li>Faça login com sua conta Google se solicitado</li>
+                        <li>
+                          Faça login com a mesma conta Google que você usou para
+                          virar membro
+                        </li>
                         <li>
                           Navegue pelas pastas para encontrar o conteúdo
                           desejado
@@ -735,6 +750,20 @@ function DashboardContent() {
                         <li>
                           Para baixar, selecione os arquivos e clique com o
                           botão direito → Fazer download
+                        </li>
+                        <li>
+                          Qualquer dúvida leia o manual de instalação:{" "}
+                          <a
+                            title="Manual de Instalação"
+                            className="cursor-pointer underline"
+                            onClick={() =>
+                              handleOpenLink(
+                                "https://docs.google.com/document/d/15JzOSYLXrAy7Ocj166NoIiUWE2z7dbYY/edit?usp=drive_link&ouid=115405130796003234712&rtpof=true&sd=true"
+                              )
+                            }
+                          >
+                            Manual de Instalação
+                          </a>
                         </li>
                       </ol>
                     </div>
