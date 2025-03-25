@@ -641,12 +641,12 @@ function DashboardContent() {
                 <div className="relative overflow-hidden rounded-lg border border-[#ff0884]/30 group">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-[#ff0884]/30 to-blue-900/40 group-hover:opacity-75 transition-opacity duration-300"></div>
                   <div className="absolute inset-0 bg-[url('/images/logo.png')] bg-no-repeat bg-center opacity-10"></div>
-                  
+
                   <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row items-center">
                     <div className="mb-6 sm:mb-0 sm:mr-8 flex-shrink-0 bg-black/30 p-4 rounded-full border border-[#ff0884]/50 shadow-[0_0_15px_rgba(255,8,132,0.3)]">
                       <HardDrive className="h-10 w-10 sm:h-16 sm:w-16 text-[#ff0884]" />
                     </div>
-                    
+
                     <div className="text-center sm:text-left flex-grow">
                       <div className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#ff0884]/20 text-[#ff0884] border border-[#ff0884]/30 mb-2">
                         12TB DE CONTEÚDO
@@ -655,11 +655,15 @@ function DashboardContent() {
                         Google Drive de Membro
                       </h3>
                       <p className="text-gray-300 mb-4 max-w-2xl">
-                        Acesso completo à nossa biblioteca exclusiva para membros com mais de 12TB de conteúdo. Atualizações regulares com os últimos lançamentos.
+                        Acesso completo à nossa biblioteca exclusiva para
+                        membros com mais de 12TB de conteúdo. Atualizações
+                        regulares com os últimos lançamentos.
                       </p>
-                      
+
                       <button
-                        onClick={() => handleOpenLink("https://bit.ly/riescade-base")}
+                        onClick={() =>
+                          handleOpenLink("https://bit.ly/riescade-base")
+                        }
                         className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#ff0884] hover:bg-[#ff0884]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-colors duration-200 shadow-[0_0_10px_rgba(255,8,132,0.4)]"
                       >
                         <ExternalLink className="w-5 h-5 mr-2" />
@@ -668,7 +672,7 @@ function DashboardContent() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Grid de opções de download */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {downloadOptions.slice(1).map((item) => (
@@ -681,20 +685,20 @@ function DashboardContent() {
                           {item.badge}
                         </span>
                       </div>
-                      
+
                       <div className="mb-4 flex items-center justify-center">
                         <div className="p-3 rounded-full bg-black/30 border border-gray-700/50">
                           <item.icon className="h-8 w-8 text-[#ff0884]" />
                         </div>
                       </div>
-                      
+
                       <h3 className="text-xl font-bold text-white text-center mb-2">
                         {item.title}
                       </h3>
                       <p className="text-gray-300 mb-4 text-center text-sm flex-grow">
                         {item.description}
                       </p>
-                      
+
                       <button
                         onClick={() => handleOpenLink(item.url)}
                         className="w-full py-2 px-4 bg-black/30 hover:bg-[#ff0884]/20 border border-gray-700 hover:border-[#ff0884]/50 rounded-md text-white transition-colors duration-200 flex items-center justify-center"
@@ -705,29 +709,45 @@ function DashboardContent() {
                     </div>
                   ))}
                 </div>
-                
+
                 {/* Seção de instruções */}
                 <div className="bg-black/30 rounded-lg border border-gray-700 p-6">
                   <h3 className="text-xl font-bold text-white mb-4 flex items-center">
                     <AlertCircle className="w-5 h-5 mr-2 text-[#ff0884]" />
                     Instruções para Download
                   </h3>
-                  
+
                   <div className="space-y-4">
                     <div className="bg-black/20 p-4 rounded-md border border-gray-700/50">
-                      <h4 className="text-lg font-medium text-white mb-2">Como acessar o conteúdo:</h4>
+                      <h4 className="text-lg font-medium text-white mb-2">
+                        Como acessar o conteúdo:
+                      </h4>
                       <ol className="list-decimal list-inside space-y-2 text-gray-300">
-                        <li>Clique no botão "Acessar Drive de Membro" para abrir o Google Drive</li>
+                        <li>
+                          Clique no botão &quot;Acessar Drive de Membro&ldquo;
+                          para abrir o Google Drive
+                        </li>
                         <li>Faça login com sua conta Google se solicitado</li>
-                        <li>Navegue pelas pastas para encontrar o conteúdo desejado</li>
-                        <li>Para baixar, selecione os arquivos e clique com o botão direito → Fazer download</li>
+                        <li>
+                          Navegue pelas pastas para encontrar o conteúdo
+                          desejado
+                        </li>
+                        <li>
+                          Para baixar, selecione os arquivos e clique com o
+                          botão direito → Fazer download
+                        </li>
                       </ol>
                     </div>
-                    
+
                     <div className="bg-[#ff0884]/10 p-4 rounded-md border border-[#ff0884]/30">
-                      <h4 className="text-lg font-medium text-white mb-2">Importante:</h4>
+                      <h4 className="text-lg font-medium text-white mb-2">
+                        Importante:
+                      </h4>
                       <ul className="list-disc list-inside space-y-2 text-gray-300">
-                        <li>O acesso ao conteúdo é exclusivo para membros com assinatura ativa</li>
+                        <li>
+                          O acesso ao conteúdo é exclusivo para membros com
+                          assinatura ativa
+                        </li>
                         <li>Não compartilhe os links com não-membros</li>
                         <li>Para problemas de acesso, contate o suporte</li>
                       </ul>
@@ -779,4 +799,3 @@ export default function Dashboard() {
     </Suspense>
   );
 }
-
