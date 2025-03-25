@@ -235,11 +235,11 @@ export default function PlatformsPage() {
 
       <Header />
 
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Plataformas</h1>
-          <p className="text-gray-400">
-            Encontre jogos para diversas plataformas
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 !pt-14">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-white mb-2">PLATAFORMAS</h1>
+          <p className={`${robotoCondensed.className} text-gray-400`}>
+            Selecione a Plataforma e vá direto para o Google Drive
           </p>
         </div>
 
