@@ -16,6 +16,7 @@ import {
 
 import { useCallback } from "react";
 import { supabase } from "@/lib/supabase";
+import { Video } from "@/components/Video";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -108,8 +109,6 @@ export default function Home() {
         {/* Hero Section com gradiente animado */}
         <div className="relative bg-gray-900 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff0884]/20 via-gray-900 to-gray-900"></div>
-          <div className="absolute inset-0 bg-grid-white/5 bg-[size:30px_30px]"></div>
-
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
             <div className="md:flex md:items-center md:space-x-12">
               <div className="md:w-1/2 mb-12 md:mb-0 animate-fade-in">
@@ -150,14 +149,7 @@ export default function Home() {
               </div>
               <div className="md:w-1/2">
                 <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-[#ff0884]/30 shadow-[0_0_30px_rgba(255,8,132,0.3)] transform rotate-1 hover:rotate-0 transition-all duration-500">
-                  <Image
-                    src="/video/intro.webm"
-                    alt="Animated gif"
-                    width={100}
-                    height={60}
-                    className="w-full min-h-max"
-                    unoptimized
-                  />
+                  <Video video="/video/intro.webm" />
 
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-[#ff0884]/20 to-gray-900/80"></div>
                   <div className="absolute -bottom-6 right-4 flex items-center justify-center">
@@ -234,9 +226,6 @@ export default function Home() {
 
         {/* Game Showcase Section */}
         <div className="py-20 bg-black relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/noise.webp')] opacity-5"></div>
-          <div className="absolute inset-0 bg-grid-white/5 bg-[size:30px_30px]"></div>
-
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
