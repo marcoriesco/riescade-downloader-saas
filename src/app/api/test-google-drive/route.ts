@@ -1,33 +1,17 @@
+// app/api/test-drive-permission/route.ts
 import { NextResponse } from "next/server";
-import { google } from "googleapis";
+import { addUserPermission } from "@/integrations/google/drive";
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const email = searchParams.get("email") || "sharkdev.com.br@gmail.com";
+
   try {
-    console.log("Testando credenciais Google Drive");
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
-        project_id: process.env.GOOGLE_PROJECT_ID || "default-project",
-      },
-      scopes: ["https://www.googleapis.com/auth/drive"],
-    });
-
-    const drive = google.drive({ version: "v3", auth });
-
-    // Tenta uma operação simples como listar arquivos
-    const response = await drive.files.list({
-      pageSize: 5,
-      fields: "files(id, name)",
-    });
-
-    return NextResponse.json({
-      success: true,
-      message: "Credenciais funcionando corretamente",
-      files: response.data.files,
-    });
+    console.log(`Testando adição de permissão para: ${email}`);
+    const result = await addUserPermission(email);
+    return NextResponse.json({ success: true, result });
   } catch (error: unknown) {
-    console.error("Erro ao testar credenciais Google:", error);
+    console.error(`Erro ao adicionar permissão para ${email}:`, error);
 
     // Tratamento adequado para o tipo unknown
     const errorMessage =
