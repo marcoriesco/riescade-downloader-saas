@@ -349,7 +349,7 @@ function DashboardContent() {
       icon: faGamepad,
       highlight: false,
       badge: "Premium",
-      bgClass: "bg-gradient-to-br from-blue-900/60 to-indigo-900/60",
+      bgClass: "bg-gradient-to-br from-blue-900/60",
     },
     {
       id: "base-free",
@@ -359,7 +359,7 @@ function DashboardContent() {
       icon: faDice,
       highlight: false,
       badge: "Novo",
-      bgClass: "bg-gradient-to-br from-green-900/60 to-emerald-900/60",
+      bgClass: "bg-gradient-to-br from-green-900/60",
     },
     {
       id: "apps-necessarios",
@@ -369,7 +369,7 @@ function DashboardContent() {
       icon: faFile,
       highlight: false,
       badge: "Essencial",
-      bgClass: "bg-gradient-to-br from-amber-900/60 to-orange-900/60",
+      bgClass: "bg-gradient-to-br from-amber-900/60",
     },
   ];
 
