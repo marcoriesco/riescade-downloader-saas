@@ -66,7 +66,7 @@ export function Header() {
   };
 
   return (
-    <header className="bg-black/80 backdrop-blur-md sticky top-0 z-50 border-b border-gray-800/50">
+    <header className="sticky top-0 z-50 header-backdrop">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2">
           <div className="flex items-center">
