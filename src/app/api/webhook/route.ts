@@ -1,18 +1,14 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { supabase } from "@/lib/supabase";
-import {
-  getUserEmailById,
-  getUserEmailFromProfile,
-  supabaseAdmin,
-} from "@/lib/supabase-admin";
+import { getUserEmailFromProfile, supabaseAdmin } from "@/lib/supabase-admin";
 import {
   addUserPermission,
   removeUserPermission,
 } from "@/integrations/google/drive";
 
 /**
- * Tenta obter o email do usuário usando várias estratégias
+ * Tenta obter o email do usuário usando várias estratégias, com foco no login do Google
  * @param userId ID do usuário
  * @param customerId ID do cliente no Stripe
  * @param customerEmail Email do cliente do Stripe (se disponível)
@@ -23,81 +19,114 @@ async function getUserEmail(
   customerId?: string,
   customerEmail?: string | null
 ): Promise<string | null> {
-  // 1. Tentar obter com o cliente padrão do Supabase
-  try {
-    const { data } = await supabase.auth.getUser(userId);
-    if (data?.user?.email) {
-      console.log(`Email obtido via Supabase Auth: ${data.user.email}`);
-      return data.user.email;
-    }
-  } catch (error) {
-    console.error("Erro ao obter email via Supabase Auth:", error);
-  }
+  const strategies = [
+    // Estratégia 1: Auth do Supabase (mais confiável para login do Google)
+    async () => {
+      try {
+        const { data } = await supabase.auth.getUser(userId);
+        if (data?.user?.email) {
+          console.log(`Email obtido via Supabase Auth: ${data.user.email}`);
+          return {
+            success: true,
+            email: data.user.email,
+            source: "Supabase Auth",
+          };
+        }
+      } catch (error) {
+        console.error("Erro ao obter email via Supabase Auth:", error);
+      }
+      return { success: false };
+    },
 
-  // 2. Tentar obter da sessão de autenticação do usuário com Admin API
-  try {
-    const { data } = await supabase.auth.admin?.getUserById(userId);
-    if (data?.user?.email) {
-      console.log(
-        `Email obtido via sessão de autenticação Admin: ${data.user.email}`
-      );
-      return data.user.email;
-    }
-  } catch (error) {
-    console.error("Erro ao obter email da sessão Admin:", error);
-  }
+    // Estratégia 2: Admin API do Supabase
+    async () => {
+      try {
+        const { data } = await supabaseAdmin.auth.admin.getUserById(userId);
+        if (data?.user?.email) {
+          console.log(`Email obtido via Admin API: ${data.user.email}`);
+          return { success: true, email: data.user.email, source: "Admin API" };
+        }
+      } catch (error) {
+        console.error("Erro ao obter email via Admin API:", error);
+      }
+      return { success: false };
+    },
 
-  // 3. Usar o email do cliente Stripe se disponível
-  if (customerEmail) {
-    console.log(
-      `Email obtido dos detalhes do cliente Stripe: ${customerEmail}`
-    );
-    return customerEmail;
-  }
+    // Estratégia 3: Email do cliente do Stripe
+    async () => {
+      if (customerEmail) {
+        console.log(`Email obtido do Stripe: ${customerEmail}`);
+        return {
+          success: true,
+          email: customerEmail,
+          source: "Stripe Customer Email",
+        };
+      }
+      return { success: false };
+    },
 
-  // 4. Tentar obter o email via admin API específica
-  try {
-    const adminEmail = await getUserEmailById(userId);
-    if (adminEmail) {
-      console.log(`Email obtido via admin API: ${adminEmail}`);
-      return adminEmail;
-    }
-  } catch (error) {
-    console.error("Erro ao obter email via admin API:", error);
-  }
+    // Estratégia 4: Obter do perfil do usuário
+    async () => {
+      try {
+        const profileEmail = await getUserEmailFromProfile(userId);
+        if (profileEmail) {
+          console.log(`Email obtido do perfil: ${profileEmail}`);
+          return { success: true, email: profileEmail, source: "User Profile" };
+        }
+      } catch (error) {
+        console.error("Erro ao obter email do perfil:", error);
+      }
+      return { success: false };
+    },
 
-  // 5. Tentar obter o email do perfil
-  try {
-    const profileEmail = await getUserEmailFromProfile(userId);
-    if (profileEmail) {
-      console.log(`Email obtido do perfil do usuário: ${profileEmail}`);
-      return profileEmail;
-    }
-  } catch (error) {
-    console.error("Erro ao obter email do perfil:", error);
-  }
-
-  // 6. Se tiver customerId, tente obter do Stripe
-  if (customerId) {
-    try {
-      const stripe = getStripe();
-      if (stripe) {
-        const customer = await stripe.customers.retrieve(customerId);
-        if (
-          typeof customer !== "string" &&
-          !customer.deleted &&
-          customer.email
-        ) {
-          console.log(`Email obtido diretamente do Stripe: ${customer.email}`);
-          return customer.email;
+    // Estratégia 5: Diretamente do Stripe
+    async () => {
+      if (customerId) {
+        try {
+          const stripe = getStripe();
+          if (stripe) {
+            const customer = await stripe.customers.retrieve(customerId);
+            if (
+              typeof customer !== "string" &&
+              !customer.deleted &&
+              customer.email
+            ) {
+              console.log(
+                `Email obtido diretamente do Stripe: ${customer.email}`
+              );
+              return {
+                success: true,
+                email: customer.email,
+                source: "Stripe API",
+              };
+            }
+          }
+        } catch (error) {
+          console.error("Erro ao obter email do Stripe:", error);
         }
       }
-    } catch (error) {
-      console.error("Erro ao obter email do Stripe:", error);
+      return { success: false };
+    },
+  ];
+
+  // Tentar cada estratégia em sequência
+  console.log(
+    `Tentando obter email para o usuário ${userId} usando ${strategies.length} estratégias`
+  );
+
+  for (let i = 0; i < strategies.length; i++) {
+    const result = await strategies[i]();
+    if (result.success) {
+      console.log(`Estratégia ${i + 1} bem-sucedida: ${result.source}`);
+      return result.email || null;
+    } else {
+      console.log(`Estratégia ${i + 1} falhou`);
     }
   }
 
-  console.error(`Não foi possível obter o email para o usuário: ${userId}`);
+  console.error(
+    `TODAS AS ESTRATÉGIAS FALHARAM para obter email do usuário: ${userId}`
+  );
   return null;
 }
 

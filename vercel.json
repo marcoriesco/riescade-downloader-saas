@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/reconcile-permissions",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}

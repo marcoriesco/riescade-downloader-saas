@@ -8,6 +8,7 @@ Plataforma para gerenciamento de assinaturas para acesso a conteúdo exclusivo.
 - Processamento de pagamentos com Stripe
 - Gerenciamento de assinaturas
 - Integração automática com Google Drive para conceder acesso a pastas compartilhadas
+- Reconciliação periódica de permissões via Vercel Cron Jobs
 
 ## Configuração
 
@@ -67,6 +68,30 @@ npm run dev
 3. O webhook do Stripe atualiza o status da assinatura no Supabase
 4. Quando uma assinatura se torna ativa, o sistema adiciona o email do usuário na pasta compartilhada do Google Drive
 5. Quando uma assinatura é cancelada, o acesso é removido automaticamente
+6. Um processo de reconciliação diário verifica e corrige eventuais inconsistências entre assinaturas ativas e permissões concedidas
+
+## Cron Job de Reconciliação
+
+O sistema utiliza Vercel Cron Jobs para executar automaticamente a reconciliação de permissões:
+
+1. O job está configurado para rodar diariamente às 03:00 UTC
+2. Verifica todas as assinaturas ativas no Supabase
+3. Para cada usuário com assinatura ativa, confirma se há permissão no Google Drive
+4. Adiciona permissões faltantes automaticamente
+5. Gera logs detalhados do processo
+
+A configuração do cron job está no arquivo `vercel.json`:
+
+```json
+{
+  "crons": [
+    {
+      "path": "/api/reconcile-permissions",
+      "schedule": "0 3 * * *"
+    }
+  ]
+}
+```
 
 ## Webhook do Stripe
 
