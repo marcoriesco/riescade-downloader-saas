@@ -37,13 +37,18 @@ export async function POST(request: Request) {
 
 async function handleReconciliation(request: Request) {
   try {
-    // Verificar se a solicitação é da Vercel ou tem token válido
-    const isVercelCron = request.headers.get("x-vercel-cron") === "true";
+    // Verificar se a solicitação é da Vercel através de múltiplos métodos
+    const isVercelCronHeader = request.headers.get("x-vercel-cron") === "true";
+    const userAgent = request.headers.get("user-agent") || "";
+    const isVercelCronUserAgent = userAgent.includes("vercel-cron");
+    const isVercelCron = isVercelCronHeader || isVercelCronUserAgent;
 
     // Log específico para identificar solicitações da Vercel
     if (isVercelCron) {
       console.log(
-        "Detectada chamada do Cron Job da Vercel - autenticação automática"
+        `Detectada chamada do Cron Job da Vercel - autenticação automática (via ${
+          isVercelCronHeader ? "x-vercel-cron header" : "user-agent"
+        })`
       );
     } else {
       // Log detalhado de todos os cabeçalhos para depuração
@@ -91,6 +96,16 @@ async function handleReconciliation(request: Request) {
     // Log detalhado para depuração da autenticação
     console.log("Detalhes da requisição de reconciliação:");
     console.log(`- Origem Vercel Cron: ${isVercelCron ? "Sim" : "Não"}`);
+    if (isVercelCron) {
+      console.log(
+        `- Método de detecção: ${
+          isVercelCronHeader
+            ? "Cabeçalho x-vercel-cron"
+            : "User-Agent vercel-cron"
+        }`
+      );
+      console.log(`- User-Agent: ${userAgent}`);
+    }
     console.log(`- Token fornecido: ${token ? "Presente" : "Ausente"}`);
     console.log(
       `- Token esperado configurado: ${expectedToken ? "Sim" : "Não"}`
