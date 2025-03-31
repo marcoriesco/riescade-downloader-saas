@@ -10,6 +10,24 @@ import {
  * Configurado para ser executado como Vercel Cron Job
  */
 export async function GET(request: Request) {
+  // Verificar se é uma requisição de teste
+  const { searchParams } = new URL(request.url);
+  const isTest = searchParams.get("test") === "true";
+
+  if (isTest) {
+    // Endpoint de teste sem autenticação - use apenas durante desenvolvimento
+    return NextResponse.json({
+      message: "API de reconciliação está funcionando",
+      env_check: {
+        reconciliation_token_set: !!process.env.RECONCILIATION_SECRET_TOKEN,
+        google_drive_folder_set: !!process.env.GOOGLE_DRIVE_FOLDER_ID,
+        google_credentials_set: !!(
+          process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY
+        ),
+      },
+    });
+  }
+
   return handleReconciliation(request);
 }
 
@@ -23,13 +41,32 @@ async function handleReconciliation(request: Request) {
     const isVercelCron = request.headers.get("x-vercel-cron") === "true";
     const { searchParams } = new URL(request.url);
     const token = searchParams.get("token");
+    const expectedToken = process.env.RECONCILIATION_SECRET_TOKEN;
 
-    if (!isVercelCron && token !== process.env.RECONCILIATION_SECRET_TOKEN) {
+    // Log detalhado para depuração da autenticação
+    console.log("Detalhes da requisição de reconciliação:");
+    console.log(`- Origem Vercel Cron: ${isVercelCron ? "Sim" : "Não"}`);
+    console.log(`- Token fornecido: ${token ? "Presente" : "Ausente"}`);
+    console.log(
+      `- Token esperado configurado: ${expectedToken ? "Sim" : "Não"}`
+    );
+
+    // Verificação de autenticação mais permissiva para facilitar testes
+    if (!isVercelCron && (!token || token !== expectedToken)) {
       console.log(
         "Tentativa de acesso não autorizado ao endpoint de reconciliação"
       );
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        {
+          error: "Unauthorized",
+          details: "Verifique o token ou cabeçalho x-vercel-cron",
+        },
+        { status: 401 }
+      );
     }
+
+    // Token válido ou requisição da Vercel, prosseguir com reconciliação
+    console.log("Autenticação bem-sucedida para o endpoint de reconciliação");
 
     // Verificar se as variáveis de ambiente do Google Drive estão configuradas
     if (
