@@ -40,8 +40,25 @@ async function handleReconciliation(request: Request) {
     // Verificar se a solicitação é da Vercel ou tem token válido
     const isVercelCron = request.headers.get("x-vercel-cron") === "true";
     const { searchParams } = new URL(request.url);
-    const token = searchParams.get("token");
+    let token = searchParams.get("token");
     const expectedToken = process.env.RECONCILIATION_SECRET_TOKEN;
+
+    // Corrigir caso especial onde a Vercel não substitui a variável
+    if (
+      token &&
+      (token === "${RECONCILIATION_SECRET_TOKEN}" ||
+        token === '"${RECONCILIATION_SECRET_TOKEN}"')
+    ) {
+      console.log(
+        "Detectada string literal da variável de ambiente em vez do valor. Verificando headers alternativos..."
+      );
+      // Tentar usar cabeçalho alternativo que pode ter sido definido em uma configuração personalizada
+      const altHeader = request.headers.get("x-cron-auth");
+      if (altHeader) {
+        token = altHeader;
+        console.log("Usando token do cabeçalho x-cron-auth como alternativa");
+      }
+    }
 
     // Log detalhado para depuração da autenticação
     console.log("Detalhes da requisição de reconciliação:");
@@ -87,24 +104,44 @@ async function handleReconciliation(request: Request) {
 
     // Verificação de autenticação mais permissiva para facilitar testes
     // Permitir acesso se vier da Vercel OU se o token estiver correto
-    if (!isVercelCron && (!token || token !== expectedToken)) {
-      // Bypass temporário para testes - REMOVER EM PRODUÇÃO
+    let isAuthorized = isVercelCron;
+
+    // Verificar token via query param
+    if (!isAuthorized && token && token === expectedToken) {
+      isAuthorized = true;
+      console.log("Autorizado via token na query string");
+    }
+
+    // Verificar token via header x-cron-auth
+    if (!isAuthorized) {
+      const headerToken = request.headers.get("x-cron-auth");
+      if (headerToken && headerToken === expectedToken) {
+        isAuthorized = true;
+        console.log("Autorizado via header x-cron-auth");
+      }
+    }
+
+    // Verificar via bypass temporário
+    if (!isAuthorized) {
       const bypassCode = searchParams.get("bypass");
       if (bypassCode === "dev-riescade-temp") {
+        isAuthorized = true;
         console.log("AVISO: Usando bypass temporário de desenvolvimento!");
-        // Continuar com a execução
-      } else {
-        console.log(
-          "Tentativa de acesso não autorizado ao endpoint de reconciliação"
-        );
-        return NextResponse.json(
-          {
-            error: "Unauthorized",
-            details: "Verifique o token ou cabeçalho x-vercel-cron",
-          },
-          { status: 401 }
-        );
       }
+    }
+
+    // Se não estiver autorizado, retornar erro
+    if (!isAuthorized) {
+      console.log(
+        "Tentativa de acesso não autorizado ao endpoint de reconciliação"
+      );
+      return NextResponse.json(
+        {
+          error: "Unauthorized",
+          details: "Verifique o token ou cabeçalho x-vercel-cron",
+        },
+        { status: 401 }
+      );
     }
 
     // Token válido ou requisição da Vercel, prosseguir com reconciliação
