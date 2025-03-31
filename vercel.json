@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/reconcile-permissions?token=${RECONCILIATION_SECRET_TOKEN}",
+      "path": "/api/reconcile-permissions?token=\"${RECONCILIATION_SECRET_TOKEN}\"",
       "schedule": "0 3 * * *"
     }
   ]

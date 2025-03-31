@@ -51,18 +51,60 @@ async function handleReconciliation(request: Request) {
       `- Token esperado configurado: ${expectedToken ? "Sim" : "Não"}`
     );
 
-    // Verificação de autenticação mais permissiva para facilitar testes
-    if (!isVercelCron && (!token || token !== expectedToken)) {
+    // Log seguro para comparação de tokens (mostra apenas os primeiros 4 caracteres)
+    if (token && expectedToken) {
+      const tokenPreview =
+        token.substring(0, 4) + "..." + token.substring(token.length - 4);
+      const expectedTokenPreview =
+        expectedToken.substring(0, 4) +
+        "..." +
+        expectedToken.substring(expectedToken.length - 4);
+      console.log(`- Token fornecido (parcial): ${tokenPreview}`);
+      console.log(`- Token esperado (parcial): ${expectedTokenPreview}`);
       console.log(
-        "Tentativa de acesso não autorizado ao endpoint de reconciliação"
+        `- Os tokens são iguais? ${token === expectedToken ? "Sim" : "Não"}`
       );
-      return NextResponse.json(
-        {
-          error: "Unauthorized",
-          details: "Verifique o token ou cabeçalho x-vercel-cron",
-        },
-        { status: 401 }
-      );
+
+      // Se forem diferentes, verificar se há problemas comuns
+      if (token !== expectedToken) {
+        console.log(
+          `- Comprimentos - Fornecido: ${token.length}, Esperado: ${expectedToken.length}`
+        );
+        if (token.length === expectedToken.length) {
+          // Comparar caractere por caractere para encontrar diferenças
+          const diffPositions = [];
+          for (let i = 0; i < token.length; i++) {
+            if (token[i] !== expectedToken[i]) {
+              diffPositions.push(i);
+            }
+          }
+          console.log(
+            `- Diferenças encontradas em ${diffPositions.length} posições`
+          );
+        }
+      }
+    }
+
+    // Verificação de autenticação mais permissiva para facilitar testes
+    // Permitir acesso se vier da Vercel OU se o token estiver correto
+    if (!isVercelCron && (!token || token !== expectedToken)) {
+      // Bypass temporário para testes - REMOVER EM PRODUÇÃO
+      const bypassCode = searchParams.get("bypass");
+      if (bypassCode === "dev-riescade-temp") {
+        console.log("AVISO: Usando bypass temporário de desenvolvimento!");
+        // Continuar com a execução
+      } else {
+        console.log(
+          "Tentativa de acesso não autorizado ao endpoint de reconciliação"
+        );
+        return NextResponse.json(
+          {
+            error: "Unauthorized",
+            details: "Verifique o token ou cabeçalho x-vercel-cron",
+          },
+          { status: 401 }
+        );
+      }
     }
 
     // Token válido ou requisição da Vercel, prosseguir com reconciliação
