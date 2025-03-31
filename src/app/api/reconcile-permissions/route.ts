@@ -39,6 +39,34 @@ async function handleReconciliation(request: Request) {
   try {
     // Verificar se a solicitação é da Vercel ou tem token válido
     const isVercelCron = request.headers.get("x-vercel-cron") === "true";
+
+    // Log específico para identificar solicitações da Vercel
+    if (isVercelCron) {
+      console.log(
+        "Detectada chamada do Cron Job da Vercel - autenticação automática"
+      );
+    } else {
+      // Log detalhado de todos os cabeçalhos para depuração
+      console.log("=== ANÁLISE DETALHADA DE CABEÇALHOS ===");
+      const headers = Array.from(request.headers.entries());
+      console.log("Cabeçalhos recebidos:", JSON.stringify(headers, null, 2));
+
+      // Verificar se há outros cabeçalhos que possam identificar a origem Vercel
+      const potentialVercelHeaders = headers.filter(
+        ([key]) =>
+          key.toLowerCase().includes("vercel") ||
+          key.toLowerCase().includes("cron") ||
+          key.toLowerCase().includes("job")
+      );
+
+      if (potentialVercelHeaders.length > 0) {
+        console.log(
+          "Cabeçalhos potenciais da Vercel:",
+          JSON.stringify(potentialVercelHeaders, null, 2)
+        );
+      }
+    }
+
     const { searchParams } = new URL(request.url);
     let token = searchParams.get("token");
     const expectedToken = process.env.RECONCILIATION_SECRET_TOKEN;
