@@ -393,9 +393,9 @@ function DashboardContent() {
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {success && (
           <div className="mb-8 p-4 bg-green-900/20 border border-green-500/30 rounded-md backdrop-blur-sm animate-fade-in">
-            <p className="text-green-400 flex items-center">
+            <p className="text-green-400 flex items-start">
               <svg
-                className="h-5 w-5 mr-2 text-green-500"
+                className="h-5 w-5 mr-2 text-green-500 mt-1"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -408,7 +408,15 @@ function DashboardContent() {
                   d="M5 13l4 4L19 7"
                 ></path>
               </svg>
-              Pagamento confirmado! Sua assinatura está ativa.
+              <span>
+                <span className="block mb-1">
+                  Pagamento confirmado! Sua assinatura está ativa.
+                </span>
+                <span className="block text-sm text-green-300/80">
+                  A liberação de acesso ao Google Drive poderá levar até 1 hora
+                  para ser processada.
+                </span>
+              </span>
             </p>
           </div>
         )}
