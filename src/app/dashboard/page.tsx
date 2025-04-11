@@ -413,8 +413,8 @@ function DashboardContent() {
                   Pagamento confirmado! Sua assinatura está ativa.
                 </span>
                 <span className="block text-sm text-green-300/80">
-                  A liberação de acesso ao Google Drive poderá levar até 1 hora
-                  para ser processada.
+                  A liberação de acesso ao Google Drive poderá levar até 12
+                  horas para ser processada.
                 </span>
               </span>
             </p>

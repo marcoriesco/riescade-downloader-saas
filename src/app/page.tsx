@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Zap, Trophy, Flame } from "lucide-react";
 import Image from "next/image";
 import { ImageSlider } from "@/components/ImageSlider";
-import { PlatformIcons } from "@/components/PlatformIcons";
+import { GoogleReviews } from "@/components/GoogleReviews";
 
 import { Roboto_Condensed } from "next/font/google";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -323,7 +323,7 @@ export default function Home() {
       </main>
 
       {/* Plataformas Suportadas */}
-      <div className="bg-black relative">
+      {/* <div className="bg-black relative">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#13111C] via-black to-black"></div>
         <div className="relative max-w mx-auto">
           <div className="text-center py-8">
@@ -332,6 +332,27 @@ export default function Home() {
             </h2>
           </div>
           <PlatformIcons speed={90} />
+        </div>
+      </div> */}
+
+      {/* Avaliações do Google */}
+      <div className="py-20 bg-black relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-gray-800 via-black to-black opacity-90"></div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+              O QUE <span className="text-[#ff0884]">NOSSOS COLABORADORES</span>{" "}
+              DIZEM
+            </h2>
+            <p
+              className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+            >
+              Avaliações reais de usuários satisfeitos
+            </p>
+          </div>
+
+          {/* Slider de Avaliações */}
+          <GoogleReviews slidesPerView={3} />
         </div>
       </div>
 
