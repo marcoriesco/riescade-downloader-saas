@@ -48,12 +48,20 @@ export function Header() {
   const handleSignIn = async () => {
     setIsLoggingIn(true);
     try {
-      await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: window.location.origin + "/dashboard",
         },
       });
+
+      if (error) {
+        console.error("Erro ao iniciar login:", error);
+        setIsLoggingIn(false);
+      } else if (data) {
+        console.log("Login iniciado com sucesso, URL:", data.url);
+        window.location.href = data.url;
+      }
     } catch (error) {
       console.error("Error signing in:", error);
       setIsLoggingIn(false);

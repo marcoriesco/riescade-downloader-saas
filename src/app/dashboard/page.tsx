@@ -81,12 +81,20 @@ function DashboardContent() {
   const handleSignIn = useCallback(async () => {
     setAuthRedirecting(true);
     try {
-      await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: window.location.origin + "/dashboard",
         },
       });
+
+      if (error) {
+        console.error("Erro ao iniciar login:", error);
+        setAuthRedirecting(false);
+      } else if (data) {
+        console.log("Login iniciado com sucesso, URL:", data.url);
+        window.location.href = data.url;
+      }
     } catch (error) {
       console.error("Error signing in:", error);
       setAuthRedirecting(false);

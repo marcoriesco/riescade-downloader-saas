@@ -90,12 +90,19 @@ export default function Home() {
   const handleLoginRedirect = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
-      await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
-          redirectTo: `${window.location.origin}/dashboard`,
+          redirectTo: window.location.origin + "/dashboard",
         },
       });
+
+      if (error) {
+        console.error("Erro ao iniciar login:", error);
+      } else if (data) {
+        console.log("Login iniciado com sucesso, URL:", data.url);
+        window.location.href = data.url;
+      }
     } catch (error) {
       console.error("Error signing in:", error);
     }
@@ -132,13 +139,13 @@ export default function Home() {
                   </span>
                 </p>
                 <div className="flex flex-wrap gap-4">
-                  <Link
-                    href="/dashboard"
+                  <button
+                    onClick={handleLoginRedirect}
                     className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884] text-base font-bold rounded-md shadow-[0_0_20px_rgba(255,8,132,0.4)] text-white bg-[#ff0884] hover:bg-[#ff0884]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 transform hover:scale-105"
                   >
                     <Flame className="h-5 w-5" />
                     COMEÇAR AGORA
-                  </Link>
+                  </button>
                   <Link
                     href="#features"
                     className={`${robotoCondensed.className} inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884]/70 text-base font-bold rounded-md text-white bg-transparent hover:bg-[#ff0884]/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300`}
