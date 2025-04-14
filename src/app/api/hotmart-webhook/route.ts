@@ -107,25 +107,16 @@ async function findUserByEmail(email: string) {
   return user || null;
 }
 
+// ID do usuário padrão para compras do Hotmart sem usuário correspondente
+// IMPORTANTE: Este usuário deve existir no Supabase
+const DEFAULT_HOTMART_USER_ID = "b7c1c393-944c-4c49-92c8-aafa1f00d08d";
+
 export async function POST(request: Request) {
   try {
     // Verificar autenticação usando o header correto da Hotmart
     const authToken = request.headers.get("x-hotmart-hottok");
 
-    console.log(
-      "HEADERS RECEBIDOS:",
-      Object.fromEntries([...request.headers.entries()])
-    );
-    console.log("AUTH TOKEN:", authToken);
-    console.log("SECRET ESPERADO:", process.env.HOTMART_WEBHOOK_SECRET);
-
-    // TEMPORÁRIO: Permitir testes locais/iniciais sem autenticação
-    const isTestMode = process.env.NODE_ENV !== "production";
-
-    if (
-      !isTestMode &&
-      (!authToken || authToken !== process.env.HOTMART_WEBHOOK_SECRET)
-    ) {
+    if (!authToken || authToken !== process.env.HOTMART_WEBHOOK_SECRET) {
       return NextResponse.json(
         { message: "Unauthorized access" },
         { status: 401 }
@@ -179,14 +170,17 @@ async function handleSubscriptionActive(payload: HotmartWebhookPayload) {
 
   // Tentar encontrar o usuário pelo email, mas não abortar se não existir
   const user = await findUserByEmail(buyer.email);
-  const userId = user?.id || null;
 
-  // Se encontrou o usuário, usar o status normal, senão marcar como pendente
-  const status = user
-    ? subscription
-      ? mapHotmartStatus(subscription.status)
-      : "active"
-    : "pending_association"; // Status especial para associação manual posterior
+  // Usar o usuário encontrado ou o padrão para o Hotmart
+  const userId = user?.id || DEFAULT_HOTMART_USER_ID;
+
+  // Status padrão ou pendente de associação
+  const status =
+    user && user.id !== DEFAULT_HOTMART_USER_ID
+      ? subscription
+        ? mapHotmartStatus(subscription.status)
+        : "active"
+      : "pending_association";
 
   const hotmartTransactionId = purchase.transaction;
 
@@ -199,18 +193,18 @@ async function handleSubscriptionActive(payload: HotmartWebhookPayload) {
 
   // Preparar dados da assinatura
   const subscriptionData = {
-    user_id: userId, // Pode ser null se usuário não for encontrado
+    user_id: userId, // Usar ID padrão quando não encontrar usuário
     subscription_id: hotmartTransactionId,
-    customer_id: buyer.email, // Usando email como identificador
+    customer_id: buyer.email,
     status: status,
     price_id: product.id.toString(),
     plan_id: subscription?.plan.name || product.name,
     start_date: new Date(purchase.order_date).toISOString(),
-    end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // +30 dias por padrão
+    end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     updated_at: new Date().toISOString(),
-    payment_provider: "hotmart", // Adicionando o provedor de pagamento
-    buyer_name: buyer.name, // Armazenar nome do comprador para referência
-    buyer_email: buyer.email, // Armazenar email para associação posterior
+    payment_provider: "hotmart",
+    buyer_name: buyer.name,
+    buyer_email: buyer.email,
   };
 
   // Inserir ou atualizar assinatura
@@ -249,7 +243,7 @@ async function handleSubscriptionActive(payload: HotmartWebhookPayload) {
 
   // Gerenciar permissões do Google Drive apenas se o usuário existir
   if (user) {
-    await manageGoogleDriveAccess(userId!, buyer.email, status);
+    await manageGoogleDriveAccess(userId, buyer.email, status);
   } else {
     console.log(
       `Usuário não encontrado para o email: ${buyer.email}. Armazenando para associação posterior.`
@@ -266,6 +260,9 @@ async function handleSubscriptionInactive(payload: HotmartWebhookPayload) {
 
   // Tentar encontrar o usuário pelo email, mas não abortar se não existir
   const user = await findUserByEmail(buyer.email);
+
+  // Usar o usuário encontrado ou o padrão para o Hotmart
+  const userId = user?.id || DEFAULT_HOTMART_USER_ID;
 
   // Verificar se existe assinatura para esta transação
   const { data: existingSubscription } = await supabase
@@ -314,10 +311,13 @@ async function handleSubscriptionInactive(payload: HotmartWebhookPayload) {
     // Criar um registro cancelado/inativo para rastreamento, mesmo sem encontrar existente
     const status = "canceled";
     const subscriptionData = {
-      user_id: user?.id || null,
+      user_id: userId, // Usar ID padrão quando não encontrar usuário
       subscription_id: hotmartTransactionId,
       customer_id: buyer.email,
-      status: user ? status : "pending_association_canceled",
+      status:
+        user && user.id !== DEFAULT_HOTMART_USER_ID
+          ? status
+          : "pending_association_canceled",
       start_date: new Date().toISOString(),
       end_date: new Date().toISOString(),
       created_at: new Date().toISOString(),
