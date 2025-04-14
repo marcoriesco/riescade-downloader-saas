@@ -112,7 +112,20 @@ export async function POST(request: Request) {
     // Verificar autenticação (usando um header simples, pode ser melhorado com HMAC)
     const authToken = request.headers.get("hotmart-auth-token");
 
-    if (!authToken || authToken !== process.env.HOTMART_WEBHOOK_SECRET) {
+    console.log(
+      "HEADERS RECEBIDOS:",
+      Object.fromEntries([...request.headers.entries()])
+    );
+    console.log("AUTH TOKEN:", authToken);
+    console.log("SECRET ESPERADO:", process.env.HOTMART_WEBHOOK_SECRET);
+
+    // TEMPORÁRIO: Permitir testes locais/iniciais sem autenticação
+    const isTestMode = process.env.NODE_ENV !== "production";
+
+    if (
+      !isTestMode &&
+      (!authToken || authToken !== process.env.HOTMART_WEBHOOK_SECRET)
+    ) {
       return NextResponse.json(
         { message: "Unauthorized access" },
         { status: 401 }
