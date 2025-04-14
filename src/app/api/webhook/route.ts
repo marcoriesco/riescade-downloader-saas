@@ -175,6 +175,7 @@ export async function POST(request: Request) {
           plan_id: "default",
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
+          payment_provider: "stripe",
         });
 
         if (error) {
@@ -348,6 +349,7 @@ export async function POST(request: Request) {
                     status: status,
                     updated_at: new Date().toISOString(),
                     created_at: new Date().toISOString(),
+                    payment_provider: "stripe",
                   });
 
                 if (insertError) {

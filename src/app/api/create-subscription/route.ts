@@ -105,6 +105,7 @@ export async function POST(request: Request) {
         : null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      payment_provider: "stripe",
     });
 
     return NextResponse.json({

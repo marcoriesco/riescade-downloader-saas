@@ -197,6 +197,7 @@ async function handleSubscriptionActive(payload: HotmartWebhookPayload) {
     start_date: new Date(purchase.order_date).toISOString(),
     end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // +30 dias por padrão
     updated_at: new Date().toISOString(),
+    payment_provider: "hotmart", // Adicionando o provedor de pagamento
   };
 
   // Inserir ou atualizar assinatura
