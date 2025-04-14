@@ -109,8 +109,8 @@ async function findUserByEmail(email: string) {
 
 export async function POST(request: Request) {
   try {
-    // Verificar autenticação (usando um header simples, pode ser melhorado com HMAC)
-    const authToken = request.headers.get("hotmart-auth-token");
+    // Verificar autenticação usando o header correto da Hotmart
+    const authToken = request.headers.get("x-hotmart-hottok");
 
     console.log(
       "HEADERS RECEBIDOS:",
