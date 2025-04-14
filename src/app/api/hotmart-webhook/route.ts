@@ -177,31 +177,29 @@ export async function POST(request: Request) {
 async function handleSubscriptionActive(payload: HotmartWebhookPayload) {
   const { buyer, product, purchase, subscription } = payload.data;
 
-  // Encontrar o usuário pelo email
+  // Tentar encontrar o usuário pelo email, mas não abortar se não existir
   const user = await findUserByEmail(buyer.email);
+  const userId = user?.id || null;
 
-  if (!user) {
-    console.error(`Usuário não encontrado para o email: ${buyer.email}`);
-    return;
-  }
+  // Se encontrou o usuário, usar o status normal, senão marcar como pendente
+  const status = user
+    ? subscription
+      ? mapHotmartStatus(subscription.status)
+      : "active"
+    : "pending_association"; // Status especial para associação manual posterior
 
-  const userId = user.id;
-  const status = subscription
-    ? mapHotmartStatus(subscription.status)
-    : "active";
   const hotmartTransactionId = purchase.transaction;
 
-  // Verificar se já existe registro de assinatura
-  const { data: existingSubscription } = await supabase
+  // Verificar se já existe registro de assinatura para esta transação
+  const { data: existingTransaction } = await supabase
     .from("subscriptions")
     .select("*")
-    .eq("user_id", userId)
     .eq("subscription_id", hotmartTransactionId)
     .maybeSingle();
 
   // Preparar dados da assinatura
   const subscriptionData = {
-    user_id: userId,
+    user_id: userId, // Pode ser null se usuário não for encontrado
     subscription_id: hotmartTransactionId,
     customer_id: buyer.email, // Usando email como identificador
     status: status,
@@ -211,19 +209,23 @@ async function handleSubscriptionActive(payload: HotmartWebhookPayload) {
     end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // +30 dias por padrão
     updated_at: new Date().toISOString(),
     payment_provider: "hotmart", // Adicionando o provedor de pagamento
+    buyer_name: buyer.name, // Armazenar nome do comprador para referência
+    buyer_email: buyer.email, // Armazenar email para associação posterior
   };
 
   // Inserir ou atualizar assinatura
-  if (existingSubscription) {
+  if (existingTransaction) {
     const { error } = await supabase
       .from("subscriptions")
       .update(subscriptionData)
-      .eq("id", existingSubscription.id);
+      .eq("id", existingTransaction.id);
 
     if (error) {
       console.error("Erro ao atualizar assinatura:", error);
     } else {
-      console.log(`Assinatura atualizada para ${userId}`);
+      console.log(
+        `Assinatura atualizada para transação ${hotmartTransactionId}`
+      );
     }
   } else {
     // Adicionar created_at para novos registros
@@ -239,12 +241,20 @@ async function handleSubscriptionActive(payload: HotmartWebhookPayload) {
     if (error) {
       console.error("Erro ao criar assinatura:", error);
     } else {
-      console.log(`Nova assinatura criada para ${userId}`);
+      console.log(
+        `Nova assinatura criada para transação ${hotmartTransactionId}`
+      );
     }
   }
 
-  // Gerenciar permissões do Google Drive
-  await manageGoogleDriveAccess(userId, buyer.email, status);
+  // Gerenciar permissões do Google Drive apenas se o usuário existir
+  if (user) {
+    await manageGoogleDriveAccess(userId!, buyer.email, status);
+  } else {
+    console.log(
+      `Usuário não encontrado para o email: ${buyer.email}. Armazenando para associação posterior.`
+    );
+  }
 }
 
 /**
@@ -254,28 +264,25 @@ async function handleSubscriptionInactive(payload: HotmartWebhookPayload) {
   const { buyer, purchase } = payload.data;
   const hotmartTransactionId = purchase.transaction;
 
-  // Encontrar o usuário pelo email
+  // Tentar encontrar o usuário pelo email, mas não abortar se não existir
   const user = await findUserByEmail(buyer.email);
 
-  if (!user) {
-    console.error(`Usuário não encontrado para o email: ${buyer.email}`);
-    return;
-  }
-
-  const userId = user.id;
-  const status = payload.data.subscription
-    ? mapHotmartStatus(payload.data.subscription.status)
-    : "canceled";
-
-  // Verificar se existe assinatura
+  // Verificar se existe assinatura para esta transação
   const { data: existingSubscription } = await supabase
     .from("subscriptions")
     .select("*")
-    .eq("user_id", userId)
     .eq("subscription_id", hotmartTransactionId)
     .maybeSingle();
 
   if (existingSubscription) {
+    // Se o status já for pending_association, manter como pendente mas marcar como cancelado
+    const status =
+      existingSubscription.status === "pending_association"
+        ? "pending_association_canceled"
+        : payload.data.subscription
+        ? mapHotmartStatus(payload.data.subscription.status)
+        : "canceled";
+
     // Atualizar status da assinatura
     const { error } = await supabase
       .from("subscriptions")
@@ -291,11 +298,43 @@ async function handleSubscriptionInactive(payload: HotmartWebhookPayload) {
       console.log(`Status da assinatura atualizado para ${status}`);
     }
 
-    // Gerenciar permissões do Google Drive
-    await manageGoogleDriveAccess(userId, buyer.email, status);
+    // Gerenciar permissões do Drive apenas se o usuário existir
+    if (user && existingSubscription.user_id) {
+      await manageGoogleDriveAccess(
+        existingSubscription.user_id,
+        buyer.email,
+        status
+      );
+    }
   } else {
     console.log(
-      `Nenhuma assinatura encontrada para o usuário ${userId} com ID de transação ${hotmartTransactionId}`
+      `Nenhuma assinatura encontrada para transação ${hotmartTransactionId}`
     );
+
+    // Criar um registro cancelado/inativo para rastreamento, mesmo sem encontrar existente
+    const status = "canceled";
+    const subscriptionData = {
+      user_id: user?.id || null,
+      subscription_id: hotmartTransactionId,
+      customer_id: buyer.email,
+      status: user ? status : "pending_association_canceled",
+      start_date: new Date().toISOString(),
+      end_date: new Date().toISOString(),
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      payment_provider: "hotmart",
+      buyer_name: buyer.name,
+      buyer_email: buyer.email,
+    };
+
+    const { error } = await supabase
+      .from("subscriptions")
+      .insert(subscriptionData);
+
+    if (error) {
+      console.error("Erro ao criar registro de assinatura cancelada:", error);
+    } else {
+      console.log(`Registro de assinatura cancelada criado para rastreamento`);
+    }
   }
 }
