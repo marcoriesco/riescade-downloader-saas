@@ -180,7 +180,7 @@ async function handleSubscriptionActive(payload: HotmartWebhookPayload) {
       ? subscription
         ? mapHotmartStatus(subscription.status)
         : "active"
-      : "pending_association";
+      : "incomplete"; // Usando incomplete para registros pendentes de associação
 
   const hotmartTransactionId = purchase.transaction;
 
@@ -314,10 +314,7 @@ async function handleSubscriptionInactive(payload: HotmartWebhookPayload) {
       user_id: userId, // Usar ID padrão quando não encontrar usuário
       subscription_id: hotmartTransactionId,
       customer_id: buyer.email,
-      status:
-        user && user.id !== DEFAULT_HOTMART_USER_ID
-          ? status
-          : "pending_association_canceled",
+      status: user && user.id !== DEFAULT_HOTMART_USER_ID ? status : "canceled",
       start_date: new Date().toISOString(),
       end_date: new Date().toISOString(),
       created_at: new Date().toISOString(),
