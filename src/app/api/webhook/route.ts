@@ -1,133 +1,40 @@
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { supabase } from "@/lib/supabase";
-import { getUserEmailFromProfile, supabaseAdmin } from "@/lib/supabase-admin";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import {
   addUserPermission,
   removeUserPermission,
 } from "@/integrations/google/drive";
 
 /**
- * Tenta obter o email do usuário usando várias estratégias, com foco no login do Google
- * @param userId ID do usuário
- * @param customerId ID do cliente no Stripe
- * @param customerEmail Email do cliente do Stripe (se disponível)
+ * Obtém o email do usuário para gerenciar permissões no Google Drive
+ * Simplificado para usar diretamente o email da autenticação, já que o login é sempre pelo Google
+ *
+ * @param userId ID do usuário no Supabase
  * @returns Email do usuário ou null se não encontrado
  */
-async function getUserEmail(
-  userId: string,
-  customerId?: string,
-  customerEmail?: string | null
-): Promise<string | null> {
-  const strategies = [
-    // Estratégia 1: Auth do Supabase (mais confiável para login do Google)
-    async () => {
-      try {
-        const { data } = await supabase.auth.getUser(userId);
-        if (data?.user?.email) {
-          console.log(`Email obtido via Supabase Auth: ${data.user.email}`);
-          return {
-            success: true,
-            email: data.user.email,
-            source: "Supabase Auth",
-          };
-        }
-      } catch (error) {
-        console.error("Erro ao obter email via Supabase Auth:", error);
-      }
-      return { success: false };
-    },
+async function getUserEmail(userId: string): Promise<string | null> {
+  try {
+    // Obter dados do usuário diretamente do Supabase Auth
+    const { data, error } = await supabaseAdmin.auth.admin.getUserById(userId);
 
-    // Estratégia 2: Admin API do Supabase
-    async () => {
-      try {
-        const { data } = await supabaseAdmin.auth.admin.getUserById(userId);
-        if (data?.user?.email) {
-          console.log(`Email obtido via Admin API: ${data.user.email}`);
-          return { success: true, email: data.user.email, source: "Admin API" };
-        }
-      } catch (error) {
-        console.error("Erro ao obter email via Admin API:", error);
-      }
-      return { success: false };
-    },
-
-    // Estratégia 3: Email do cliente do Stripe
-    async () => {
-      if (customerEmail) {
-        console.log(`Email obtido do Stripe: ${customerEmail}`);
-        return {
-          success: true,
-          email: customerEmail,
-          source: "Stripe Customer Email",
-        };
-      }
-      return { success: false };
-    },
-
-    // Estratégia 4: Obter do perfil do usuário
-    async () => {
-      try {
-        const profileEmail = await getUserEmailFromProfile(userId);
-        if (profileEmail) {
-          console.log(`Email obtido do perfil: ${profileEmail}`);
-          return { success: true, email: profileEmail, source: "User Profile" };
-        }
-      } catch (error) {
-        console.error("Erro ao obter email do perfil:", error);
-      }
-      return { success: false };
-    },
-
-    // Estratégia 5: Diretamente do Stripe
-    async () => {
-      if (customerId) {
-        try {
-          const stripe = getStripe();
-          if (stripe) {
-            const customer = await stripe.customers.retrieve(customerId);
-            if (
-              typeof customer !== "string" &&
-              !customer.deleted &&
-              customer.email
-            ) {
-              console.log(
-                `Email obtido diretamente do Stripe: ${customer.email}`
-              );
-              return {
-                success: true,
-                email: customer.email,
-                source: "Stripe API",
-              };
-            }
-          }
-        } catch (error) {
-          console.error("Erro ao obter email do Stripe:", error);
-        }
-      }
-      return { success: false };
-    },
-  ];
-
-  // Tentar cada estratégia em sequência
-  console.log(
-    `Tentando obter email para o usuário ${userId} usando ${strategies.length} estratégias`
-  );
-
-  for (let i = 0; i < strategies.length; i++) {
-    const result = await strategies[i]();
-    if (result.success) {
-      console.log(`Estratégia ${i + 1} bem-sucedida: ${result.source}`);
-      return result.email || null;
-    } else {
-      console.log(`Estratégia ${i + 1} falhou`);
+    if (error) {
+      console.error("Erro ao obter usuário via Admin API:", error);
+      return null;
     }
-  }
 
-  console.error(
-    `TODAS AS ESTRATÉGIAS FALHARAM para obter email do usuário: ${userId}`
-  );
-  return null;
+    if (data?.user?.email) {
+      console.log(`Email obtido da autenticação: ${data.user.email}`);
+      return data.user.email;
+    }
+
+    console.error("Email não encontrado para o usuário:", userId);
+    return null;
+  } catch (error) {
+    console.error("Erro ao obter email do usuário:", error);
+    return null;
+  }
 }
 
 /**
@@ -292,11 +199,7 @@ export async function POST(request: Request) {
 
           // Obter o email do usuário para gerenciar permissões no Drive
           try {
-            const userEmail = await getUserEmail(
-              session.client_reference_id,
-              session.customer.toString(),
-              session.customer_details?.email
-            );
+            const userEmail = await getUserEmail(session.client_reference_id);
 
             if (userEmail) {
               await manageGoogleDriveAccess(
@@ -503,7 +406,7 @@ async function processUserAccess(
   status: string
 ) {
   try {
-    const userEmail = await getUserEmail(userId, customerId, null);
+    const userEmail = await getUserEmail(userId);
     if (userEmail) {
       await manageGoogleDriveAccess(userId, userEmail, status);
     } else {

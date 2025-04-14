@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
+import { addUserPermission } from "@/integrations/google/drive";
 
 // Cliente Supabase com permissões de serviço
 const supabaseAdmin = createClient(
@@ -215,6 +216,49 @@ export async function POST(request: Request) {
         { message: `Failed to save subscription: ${error.message}` },
         { status: 500 }
       );
+    }
+
+    // Adicionar permissão no Google Drive após verificar assinatura
+    try {
+      // Obter email do usuário diretamente do Supabase Auth
+      const { data: userData, error: userError } =
+        await supabaseAdmin.auth.admin.getUserById(userId);
+
+      if (userError || !userData?.user?.email) {
+        console.error(
+          "API: verify-session - Erro ao obter email do usuário:",
+          userError
+        );
+      } else {
+        const userEmail = userData.user.email;
+        console.log(
+          `API: verify-session - Adicionando permissão no Google Drive para ${userEmail}`
+        );
+
+        // Verificar se as variáveis de ambiente estão configuradas
+        if (
+          !process.env.GOOGLE_DRIVE_FOLDER_ID ||
+          !process.env.GOOGLE_CLIENT_EMAIL ||
+          !process.env.GOOGLE_PRIVATE_KEY
+        ) {
+          console.error(
+            "API: verify-session - Configurações do Google Drive incompletas"
+          );
+        } else {
+          // Adicionar permissão no Google Drive
+          const result = await addUserPermission(userEmail);
+          console.log(
+            "API: verify-session - Resultado da adição de permissão:",
+            result
+          );
+        }
+      }
+    } catch (driveError) {
+      console.error(
+        "API: verify-session - Erro ao gerenciar permissões do Drive:",
+        driveError
+      );
+      // Não falhar a resposta por causa desse erro
     }
 
     console.log(
