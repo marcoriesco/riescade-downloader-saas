@@ -1,10 +1,131 @@
 "use client";
 
-import { Shield, Lock, Eye, Users, Server, AlertCircle } from "lucide-react";
+import {
+  Shield,
+  Lock,
+  Eye,
+  Users,
+  Server,
+  AlertCircle,
+  Gamepad2,
+} from "lucide-react";
 import { Header } from "@/components/Header";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { User } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 export default function PrivacyPolicy() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [authRedirecting, setAuthRedirecting] = useState(false);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          setUser(session.user);
+        }
+      } catch (error) {
+        console.error("Erro verificando sessão:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkUser();
+  }, []);
+
+  const handleSignIn = async () => {
+    setAuthRedirecting(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/politica",
+        },
+      });
+
+      if (error) {
+        console.error("Erro ao iniciar login:", error);
+        setAuthRedirecting(false);
+      } else if (data) {
+        console.log("Login iniciado com sucesso, URL:", data.url);
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error("Error signing in:", error);
+      setAuthRedirecting(false);
+    }
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">Verificando autenticação...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirecting state
+  if (authRedirecting) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">
+              Redirecionando para autenticação...
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Not authenticated
+  if (!user) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center p-8 bg-black/30 rounded-lg border border-[#ff0884]/30 max-w-md">
+            <Gamepad2 className="h-12 w-12 text-[#ff0884] mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">
+              Área Exclusiva
+            </h2>
+            <p className="text-gray-300 mb-6">
+              Faça login para acessar nossa política de privacidade e entender
+              como protegemos seus dados.
+            </p>
+            <button
+              onClick={handleSignIn}
+              disabled={authRedirecting}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
+            >
+              <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
+              Entrar com Google
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
       {/* Background elements */}

@@ -113,29 +113,35 @@ export default function Home() {
       <Header />
 
       <main className="flex-grow">
-        {/* Hero Section com gradiente animado */}
-        <div className="relative bg-gray-900 overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-[#ff0884]/20 via-gray-900 to-gray-900"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
-            <div className="md:flex md:items-center md:space-x-12">
-              <div className="md:w-1/2 mb-12 md:mb-0 animate-fade-in">
-                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4">
+        {/* Hero Section com vídeo em tela cheia */}
+        <div className="relative w-full h-screen overflow-hidden">
+          {/* Vídeo de fundo em tela cheia */}
+          <Video video="/video/intro.webm" />
+
+          {/* Overlay para melhorar a legibilidade */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-10"></div>
+
+          <div className="relative z-20 h-full flex items-center">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+              <div className="max-w-xl">
+                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-left">
                   <span className="text-white drop-shadow-[0_0_25px_rgba(255,8,132,0.8)]">
-                    RIESCADE
+                    O MELHOR DOS
                   </span>
                   <br />
                   <span
                     className={`${robotoCondensed.className} bg-clip-text text-transparent bg-gradient-to-r from-[#ff0884] to-purple-500`}
                   >
-                    +250 PLATAFORMAS
+                    RETROGAMES
                   </span>
                 </h1>
                 <p
-                  className={`${robotoCondensed.className} text-xl text-gray-300 mb-8 max-w-lg`}
+                  className={`${robotoCondensed.className} text-xl text-gray-300 mb-8 max-w-lg text-left`}
                 >
-                  Acesso à mais de 250 plataformas de jogos em um único lugar.
+                  Acesso à mais de 250 plataformas de games, consoles e arcades
+                  clássicos em um único lugar.
                   <span className="block mt-3 font-semibold text-[#ff0884]">
-                    +5 Temas Premium
+                    Emulação perfeita + 5 Temas Premium
                   </span>
                 </p>
                 <div className="flex flex-wrap gap-4">
@@ -154,22 +160,6 @@ export default function Home() {
                   </Link>
                 </div>
               </div>
-              <div className="md:w-1/2">
-                <div className="relative aspect-[16/9] rounded-lg overflow-hidden border border-[#ff0884]/30 shadow-[0_0_30px_rgba(255,8,132,0.3)] transform rotate-1 hover:rotate-0 transition-all duration-500">
-                  <Video video="/video/intro.webm" />
-
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-900/70 via-[#ff0884]/20 to-gray-900/80"></div>
-                  <div className="absolute -bottom-6 right-4 flex items-center justify-center">
-                    <Image
-                      src="/images/logos.webp"
-                      alt="RIESCADE logo"
-                      width={100}
-                      height={100}
-                      className="drop-shadow-[0_0_8px_rgba(255,8,132,0.8)] rotate-12"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -178,17 +168,17 @@ export default function Home() {
         <div id="features" className="py-20 bg-gray-900 relative">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-gray-900"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
+            <div className="text-left mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
                 <span className="relative inline-block">
-                  RECURSOS ÉPICOS
+                  RECURSOS DE GAMES
                   <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-[#ff0884] to-purple-500"></span>
                 </span>
               </h2>
               <p
-                className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
               >
-                Projetado para gamers que exigem o melhor
+                Projetado para amantes de jogos retro e arcade clássico
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -234,12 +224,12 @@ export default function Home() {
         {/* Game Showcase Section */}
         <div className="py-20 bg-black relative overflow-hidden">
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
+            <div className="text-left mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
                 <span className="text-[#ff0884]">MULTISISTEMA</span> COMPLETO
               </h2>
               <p
-                className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
               >
                 Mais de 250 sistemas em um único lugar
               </p>
@@ -250,79 +240,149 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Pricing Section - Mostrando apenas um plano a R$30.00 */}
+        {/* Pricing Section - Redesenhada */}
         <div className="py-20 bg-[#13111C] relative">
           <div className="absolute inset-0 bg-[url('/noise.webp')] opacity-5"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
+            <div className="text-left mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
                 <span className="text-[#ff0884]">POTENCIALIZE</span> SUA
                 EXPERIÊNCIA
               </h2>
               <p
-                className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
               >
                 A melhor experiência de jogos retro aguarda por você
               </p>
             </div>
 
-            {/* Single plan centered */}
-            <div className="max-w-md mx-auto">
-              <div className="relative bg-gray-800/40 backdrop-blur-sm p-8 rounded-lg border-2 border-[#ff0884] shadow-[0_0_30px_rgba(255,8,132,0.3)] overflow-hidden">
-                <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-[#ff0884]/20 via-transparent to-transparent rounded-bl-full"></div>
+            {/* Design moderno de plano */}
+            <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.3)]">
+              <div className="grid md:grid-cols-2 gap-0">
+                {/* Lado esquerdo - Informações do plano */}
+                <div className="p-8 md:p-12 bg-gradient-to-br from-gray-800/50 via-black/50 to-black/50">
+                  <div className="flex items-center space-x-3 mb-8">
+                    <div className="w-12 h-12 bg-[#ff0884]/20 rounded-full flex items-center justify-center border border-[#ff0884]/30">
+                      <Flame className="h-6 w-6 text-[#ff0884]" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">
+                      RIESCADE MEMBRO
+                    </h3>
+                  </div>
 
-                <div className="flex items-center justify-center mb-6">
-                  <Image
-                    src="/images/logos.webp"
-                    alt="RIESCADE Mascot"
-                    className="h-20 w-20 object-contain mb-2"
-                    width={120}
-                    height={120}
-                  />
+                  <div className="mb-8">
+                    <div className="flex items-baseline">
+                      <span className="text-5xl font-bold text-white">
+                        R$30
+                      </span>
+                      <span className="text-gray-400 ml-2">/mês</span>
+                    </div>
+                    <p className="text-gray-400 mt-2">
+                      Assinatura mensal sem fidelidade
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 mb-8">
+                    <p className="text-gray-300">Acesso completo a:</p>
+                    <ul className={`${robotoCondensed.className} space-y-4`}>
+                      {[
+                        {
+                          title: "12TB de Jogos",
+                          desc: "Download ilimitado de todo o conteúdo premium",
+                        },
+                        {
+                          title: "Google Drive",
+                          desc: "Acesso integrado com sua conta Google",
+                        },
+                        {
+                          title: "Comunidade VIP",
+                          desc: "Suporte prioritário e atualizações exclusivas",
+                        },
+                        {
+                          title: "250+ Plataformas",
+                          desc: "Do Atari até os consoles mais recentes",
+                        },
+                        {
+                          title: "Integrações",
+                          desc: "Retroachievements + scraping automático",
+                        },
+                      ].map((feature, index) => (
+                        <li key={index} className="flex">
+                          <svg
+                            className="h-6 w-6 text-[#ff0884] mr-3 flex-shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <div>
+                            <span className="block text-white font-medium">
+                              {feature.title}
+                            </span>
+                            <span className="block text-gray-400 text-sm">
+                              {feature.desc}
+                            </span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
 
-                <h3 className="text-2xl font-bold text-white mb-4 text-center">
-                  SEJA MEMBRO POR
-                </h3>
-                <div className="mb-6 text-center">
-                  <span className="text-4xl font-bold text-white">
-                    Apenas R$ 30
-                  </span>
-                  <span className="text-gray-400">/mês</span>
-                </div>
-                <ul className={`${robotoCondensed.className} space-y-3 mb-8`}>
-                  {[
-                    "Acesso a todos os jogos",
-                    "Jogos ilimitados",
-                    "Acesso ao Discord VIP",
-                    "Acesso a Comunidade WhatsApp",
-                    "+250 plataformas disponíveis",
-                  ].map((feature, index) => (
-                    <li key={index} className="flex items-center">
-                      <svg
-                        className="h-5 w-5 text-[#ff0884] mr-2 flex-shrink-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
+                {/* Lado direito - Call to action e imagem */}
+                <div className="relative p-8 md:p-12 bg-gradient-to-br from-[#ff0884]/10 via-black/70 to-black/70 flex flex-col justify-center">
+                  <div className="absolute inset-0 opacity-10">
+                    <Image
+                      src="/images/logos.webp"
+                      alt="RIESCADE Background"
+                      width={500}
+                      height={500}
+                      className="opacity-20 object-cover w-full h-full"
+                    />
+                  </div>
+
+                  <div className="relative">
+                    <div className="mb-8">
+                      <h4 className="text-2xl font-bold text-white mb-4">
+                        Torne-se membro agora
+                      </h4>
+                      <p className="text-gray-300 mb-6">
+                        Junte-se a milhares de jogadores que já estão
+                        aproveitando nossa coleção exclusiva de jogos retro.
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <button
+                        onClick={handleLoginRedirect}
+                        className="w-full block text-center px-6 py-4 rounded-md font-bold bg-[#ff0884] text-white hover:bg-[#ff0884]/90 shadow-[0_0_15px_rgba(255,8,132,0.4)] transition-all duration-300 transform hover:scale-105"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M5 13l4 4L19 7"
-                        ></path>
-                      </svg>
-                      <span className="text-gray-300">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button
-                  onClick={handleLoginRedirect}
-                  className="w-full block text-center px-6 py-3 rounded-md font-bold bg-[#ff0884] text-white hover:bg-[#ff0884]/90 shadow-[0_0_15px_rgba(255,8,132,0.4)] transition-all duration-300 transform hover:scale-105 animate-pulse-glow"
-                >
-                  ASSINE AGORA
-                </button>
+                        ASSINAR AGORA
+                      </button>
+
+                      <p className="text-center text-gray-400 text-sm">
+                        Processo 100% seguro. Cancele quando quiser.
+                      </p>
+                    </div>
+
+                    <div className="mt-12 p-4 bg-black/30 border border-gray-700 rounded-lg">
+                      <p className="text-gray-300 text-sm">
+                        &ldquo;O melhor sistema de retrogames que já usei. Vale
+                        cada centavo pela experiência nostálgica!&rdquo;
+                      </p>
+                      <p className="text-right text-[#ff0884] text-sm mt-2">
+                        — Membro desde 2023
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -346,13 +406,13 @@ export default function Home() {
       <div className="py-20 bg-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-gray-800 via-black to-black opacity-90"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
+          <div className="text-left mb-16">
             <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
               O QUE <span className="text-[#ff0884]">NOSSOS COLABORADORES</span>{" "}
               DIZEM
             </h2>
             <p
-              className={`${robotoCondensed.className} max-w-2xl mx-auto text-xl text-gray-400`}
+              className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
             >
               Avaliações reais de usuários satisfeitos
             </p>

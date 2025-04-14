@@ -14,6 +14,7 @@ import {
   AlertCircle,
   XCircle,
   ExternalLink,
+  Gamepad2,
 } from "lucide-react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -317,11 +318,14 @@ function DashboardContent() {
       <div className="flex min-h-screen flex-col bg-gamer-dark">
         <Header />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-center p-8 bg-black/30 rounded-lg border border-red-800/50 max-w-md">
-            <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-white mb-2">Acesso Negado</h2>
+          <div className="text-center p-8 bg-black/30 rounded-lg border border-[#ff0884]/30 max-w-md">
+            <Gamepad2 className="h-12 w-12 text-[#ff0884] mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">
+              Área Exclusiva
+            </h2>
             <p className="text-gray-300 mb-6">
-              É necessário fazer login para acessar o dashboard.
+              Faça login para acessar seu dashboard e desfrutar de todos os
+              recursos disponíveis para membros.
             </p>
             <button
               onClick={handleSignIn}
@@ -329,7 +333,7 @@ function DashboardContent() {
               className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
             >
               <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
-              Login com Google
+              Entrar com Google
             </button>
           </div>
         </div>

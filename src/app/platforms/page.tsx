@@ -3,11 +3,12 @@
 import { useState, useEffect } from "react";
 import { supabase, type Subscription } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
 import { Header } from "@/components/Header";
 import Image from "next/image";
 import platformsData from "@/data/platforms.json";
-import { Search, Flame } from "lucide-react";
+import { Search, Flame, Gamepad2 } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 import { Roboto_Condensed } from "next/font/google";
 
@@ -22,7 +23,6 @@ export default function PlatformsPage() {
   const [loading, setLoading] = useState(true);
   const [authRedirecting, setAuthRedirecting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const router = useRouter();
 
   // Fetch subscription function
   const fetchSubscription = async (userId: string) => {
@@ -58,9 +58,7 @@ export default function PlatformsPage() {
           setUser(session.user);
           await fetchSubscription(session.user.id);
         } else {
-          console.log("Redirecionando para login (sem sessão)");
-          router.push("/");
-          return;
+          setUser(null);
         }
       } catch (error) {
         console.error("Erro verificando sessão:", error);
@@ -70,7 +68,7 @@ export default function PlatformsPage() {
     };
 
     checkUser();
-  }, [router]);
+  }, []);
 
   // Handle sign in with OAuth
   const handleSignIn = async () => {
@@ -168,40 +166,22 @@ export default function PlatformsPage() {
       <div className="flex min-h-screen flex-col bg-gamer-dark">
         <Header />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-center p-8 bg-black/30 rounded-lg border border-red-800/50 max-w-md">
-            <div className="h-12 w-12 text-red-500 mx-auto mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-            </div>
-            <h2 className="text-xl font-bold text-white mb-2">Acesso Negado</h2>
+          <div className="text-center p-8 bg-black/30 rounded-lg border border-[#ff0884]/30 max-w-md">
+            <Gamepad2 className="h-12 w-12 text-[#ff0884] mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">
+              Área Exclusiva
+            </h2>
             <p className="text-gray-300 mb-6">
-              É necessário fazer login para acessar as plataformas.
+              Faça login para acessar as plataformas e explorar toda a nossa
+              coleção de jogos.
             </p>
             <button
               onClick={handleSignIn}
               disabled={authRedirecting}
               className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032 s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2 C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"></path>
-              </svg>
-              Login com Google
+              <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
+              Entrar com Google
             </button>
           </div>
         </div>
