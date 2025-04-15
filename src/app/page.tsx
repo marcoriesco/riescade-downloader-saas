@@ -119,12 +119,13 @@ export default function Home() {
           <Video video="/video/intro.webm" />
 
           {/* Overlay para melhorar a legibilidade */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-10"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-20"></div>
 
-          <div className="relative z-20 h-full flex items-center">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-              <div className="max-w-xl">
-                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-left">
+          {/* Container para posicionar o texto na parte inferior esquerda */}
+          <div className="absolute inset-0 z-40 flex flex-col justify-center">
+            <div className="px-4 sm:px-6 lg:px-8 pt-20">
+              <div className="max-w-xl p-6">
+                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-left text-shadow-lg">
                   <span className="text-white drop-shadow-[0_0_25px_rgba(255,8,132,0.8)]">
                     O MELHOR DOS
                   </span>
@@ -136,7 +137,7 @@ export default function Home() {
                   </span>
                 </h1>
                 <p
-                  className={`${robotoCondensed.className} text-xl text-gray-300 mb-8 max-w-lg text-left`}
+                  className={`${robotoCondensed.className} text-xl text-white mb-8 max-w-lg text-left drop-shadow-md`}
                 >
                   Acesso à mais de 250 plataformas de games, consoles e arcades
                   clássicos em um único lugar.
