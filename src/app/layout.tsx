@@ -9,8 +9,53 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 const roboto = Roboto({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RIESCADE Platform",
-  description: "RIESCADE™ RetroGames e Games, sempre emulando...",
+  title: "RIESCADE Platform - Mais de 250 Plataformas de Retrogames",
+  description:
+    "Acesso à mais de 250 plataformas de games, consoles e arcades clássicos em um único lugar. RIESCADE™ RetroGames e Games, sempre emulando...",
+  keywords: [
+    "retrogames",
+    "arcade",
+    "emulador",
+    "jogos clássicos",
+    "jogos retro",
+    "Nintendo",
+    "PlayStation",
+    "Atari",
+    "SEGA",
+  ],
+  authors: [{ name: "RIESCADE", url: "https://www.riescade.com.br" }],
+  creator: "RIESCADE",
+  publisher: "RIESCADE",
+  robots: "index, follow",
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    url: "https://www.riescade.com.br",
+    siteName: "RIESCADE Platform",
+    title: "RIESCADE - A Maior Plataforma de Retrogames do Brasil",
+    description:
+      "Acesso à mais de 250 plataformas de games, consoles e arcades clássicos em um único lugar.",
+    images: [
+      {
+        url: "https://www.riescade.com.br/images/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "RIESCADE Platform Preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RIESCADE - A Maior Plataforma de Retrogames do Brasil",
+    description: "Acesso à mais de 250 plataformas de games em um único lugar.",
+    images: ["https://www.riescade.com.br/images/og-image.jpg"],
+  },
+  alternates: {
+    canonical: "https://www.riescade.com.br",
+  },
+  verification: {
+    google: "google-site-verification=inserir_código_aqui",
+  },
 };
 
 export default function RootLayout({
@@ -19,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <body className={roboto.className}>
         <Analytics />
         <Providers>{children}</Providers>

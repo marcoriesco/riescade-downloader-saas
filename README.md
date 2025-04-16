@@ -137,3 +137,95 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+# RIESCADE SAAS
+
+Esta é a aplicação web do RIESCADE, uma plataforma de preservação de jogos arcade e consoles retro.
+
+## Desenvolvimento
+
+Certifique-se de ter o Node.js instalado (versão 18 ou superior).
+
+1. Clone este repositório
+2. Instale as dependências: `npm install`
+3. Configure as variáveis de ambiente: copie `.env.example` para `.env.local` e configure as variáveis
+4. Inicie o servidor de desenvolvimento: `npm run dev`
+
+## Sistema de Blog
+
+O blog do RIESCADE usa um sistema híbrido que permite:
+
+1. Posts serem escritos/editados em arquivos JSON organizados por semanas
+2. Publicação automática dos posts no banco de dados Supabase quando chegar a data agendada
+3. Visualização dos posts através da interface web
+
+### Estrutura dos Arquivos de Post
+
+Os posts são armazenados em arquivos JSON na pasta `src/content/scheduled-posts/` com o formato `YYYY-WXX.json` (por exemplo, `2025-W17.json` para a semana 17 de 2025).
+
+Cada arquivo contém informações sobre a semana e uma lista de posts:
+
+```json
+{
+  "week": 17,
+  "year": 2025,
+  "posts": [
+    {
+      "title": "Título do Post",
+      "publish_date": "2025-04-27",
+      "content": "<p>Conteúdo HTML do post...</p>",
+      "excerpt": "Resumo curto do post",
+      "image_path": "nome-da-imagem.jpg",
+      "category": "Categoria",
+      "tags": ["tag1", "tag2"],
+      "author": "Nome do Autor",
+      "featured": false,
+      "published": false
+    }
+  ]
+}
+```
+
+### Publicação de Posts
+
+O sistema publica automaticamente **um post por dia** da seguinte forma:
+
+1. Os posts são verificados diariamente às 8:00 da manhã pelo cronjob
+2. O sistema seleciona todos os posts programados para a data atual
+3. O primeiro post destacado (`featured: true`) é publicado
+4. Se não houver posts destacados, será publicado o primeiro post por ordem alfabética
+5. O post publicado é marcado como `published: true` no arquivo JSON
+
+#### Publicação Manual
+
+Para publicar posts manualmente:
+
+```bash
+# Publicar posts agendados para hoje
+npm run publish-post
+```
+
+#### Configuração do Cronjob
+
+O agendador está configurado para executar todos os dias às 8:00 da manhã. Para iniciar o cronjob em um servidor:
+
+```bash
+# Iniciar o agendador (deixe rodando em segundo plano)
+npm run cron
+```
+
+### Implementação Técnica
+
+O sistema usa as seguintes tecnologias:
+
+- **TypeScript**: Scripts de publicação usando TypeScript
+- **node-cron**: Para agendamento das publicações
+- **Supabase**: Como banco de dados para armazenar os posts publicados
+- **Next.js**: Para renderização do blog na interface web
+
+### Arquivos do Sistema
+
+- `src/scripts/cron-scheduler.ts`: Agendador que executa diariamente
+- `src/scripts/publish-scheduled-posts.ts`: Script principal de publicação
+- `logs/publish-logs.log`: Registro das publicações realizadas
+- `logs/publish-errors.log`: Registro de erros durante a publicação

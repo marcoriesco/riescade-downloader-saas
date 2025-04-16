@@ -17,6 +17,7 @@ import {
 import { useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import { Video } from "@/components/Video";
+import BlogPostsPreview from "@/components/BlogPostsPreview";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -388,6 +389,61 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        {/* Blog Recente Section */}
+        <div className="py-20 bg-gray-900 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-gray-900 opacity-90"></div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-left mb-10">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                <span className="text-[#ff0884]">BLOG</span> RIESCADE
+              </h2>
+              <p
+                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
+              >
+                Novidades e artigos sobre o universo dos jogos retro
+              </p>
+            </div>
+
+            {/* Blog posts */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+              {/* Este componente é renderizado do lado do cliente, então não podemos usar diretamente os dados do servidor.
+                  Precisamos usar um servidor component ou fazer a chamada de forma client-side */}
+              <BlogPostsPreview />
+            </div>
+
+            <div className="text-center">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884]/70 text-base font-bold rounded-md text-white bg-transparent hover:bg-[#ff0884]/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300"
+              >
+                Ver todos os artigos
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Avaliações do Google */}
+        <div className="py-20 bg-black relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-gray-800 via-black to-black opacity-90"></div>
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-left mb-16">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                O QUE{" "}
+                <span className="text-[#ff0884]">NOSSOS COLABORADORES</span>{" "}
+                DIZEM
+              </h2>
+              <p
+                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
+              >
+                Avaliações reais de usuários satisfeitos
+              </p>
+            </div>
+
+            {/* Slider de Avaliações */}
+            <GoogleReviews slidesPerView={3} />
+          </div>
+        </div>
       </main>
 
       {/* Plataformas Suportadas */}
@@ -402,27 +458,6 @@ export default function Home() {
           <PlatformIcons speed={90} />
         </div>
       </div> */}
-
-      {/* Avaliações do Google */}
-      <div className="py-20 bg-black relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-gray-800 via-black to-black opacity-90"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-left mb-16">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-              O QUE <span className="text-[#ff0884]">NOSSOS COLABORADORES</span>{" "}
-              DIZEM
-            </h2>
-            <p
-              className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
-            >
-              Avaliações reais de usuários satisfeitos
-            </p>
-          </div>
-
-          {/* Slider de Avaliações */}
-          <GoogleReviews slidesPerView={3} />
-        </div>
-      </div>
 
       <footer className="bg-black text-white py-12 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
