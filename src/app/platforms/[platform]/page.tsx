@@ -1,11 +1,9 @@
+"use client";
+
 import React, { use } from "react";
 import { notFound } from "next/navigation";
-import fs from "fs/promises";
-import path from "path";
-import { parseStringPromise } from "xml2js";
 import Link from "next/link";
 import Image from "next/image";
-import { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Roboto_Condensed } from "next/font/google";
 import platformsData from "@/data/platforms.json";
@@ -39,142 +37,13 @@ interface PlatformMetadata {
   systemColorPalette4?: string;
 }
 
-// Define platform name mapping to XML file names
-const PLATFORM_MAPPINGS: Record<string, string> = {
-  gameboy: "gb",
-  nintendo64: "n64",
-  supernintendo: "snes",
-  gameboycolor: "gbc",
-  gameboyadvance: "gba",
-  playstation: "psx",
-  playstation2: "ps2",
-  megadrive: "genesis",
-  mastersystem: "sms",
-  sega: "genesis",
-  dreamcast: "dc",
-  nes: "nes",
-  snes: "snes",
-  genesis: "genesis",
-};
-
-// Generate metadata for the page
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ platform: string }>;
-}): Promise<Metadata> {
-  const { platform } = await params;
-  const platformInfo = (platformsData as PlatformData[]).find(
-    (p) => p.name === platform
-  );
-
-  if (!platformInfo) {
-    return {
-      title: "Plataforma não encontrada",
-    };
-  }
-
-  return {
-    title: `${platformInfo.fullName} - RIESCADE`,
-    description: `Explore jogos e emuladores de ${platformInfo.fullName} disponíveis na RIESCADE.`,
-    openGraph: {
-      title: `${platformInfo.fullName} - RIESCADE`,
-      description: `Explore jogos e emuladores de ${platformInfo.fullName} disponíveis na RIESCADE.`,
-      images: [platformInfo.image],
-      type: "website",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: `${platformInfo.fullName} - RIESCADE`,
-      description: `Explore jogos e emuladores de ${platformInfo.fullName} disponíveis na RIESCADE.`,
-      images: [platformInfo.image],
-    },
-  };
-}
-
-// Read platform XML metadata
-async function getPlatformMetadata(
-  platform: string
-): Promise<PlatformMetadata | null> {
-  try {
-    console.log(`Fetching metadata for platform: ${platform}`);
-
-    // Map platform name to its potential XML file name
-    const mappedName = PLATFORM_MAPPINGS[platform.toLowerCase()] || platform;
-    console.log(`Mapped name: ${mappedName}`);
-
-    // Determine the XML file path - try different possible file names
-    const possiblePaths = [
-      path.join(process.cwd(), "src", "data", "platforms", `${platform}.xml`),
-      path.join(process.cwd(), "src", "data", "platforms", `${mappedName}.xml`),
-    ];
-
-    console.log(`Looking for XML files at: ${possiblePaths.join(", ")}`);
-
-    let xmlData = null;
-    let foundPath = null;
-
-    for (const xmlPath of possiblePaths) {
-      try {
-        xmlData = await fs.readFile(xmlPath, "utf-8");
-        foundPath = xmlPath;
-        console.log(`Successfully read XML from: ${xmlPath}`);
-        break; // Found a valid XML file
-      } catch (err) {
-        console.log(
-          `Could not read from ${xmlPath}: ${(err as Error).message}`
-        );
-        // Continue to next potential path
-        continue;
-      }
-    }
-
-    if (!xmlData) {
-      console.log(`No XML data found for platform: ${platform}`);
-      return null; // No XML file found for this platform
-    }
-
-    try {
-      // Parse XML data
-      const parsedData = await parseStringPromise(xmlData);
-
-      if (
-        !parsedData.theme ||
-        !parsedData.theme.variables ||
-        !parsedData.theme.variables[0]
-      ) {
-        console.log(`Invalid XML structure for ${foundPath}`);
-        return null;
-      }
-
-      const variables = parsedData.theme.variables[0];
-
-      // Extract metadata
-      const metadata: PlatformMetadata = {};
-      for (const key in variables) {
-        if (Object.prototype.hasOwnProperty.call(variables, key)) {
-          metadata[key as keyof PlatformMetadata] = variables[key][0];
-        }
-      }
-
-      console.log(`Successfully parsed metadata for ${platform}`);
-      return metadata;
-    } catch (parseError) {
-      console.error(`Error parsing XML for ${platform}:`, parseError);
-      return null;
-    }
-  } catch (error) {
-    console.error(`Error reading platform metadata for ${platform}:`, error);
-    return null;
-  }
-}
-
 export default function PlatformPage({
   params,
 }: {
   params: Promise<{ platform: string }>;
 }) {
   const { platform } = use(params);
+
   const platformInfo = (platformsData as PlatformData[]).find(
     (p) => p.name === platform
   );
@@ -183,8 +52,15 @@ export default function PlatformPage({
     notFound();
   }
 
-  // Get XML metadata - wrap in use() since it's an async function
-  const metadata = use(getPlatformMetadata(platform));
+  // Get metadata from API (we'll simulate fetching it)
+  const fetchPlatformMetadata = async (): Promise<PlatformMetadata | null> => {
+    // Simulating API call - in real app, you would call an API endpoint here
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return null; // Return null for now
+  };
+
+  // Use the 'use' hook to handle the async call
+  const metadata = use(fetchPlatformMetadata());
   const hasMetadata = metadata !== null;
 
   // Generate background gradient based on platform colors

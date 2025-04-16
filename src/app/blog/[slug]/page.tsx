@@ -1,3 +1,5 @@
+"use client";
+
 import React, { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -14,7 +16,6 @@ import {
   getRelatedPosts,
 } from "@/lib/blog-service";
 import { formatDate } from "@/lib/utils";
-import { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Roboto, Roboto_Condensed } from "next/font/google";
 import styles from "@/styles/markdown.module.css";
@@ -65,57 +66,14 @@ interface BlogPost {
   slug: string;
   content: string;
   excerpt: string;
-  cover_image: string;
+  cover_image: string | null;
   published_at: string | null;
   category: string;
   reading_time: number;
   author: string;
-  author_image: string;
+  author_image: string | null;
   tags: string[];
   views: number;
-}
-
-// Generate metadata for the page
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const post = await getBlogPostBySlug(slug);
-
-  if (!post) {
-    return {
-      title: "Post não encontrado",
-    };
-  }
-
-  return {
-    title: post.title,
-    description: post.excerpt,
-    keywords: post.tags?.join(", "),
-    openGraph: {
-      title: post.title,
-      description: post.excerpt,
-      images: post.cover_image ? [post.cover_image] : [],
-      type: "article",
-      publishedTime: post.published_at || undefined,
-      authors: post.author ? [post.author] : [],
-      tags: post.tags,
-      siteName: "RIESCADE",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt,
-      images: post.cover_image ? [post.cover_image] : [],
-      creator: "@riescade",
-      site: "@riescade",
-    },
-    alternates: {
-      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
-    },
-  };
 }
 
 export default function BlogPost({
@@ -124,17 +82,31 @@ export default function BlogPost({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = use(params);
-  const post = use(getBlogPostBySlug(slug));
+
+  // Função assíncrona para buscar os dados do post
+  const fetchPostData = async () => {
+    const postData = await getBlogPostBySlug(slug);
+
+    if (!postData) {
+      return { post: null, relatedPosts: [] };
+    }
+
+    // Update view count
+    updatePostViews(postData.id);
+
+    // Get related posts
+    const related = await getRelatedPosts(postData, 3);
+
+    return { post: postData, relatedPosts: related };
+  };
+
+  // Usar o hook use para dados assíncronos
+  const { post, relatedPosts } = use(fetchPostData());
 
   if (!post) {
     notFound();
+    return null;
   }
-
-  // Update view count
-  updatePostViews(post.id);
-
-  // Get related posts
-  const relatedPosts = use(getRelatedPosts(post, 3));
 
   // Create category slug from category name
   const categorySlug = post.category.toLowerCase().replace(/\s+/g, "-");
@@ -378,7 +350,7 @@ export default function BlogPost({
                 Tags
               </h2>
               <div className="flex flex-wrap gap-3">
-                {post.tags.map((tag) => (
+                {post.tags.map((tag: string) => (
                   <Link
                     key={tag}
                     href={`/blog?tag=${tag}`}
@@ -412,7 +384,7 @@ export default function BlogPost({
                 Posts Relacionados
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {relatedPosts.map((relatedPost) => (
+                {relatedPosts.map((relatedPost: BlogPost) => (
                   <div
                     key={relatedPost.id}
                     className="bg-gray-800/50 rounded-lg overflow-hidden shadow-xl hover:shadow-[0_0_15px_rgba(255,8,132,0.15)] transition-all duration-300 hover:-translate-y-1 group relative after:absolute after:inset-0 after:z-[-1] after:bg-gradient-to-br after:from-[#ff0884]/20 after:to-purple-500/20 after:opacity-0 hover:after:opacity-100 after:transition-opacity"
