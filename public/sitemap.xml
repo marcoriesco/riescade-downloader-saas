@@ -2,32 +2,128 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
         <loc>https://www.riescade.com.br/</loc>
-        <lastmod>2024-07-15</lastmod>
+        <lastmod>2025-04-16</lastmod>
         <changefreq>weekly</changefreq>
-        <priority>1.0</priority>
+        <priority>1</priority>
     </url>
     <url>
         <loc>https://www.riescade.com.br/dashboard</loc>
-        <lastmod>2024-07-15</lastmod>
+        <lastmod>2025-04-16</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
         <loc>https://www.riescade.com.br/tutorial</loc>
-        <lastmod>2024-07-15</lastmod>
+        <lastmod>2025-04-16</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.7</priority>
     </url>
     <url>
         <loc>https://www.riescade.com.br/termos</loc>
-        <lastmod>2024-07-15</lastmod>
+        <lastmod>2025-04-16</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>
     </url>
     <url>
         <loc>https://www.riescade.com.br/politica</loc>
-        <lastmod>2024-07-15</lastmod>
+        <lastmod>2025-04-16</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.5</priority>
     </url>
-</urlset> 
+    <url>
+        <loc>https://www.riescade.com.br/blog</loc>
+        <lastmod>2025-04-16</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/o-grande-crash-de-1983-como-o-atari-quase-destruiu-a-industria-de-videogames</loc>
+        <lastmod>2025-04-17</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/dreamcast-o-console-a-frente-de-seu-tempo-que-definiu-o-futuro</loc>
+        <lastmod>2025-04-18</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/final-fantasy-a-serie-que-revolucionou-os-rpgs</loc>
+        <lastmod>2025-04-19</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/a-evolucao-da-portabilidade-de-game-watch-ao-nintendo-switch</loc>
+        <lastmod>2025-04-20</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/fliperamas-no-brasil-a-era-de-ouro-dos-arcades-brasileiros</loc>
+        <lastmod>2025-04-21</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/jogos-brasileiros-a-ascensao-da-industria-nacional</loc>
+        <lastmod>2025-04-22</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/msx-no-brasil-como-o-videogame-com-teclado-revolucionou-a-computacao-nacional</loc>
+        <lastmod>2025-04-23</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/historia-da-emulacao-a-preservacao-digital-dos-videogames</loc>
+        <lastmod>2025-04-24</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/a-evolucao-da-pixel-art-de-limitacao-tecnica-a-escolha-estetica</loc>
+        <lastmod>2025-04-25</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/a-evolucao-da-musica-nos-videogames-de-beeps-a-sinfonias</loc>
+        <lastmod>2025-04-26</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/jogos-de-aventura-a-evolucao-de-um-genero-que-definiu-o-storytelling-nos-videogames</loc>
+        <lastmod>2025-04-27</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/mulheres-pioneiras-as-heroinas-esquecidas-na-historia-dos-videogames</loc>
+        <lastmod>2025-04-28</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/speedrunning-como-a-obsessao-por-velocidade-criou-uma-nova-cultura-gamer</loc>
+        <lastmod>2025-04-29</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/rpgs-a-evolucao-do-genero-que-transformou-os-videogames-em-experiencias-epicas</loc>
+        <lastmod>2025-04-30</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://www.riescade.com.br/blog/a-ascensao-dos-esports-como-os-videogames-se-tornaram-um-fenomeno-competitivo-global</loc>
+        <lastmod>2025-05-01</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+</urlset>
