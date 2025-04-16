@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
+import { supabase } from "@/lib/supabase";
 import { Header } from "@/components/Header";
 
 interface PageProps {
@@ -37,8 +36,6 @@ function formatDate(dateString: string) {
 }
 
 export default async function CategoryPage({ params }: PageProps) {
-  const supabase = createServerComponentClient({ cookies });
-
   // Transformar o slug de volta para o nome da categoria
   const categoryName = params.slug
     .split("-")
