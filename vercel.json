@@ -2,12 +2,25 @@
   "crons": [
     {
       "path": "/api/reconcile-permissions",
-      "schedule": "0 1 */2 * *"
+      "schedule": "0 22 * * *"
+    },
+    {
+      "path": "/api/publish-post",
+      "schedule": "0 8 * * *"
     }
   ],
   "headers": [
     {
       "source": "/api/reconcile-permissions",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, no-cache"
+        }
+      ]
+    },
+    {
+      "source": "/api/publish-post",
       "headers": [
         {
           "key": "Cache-Control",

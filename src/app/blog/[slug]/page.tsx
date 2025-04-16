@@ -196,7 +196,7 @@ export default function BlogPost({
             </div>
 
             {/* Cover Image */}
-            {post.cover_image && post.cover_image.startsWith("http") && (
+            {post.cover_image && (
               <div className="relative h-80 md:h-[500px] rounded-xl overflow-hidden mb-16 shadow-2xl">
                 <Image
                   src={post.cover_image}

@@ -37,7 +37,7 @@ export const metadata: Metadata = {
       "Acesso à mais de 250 plataformas de games, consoles e arcades clássicos em um único lugar.",
     images: [
       {
-        url: "https://www.riescade.com.br/images/og-image.jpg",
+        url: "https://www.riescade.com.br/images/og-image.webp",
         width: 1200,
         height: 630,
         alt: "RIESCADE Platform Preview",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "RIESCADE - A Maior Plataforma de Retrogames do Brasil",
     description: "Acesso à mais de 250 plataformas de games em um único lugar.",
-    images: ["https://www.riescade.com.br/images/og-image.jpg"],
+    images: ["https://www.riescade.com.br/images/og-image.webp"],
   },
   alternates: {
     canonical: "https://www.riescade.com.br",

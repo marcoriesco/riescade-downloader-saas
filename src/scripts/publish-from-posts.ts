@@ -9,7 +9,7 @@ dotenv.config({ path: envPath });
 
 // Configuração de caminhos
 const SCRIPT_DIR = __dirname || path.resolve();
-const CONTENT_DIR = path.join(SCRIPT_DIR, "..", "content", "scheduled-posts");
+const POSTS_DIR = path.join(SCRIPT_DIR, "..", "content", "posts");
 const LOG_DIR = path.join(SCRIPT_DIR, "..", "..", "logs");
 
 // Configuração do Supabase
@@ -37,8 +37,8 @@ const getCurrentDate = (): string => {
   return date.toISOString().split("T")[0]; // Formato YYYY-MM-DD
 };
 
-// Definição da interface para os posts agendados
-interface ScheduledPost {
+// Definição da interface para os posts
+interface Post {
   title: string;
   publish_date: string;
   content: string;
@@ -48,15 +48,7 @@ interface ScheduledPost {
   tags?: string[];
   author?: string;
   author_image?: string;
-  featured?: boolean;
   published?: boolean;
-}
-
-// Definição da interface para os dados semanais
-interface WeeklyData {
-  week: number;
-  year: number;
-  posts: ScheduledPost[];
 }
 
 // Função para registrar mensagens de log
@@ -81,7 +73,7 @@ const logError = (error: Error | unknown): void => {
 };
 
 // Função para converter o post do formato JSON para o formato do Supabase
-const preparePostForSupabase = (post: ScheduledPost) => {
+const preparePostForSupabase = (post: Post) => {
   // Gerar um slug a partir do título
   const slug = post.title
     .toLowerCase()
@@ -103,7 +95,6 @@ const preparePostForSupabase = (post: ScheduledPost) => {
     updated_at: new Date().toISOString(),
     category: post.category || "General",
     tags: post.tags || [],
-    featured: post.featured || false,
     views: 0,
   };
 };
@@ -124,7 +115,7 @@ const checkPostExists = async (title: string) => {
 };
 
 // Função para publicar um post no Supabase
-const publishPostToSupabase = async (post: ScheduledPost) => {
+const publishPostToSupabase = async (post: Post) => {
   try {
     // Verificar se já existe um post com o mesmo título
     const existingPost = await checkPostExists(post.title);
@@ -167,104 +158,47 @@ const publishScheduledPosts = async (): Promise<void> => {
 
   try {
     // Ler todos os arquivos da pasta de conteúdo
-    const files = fs.readdirSync(CONTENT_DIR);
+    const files = fs.readdirSync(POSTS_DIR);
 
-    // Filtrar apenas arquivos JSON que seguem o padrão de semanas (YYYY-WXX.json)
-    const weeklyFiles = files.filter(
-      (file: string) =>
-        file.endsWith(".json") && /^\d{4}-W\d{2}\.json$/.test(file)
+    // Filtrar apenas arquivos JSON que começam com a data atual
+    const todaysPostFiles = files.filter(
+      (file: string) => file.startsWith(currentDate) && file.endsWith(".json")
     );
 
-    if (weeklyFiles.length === 0) {
-      logMessage("Nenhum arquivo semanal encontrado.");
-      return;
-    }
-
-    // Armazenar todos os posts disponíveis para hoje
-    const allPostsForToday: Array<{
-      file: string;
-      post: ScheduledPost;
-      index: number;
-    }> = [];
-
-    // Coletar todos os posts para hoje de todos os arquivos
-    for (const file of weeklyFiles) {
-      const filePath = path.join(CONTENT_DIR, file);
-
-      try {
-        const fileContent = fs.readFileSync(filePath, "utf8");
-        const weekData = JSON.parse(fileContent) as WeeklyData;
-
-        if (!weekData.posts || !Array.isArray(weekData.posts)) {
-          logMessage(`Arquivo ${file} não contém lista de posts válida.`);
-          continue;
-        }
-
-        // Encontrar posts para a data atual que ainda não foram publicados
-        weekData.posts.forEach((post, index) => {
-          if (post.publish_date === currentDate && post.published !== true) {
-            allPostsForToday.push({
-              file,
-              post,
-              index,
-            });
-          }
-        });
-      } catch (error) {
-        logError(
-          new Error(
-            `Erro ao processar arquivo ${file}: ${
-              error instanceof Error ? error.message : String(error)
-            }`
-          )
-        );
-      }
-    }
-
-    // Verificar se temos posts para publicar hoje
-    if (allPostsForToday.length === 0) {
+    if (todaysPostFiles.length === 0) {
       logMessage("Nenhum post para publicar hoje.");
       return;
     }
 
-    // Ordenar posts por featured (primeiro os destacados) e depois por título
-    allPostsForToday.sort((a, b) => {
-      // Primeiro critério: featured (true vem antes)
-      if (a.post.featured === true && b.post.featured !== true) return -1;
-      if (a.post.featured !== true && b.post.featured === true) return 1;
+    // Publicar o primeiro post encontrado
+    const postFile = todaysPostFiles[0];
+    const filePath = path.join(POSTS_DIR, postFile);
+    const fileContent = fs.readFileSync(filePath, "utf8");
+    const post = JSON.parse(fileContent) as Post;
 
-      // Segundo critério: título em ordem alfabética
-      return a.post.title.localeCompare(b.post.title);
-    });
+    if (post.published) {
+      logMessage(`O post "${post.title}" já está publicado.`);
+      return;
+    }
 
-    // Publicar apenas o primeiro post da lista ordenada (1 post por dia)
-    const postToPublish = allPostsForToday[0];
-
-    logMessage(`Publicando 1 post para hoje: "${postToPublish.post.title}"`);
+    logMessage(`Publicando post para hoje: "${post.title}"`);
 
     try {
       // Publicar no Supabase
-      await publishPostToSupabase(postToPublish.post);
+      await publishPostToSupabase(post);
 
       // Marcar como publicado no arquivo JSON
-      const filePath = path.join(CONTENT_DIR, postToPublish.file);
-      const fileContent = fs.readFileSync(filePath, "utf8");
-      const weekData = JSON.parse(fileContent) as WeeklyData;
-
-      // Atualizar o status published
-      weekData.posts[postToPublish.index].published = true;
-
-      // Salvar o arquivo atualizado
-      fs.writeFileSync(filePath, JSON.stringify(weekData, null, 2), "utf8");
+      post.published = true;
+      fs.writeFileSync(filePath, JSON.stringify(post, null, 2), "utf8");
       logMessage(
-        `Arquivo ${postToPublish.file} atualizado, post marcado como publicado.`
+        `Arquivo ${postFile} atualizado, post marcado como publicado.`
       );
 
-      logMessage("Publicação concluída com sucesso. 1 post publicado.");
+      logMessage("Publicação concluída com sucesso.");
     } catch (error) {
       logError(
         new Error(
-          `Erro ao publicar post "${postToPublish.post.title}": ${
+          `Erro ao publicar post "${post.title}": ${
             error instanceof Error ? error.message : String(error)
           }`
         )
@@ -276,53 +210,40 @@ const publishScheduledPosts = async (): Promise<void> => {
 };
 
 // Função para publicação forçada de um post específico para testes
-export const forcePublishOnePost = async (
-  weekFile: string,
-  postIndex: number = 0
-): Promise<void> => {
+export const forcePublishOnePost = async (postFile: string): Promise<void> => {
   try {
-    const filePath = path.join(CONTENT_DIR, weekFile);
+    const filePath = path.join(POSTS_DIR, postFile);
 
     if (fs.existsSync(filePath)) {
       const fileContent = fs.readFileSync(filePath, "utf8");
-      const weekData = JSON.parse(fileContent) as WeeklyData;
+      const post = JSON.parse(fileContent) as Post;
 
-      if (weekData.posts && weekData.posts.length > postIndex) {
-        const post = weekData.posts[postIndex];
+      if (!post.published) {
+        logMessage(`Forçando publicação do post: ${post.title}`);
 
-        if (!post.published) {
-          logMessage(`Forçando publicação do post: ${post.title}`);
+        try {
+          // Publicar no Supabase
+          await publishPostToSupabase(post);
 
-          try {
-            // Publicar no Supabase
-            await publishPostToSupabase(post);
+          // Marcar como publicado
+          post.published = true;
+          fs.writeFileSync(filePath, JSON.stringify(post, null, 2), "utf8");
 
-            // Marcar como publicado
-            post.published = true;
-            fs.writeFileSync(
-              filePath,
-              JSON.stringify(weekData, null, 2),
-              "utf8"
-            );
-
-            logMessage(`Post "${post.title}" publicado com sucesso!`);
-          } catch (error) {
-            logError(
-              new Error(
-                `Erro ao forçar publicação do post "${post.title}": ${
-                  error instanceof Error ? error.message : String(error)
-                }`
-              )
-            );
-          }
-        } else {
-          logMessage(`O post "${post.title}" já está publicado.`);
+          logMessage(`Post "${post.title}" publicado com sucesso!`);
+        } catch (error) {
+          logError(
+            new Error(
+              `Erro ao forçar publicação do post "${post.title}": ${
+                error instanceof Error ? error.message : String(error)
+              }`
+            )
+          );
         }
       } else {
-        logMessage(`Índice de post inválido no arquivo ${weekFile}.`);
+        logMessage(`O post "${post.title}" já está publicado.`);
       }
     } else {
-      logMessage(`Arquivo ${weekFile} não encontrado!`);
+      logMessage(`Arquivo ${postFile} não encontrado!`);
     }
   } catch (error) {
     logError(error);

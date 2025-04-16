@@ -28,7 +28,7 @@ nodeCron.schedule("0 8 * * *", () => {
   logMessage(`Executando publicação agendada em ${new Date().toISOString()}`);
 
   // Caminho para o script de publicação
-  const scriptPath = path.join(SCRIPT_DIR, "publish-scheduled-posts.ts");
+  const scriptPath = path.join(SCRIPT_DIR, "publish-from-posts.ts");
 
   // Comando para executar o script TypeScript
   const command = `npx ts-node ${scriptPath}`;
@@ -57,7 +57,7 @@ if (process.argv.includes("--run-now")) {
   );
 
   // Caminho para o script de publicação
-  const scriptPath = path.join(SCRIPT_DIR, "publish-scheduled-posts.ts");
+  const scriptPath = path.join(SCRIPT_DIR, "publish-from-posts.ts");
 
   // Comando para executar o script TypeScript
   const command = `npx ts-node ${scriptPath}`;

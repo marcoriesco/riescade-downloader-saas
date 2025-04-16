@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "cron": "ts-node src/scripts/cron-scheduler.ts",
-    "publish-post": "ts-node src/scripts/cron-scheduler.ts --run-now"
+    "publish-post": "ts-node src/scripts/cron-scheduler.ts --run-now",
+    "update-post-dates": "ts-node src/scripts/rename-post-files.ts"
   },
   "dependencies": {
     "@stripe/react-stripe-js": "^3.5.1",
