@@ -105,6 +105,10 @@ export default function PlatformsPage() {
                         fill
                         sizes="100px"
                         className="object-contain transition-transform group-hover:scale-110"
+                        onError={(e) => {
+                          // Fallback para a imagem original se a versão em /logos/ não existir
+                          (e.target as HTMLImageElement).src = platform.image;
+                        }}
                       />
                     </div>
                     <h3 className="text-lg font-semibold group-hover:text-[#ff0884]">

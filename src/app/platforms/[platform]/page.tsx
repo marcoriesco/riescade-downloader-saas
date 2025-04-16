@@ -56,7 +56,21 @@ export default function PlatformPage({
   const fetchPlatformMetadata = async (): Promise<PlatformMetadata | null> => {
     // Simulating API call - in real app, you would call an API endpoint here
     await new Promise((resolve) => setTimeout(resolve, 500));
-    return null; // Return null for now
+
+    // Instead of returning null, return simulated metadata
+    return {
+      systemName: platformInfo.fullName,
+      systemDescription: `${platformInfo.fullName} é uma plataforma clássica de jogos que faz parte da coleção RIESCADE. Esta plataforma oferece uma variedade de jogos retro que foram cuidadosamente preservados para garantir a melhor experiência de jogo.`,
+      systemManufacturer: "RIESCADE Collections",
+      systemReleaseYear: "Variado",
+      systemReleaseDateFormated: "Data variada",
+      systemHardwareType: "Console / Computador",
+      systemColor: "ff0884", // Rosa RIESCADE
+      systemColorPalette1: "8a0046",
+      systemColorPalette2: "560029",
+      systemColorPalette3: "23001b",
+      systemColorPalette4: "110011",
+    };
   };
 
   // Use the 'use' hook to handle the async call
