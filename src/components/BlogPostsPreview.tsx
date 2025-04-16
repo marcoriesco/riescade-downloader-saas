@@ -86,7 +86,7 @@ export default function BlogPostsPreview() {
           key={post.id}
           className="border border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-gray-800"
         >
-          {post.cover_image && post.cover_image.startsWith("http") && (
+          {post.cover_image && (
             <div className="relative h-48 w-full">
               <Image
                 src={post.cover_image}
