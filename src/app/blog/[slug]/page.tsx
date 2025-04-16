@@ -19,6 +19,21 @@ import { Header } from "@/components/Header";
 import { Roboto, Roboto_Condensed } from "next/font/google";
 import styles from "../../../styles/markdown.module.css";
 
+// Define platform keywords and their corresponding URLs
+const PLATFORM_KEYWORDS = {
+  gameboy: "/platforms/gameboy",
+  nintendo: "/platforms/nintendo",
+  playstation: "/platforms/playstation",
+  sega: "/platforms/sega",
+  xbox: "/platforms/xbox",
+  atari: "/platforms/atari",
+  dreamcast: "/platforms/dreamcast",
+  nes: "/platforms/nes",
+  snes: "/platforms/snes",
+  n64: "/platforms/n64",
+  genesis: "/platforms/genesis",
+};
+
 const roboto = Roboto({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
@@ -65,6 +80,7 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
+    keywords: post.tags?.join(", "),
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -72,6 +88,19 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.published_at || undefined,
       authors: post.author ? [post.author] : [],
+      tags: post.tags,
+      siteName: "RIESCADE",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: post.cover_image ? [post.cover_image] : [],
+      creator: "@riescade",
+      site: "@riescade",
+    },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_SITE_URL}/blog/${post.slug}`,
     },
   };
 }
@@ -97,30 +126,76 @@ export default function BlogPost({
   // Create category slug from category name
   const categorySlug = post.category.toLowerCase().replace(/\s+/g, "-");
 
+  // Function to check and add platform links to text content
+  const addPlatformLinks = (textContent: string) => {
+    // Create regex pattern for all keywords (case insensitive)
+    const keywordPattern = new RegExp(
+      "\\b(" + Object.keys(PLATFORM_KEYWORDS).join("|") + ")\\b",
+      "gi"
+    );
+
+    // Keep track of which keywords have been linked already to avoid duplicates
+    const linkedKeywords = new Set<string>();
+
+    return textContent.replace(keywordPattern, (match) => {
+      const lowerMatch = match.toLowerCase();
+      // Only link the first occurrence of each keyword
+      if (!linkedKeywords.has(lowerMatch)) {
+        linkedKeywords.add(lowerMatch);
+        const url =
+          PLATFORM_KEYWORDS[lowerMatch as keyof typeof PLATFORM_KEYWORDS];
+        return `<a href="${url}" class="platform-link">${match}</a>`;
+      }
+      return match;
+    });
+  };
+
   const options: HTMLReactParserOptions = {
     replace: (domNode: DOMNode) => {
-      if (domNode instanceof Element && domNode.name === "pre") {
-        return (
-          <pre
-            className={`${styles.codeBlock} my-8 p-4 bg-gray-800 rounded-lg overflow-auto relative`}
-          >
-            {domToReact(domNode.children as DOMNode[], options)}
-          </pre>
-        );
-      }
-      if (domNode instanceof Element && domNode.name === "h1") {
-        return (
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-[#ff0884]">
-            {domToReact(domNode.children as DOMNode[], options)}
-          </h1>
-        );
-      }
-      if (domNode instanceof Element && domNode.name === "h2") {
-        return (
-          <h2 className="text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent">
-            {domToReact(domNode.children as DOMNode[], options)}
-          </h2>
-        );
+      if (domNode instanceof Element) {
+        // Add structured data attributes for SEO
+        if (
+          domNode.name === "h1" ||
+          domNode.name === "h2" ||
+          domNode.name === "h3"
+        ) {
+          return (
+            <domNode.name
+              className={
+                domNode.name === "h1"
+                  ? "text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-[#ff0884]"
+                  : domNode.name === "h2"
+                  ? "text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent"
+                  : "text-2xl md:text-3xl font-bold mb-4 mt-8 text-white"
+              }
+            >
+              {domToReact(domNode.children as DOMNode[], options)}
+            </domNode.name>
+          );
+        }
+
+        if (domNode.name === "p") {
+          // Get text content and process it for platform links
+          const textContent = domToReact(domNode.children as DOMNode[]);
+          const textWithLinks = addPlatformLinks(String(textContent));
+
+          // If the content was modified with links, use the HTML parser again
+          if (textWithLinks !== String(textContent)) {
+            return (
+              <p className="mb-6 leading-relaxed">{parse(textWithLinks)}</p>
+            );
+          }
+        }
+
+        if (domNode.name === "pre") {
+          return (
+            <pre
+              className={`${styles.codeBlock} my-8 p-4 bg-gray-800 rounded-lg overflow-auto relative`}
+            >
+              {domToReact(domNode.children as DOMNode[], options)}
+            </pre>
+          );
+        }
       }
       return undefined;
     },
@@ -143,6 +218,33 @@ export default function BlogPost({
                 {post.category}
               </Link>
             </div>
+
+            {/* Add schema.org metadata for SEO */}
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{
+                __html: JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "BlogPosting",
+                  headline: post.title,
+                  image: post.cover_image ? [post.cover_image] : [],
+                  datePublished: post.published_at,
+                  author: {
+                    "@type": "Person",
+                    name: post.author,
+                  },
+                  publisher: {
+                    "@type": "Organization",
+                    name: "RIESCADE",
+                    logo: {
+                      "@type": "ImageObject",
+                      url: "/images/logos.webp",
+                    },
+                  },
+                  description: post.excerpt,
+                }),
+              }}
+            />
 
             {/* Title */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-10 leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">

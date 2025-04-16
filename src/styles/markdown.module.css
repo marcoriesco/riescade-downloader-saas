@@ -2,6 +2,26 @@
   @apply text-gray-300;
 }
 
+/* Styling for automatic platform links */
+:global(.platform-link) {
+  @apply text-[#ff0884] font-semibold relative inline-block;
+  text-decoration: none;
+  background-image: linear-gradient(
+    to right,
+    rgba(255, 8, 132, 0.2),
+    rgba(255, 8, 132, 0.2)
+  );
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+  transition: background-size 0.2s, color 0.2s;
+}
+
+:global(.platform-link:hover) {
+  @apply text-[#ff6eb7];
+  background-size: 100% 40%;
+}
+
 .markdown h1 {
   @apply text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-[#ff0884];
 }
