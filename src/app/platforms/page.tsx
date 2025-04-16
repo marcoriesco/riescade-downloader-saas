@@ -1,293 +1,163 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { supabase, type Subscription } from "@/lib/supabase";
-import { User } from "@supabase/supabase-js";
-import { Header } from "@/components/Header";
+import React from "react";
+import Link from "next/link";
 import Image from "next/image";
-import platformsData from "@/data/platforms.json";
-import { Search, Flame, Gamepad2 } from "lucide-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-
+import { Header } from "@/components/Header";
 import { Roboto_Condensed } from "next/font/google";
+import platformsData from "@/data/platforms.json";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
   weight: ["400", "700"],
 });
 
+// Define PlatformData interface
+interface PlatformData {
+  name: string;
+  image: string;
+  url: string;
+  fullName: string;
+}
+
+// Metadata is defined outside of the component since this is a client component
+// It will be picked up by the layout
+
 export default function PlatformsPage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [subscription, setSubscription] = useState<Subscription | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [authRedirecting, setAuthRedirecting] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
+  // Group platforms by first letter for A-Z navigation
+  const groupedPlatforms: Record<string, PlatformData[]> = {};
 
-  // Fetch subscription function
-  const fetchSubscription = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("subscriptions")
-        .select("*")
-        .eq("user_id", userId)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Error fetching subscription:", error);
-        setSubscription(null);
-      } else {
-        console.log("Subscription data:", data);
-        setSubscription(data);
-      }
-    } catch (error) {
-      console.error("Error in fetchSubscription:", error);
-      setSubscription(null);
+  (platformsData as PlatformData[]).forEach((platform) => {
+    const firstLetter = platform.fullName.charAt(0).toUpperCase();
+    if (!groupedPlatforms[firstLetter]) {
+      groupedPlatforms[firstLetter] = [];
     }
-  };
+    groupedPlatforms[firstLetter].push(platform);
+  });
 
-  // Verificar autenticação
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-
-        if (session?.user) {
-          setUser(session.user);
-          await fetchSubscription(session.user.id);
-        } else {
-          setUser(null);
-        }
-      } catch (error) {
-        console.error("Erro verificando sessão:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkUser();
-  }, []);
-
-  // Handle sign in with OAuth
-  const handleSignIn = async () => {
-    setAuthRedirecting(true);
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: window.location.origin + "/platforms",
-        },
-      });
-
-      if (error) {
-        console.error("Erro ao iniciar login:", error);
-        setAuthRedirecting(false);
-      } else if (data) {
-        console.log("Login iniciado com sucesso, URL:", data.url);
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error("Error signing in:", error);
-      setAuthRedirecting(false);
-    }
-  };
-
-  // Handle checkout para renovar assinatura
-  const handleCheckout = async () => {
-    if (!user) return;
-
-    try {
-      const response = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || "price_1",
-          userId: user.id,
-          userEmail: user.email,
-        }),
-      });
-
-      const session = await response.json();
-
-      if (session.url) {
-        window.location.href = session.url;
-      }
-    } catch (error) {
-      console.error("Error during checkout:", error);
-    }
-  };
-
-  // Filtrar plataformas com base no termo de pesquisa e ordenar alfabeticamente
-  const filteredPlatforms = platformsData
-    .filter((platform) =>
-      platform.fullName.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => a.fullName.localeCompare(b.fullName));
-
-  // Loading state
-  if (loading) {
-    return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
-        <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-gray-300">Verificando autenticação...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Redirecting state
-  if (authRedirecting) {
-    return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
-        <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-gray-300">
-              Redirecionando para autenticação...
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Not authenticated
-  if (!user) {
-    return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
-        <Header />
-        <div className="flex-1 flex items-center justify-center">
-          <div className="text-center p-8 bg-black/30 rounded-lg border border-[#ff0884]/30 max-w-md">
-            <Gamepad2 className="h-12 w-12 text-[#ff0884] mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-white mb-2">
-              Área Exclusiva
-            </h2>
-            <p className="text-gray-300 mb-6">
-              Faça login para acessar as plataformas e explorar toda a nossa
-              coleção de jogos.
-            </p>
-            <button
-              onClick={handleSignIn}
-              disabled={authRedirecting}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
-            >
-              <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
-              Entrar com Google
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Usuário autenticado, mas sem assinatura ativa
-  if (!subscription || subscription.status !== "active") {
-    return (
-      <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gamer-dark via-black to-black opacity-90 z-0"></div>
-        <Header />
-        <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="text-center py-10">
-            <Flame className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-            <h3 className="text-xl font-medium text-gray-400 mb-2">
-              Acesso Bloqueado
-            </h3>
-            <p className="text-gray-500 mb-6">
-              Assine o plano para desbloquear o acesso a todas as plataformas.
-            </p>
-            <button
-              onClick={handleCheckout}
-              className="px-6 py-2 bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] rounded-md border border-[#ff0884]/30 transition-colors duration-200"
-            >
-              Assinar agora!
-            </button>
-          </div>
-        </main>
-      </div>
-    );
-  }
+  // Sort the alphabet keys
+  const sortedLetters = Object.keys(groupedPlatforms).sort();
 
   return (
-    <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
-      {/* Background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gamer-dark via-black to-black opacity-90 z-0"></div>
-
+    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Header />
 
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 !pt-14">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">PLATAFORMAS</h1>
-          <p className={`${robotoCondensed.className} text-gray-400`}>
-            Selecione a Plataforma e vá direto para o Google Drive
-          </p>
-        </div>
-
-        {/* Campo de pesquisa */}
-        <div className="mb-8">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Search className="h-5 w-5 text-gray-400" />
+      <main className={`flex-grow pt-20 ${robotoCondensed.className}`}>
+        {/* Hero banner */}
+        <div
+          className="w-full h-[30vh] relative bg-cover bg-center"
+          style={{
+            background:
+              "linear-gradient(to right, rgba(255, 8, 132, 0.8), rgba(128, 0, 255, 0.8))",
+            backgroundImage: "url(/images/platforms-banner.webp)",
+            backgroundBlendMode: "overlay",
+          }}
+        >
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center p-8">
+              <h1 className="text-4xl md:text-6xl font-bold mb-4">
+                Gaming Platforms
+              </h1>
+              <p className="text-xl md:text-2xl max-w-3xl">
+                Discover our comprehensive collection of retro and modern gaming
+                platforms
+              </p>
             </div>
-            <input
-              type="text"
-              placeholder="Pesquisar plataformas..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-gray-800/60 border border-gray-700 rounded-lg py-3 pl-10 pr-4 placeholder-gray-500 text-gray-200 focus:outline-none focus:border-[#ff0884] focus:ring-1 focus:ring-[#ff0884] transition-colors"
-            />
           </div>
         </div>
 
-        {/* Grid de plataformas */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-          {filteredPlatforms.map((platform) => (
-            <a
-              key={platform.name}
-              href={platform.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 overflow-hidden shadow-lg transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.3)] hover:border-[#ff0884]/30 transform hover:-translate-y-1"
-            >
-              <div className="h-auto w-full overflow-hidden">
-                <Image
-                  src={platform.image || "/images/logos.webp"}
-                  alt={platform.fullName}
-                  width={300}
-                  height={200}
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
-                />
-              </div>
-              <div className="absolute bottom-0 left-0 right-0 w-full p-4 text-center pb-3">
-                <h3
-                  className={`${robotoCondensed.className} text-md font-regular text-white flex items-center justify-center`}
+        <div className="max-w-7xl mx-auto px-4 py-12">
+          {/* A-Z Navigation */}
+          <div className="sticky top-20 bg-gray-900/90 backdrop-blur-sm z-10 py-4 mb-8 shadow-md rounded-lg">
+            <div className="flex flex-wrap justify-center gap-2">
+              {sortedLetters.map((letter) => (
+                <a
+                  key={letter}
+                  href={`#${letter}`}
+                  className="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-[#ff0884] rounded-md font-bold transition-colors"
                 >
-                  {platform.fullName}
-                </h3>
+                  {letter}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Platforms grid by letter */}
+          {sortedLetters.map((letter) => (
+            <div key={letter} id={letter} className="mb-12 scroll-mt-32">
+              <h2 className="text-3xl font-bold mb-6 pl-4 border-l-4 border-[#ff0884]">
+                {letter}
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                {groupedPlatforms[letter].map((platform) => (
+                  <Link
+                    key={platform.name}
+                    href={`/platforms/${platform.name}`}
+                    className="bg-gray-800 rounded-lg p-4 flex flex-col items-center text-center hover:bg-gray-700 transition-all hover:shadow-lg hover:shadow-[#ff0884]/10 transform hover:-translate-y-1 group"
+                  >
+                    <div className="relative w-24 h-24 mb-4">
+                      <Image
+                        src={platform.image}
+                        alt={platform.fullName}
+                        fill
+                        sizes="100px"
+                        className="object-contain transition-transform group-hover:scale-110"
+                      />
+                    </div>
+                    <h3 className="text-lg font-semibold group-hover:text-[#ff0884]">
+                      {platform.fullName}
+                    </h3>
+                  </Link>
+                ))}
               </div>
-            </a>
+            </div>
           ))}
         </div>
-
-        {/* Mensagem caso não encontre resultados */}
-        {filteredPlatforms.length === 0 && (
-          <div className="text-center py-10">
-            <div className="text-gray-500 text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-medium text-gray-400 mb-2">
-              Nenhuma plataforma encontrada
-            </h3>
-            <p className="text-gray-500">Tente outro termo de pesquisa</p>
-          </div>
-        )}
       </main>
+
+      {/* Footer - Same as in platform detail page */}
+      <footer className="bg-black text-white py-12 border-t border-gray-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="md:flex md:justify-between">
+            <div className="mb-8 md:mb-0">
+              <div className="flex items-center space-x-2">
+                <Image
+                  src="/images/logos.webp"
+                  alt="RIESCADE Logo"
+                  width={35}
+                  height={35}
+                />
+                <h3 className="text-xl font-bold">RIESCADE</h3>
+              </div>
+              <p className="text-gray-400 mt-2">
+                RetroGames e Games, sempre emulando...
+              </p>
+            </div>
+
+            {/* Social links */}
+            <div className="mt-8 flex flex-col space-y-4">
+              <div className="flex space-x-6">
+                <Link
+                  href="https://t.me/riescade"
+                  className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                  target="_blank"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 496 512"
+                    className="h-6 w-6 mr-2 fill-current"
+                  >
+                    <path d="M248 8C111.033 8 0 119.033 0 256s111.033 248 248 248 248-111.033 248-248S384.967 8 248 8zm114.952 168.66c-3.732 39.215-19.881 134.378-28.1 178.3-3.476 18.584-10.322 24.816-16.948 25.425-14.4 1.326-25.338-9.517-39.287-18.661-21.827-14.308-34.158-23.215-55.346-37.177-24.485-16.135-8.612-25 5.342-39.5 3.652-3.793 67.107-61.51 68.335-66.746.153-.655.3-3.1-1.154-4.384s-3.59-.849-5.135-.5q-3.283.746-104.608 69.142-14.845 10.194-26.894 9.934c-8.855-.191-25.888-5.006-38.551-9.123-15.531-5.048-27.875-7.717-26.8-16.291q.84-6.7 18.45-13.7 108.446-47.248 144.628-62.3c68.872-28.647 83.183-33.623 92.511-33.789 2.052-.034 6.639.474 9.61 2.885a10.452 10.452 0 0 1 3.53 6.716 43.765 43.765 0 0 1 .417 9.769z" />
+                  </svg>
+                  <span className="hidden md:flex">Telegram</span>
+                </Link>
+
+                {/* Add other social links here */}
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

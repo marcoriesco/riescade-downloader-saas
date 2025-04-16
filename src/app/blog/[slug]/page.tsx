@@ -17,13 +17,13 @@ import { formatDate } from "@/lib/utils";
 import { Metadata } from "next";
 import { Header } from "@/components/Header";
 import { Roboto, Roboto_Condensed } from "next/font/google";
-import styles from "../../../styles/markdown.module.css";
+import styles from "@/styles/markdown.module.css";
 
 // Define platform keywords and their corresponding URLs
 const PLATFORM_KEYWORDS = {
-  gameboy: "/platforms/gameboy",
+  gameboy: "/platforms/gb",
   nintendo: "/platforms/nintendo",
-  playstation: "/platforms/playstation",
+  playstation: "/platforms/psx",
   sega: "/platforms/sega",
   xbox: "/platforms/xbox",
   atari: "/platforms/atari",
@@ -32,6 +32,19 @@ const PLATFORM_KEYWORDS = {
   snes: "/platforms/snes",
   n64: "/platforms/n64",
   genesis: "/platforms/genesis",
+  "master system": "/platforms/mastersystem",
+  "mega drive": "/platforms/megadrive",
+  "game boy color": "/platforms/gbc",
+  "game boy advance": "/platforms/gba",
+  "nintendo 64": "/platforms/n64",
+  "super nintendo": "/platforms/snes",
+  "playstation 2": "/platforms/ps2",
+  ps2: "/platforms/ps2",
+  ps1: "/platforms/psx",
+  psx: "/platforms/psx",
+  gba: "/platforms/gba",
+  gbc: "/platforms/gbc",
+  gb: "/platforms/gb",
 };
 
 const roboto = Roboto({
