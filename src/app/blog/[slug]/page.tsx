@@ -144,7 +144,7 @@ export default function BlogPost({
         linkedKeywords.add(lowerMatch);
         const url =
           PLATFORM_KEYWORDS[lowerMatch as keyof typeof PLATFORM_KEYWORDS];
-        return `<a href="${url}" class="platform-link">${match}</a>`;
+        return `<a href="${url}" class="platform-link ${styles.platformLink}">${match}</a>`;
       }
       return match;
     });

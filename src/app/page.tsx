@@ -244,7 +244,6 @@ export default function Home() {
 
         {/* Pricing Section - Redesenhada */}
         <div className="py-20 bg-[#13111C] relative">
-          <div className="absolute inset-0 bg-[url('/noise.webp')] opacity-5"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-left mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">

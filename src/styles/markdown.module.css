@@ -3,7 +3,8 @@
 }
 
 /* Styling for automatic platform links */
-:global(.platform-link) {
+.platformLink,
+.markdown :global(.platform-link) {
   @apply text-[#ff0884] font-semibold relative inline-block;
   text-decoration: none;
   background-image: linear-gradient(
@@ -17,7 +18,8 @@
   transition: background-size 0.2s, color 0.2s;
 }
 
-:global(.platform-link:hover) {
+.markdown :global(.platform-link:hover),
+.platformLink:hover {
   @apply text-[#ff6eb7];
   background-size: 100% 40%;
 }
