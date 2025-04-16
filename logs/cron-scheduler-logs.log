@@ -28,3 +28,12 @@ Iniciando verificação de posts agendados para 2025-04-16...
 Nenhum post para publicar hoje.
 
 2025-04-16T07:42:15.821Z - Execução manual concluída com sucesso
+2025-04-16T17:23:06.877Z - Iniciando o agendador de publicação de posts...
+2025-04-16T17:23:06.889Z - Executando publicação imediatamente por solicitação da linha de comando
+2025-04-16T17:23:06.898Z - Agendador iniciado. Posts serão publicados automaticamente às 8:00 da manhã todos os dias.
+2025-04-16T17:23:06.899Z - Use 'npm run publish-post' para executar manualmente.
+2025-04-16T17:23:15.135Z - Saída do script:
+Iniciando verificação de posts agendados para 2025-04-16...
+Nenhum post para publicar hoje.
+
+2025-04-16T17:23:15.135Z - Execução manual concluída com sucesso
