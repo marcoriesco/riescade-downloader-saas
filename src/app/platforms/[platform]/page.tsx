@@ -97,8 +97,11 @@ async function getPlatformMetadata(
   platform: string
 ): Promise<PlatformMetadata | null> {
   try {
+    console.log(`Fetching metadata for platform: ${platform}`);
+
     // Map platform name to its potential XML file name
     const mappedName = PLATFORM_MAPPINGS[platform.toLowerCase()] || platform;
+    console.log(`Mapped name: ${mappedName}`);
 
     // Determine the XML file path - try different possible file names
     const possiblePaths = [
@@ -106,34 +109,60 @@ async function getPlatformMetadata(
       path.join(process.cwd(), "src", "data", "platforms", `${mappedName}.xml`),
     ];
 
+    console.log(`Looking for XML files at: ${possiblePaths.join(", ")}`);
+
     let xmlData = null;
+    let foundPath = null;
+
     for (const xmlPath of possiblePaths) {
       try {
         xmlData = await fs.readFile(xmlPath, "utf-8");
+        foundPath = xmlPath;
+        console.log(`Successfully read XML from: ${xmlPath}`);
         break; // Found a valid XML file
-      } catch {
+      } catch (err) {
+        console.log(
+          `Could not read from ${xmlPath}: ${(err as Error).message}`
+        );
         // Continue to next potential path
         continue;
       }
     }
 
     if (!xmlData) {
+      console.log(`No XML data found for platform: ${platform}`);
       return null; // No XML file found for this platform
     }
 
-    // Parse XML data
-    const parsedData = await parseStringPromise(xmlData);
-    const variables = parsedData.theme.variables[0];
+    try {
+      // Parse XML data
+      const parsedData = await parseStringPromise(xmlData);
 
-    // Extract metadata
-    const metadata: PlatformMetadata = {};
-    for (const key in variables) {
-      if (Object.prototype.hasOwnProperty.call(variables, key)) {
-        metadata[key as keyof PlatformMetadata] = variables[key][0];
+      if (
+        !parsedData.theme ||
+        !parsedData.theme.variables ||
+        !parsedData.theme.variables[0]
+      ) {
+        console.log(`Invalid XML structure for ${foundPath}`);
+        return null;
       }
-    }
 
-    return metadata;
+      const variables = parsedData.theme.variables[0];
+
+      // Extract metadata
+      const metadata: PlatformMetadata = {};
+      for (const key in variables) {
+        if (Object.prototype.hasOwnProperty.call(variables, key)) {
+          metadata[key as keyof PlatformMetadata] = variables[key][0];
+        }
+      }
+
+      console.log(`Successfully parsed metadata for ${platform}`);
+      return metadata;
+    } catch (parseError) {
+      console.error(`Error parsing XML for ${platform}:`, parseError);
+      return null;
+    }
   } catch (error) {
     console.error(`Error reading platform metadata for ${platform}:`, error);
     return null;
@@ -159,9 +188,10 @@ export default function PlatformPage({
   const hasMetadata = metadata !== null;
 
   // Generate background gradient based on platform colors
-  const bgGradient = metadata?.systemColor
-    ? `linear-gradient(to bottom, #${metadata.systemColor}33, #121212)`
-    : "linear-gradient(to bottom, rgba(255, 8, 132, 0.2), #121212)";
+  const bgGradient =
+    metadata?.systemColor && metadata.systemColor.trim() !== ""
+      ? `linear-gradient(to bottom, #${metadata.systemColor}33, #121212)`
+      : "linear-gradient(to bottom, rgba(255, 8, 132, 0.2), #121212)";
 
   // Check if system image exists
   const systemImagePath = `/images/platforms/systems/${platform}.webp`;
@@ -177,16 +207,21 @@ export default function PlatformPage({
         >
           <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
             <div className="text-center p-8">
-              <Image
-                src={platformInfo.image.replace(
-                  "/images/platform/",
-                  "/images/platforms/logos/"
-                )}
-                alt={platformInfo.fullName}
-                width={128}
-                height={128}
-                className="mx-auto mb-6"
-              />
+              <div className="mx-auto mb-6 relative w-[128px] h-[128px] flex items-center justify-center">
+                <Image
+                  src={platformInfo.image.replace(
+                    "/images/platform/",
+                    "/images/platforms/logos/"
+                  )}
+                  alt={platformInfo.fullName}
+                  width={128}
+                  height={128}
+                  className="object-contain"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = platformInfo.image;
+                  }}
+                />
+              </div>
               <h1 className="text-5xl font-bold mb-4">
                 {platformInfo.fullName}
               </h1>
@@ -231,10 +266,15 @@ export default function PlatformPage({
                         className="object-contain p-4"
                         sizes="(max-width: 768px) 100vw, 500px"
                         onError={(e) => {
+                          console.log(
+                            `Failed to load image: ${systemImagePath}`
+                          );
                           // If image fails to load, replace with placeholder
                           (e.target as HTMLImageElement).src =
                             "/images/platforms/placeholder-console.webp";
                         }}
+                        priority={false}
+                        loading="lazy"
                       />
                     </div>
                   </div>
@@ -443,9 +483,23 @@ export default function PlatformPage({
                     height={300}
                     className="mx-auto object-contain bg-gray-900/50 p-6 rounded-xl"
                     onError={(e) => {
+                      console.log(
+                        `Failed to load fallback image: ${systemImagePath}`
+                      );
                       // If image fails to load, hide it
                       (e.target as HTMLImageElement).style.display = "none";
+                      // Try to adjust the parent container to avoid layout shift
+                      try {
+                        const parent = (e.target as HTMLImageElement)
+                          .parentElement;
+                        if (parent) {
+                          parent.style.display = "none";
+                        }
+                      } catch (err) {
+                        console.log("Error hiding parent element:", err);
+                      }
                     }}
+                    loading="lazy"
                   />
 
                   <div className="flex flex-col justify-center items-center space-y-4">
