@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -17,31 +17,34 @@ const robotoCondensed = Roboto_Condensed({
 
 export const revalidate = 3600; // Revalidate every hour
 
-export default async function Blog({
+export default function Blog({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  // Get search parameters
-  const category = searchParams.category as string;
-  const tag = searchParams.tag as string;
-  const search = searchParams.search as string;
-  const page = parseInt((searchParams.page as string) || "1");
+  // Get search parameters resolved
+  const resolvedParams = use(searchParams);
+  const category = resolvedParams.category as string;
+  const tag = resolvedParams.tag as string;
+  const search = resolvedParams.search as string;
+  const page = parseInt((resolvedParams.page as string) || "1");
 
   // Fetch blog posts with filters
-  const { data: posts, count } = await getBlogPosts({
-    category,
-    tag,
-    search,
-    page,
-    limit: 9,
-  });
+  const { data: posts, count } = use(
+    getBlogPosts({
+      category,
+      tag,
+      search,
+      page,
+      limit: 9,
+    })
+  );
 
   // Fetch featured posts for hero section
-  const featuredPosts = await getFeaturedPosts(3);
+  const featuredPosts = use(getFeaturedPosts(3));
 
   // Fetch categories for sidebar
-  const categories = await getBlogCategories();
+  const categories = use(getBlogCategories());
 
   // Calculate pagination
   const totalPages = Math.ceil(count / 9);
@@ -129,7 +132,7 @@ export default async function Blog({
                     currentPage={page}
                     totalPages={totalPages}
                     baseUrl="/blog"
-                    searchParams={searchParams}
+                    searchParams={resolvedParams}
                   />
                 </>
               ) : (

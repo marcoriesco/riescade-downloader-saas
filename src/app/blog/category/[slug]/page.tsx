@@ -3,18 +3,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Header } from "@/components/Header";
-
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
+import { use } from "react";
 
 // Gerar metadados dinâmicos para SEO
 export async function generateMetadata({
   params,
-}: PageProps): Promise<Metadata> {
-  const categoryName = params.slug
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const categoryName = slug
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
@@ -35,30 +33,39 @@ function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString("pt-BR", options);
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export default function CategoryPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   // Transformar o slug de volta para o nome da categoria
-  const categoryName = params.slug
+  const { slug } = use(params);
+  const categoryName = slug
     .split("-")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 
   // Buscar posts da categoria
-  const { data: posts, error } = await supabase
-    .from("blog_posts")
-    .select("*")
-    .eq("category", categoryName)
-    .eq("status", "published")
-    .order("published_at", { ascending: false });
+  const { data: posts, error } = use(
+    supabase
+      .from("blog_posts")
+      .select("*")
+      .eq("category", categoryName)
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+  );
 
   if (error) {
     console.error("Erro ao buscar posts:", error);
   }
 
   // Buscar todas as categorias para o sidebar
-  const { data: categories } = await supabase
-    .from("blog_categories")
-    .select("name, slug, post_count")
-    .order("post_count", { ascending: false });
+  const { data: categories } = use(
+    supabase
+      .from("blog_categories")
+      .select("name, slug, post_count")
+      .order("post_count", { ascending: false })
+  );
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">

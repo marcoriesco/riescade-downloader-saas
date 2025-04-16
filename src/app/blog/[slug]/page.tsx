@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -34,13 +34,14 @@ interface BlogPost {
   views: number;
 }
 
-type Props = {
-  params: { slug: string };
-};
-
 // Generate metadata for the page
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getBlogPostBySlug(params.slug);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
 
   if (!post) {
     return {
@@ -62,18 +63,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BlogPost({ params }: Props) {
-  const post = await getBlogPostBySlug(params.slug);
+export default function BlogPost({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = use(params);
+  const post = use(getBlogPostBySlug(slug));
 
   if (!post) {
     notFound();
   }
 
   // Update view count
-  await updatePostViews(post.id);
+  updatePostViews(post.id);
 
   // Get related posts
-  const relatedPosts = await getRelatedPosts(post, 3);
+  const relatedPosts = use(getRelatedPosts(post, 3));
 
   // Create category slug from category name
   const categorySlug = post.category.toLowerCase().replace(/\s+/g, "-");
