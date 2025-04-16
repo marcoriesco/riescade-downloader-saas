@@ -97,7 +97,10 @@ export default function PlatformsPage() {
                   >
                     <div className="relative w-24 h-24 mb-4">
                       <Image
-                        src={platform.image}
+                        src={platform.image.replace(
+                          "/images/platform/",
+                          "/images/platforms/logos/"
+                        )}
                         alt={platform.fullName}
                         fill
                         sizes="100px"
