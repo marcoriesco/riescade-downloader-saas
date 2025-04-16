@@ -84,7 +84,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 header-backdrop">
+    <header className="fixed w-full top-0 z-50 header-backdrop">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
         <Link href="/" className="flex items-center space-x-2">
           <div className="flex items-center">

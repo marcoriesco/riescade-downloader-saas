@@ -20,9 +20,9 @@ export function Video(props: { video: string }) {
       </video>
 
       {/* Overlay image - ajustado para ser mais transparente */}
-      <div className="absolute inset-0 z-5 opacity-70 mix-blend-overlay">
+      <div className="absolute inset-0 z-5">
         <Image
-          src="/images/overlay.png"
+          src="/images/overlay.webp"
           alt="Overlay"
           fill
           style={{ objectFit: "cover" }}

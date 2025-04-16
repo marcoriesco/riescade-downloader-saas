@@ -13,6 +13,7 @@ interface BlogPost {
   cover_image: string | null;
   published_at: string | null;
   category: string;
+  reading_time?: number;
 }
 
 export default function BlogPostsPreview() {
@@ -25,7 +26,7 @@ export default function BlogPostsPreview() {
         const { data, error } = await supabase
           .from("blog_posts")
           .select(
-            "id, title, slug, excerpt, cover_image, published_at, category"
+            "id, title, slug, excerpt, cover_image, published_at, category, reading_time"
           )
           .eq("status", "published")
           .order("published_at", { ascending: false })
@@ -53,10 +54,10 @@ export default function BlogPostsPreview() {
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="border border-gray-700 rounded-lg overflow-hidden shadow-sm bg-gray-800 animate-pulse"
+            className="bg-gray-800 rounded-xl overflow-hidden shadow-lg border border-gray-700 animate-pulse h-full"
           >
             <div className="h-48 w-full bg-gray-700"></div>
-            <div className="p-4">
+            <div className="p-6">
               <div className="h-6 bg-gray-700 rounded mb-4"></div>
               <div className="h-4 bg-gray-700 rounded mb-2"></div>
               <div className="h-4 bg-gray-700 rounded mb-2 w-3/4"></div>
@@ -70,9 +71,23 @@ export default function BlogPostsPreview() {
 
   if (posts.length === 0) {
     return (
-      <div className="col-span-3 text-center py-12 bg-gray-800 rounded-lg">
-        <h3 className="text-xl font-medium mb-2">Nenhum post encontrado</h3>
-        <p className="text-gray-400 mb-4">
+      <div className="col-span-3 bg-gray-800/50 border border-gray-700 rounded-xl p-12 text-center">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-16 w-16 mx-auto mb-6 text-gray-600"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <h3 className="text-2xl font-bold mb-2">Nenhum post encontrado</h3>
+        <p className="text-gray-400 mb-6">
           Novos artigos serão publicados em breve!
         </p>
       </div>
@@ -84,37 +99,83 @@ export default function BlogPostsPreview() {
       {posts.map((post) => (
         <article
           key={post.id}
-          className="border border-gray-700 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow bg-gray-800"
+          className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-[#ff0884]/5 transition-all duration-300 border border-gray-700 hover:border-[#ff0884]/30 h-full flex flex-col"
         >
-          {post.cover_image && (
+          <Link href={`/blog/${post.slug}`}>
             <div className="relative h-48 w-full">
-              <Image
-                src={post.cover_image}
-                alt={post.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover"
-              />
+              {post.cover_image ? (
+                <Image
+                  src={post.cover_image}
+                  alt={post.title}
+                  fill
+                  className="object-cover"
+                />
+              ) : (
+                <div className="h-full w-full bg-gradient-to-r from-gray-700 to-gray-600 flex items-center justify-center">
+                  <span className="text-gray-400">Sem imagem</span>
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
+              <div className="absolute bottom-4 left-4">
+                <span className="bg-[#ff0884]/20 text-[#ff0884] px-2 py-1 rounded text-xs font-bold">
+                  {post.category}
+                </span>
+              </div>
             </div>
-          )}
-          <div className="p-4">
-            <div className="mb-2">
-              <span className="inline-block bg-[#ff0884] text-white text-xs px-2 py-1 rounded">
-                {post.category || "Sem categoria"}
-              </span>
+          </Link>
+
+          <div className="p-6 flex-grow flex flex-col">
+            <div className="flex-grow">
+              <Link href={`/blog/${post.slug}`}>
+                <h2 className="text-xl font-bold mb-3 hover:text-[#ff0884] transition-colors line-clamp-2">
+                  {post.title}
+                </h2>
+              </Link>
+              <p className="text-gray-400 mb-4 line-clamp-3">{post.excerpt}</p>
             </div>
-            <Link href={`/blog/${post.slug}`}>
-              <h3 className="text-xl font-semibold mb-2 hover:text-[#ff0884]">
-                {post.title}
-              </h3>
-            </Link>
-            <p className="text-gray-300 mb-4 line-clamp-2">{post.excerpt}</p>
-            <Link
-              href={`/blog/${post.slug}`}
-              className="text-[#ff0884] hover:underline text-sm font-medium"
-            >
-              Leia mais →
-            </Link>
+
+            <div className="flex items-center justify-between mt-4 text-sm text-gray-400">
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                  />
+                </svg>
+                {post.published_at
+                  ? new Date(post.published_at).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })
+                  : "Não publicado"}
+              </div>
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 mr-1"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                {post.reading_time || 5} min
+              </div>
+            </div>
           </div>
         </article>
       ))}

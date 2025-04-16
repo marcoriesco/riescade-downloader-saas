@@ -51,4 +51,59 @@ body {
   .rounded-md {
     border-radius: 1rem;
   }
+
+  .mask-gradient-border {
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+  }
+}
+
+/* Custom share button hover effects */
+.share-button-hover {
+  transition: all 0.3s ease;
+}
+
+.share-button-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Specific button hover glows */
+.twitter-share:hover {
+  box-shadow: 0 0 15px rgba(29, 161, 242, 0.5);
+}
+
+.facebook-share:hover {
+  box-shadow: 0 0 15px rgba(24, 119, 242, 0.5);
+}
+
+.linkedin-share:hover {
+  box-shadow: 0 0 15px rgba(0, 119, 181, 0.5);
+}
+
+.whatsapp-share:hover {
+  box-shadow: 0 0 15px rgba(37, 211, 102, 0.5);
+}
+
+.instagram-share:hover {
+  box-shadow: 0 0 15px rgba(225, 48, 108, 0.5);
+}
+
+/* Animated gradients for buttons */
+@keyframes gradient-shift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
 }
