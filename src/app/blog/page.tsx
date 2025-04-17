@@ -12,8 +12,6 @@ const robotoCondensed = Roboto_Condensed({
   weight: ["400", "700"],
 });
 
-export const revalidate = 3600;
-
 // Manually defined categories
 const categories = [
   { id: "1", name: "Tutoriais", slug: "tutoriais", post_count: 5 },
