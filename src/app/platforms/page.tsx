@@ -9,7 +9,7 @@ import platformsData from "@/data/platforms.json";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
 import { User } from "@supabase/supabase-js";
-import { Gamepad2 } from "lucide-react";
+import { Gamepad2, Search } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
@@ -33,6 +33,10 @@ export default function PlatformsPage() {
   const [user, setUser] = useState<User | null>(null);
   const [authChecking, setAuthChecking] = useState(true);
   const [authRedirecting, setAuthRedirecting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredPlatforms, setFilteredPlatforms] = useState<PlatformData[]>(
+    []
+  );
 
   // Handle sign in with OAuth
   const handleSignIn = async () => {
@@ -57,6 +61,26 @@ export default function PlatformsPage() {
       setAuthRedirecting(false);
     }
   };
+
+  // Filter platforms based on search term
+  useEffect(() => {
+    if (!searchTerm.trim()) {
+      setFilteredPlatforms(platformsData as PlatformData[]);
+    } else {
+      const term = searchTerm.toLowerCase();
+      const filtered = (platformsData as PlatformData[]).filter(
+        (platform) =>
+          platform.fullName.toLowerCase().includes(term) ||
+          platform.name.toLowerCase().includes(term)
+      );
+      setFilteredPlatforms(filtered);
+    }
+  }, [searchTerm]);
+
+  // Initialize filtered platforms with all platforms
+  useEffect(() => {
+    setFilteredPlatforms(platformsData as PlatformData[]);
+  }, []);
 
   // Verificar autenticação ao carregar a página
   useEffect(() => {
@@ -148,20 +172,6 @@ export default function PlatformsPage() {
     );
   }
 
-  // Group platforms by first letter for A-Z navigation
-  const groupedPlatforms: Record<string, PlatformData[]> = {};
-
-  (platformsData as PlatformData[]).forEach((platform) => {
-    const firstLetter = platform.fullName.charAt(0).toUpperCase();
-    if (!groupedPlatforms[firstLetter]) {
-      groupedPlatforms[firstLetter] = [];
-    }
-    groupedPlatforms[firstLetter].push(platform);
-  });
-
-  // Sort the alphabet keys
-  const sortedLetters = Object.keys(groupedPlatforms).sort();
-
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Header />
@@ -191,29 +201,37 @@ export default function PlatformsPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 py-12">
-          {/* A-Z Navigation */}
+          {/* Search Bar */}
           <div className="sticky top-20 bg-gray-900/90 backdrop-blur-sm z-10 py-4 mb-8 shadow-md rounded-lg">
-            <div className="flex flex-wrap justify-center gap-2">
-              {sortedLetters.map((letter) => (
-                <a
-                  key={letter}
-                  href={`#${letter}`}
-                  className="w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-[#ff0884] rounded-md font-bold transition-colors"
-                >
-                  {letter}
-                </a>
-              ))}
+            <div className="flex items-center justify-center max-w-2xl mx-auto">
+              <div className="relative w-full">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  className="block w-full pl-10 pr-3 py-3 bg-gray-800 border border-gray-700 placeholder-gray-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff0884] focus:border-transparent"
+                  placeholder="Pesquisar plataformas..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                {searchTerm && (
+                  <button
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    onClick={() => setSearchTerm("")}
+                  >
+                    <span className="text-gray-400 hover:text-white">×</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Platforms grid by letter */}
-          {sortedLetters.map((letter) => (
-            <div key={letter} id={letter} className="mb-12 scroll-mt-32">
-              <h2 className="text-3xl font-bold mb-6 pl-4 border-l-4 border-[#ff0884]">
-                {letter}
-              </h2>
+          {/* Platforms grid */}
+          <div className="mb-12">
+            {filteredPlatforms.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {groupedPlatforms[letter].map((platform) => (
+                {filteredPlatforms.map((platform) => (
                   <div
                     key={platform.name}
                     className="bg-gray-800 rounded-lg p-4 flex flex-col items-center text-center hover:bg-gray-700 transition-all hover:shadow-lg hover:shadow-[#ff0884]/10 transform hover:-translate-y-1 group"
@@ -278,8 +296,21 @@ export default function PlatformsPage() {
                   </div>
                 ))}
               </div>
-            </div>
-          ))}
+            ) : (
+              <div className="text-center py-12">
+                <div className="inline-block p-3 rounded-full bg-gray-800 mb-4">
+                  <Search className="h-8 w-8 text-[#ff0884]" />
+                </div>
+                <h3 className="text-xl font-bold mb-2">
+                  Nenhuma plataforma encontrada
+                </h3>
+                <p className="text-gray-400">
+                  Não encontramos nenhuma plataforma com &quot;{searchTerm}
+                  &quot;. Tente outro termo.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       </main>
 
