@@ -284,7 +284,7 @@ export default function PlatformPage({
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="max-w-3xl mx-auto px-4 py-12">
           {/* Platform buttons section */}
           <div className="flex flex-col md:flex-row gap-6 justify-center mb-12">
             <a
@@ -329,7 +329,7 @@ export default function PlatformPage({
           {/* Content section with actual metadata */}
           <div className="grid grid-cols-1 gap-12">
             {!showModal && metadata ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <div className="grid grid-cols-1 gap-12">
                 {/* Left column: Image and Description */}
                 <div className="space-y-8">
                   {/* System Image - if available */}
@@ -339,7 +339,7 @@ export default function PlatformPage({
                         src={systemImagePath}
                         alt={`${platformInfo.fullName} Console`}
                         fill
-                        className="object-contain p-4"
+                        className="object-contain p-16"
                         sizes="(max-width: 768px) 100vw, 500px"
                         onError={(e) => {
                           console.log(
