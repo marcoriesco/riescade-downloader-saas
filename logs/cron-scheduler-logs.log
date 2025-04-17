@@ -37,3 +37,15 @@ Iniciando verificação de posts agendados para 2025-04-16...
 Nenhum post para publicar hoje.
 
 2025-04-16T17:23:15.135Z - Execução manual concluída com sucesso
+2025-04-17T13:57:17.955Z - Iniciando o agendador de publicação de posts...
+2025-04-17T13:57:17.959Z - Executando publicação imediatamente por solicitação da linha de comando
+2025-04-17T13:57:17.967Z - Agendador iniciado. Posts serão publicados automaticamente às 8:00 da manhã todos os dias.
+2025-04-17T13:57:17.968Z - Use 'npm run publish-post' para executar manualmente.
+2025-04-17T13:57:35.197Z - Saída do script:
+Iniciando verificação de posts agendados para 2025-04-17...
+Publicando post para hoje: "O Grande Crash de 1983: Como o Atari Quase Destruiu a Indústria de Videogames"
+Post "O Grande Crash de 1983: Como o Atari Quase Destruiu a Indústria de Videogames" inserido com sucesso no Supabase com ID: e76e72a4-30c6-4978-b379-1d898f67c7c8
+Arquivo 2025-04-17-atari-crash-1983.json atualizado, post marcado como publicado.
+Publicação concluída com sucesso.
+
+2025-04-17T13:57:35.197Z - Execução manual concluída com sucesso
