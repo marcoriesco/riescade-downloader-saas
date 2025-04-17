@@ -66,33 +66,12 @@ async function throttledRequest<T>(
   }
 }
 
-// Server-side Supabase client that uses cookies
-async function getServerSupabase() {
-  // If we're in a server component, try to use cookies
-  if (typeof window === "undefined") {
-    try {
-      // We'll use a safer approach that doesn't rely on direct imports
-      // that might not be available
-      return createClient(supabaseUrl, supabaseKey);
-    } catch {
-      // If we can't create a server client, fall back to the default client
-      console.warn("Failed to create server-side Supabase client");
-    }
-  }
-
-  // Return the default client if we're on the client side or if server-side init failed
-  return supabase;
-}
-
 // Posts
 export async function getBlogPosts(
   params?: QueryParams
 ): Promise<{ data: BlogPost[]; count: number }> {
   try {
-    // Get the appropriate client
-    const client = await getServerSupabase();
-
-    let query = client
+    let query = supabase
       .from("blog_posts")
       .select("*", { count: "exact" })
       .eq("status", "published")
@@ -145,9 +124,7 @@ export async function getBlogPostBySlug(
 
   return throttledRequest(cacheKey, async () => {
     try {
-      const client = await getServerSupabase();
-
-      const { data, error } = await client
+      const { data, error } = await supabase
         .from("blog_posts")
         .select("*")
         .eq("slug", slug)
@@ -175,9 +152,7 @@ export async function getRelatedPosts(
 
   return throttledRequest(cacheKey, async () => {
     try {
-      const client = await getServerSupabase();
-
-      const { data, error } = await client
+      const { data, error } = await supabase
         .from("blog_posts")
         .select("*")
         .eq("status", "published")
@@ -200,9 +175,7 @@ export async function getRelatedPosts(
 
 export async function getFeaturedPosts(limit = 5): Promise<BlogPost[]> {
   try {
-    const client = await getServerSupabase();
-
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from("blog_posts")
       .select("*")
       .eq("status", "published")
@@ -223,9 +196,12 @@ export async function getFeaturedPosts(limit = 5): Promise<BlogPost[]> {
 }
 
 export async function updatePostViews(postId: string): Promise<void> {
+  // Só executa no cliente
+  if (typeof window === "undefined") {
+    return;
+  }
+
   try {
-    // Sempre usar a API para atualizar visualizações
-    // Esta abordagem funciona tanto no cliente quanto no servidor
     await fetch(`/api/update-post-views?id=${postId}`, {
       method: "POST",
     });
@@ -237,9 +213,7 @@ export async function updatePostViews(postId: string): Promise<void> {
 // Categories
 export async function getBlogCategories(): Promise<BlogCategory[]> {
   try {
-    const client = await getServerSupabase();
-
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from("blog_categories")
       .select("*")
       .order("name", { ascending: true });
@@ -260,9 +234,7 @@ export async function getCategoryBySlug(
   slug: string
 ): Promise<BlogCategory | null> {
   try {
-    const client = await getServerSupabase();
-
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from("blog_categories")
       .select("*")
       .eq("slug", slug)
@@ -283,9 +255,7 @@ export async function getCategoryBySlug(
 // Calendar
 export async function getCalendarEntries(): Promise<CalendarEntry[]> {
   try {
-    const client = await getServerSupabase();
-
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from("blog_calendar")
       .select("*")
       .order("scheduled_date", { ascending: true });
@@ -306,9 +276,7 @@ export async function createCalendarEntry(
   entry: Omit<CalendarEntry, "id" | "created_at" | "updated_at">
 ): Promise<CalendarEntry | null> {
   try {
-    const client = await getServerSupabase();
-
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from("blog_calendar")
       .insert([entry])
       .select()
@@ -331,9 +299,7 @@ export async function updateCalendarEntry(
   updates: Partial<CalendarEntry>
 ): Promise<CalendarEntry | null> {
   try {
-    const client = await getServerSupabase();
-
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from("blog_calendar")
       .update(updates)
       .eq("id", id)
@@ -357,9 +323,7 @@ export async function getBlogPostStats(
   postId: string
 ): Promise<BlogStats | null> {
   try {
-    const client = await getServerSupabase();
-
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from("blog_stats")
       .select("*")
       .eq("post_id", postId)
@@ -382,9 +346,7 @@ export async function createBlogPost(
   post: Omit<BlogPost, "id" | "created_at" | "updated_at">
 ): Promise<BlogPost | null> {
   try {
-    const client = await getServerSupabase();
-
-    const { data, error } = await client
+    const { data, error } = await supabase
       .from("blog_posts")
       .insert([post])
       .select()
