@@ -99,13 +99,22 @@ export default function PlatformPage({
 
     // Check for XML metadata file using the API
     async function checkXmlFile() {
+      console.log(`Fetching XML metadata for platform: ${platform}`);
       try {
         const response = await fetch(`/api/xml-check?platform=${platform}`);
         if (response.ok) {
           const data = await response.json();
-          setMetadata(data);
+          console.log("API response data:", data);
+
+          if (data.exists && data.metadata) {
+            console.log("Metadata found in response, setting state");
+            setMetadata(data.metadata);
+          } else {
+            console.log("No metadata in response, showing modal");
+            setShowModal(true);
+          }
         } else {
-          // If API returns an error or no metadata, show modal
+          console.log("API returned error, showing modal");
           setShowModal(true);
         }
       } catch (error) {
@@ -124,7 +133,7 @@ export default function PlatformPage({
 
   // Generate background color gradient from platform metadata or use default
   const backgroundGradient = metadata?.systemColor
-    ? `linear-gradient(to bottom, ${metadata.systemColor}33, #121212)`
+    ? `linear-gradient(to bottom, #${metadata.systemColor}33, #121212)`
     : "linear-gradient(to bottom, rgba(255, 8, 132, 0.2), #121212)";
 
   // Show redirecting state when auth is in progress
@@ -197,8 +206,8 @@ export default function PlatformPage({
         {/* Main Content Section */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid grid-cols-1 gap-12">
-            {!showModal && metadata ? (
-              <div className="grid grid-cols-1 gap-12">
+            {metadata && !showModal ? (
+              <>
                 {/* Left column: Image and Description */}
                 <div className="space-y-8">
                   {/* System Image - if available */}
@@ -349,7 +358,7 @@ export default function PlatformPage({
                     </div>
                   </div>
                 </div>
-              </div>
+              </>
             ) : (
               <div className="bg-gray-800/50 p-10 rounded-xl text-center shadow-xl border border-gray-700/50 relative">
                 <svg
@@ -427,6 +436,25 @@ export default function PlatformPage({
       </main>
 
       <Footer />
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">Metadata Not Found</h2>
+            <p className="mb-4">
+              This platform does not have an XML metadata file yet.
+            </p>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

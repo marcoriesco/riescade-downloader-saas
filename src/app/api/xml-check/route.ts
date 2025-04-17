@@ -22,11 +22,15 @@ export async function GET(request: NextRequest) {
       `${platform}.xml`
     );
 
+    console.log(`Checking for XML file: ${xmlFilePath}`);
+
     // Verificar se o arquivo existe
     if (!fs.existsSync(xmlFilePath)) {
       console.log(`XML file for ${platform} not found: ${xmlFilePath}`);
       return NextResponse.json({ exists: false });
     }
+
+    console.log(`XML file found for ${platform}, parsing content...`);
 
     // Ler e converter o XML
     const xmlContent = fs.readFileSync(xmlFilePath, "utf-8");
@@ -52,9 +56,11 @@ export async function GET(request: NextRequest) {
         systemColorPalette4: variables.systemColorPalette4?.[0] || "110011",
       };
 
+      console.log(`Successfully extracted metadata for ${platform}`);
       return NextResponse.json({ exists: true, metadata });
     }
 
+    console.log(`Invalid metadata format for ${platform}`);
     return NextResponse.json(
       { exists: true, error: "Formato de metadados inválido" },
       { status: 400 }
