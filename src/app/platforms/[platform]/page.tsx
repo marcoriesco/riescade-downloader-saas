@@ -7,6 +7,12 @@ import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Roboto_Condensed } from "next/font/google";
 import platformsData from "@/data/platforms.json";
+import { supabase } from "@/lib/supabase";
+import Footer from "@/components/Footer";
+import { User } from "@supabase/supabase-js";
+import { Gamepad2 } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -46,9 +52,12 @@ export default function PlatformPage({
   const resolvedParams = use(params);
   const platform = resolvedParams.platform;
 
+  const [user, setUser] = useState<User | null>(null);
   const [metadata, setMetadata] = useState<PlatformMetadata | null>(null);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
+  const [authRedirecting, setAuthRedirecting] = useState(false);
 
   const platformInfo = (platformsData as PlatformData[]).find(
     (p) => p.name === platform
@@ -58,9 +67,62 @@ export default function PlatformPage({
     notFound();
   }
 
+  // Handle sign in with OAuth
+  const handleSignIn = async () => {
+    setAuthRedirecting(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + `/platforms/${platform}`,
+        },
+      });
+
+      if (error) {
+        console.error("Erro ao iniciar login:", error);
+        setAuthRedirecting(false);
+      } else if (data) {
+        console.log("Login iniciado com sucesso, URL:", data.url);
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error("Error signing in:", error);
+      setAuthRedirecting(false);
+    }
+  };
+
+  // Verificar autenticação
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          console.log("User authenticated:", session.user.email);
+          setUser(session.user);
+          setAuthChecking(false);
+        } else {
+          console.log("No authenticated user found");
+          setUser(null);
+          setAuthChecking(false);
+        }
+      } catch (error) {
+        console.error("Error checking user session:", error);
+        setAuthChecking(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
   useEffect(() => {
     // Função para verificar se o arquivo XML existe via API interna
     async function checkXmlFile() {
+      // Não verificar XML se ainda estiver checando autenticação
+      if (authChecking || !user) return;
+
       try {
         setLoading(true);
 
@@ -84,8 +146,10 @@ export default function PlatformPage({
       }
     }
 
-    checkXmlFile();
-  }, [platform]);
+    if (!authChecking) {
+      checkXmlFile();
+    }
+  }, [platform, authChecking, user]);
 
   // Generate background gradient based on platform colors
   const bgGradient =
@@ -96,13 +160,83 @@ export default function PlatformPage({
   // Check if system image exists
   const systemImagePath = `/images/platforms/systems/${platform}.webp`;
 
+  // Show redirecting state when auth is in progress
+  if (authRedirecting) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">
+              Redirecionando para autenticação...
+            </p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Mostrar loader enquanto verifica autenticação ou carrega dados
+  if (authChecking) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">Verificando autenticação...</p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show "Acesso Negado" message if not authenticated
+  if (!user) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center p-8 bg-black/30 rounded-lg border border-[#ff0884]/30 max-w-md">
+            <Gamepad2 className="h-12 w-12 text-[#ff0884] mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">
+              Área Exclusiva
+            </h2>
+            <p className="text-gray-300 mb-6">
+              Faça login para acessar informações detalhadas sobre{" "}
+              {platformInfo.fullName} e todos os recursos disponíveis para
+              membros.
+            </p>
+            <button
+              onClick={handleSignIn}
+              disabled={authRedirecting}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
+            >
+              <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
+              Entrar com Google
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Mostrar loader enquanto carrega dados
   if (loading) {
     return (
       <div className="flex flex-col min-h-screen bg-gray-900 text-white">
         <Header />
-        <main className="flex-grow pt-20 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff0884]"></div>
+        <main className="flex-grow flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff0884] mx-auto mb-4"></div>
+            <p className="text-xl">Carregando...</p>
+          </div>
         </main>
+        <Footer />
       </div>
     );
   }
@@ -111,7 +245,7 @@ export default function PlatformPage({
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Header />
 
-      <main className={`flex-grow pt-20 ${robotoCondensed.className}`}>
+      <main className={`flex-grow pt-24 ${robotoCondensed.className}`}>
         <div
           className="w-full h-[40vh] relative bg-cover bg-center"
           style={{ background: bgGradient }}
@@ -493,48 +627,7 @@ export default function PlatformPage({
       </main>
 
       {/* Footer */}
-      <footer className="bg-black text-white py-12 border-t border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="md:flex md:justify-between">
-            <div className="mb-8 md:mb-0">
-              <div className="flex items-center space-x-2">
-                <Image
-                  src="/images/logos.webp"
-                  alt="RIESCADE Logo"
-                  width={35}
-                  height={35}
-                />
-                <h3 className="text-xl font-bold">RIESCADE</h3>
-              </div>
-              <p className="text-gray-400 mt-2">
-                RetroGames e Games, sempre emulando...
-              </p>
-            </div>
-
-            {/* Social links */}
-            <div className="mt-8 flex flex-col space-y-4">
-              <div className="flex space-x-6">
-                <Link
-                  href="https://t.me/riescade"
-                  className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
-                  target="_blank"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 496 512"
-                    className="h-6 w-6 mr-2 fill-current"
-                  >
-                    <path d="M248 8C111.033 8 0 119.033 0 256s111.033 248 248 248 248-111.033 248-248S384.967 8 248 8zm114.952 168.66c-3.732 39.215-19.881 134.378-28.1 178.3-3.476 18.584-10.322 24.816-16.948 25.425-14.4 1.326-25.338-9.517-39.287-18.661-21.827-14.308-34.158-23.215-55.346-37.177-24.485-16.135-8.612-25 5.342-39.5 3.652-3.793 67.107-61.51 68.335-66.746.153-.655.3-3.1-1.154-4.384s-3.59-.849-5.135-.5q-3.283.746-104.608 69.142-14.845 10.194-26.894 9.934c-8.855-.191-25.888-5.006-38.551-9.123-15.531-5.048-27.875-7.717-26.8-16.291q.84-6.7 18.45-13.7 108.446-47.248 144.628-62.3c68.872-28.647 83.183-33.623 92.511-33.789 2.052-.034 6.639.474 9.61 2.885a10.452 10.452 0 0 1 3.53 6.716 43.765 43.765 0 0 1 .417 9.769z" />
-                  </svg>
-                  <span className="hidden md:flex">Telegram</span>
-                </Link>
-
-                {/* Other social links */}
-              </div>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

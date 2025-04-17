@@ -1,12 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
 import { Roboto_Condensed } from "next/font/google";
 import platformsData from "@/data/platforms.json";
 import Footer from "@/components/Footer";
+import { supabase } from "@/lib/supabase";
+import { User } from "@supabase/supabase-js";
+import { Gamepad2 } from "lucide-react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -25,6 +30,124 @@ interface PlatformData {
 // It will be picked up by the layout
 
 export default function PlatformsPage() {
+  const [user, setUser] = useState<User | null>(null);
+  const [authChecking, setAuthChecking] = useState(true);
+  const [authRedirecting, setAuthRedirecting] = useState(false);
+
+  // Handle sign in with OAuth
+  const handleSignIn = async () => {
+    setAuthRedirecting(true);
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin + "/platforms",
+        },
+      });
+
+      if (error) {
+        console.error("Erro ao iniciar login:", error);
+        setAuthRedirecting(false);
+      } else if (data) {
+        console.log("Login iniciado com sucesso, URL:", data.url);
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error("Error signing in:", error);
+      setAuthRedirecting(false);
+    }
+  };
+
+  // Verificar autenticação ao carregar a página
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (session?.user) {
+          console.log("User authenticated:", session.user.email);
+          setUser(session.user);
+          setAuthChecking(false);
+        } else {
+          console.log("No authenticated user found");
+          setUser(null);
+          setAuthChecking(false);
+        }
+      } catch (error) {
+        console.error("Error checking user session:", error);
+        setAuthChecking(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  // Show redirecting state when auth is in progress
+  if (authRedirecting) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">
+              Redirecionando para autenticação...
+            </p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Mostrar loader enquanto verifica autenticação
+  if (authChecking) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-gray-300">Verificando autenticação...</p>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Show "Acesso Negado" message if not authenticated
+  if (!user) {
+    return (
+      <div className="flex min-h-screen flex-col bg-gamer-dark">
+        <Header />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center p-8 bg-black/30 rounded-lg border border-[#ff0884]/30 max-w-md">
+            <Gamepad2 className="h-12 w-12 text-[#ff0884] mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-white mb-2">
+              Área Exclusiva
+            </h2>
+            <p className="text-gray-300 mb-6">
+              Faça login para acessar nossa coleção completa de plataformas de
+              jogos e desfrutar de todos os recursos disponíveis para membros.
+            </p>
+            <button
+              onClick={handleSignIn}
+              disabled={authRedirecting}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
+            >
+              <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
+              Entrar com Google
+            </button>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   // Group platforms by first letter for A-Z navigation
   const groupedPlatforms: Record<string, PlatformData[]> = {};
 

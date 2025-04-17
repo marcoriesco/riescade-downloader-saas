@@ -131,6 +131,12 @@ export function Header() {
             >
               Plataformas
             </Link>
+            <Link
+              href="/blog"
+              className="text-gray-200 hover:text-[#ff0884] transition-colors"
+            >
+              Blog
+            </Link>
           </nav>
 
           <div className="flex items-center space-x-4">
@@ -208,6 +214,13 @@ export function Header() {
                 onClick={handleLinkClick}
               >
                 Plataformas
+              </Link>
+              <Link
+                href="/blog"
+                className="text-gray-200 hover:text-[#ff0884] transition-colors py-2 border-b border-gray-800"
+                onClick={handleLinkClick}
+              >
+                Blog
               </Link>
             </nav>
 
