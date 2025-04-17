@@ -1,0 +1,56 @@
+2025-04-17T22:27:38.819Z - ERROR: Erro ao inserir post "Dreamcast: O Console à Frente de Seu Tempo que Definiu o Futuro": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "Dreamcast: O Console à Frente de Seu Tempo que Definiu o Futuro": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:38.943Z - ERROR: Erro ao inserir post "Final Fantasy: A Série que Revolucionou os RPGs": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "Final Fantasy: A Série que Revolucionou os RPGs": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.051Z - ERROR: Erro ao inserir post "A Evolução da Portabilidade: De Game & Watch ao Nintendo Switch": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "A Evolução da Portabilidade: De Game & Watch ao Nintendo Switch": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.152Z - ERROR: Erro ao inserir post "Fliperamas no Brasil: A Era de Ouro dos Arcades Brasileiros": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "Fliperamas no Brasil: A Era de Ouro dos Arcades Brasileiros": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.257Z - ERROR: Erro ao inserir post "Jogos Brasileiros: A Ascensão da Indústria Nacional": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "Jogos Brasileiros: A Ascensão da Indústria Nacional": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.317Z - ERROR: Erro ao inserir post "MSX no Brasil: Como o 'Videogame com Teclado' Revolucionou a Computação Nacional": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "MSX no Brasil: Como o 'Videogame com Teclado' Revolucionou a Computação Nacional": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.419Z - ERROR: Erro ao inserir post "História da Emulação: A Preservação Digital dos Videogames": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "História da Emulação: A Preservação Digital dos Videogames": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.483Z - ERROR: Erro ao inserir post "A Evolução da Pixel Art: De Limitação Técnica a Escolha Estética": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "A Evolução da Pixel Art: De Limitação Técnica a Escolha Estética": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.576Z - ERROR: Erro ao inserir post "A Evolução da Música nos Videogames: De Beeps a Sinfonias": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "A Evolução da Música nos Videogames: De Beeps a Sinfonias": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.679Z - ERROR: Erro ao inserir post "Jogos de Aventura: A Evolução de um Gênero que Definiu o Storytelling nos Videogames": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "Jogos de Aventura: A Evolução de um Gênero que Definiu o Storytelling nos Videogames": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.779Z - ERROR: Erro ao inserir post "Mulheres Pioneiras: As Heroínas Esquecidas na História dos Videogames": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "Mulheres Pioneiras: As Heroínas Esquecidas na História dos Videogames": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.859Z - ERROR: Erro ao inserir post "Speedrunning: Como a Obsessão por Velocidade Criou uma Nova Cultura Gamer": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "Speedrunning: Como a Obsessão por Velocidade Criou uma Nova Cultura Gamer": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:39.943Z - ERROR: Erro ao inserir post "RPGs: A Evolução do Gênero que Transformou os Videogames em Experiências Épicas": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "RPGs: A Evolução do Gênero que Transformou os Videogames em Experiências Épicas": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-17T22:27:40.018Z - ERROR: Erro ao inserir post "A Ascensão dos eSports: Como os Videogames se Tornaram um Fenômeno Competitivo Global": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+Error: Erro ao inserir post "A Ascensão dos eSports: Como os Videogames se Tornaram um Fenômeno Competitivo Global": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)

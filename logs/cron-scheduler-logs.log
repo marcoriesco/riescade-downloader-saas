@@ -49,3 +49,12 @@ Arquivo 2025-04-17-atari-crash-1983.json atualizado, post marcado como publicado
 Publicação concluída com sucesso.
 
 2025-04-17T13:57:35.197Z - Execução manual concluída com sucesso
+2025-04-17T22:13:31.203Z - Iniciando o agendador de publicação de posts...
+2025-04-17T22:13:31.206Z - Executando publicação imediatamente por solicitação da linha de comando
+2025-04-17T22:13:31.215Z - Agendador iniciado. Posts serão publicados automaticamente às 8:00 da manhã todos os dias.
+2025-04-17T22:13:31.215Z - Use 'npm run publish-post' para executar manualmente.
+2025-04-17T22:13:40.374Z - Saída do script:
+Iniciando verificação de posts agendados para 2025-04-17...
+O post "O Grande Crash de 1983: Como o Atari Quase Destruiu a Indústria de Videogames" já está publicado.
+
+2025-04-17T22:13:40.374Z - Execução manual concluída com sucesso
