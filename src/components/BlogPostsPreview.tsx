@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 
@@ -101,7 +100,7 @@ export default function BlogPostsPreview() {
           key={post.id}
           className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-[#ff0884]/5 transition-all duration-300 border border-gray-700 hover:border-[#ff0884]/30 h-full flex flex-col"
         >
-          <Link href={`/blog/${post.slug}`}>
+          <a href={`/blog/${post.slug}`} className="block">
             <div className="relative h-48 w-full">
               {post.cover_image ? (
                 <Image
@@ -122,15 +121,15 @@ export default function BlogPostsPreview() {
                 </span>
               </div>
             </div>
-          </Link>
+          </a>
 
           <div className="p-6 flex-grow flex flex-col">
             <div className="flex-grow">
-              <Link href={`/blog/${post.slug}`}>
-                <h2 className="text-xl font-bold mb-3 hover:text-[#ff0884] transition-colors line-clamp-2">
+              <a href={`/blog/${post.slug}`} className="block">
+                <h2 className="text-xl font-bold mb-3 hover:text-[#ff0884] transition-colors line-clamp-2 cursor-pointer">
                   {post.title}
                 </h2>
-              </Link>
+              </a>
               <p className="text-gray-400 mb-4 line-clamp-3">{post.excerpt}</p>
             </div>
 

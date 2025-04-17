@@ -65,7 +65,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={roboto.className}>
+      <body className={`${roboto.className} pt-20`}>
         <Analytics />
         <Providers>{children}</Providers>
         <SpeedInsights />

@@ -12,6 +12,60 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Cache e controle de throttle para evitar excesso de requisições
+const cache = new Map<string, { data: unknown; timestamp: number }>();
+const inFlight = new Map<string, boolean>();
+const CACHE_TTL = 30000; // 30 segundos
+const THROTTLE_TIME = 2000; // 2 segundos
+
+// Função para throttle de requisições
+async function throttledRequest<T>(
+  cacheKey: string,
+  requestFn: () => Promise<T>,
+  ttl = CACHE_TTL
+): Promise<T> {
+  // Verificar se já temos dados em cache válidos
+  const cachedItem = cache.get(cacheKey);
+  const now = Date.now();
+
+  if (cachedItem && now - cachedItem.timestamp < ttl) {
+    return cachedItem.data as T;
+  }
+
+  // Verificar se já existe uma requisição em andamento para esta chave
+  if (inFlight.get(cacheKey)) {
+    // Se houver cache, mesmo expirado, retornar enquanto aguarda nova requisição
+    if (cachedItem) {
+      return cachedItem.data as T;
+    }
+
+    // Aguardar um pouco e tentar novamente
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return throttledRequest(cacheKey, requestFn, ttl);
+  }
+
+  try {
+    // Marcar esta requisição como em andamento
+    inFlight.set(cacheKey, true);
+
+    // Executar a requisição
+    const result = await requestFn();
+
+    // Armazenar no cache
+    cache.set(cacheKey, { data: result, timestamp: now });
+
+    return result;
+  } finally {
+    // Liberar a flag de requisição em andamento
+    inFlight.set(cacheKey, false);
+
+    // Programar remoção da flag após o tempo de throttle
+    setTimeout(() => {
+      inFlight.delete(cacheKey);
+    }, THROTTLE_TIME);
+  }
+}
+
 // Server-side Supabase client that uses cookies
 async function getServerSupabase() {
   // If we're in a server component, try to use cookies
@@ -87,53 +141,61 @@ export async function getBlogPosts(
 export async function getBlogPostBySlug(
   slug: string
 ): Promise<BlogPost | null> {
-  try {
-    const client = await getServerSupabase();
+  const cacheKey = `post-${slug}`;
 
-    const { data, error } = await client
-      .from("blog_posts")
-      .select("*")
-      .eq("slug", slug)
-      .eq("status", "published")
-      .single();
+  return throttledRequest(cacheKey, async () => {
+    try {
+      const client = await getServerSupabase();
 
-    if (error) {
-      console.error("Error fetching blog post:", error);
+      const { data, error } = await client
+        .from("blog_posts")
+        .select("*")
+        .eq("slug", slug)
+        .eq("status", "published")
+        .single();
+
+      if (error) {
+        console.error("Error fetching blog post:", error);
+        return null;
+      }
+
+      return data as BlogPost;
+    } catch (error) {
+      console.error("Error in getBlogPostBySlug:", error);
       return null;
     }
-
-    return data as BlogPost;
-  } catch (error) {
-    console.error("Error in getBlogPostBySlug:", error);
-    return null;
-  }
+  });
 }
 
 export async function getRelatedPosts(
   post: BlogPost,
   limit = 3
 ): Promise<BlogPost[]> {
-  try {
-    const client = await getServerSupabase();
+  const cacheKey = `related-${post.id}-${limit}`;
 
-    const { data, error } = await client
-      .from("blog_posts")
-      .select("*")
-      .eq("status", "published")
-      .eq("category", post.category)
-      .neq("id", post.id)
-      .limit(limit);
+  return throttledRequest(cacheKey, async () => {
+    try {
+      const client = await getServerSupabase();
 
-    if (error) {
-      console.error("Error fetching related posts:", error);
+      const { data, error } = await client
+        .from("blog_posts")
+        .select("*")
+        .eq("status", "published")
+        .eq("category", post.category)
+        .neq("id", post.id)
+        .limit(limit);
+
+      if (error) {
+        console.error("Error fetching related posts:", error);
+        return [];
+      }
+
+      return data as BlogPost[];
+    } catch (error) {
+      console.error("Error in getRelatedPosts:", error);
       return [];
     }
-
-    return data as BlogPost[];
-  } catch (error) {
-    console.error("Error in getRelatedPosts:", error);
-    return [];
-  }
+  });
 }
 
 export async function getFeaturedPosts(limit = 5): Promise<BlogPost[]> {

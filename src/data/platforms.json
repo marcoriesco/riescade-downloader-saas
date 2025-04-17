@@ -1,7 +1,7 @@
 [
   {
     "name": "doom3",
-    "image": "/images/platform/doom3.webp",
+    "image": "/images/platform/boom3.webp",
     "url": "https://drive.google.com/drive/folders/1M433EgfA5TB8VZjJSjzW_y2s3Yg77BxU",
     "fullName": "Doom 3"
   },
@@ -553,7 +553,7 @@
   },
   {
     "name": "java",
-    "image": "/images/platform/java.webp",
+    "image": "/images/platform/j2me.webp",
     "url": "https://drive.google.com/drive/folders/14Lg88HpZhEfMKHByXEKbbCMTiOqKaKEJ",
     "fullName": "Java"
   },
@@ -973,7 +973,7 @@
   },
   {
     "name": "sordm5",
-    "image": "/images/platform/sordm5.webp",
+    "image": "/images/platform/m5.webp",
     "url": "https://drive.google.com/drive/folders/1mfwTIOhAnbG0zyIh535YnMdfZrz1Tja0",
     "fullName": "SORD M5"
   },
@@ -985,13 +985,13 @@
   },
   {
     "name": "sonicmania",
-    "image": "/images/platform/sonicmania.webp",
+    "image": "/images/platform/sonic-mania.webp",
     "url": "https://drive.google.com/drive/folders/1WN5kXy7x34XFghUWputGILg30BWR2evY",
     "fullName": "Sonic Mania"
   },
   {
     "name": "sonic3air",
-    "image": "/images/platform/sonic3air.webp",
+    "image": "/images/platform/sonic3-air.webp",
     "url": "https://drive.google.com/drive/folders/1vSZhH_CpzxDVM0kawQG-QPdaF5GoTfCm",
     "fullName": "Sonic 3 A.I.R."
   },
@@ -1290,8 +1290,8 @@
     "fullName": "DevilutionX"
   },
   {
-    "name": "daphne-singe2",
-    "image": "/images/platform/daphne-singe2.webp",
+    "name": "singe",
+    "image": "/images/platform/singe.webp",
     "url": "https://drive.google.com/drive/folders/1dSGiJT1ALlEPFaTx0vk-3EZ1dze4Lp_t",
     "fullName": "Daphne Singe 2"
   },

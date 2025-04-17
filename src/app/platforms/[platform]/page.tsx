@@ -129,7 +129,17 @@ export default function PlatformPage({
                   height={128}
                   className="object-contain"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = platformInfo.image;
+                    const imgElement = e.target as HTMLImageElement;
+                    // Verifica se já não estamos usando a fonte original para evitar loop
+                    if (imgElement.src !== platformInfo.image) {
+                      imgElement.src = platformInfo.image;
+                    } else {
+                      // Se a imagem original também falhar, use um placeholder
+                      imgElement.src =
+                        "/images/platforms/placeholder-logo.webp";
+                    }
+                    // Evita novos erros
+                    imgElement.onerror = null;
                   }}
                 />
               </div>
@@ -201,9 +211,16 @@ export default function PlatformPage({
                           console.log(
                             `Failed to load image: ${systemImagePath}`
                           );
-                          // If image fails to load, replace with placeholder
-                          (e.target as HTMLImageElement).src =
-                            "/images/platforms/placeholder-console.webp";
+                          // If image fails to load, replace with placeholder and prevent further attempts
+                          const imgElement = e.target as HTMLImageElement;
+                          if (
+                            imgElement.src !==
+                            "/images/platforms/placeholder-console.webp"
+                          ) {
+                            imgElement.src =
+                              "/images/platforms/placeholder-console.webp";
+                            imgElement.onerror = null; // Evita novos loops de erro
+                          }
                         }}
                         priority={false}
                         loading="lazy"
@@ -419,17 +436,17 @@ export default function PlatformPage({
                         `Failed to load fallback image: ${systemImagePath}`
                       );
                       // If image fails to load, hide it
-                      (e.target as HTMLImageElement).style.display = "none";
-                      // Try to adjust the parent container to avoid layout shift
-                      try {
-                        const parent = (e.target as HTMLImageElement)
-                          .parentElement;
-                        if (parent) {
-                          parent.style.display = "none";
-                        }
-                      } catch (err) {
-                        console.log("Error hiding parent element:", err);
+                      const imgElement = e.target as HTMLImageElement;
+                      imgElement.style.display = "none";
+
+                      // Verify parent element exists before trying to hide it
+                      const parent = imgElement.parentElement;
+                      if (parent) {
+                        parent.style.display = "none";
                       }
+
+                      // Prevent further error loops
+                      imgElement.onerror = null;
                     }}
                     loading="lazy"
                   />
