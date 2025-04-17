@@ -416,62 +416,6 @@ export default function PlatformPage({
                           </div>
                         )}
                       </dl>
-
-                      {/* Color palette display */}
-                      {metadata.systemColor && (
-                        <div className="mt-8">
-                          <h3 className="text-lg font-semibold mb-3 text-gray-400">
-                            Cores do Sistema
-                          </h3>
-                          <div className="flex space-x-3">
-                            {metadata.systemColor && (
-                              <div
-                                className="w-12 h-12 rounded-full shadow-lg border border-white/10"
-                                style={{
-                                  backgroundColor: `#${metadata.systemColor}`,
-                                }}
-                                title="Cor Primária"
-                              ></div>
-                            )}
-                            {metadata.systemColorPalette1 && (
-                              <div
-                                className="w-12 h-12 rounded-full shadow-lg border border-white/10"
-                                style={{
-                                  backgroundColor: `#${metadata.systemColorPalette1}`,
-                                }}
-                                title="Cor da Paleta 1"
-                              ></div>
-                            )}
-                            {metadata.systemColorPalette2 && (
-                              <div
-                                className="w-12 h-12 rounded-full shadow-lg border border-white/10"
-                                style={{
-                                  backgroundColor: `#${metadata.systemColorPalette2}`,
-                                }}
-                                title="Cor da Paleta 2"
-                              ></div>
-                            )}
-                            {metadata.systemColorPalette3 && (
-                              <div
-                                className="w-12 h-12 rounded-full shadow-lg border border-white/10"
-                                style={{
-                                  backgroundColor: `#${metadata.systemColorPalette3}`,
-                                }}
-                                title="Cor da Paleta 3"
-                              ></div>
-                            )}
-                            {metadata.systemColorPalette4 && (
-                              <div
-                                className="w-12 h-12 rounded-full shadow-lg border border-white/10"
-                                style={{
-                                  backgroundColor: `#${metadata.systemColorPalette4}`,
-                                }}
-                                title="Cor da Paleta 4"
-                              ></div>
-                            )}
-                          </div>
-                        </div>
-                      )}
                     </div>
                   </div>
 
