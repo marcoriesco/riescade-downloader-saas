@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { getBlogPostBySlug } from "@/lib/blog-service";
 
 type Props = {
+  children: React.ReactNode;
   params: {
     slug: string;
   };
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${post.title} | RIESCADE Blog`,
+    title: `${post.title} | RIESCADE`,
     description: post.excerpt || post.title,
     openGraph: {
       title: post.title,
@@ -36,7 +37,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
           ]
         : [],
       type: "article",
-      publishedTime: post.published_at || undefined,
     },
     twitter: {
       card: "summary_large_image",
@@ -44,5 +44,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.excerpt || post.title,
       images: post.cover_image ? [post.cover_image] : [],
     },
+    alternates: {
+      canonical: `https://riescade.com/blog/${post.slug}`,
+    },
   };
+}
+
+export default function BlogPostLayout({ children }: Props) {
+  return <>{children}</>;
 }

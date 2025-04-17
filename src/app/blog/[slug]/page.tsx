@@ -20,10 +20,9 @@ import { Header } from "@/components/Header";
 import { Roboto, Roboto_Condensed } from "next/font/google";
 import styles from "@/styles/markdown.module.css";
 import Footer from "@/components/Footer";
-// Note: Since this is a Client Component, generateMetadata should be defined in:
-// 1. A separate server component file (layout.tsx)
-// 2. Or in a separate metadata.ts file in this folder
-// The schema.org metadata below is still valid for SEO
+
+// We use the layout.tsx file for metadata generation
+// This allows us to keep this as a client component
 
 // Define platform keywords and their corresponding URLs
 const PLATFORM_KEYWORDS = {
@@ -254,33 +253,6 @@ export default function BlogPost() {
                 {post.category}
               </Link>
             </div>
-
-            {/* Add schema.org metadata for SEO */}
-            <script
-              type="application/ld+json"
-              dangerouslySetInnerHTML={{
-                __html: JSON.stringify({
-                  "@context": "https://schema.org",
-                  "@type": "BlogPosting",
-                  headline: post.title,
-                  image: post.cover_image ? [post.cover_image] : [],
-                  datePublished: post.published_at,
-                  author: {
-                    "@type": "Person",
-                    name: post.author,
-                  },
-                  publisher: {
-                    "@type": "Organization",
-                    name: "RIESCADE",
-                    logo: {
-                      "@type": "ImageObject",
-                      url: "/images/logos.webp",
-                    },
-                  },
-                  description: post.excerpt,
-                }),
-              }}
-            />
 
             {/* Title */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-10 leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">

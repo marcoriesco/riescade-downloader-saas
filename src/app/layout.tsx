@@ -40,7 +40,7 @@ export const metadata: Metadata = {
         url: "https://www.riescade.com.br/images/og-image.webp",
         width: 1200,
         height: 630,
-        alt: "RIESCADE Platform Preview",
+        alt: "RIESCADE Platform",
       },
     ],
   },
@@ -52,9 +52,6 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://www.riescade.com.br",
-  },
-  verification: {
-    google: "google-site-verification=inserir_código_aqui",
   },
 };
 
