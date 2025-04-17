@@ -113,12 +113,7 @@ export function Header() {
         {/* Menu para desktop */}
         <div className="hidden md:flex items-center space-x-6">
           <nav className="flex items-center space-x-6 mr-4">
-            <Link
-              href="/dashboard"
-              className="text-gray-200 hover:text-[#ff0884] transition-colors"
-            >
-              Dashboard
-            </Link>
+            {/* O Dashboard só aparece quando o usuário está logado */}
             <Link
               href="/tutorial"
               className="text-gray-200 hover:text-[#ff0884] transition-colors"
@@ -142,8 +137,8 @@ export function Header() {
           <div className="flex items-center space-x-4">
             {!loading &&
               (user ? (
-                <>
-                  <div className="hidden md:flex items-center mr-4">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center mr-4">
                     <div className="w-8 h-8 rounded-full bg-[#ff0884]/20 border border-[#ff0884]/50 flex items-center justify-center mr-2">
                       <User className="h-4 w-4 text-[#ff0884]" />
                     </div>
@@ -153,13 +148,19 @@ export function Header() {
                       {user.email}
                     </span>
                   </div>
+                  <Link
+                    href="/dashboard"
+                    className="px-4 py-2 text-sm font-medium rounded-md bg-[#ff0884]/20 border border-[#ff0884]/50 text-white hover:bg-[#ff0884]/30 transition-all duration-300"
+                  >
+                    Dashboard
+                  </Link>
                   <button
                     onClick={handleSignOut}
                     className="px-4 py-2 text-sm font-medium rounded-md border border-[#ff0884]/50 text-white hover:bg-[#ff0884]/10 transition-all duration-300"
                   >
                     Sair
                   </button>
-                </>
+                </div>
               ) : (
                 <button
                   onClick={handleSignIn}
@@ -194,13 +195,16 @@ export function Header() {
         <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800">
           <div className="px-4 pt-2 pb-6 space-y-4">
             <nav className="flex flex-col space-y-4 mb-6">
-              <Link
-                href="/dashboard"
-                className="text-gray-200 hover:text-[#ff0884] transition-colors py-2 border-b border-gray-800"
-                onClick={handleLinkClick}
-              >
-                Dashboard
-              </Link>
+              {/* O Dashboard só aparece quando o usuário está logado */}
+              {user && (
+                <Link
+                  href="/dashboard"
+                  className="text-gray-200 hover:text-[#ff0884] transition-colors py-2 border-b border-gray-800"
+                  onClick={handleLinkClick}
+                >
+                  Dashboard
+                </Link>
+              )}
               <Link
                 href="/tutorial"
                 className="text-gray-200 hover:text-[#ff0884] transition-colors py-2 border-b border-gray-800"
