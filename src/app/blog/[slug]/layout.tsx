@@ -1,19 +1,22 @@
 import { Metadata } from "next";
 import { getBlogPostBySlug } from "@/lib/blog-service";
 
-type Props = {
-  children: React.ReactNode;
-  params: {
-    slug: string;
-  };
+// Props for layout metadata with params as a Promise as expected by Next.js
+type LayoutProps = {
+  params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getBlogPostBySlug(params.slug);
+export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
+  // Resolve the params Promise
+  const { params } = props;
+  const resolvedParams = await params;
+
+  // Get the post data
+  const post = await getBlogPostBySlug(resolvedParams.slug);
 
   if (!post) {
     return {
-      title: "Post Not Found | RIESCADE Blog",
+      title: "Post Not Found | RIESCADE",
       description: "The requested blog post could not be found.",
     };
   }
@@ -24,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: post.title,
       description: post.excerpt || post.title,
-      url: `https://riescade.com/blog/${post.slug}`,
+      url: `https://riescade.com/blog/${resolvedParams.slug}`,
       siteName: "RIESCADE Blog",
       images: post.cover_image
         ? [
@@ -45,11 +48,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: post.cover_image ? [post.cover_image] : [],
     },
     alternates: {
-      canonical: `https://riescade.com/blog/${post.slug}`,
+      canonical: `https://riescade.com/blog/${resolvedParams.slug}`,
     },
   };
 }
 
-export default function BlogPostLayout({ children }: Props) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
