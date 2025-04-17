@@ -4,18 +4,10 @@ import React, { useState, useEffect, use } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import parse from "xml2js";
-import * as fs from "fs/promises";
-import path from "path";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faFileDownload,
-  faGamepad,
-  faDesktop,
-  faCalendarAlt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faFileDownload } from "@fortawesome/free-solid-svg-icons";
 import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import Footer from "@/components/Footer";
 
 // Import platform data
 import platformsData from "@/data/platforms.json";
