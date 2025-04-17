@@ -20,6 +20,10 @@ import { Header } from "@/components/Header";
 import { Roboto, Roboto_Condensed } from "next/font/google";
 import styles from "@/styles/markdown.module.css";
 import Footer from "@/components/Footer";
+// Note: Since this is a Client Component, generateMetadata should be defined in:
+// 1. A separate server component file (layout.tsx)
+// 2. Or in a separate metadata.ts file in this folder
+// The schema.org metadata below is still valid for SEO
 
 // Define platform keywords and their corresponding URLs
 const PLATFORM_KEYWORDS = {

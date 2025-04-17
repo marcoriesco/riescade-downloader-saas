@@ -1,50 +1,48 @@
 import { Metadata } from "next";
 import { getBlogPostBySlug } from "@/lib/blog-service";
 
-// Generate metadata for the page
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const { slug } = params;
-  const post = await getBlogPostBySlug(slug);
+type Props = {
+  params: {
+    slug: string;
+  };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const post = await getBlogPostBySlug(params.slug);
 
   if (!post) {
     return {
-      title: "Post não encontrado",
+      title: "Post Not Found | RIESCADE Blog",
+      description: "The requested blog post could not be found.",
     };
   }
 
-  // Use the cover image directly as it's within the project
-  const defaultImage = "/images/og-image.webp";
-  const coverImage = post.cover_image || defaultImage;
-
   return {
-    title: post.title,
-    description: post.excerpt,
-    keywords: post.tags?.join(", "),
+    title: `${post.title} | RIESCADE Blog`,
+    description: post.excerpt || post.title,
     openGraph: {
       title: post.title,
-      description: post.excerpt,
-      images: [coverImage],
+      description: post.excerpt || post.title,
+      url: `https://riescade.com/blog/${post.slug}`,
+      siteName: "RIESCADE Blog",
+      images: post.cover_image
+        ? [
+            {
+              url: post.cover_image,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ]
+        : [],
       type: "article",
       publishedTime: post.published_at || undefined,
-      authors: post.author ? [post.author] : [],
-      tags: post.tags,
-      siteName: "RIESCADE",
-      url: `/blog/${post.slug}`,
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.excerpt,
-      images: [coverImage],
-      creator: "@riescade",
-      site: "@riescade",
-    },
-    alternates: {
-      canonical: `/blog/${post.slug}`,
+      description: post.excerpt || post.title,
+      images: post.cover_image ? [post.cover_image] : [],
     },
   };
 }
