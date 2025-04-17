@@ -16,39 +16,9 @@ export async function generateMetadata({
     };
   }
 
-  // Get the full URL for the cover image
-  const coverImageUrl = post.cover_image
-    ? post.cover_image.startsWith("http")
-      ? post.cover_image
-      : `${process.env.NEXT_PUBLIC_SITE_URL || "https://riescade.com.br"}${
-          post.cover_image
-        }`
-    : `${
-        process.env.NEXT_PUBLIC_SITE_URL || "https://riescade.com.br"
-      }/images/og-image.webp`;
-
-  // Prepare image array for OpenGraph and Twitter
-  const images = post.cover_image
-    ? [
-        {
-          url: coverImageUrl,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-          type: "image/jpeg",
-        },
-      ]
-    : [
-        {
-          url: `${
-            process.env.NEXT_PUBLIC_SITE_URL || "https://riescade.com.br"
-          }/images/og-image.webp`,
-          width: 1200,
-          height: 630,
-          alt: "RIESCADE Blog",
-          type: "image/webp",
-        },
-      ];
+  // Use the cover image directly as it's within the project
+  const defaultImage = "/images/og-image.webp";
+  const coverImage = post.cover_image || defaultImage;
 
   return {
     title: post.title,
@@ -57,28 +27,24 @@ export async function generateMetadata({
     openGraph: {
       title: post.title,
       description: post.excerpt,
-      images: images,
+      images: [coverImage],
       type: "article",
       publishedTime: post.published_at || undefined,
       authors: post.author ? [post.author] : [],
       tags: post.tags,
       siteName: "RIESCADE",
-      url: `${
-        process.env.NEXT_PUBLIC_SITE_URL || "https://riescade.com.br"
-      }/blog/${post.slug}`,
+      url: `/blog/${post.slug}`,
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: images,
+      images: [coverImage],
       creator: "@riescade",
       site: "@riescade",
     },
     alternates: {
-      canonical: `${
-        process.env.NEXT_PUBLIC_SITE_URL || "https://riescade.com.br"
-      }/blog/${post.slug}`,
+      canonical: `/blog/${post.slug}`,
     },
   };
 }

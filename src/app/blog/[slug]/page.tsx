@@ -259,13 +259,7 @@ export default function BlogPost() {
                   "@context": "https://schema.org",
                   "@type": "BlogPosting",
                   headline: post.title,
-                  image: post.cover_image
-                    ? [
-                        post.cover_image.startsWith("http")
-                          ? post.cover_image
-                          : `${window.location.origin}${post.cover_image}`,
-                      ]
-                    : [],
+                  image: post.cover_image ? [post.cover_image] : [],
                   datePublished: post.published_at,
                   author: {
                     "@type": "Person",
@@ -276,7 +270,7 @@ export default function BlogPost() {
                     name: "RIESCADE",
                     logo: {
                       "@type": "ImageObject",
-                      url: `${window.location.origin}/images/logos.webp`,
+                      url: "/images/logos.webp",
                     },
                   },
                   description: post.excerpt,
