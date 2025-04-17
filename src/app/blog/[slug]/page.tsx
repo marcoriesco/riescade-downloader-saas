@@ -555,63 +555,6 @@ export default function BlogPost() {
               </a>
             </div>
           </div>
-
-          {/* Comment Section - Can be implemented with a third-party service */}
-          <div className="mt-16 pt-10 border-t border-gray-700 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 bg-[length:100%_1px] bg-no-repeat bg-top">
-            <h2 className="text-2xl font-bold mb-8 flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6 mr-2 text-[#ff0884]"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                />
-              </svg>
-              Comentários
-            </h2>
-            <div className="bg-gray-800/50 p-10 rounded-xl text-center shadow-xl border border-transparent bg-gradient-to-br from-gray-700/50 via-gray-800/50 to-gray-700/50 backdrop-blur-sm relative before:absolute before:inset-0 before:p-[1px] before:rounded-xl before:bg-gradient-to-br before:from-gray-600 before:via-[#ff0884]/30 before:to-purple-500/30 before:mask-gradient-border">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 mx-auto mb-4 text-gray-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                />
-              </svg>
-              <p className="text-gray-400 mb-6 text-lg">
-                Os comentários são fornecidos por um serviço de terceiros.
-              </p>
-              <button className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center mx-auto">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-                  />
-                </svg>
-                Carregar Comentários
-              </button>
-            </div>
-          </div>
         </div>
       </main>
 
