@@ -12,16 +12,6 @@ const robotoCondensed = Roboto_Condensed({
 
 export const revalidate = 3600;
 
-// Manually defined categories
-const categories = [
-  { id: "1", name: "Tutoriais", slug: "tutoriais", post_count: 5 },
-  { id: "2", name: "Retrogaming", slug: "retrograming", post_count: 8 },
-  { id: "3", name: "Emulação", slug: "emulacao", post_count: 12 },
-  { id: "4", name: "Consoles", slug: "consoles", post_count: 6 },
-  { id: "5", name: "Jogos", slug: "jogos", post_count: 9 },
-  { id: "6", name: "Dicas", slug: "dicas", post_count: 7 },
-];
-
 export default function Blog({
   searchParams,
 }: {
