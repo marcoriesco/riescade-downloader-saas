@@ -6,6 +6,7 @@ import {
   BlogStats,
   QueryParams,
 } from "../types/blog";
+import { supabaseAdmin } from "./supabase-admin";
 
 // Initialize Supabase client (client-side safe)
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -224,10 +225,8 @@ export async function getFeaturedPosts(limit = 5): Promise<BlogPost[]> {
 
 export async function updatePostViews(postId: string): Promise<void> {
   try {
-    const client = await getServerSupabase();
-
-    // Primeiro, obter o valor atual de visualizações
-    const { data: post, error: fetchError } = await client
+    // Usamos o cliente admin que ignora as políticas RLS
+    const { data: post, error: fetchError } = await supabaseAdmin
       .from("blog_posts")
       .select("views")
       .eq("id", postId)
@@ -242,8 +241,8 @@ export async function updatePostViews(postId: string): Promise<void> {
     const currentViews = post?.views || 0;
     const newViews = currentViews + 1;
 
-    // Atualizar a contagem de visualizações
-    const { error: updateError } = await client
+    // Atualizar a contagem de visualizações usando cliente admin
+    const { error: updateError } = await supabaseAdmin
       .from("blog_posts")
       .update({ views: newViews })
       .eq("id", postId);
@@ -252,7 +251,7 @@ export async function updatePostViews(postId: string): Promise<void> {
       console.error("Erro ao atualizar visualizações do post:", updateError);
     }
   } catch (error) {
-    console.error("Erro em updatePostViews:", error);
+    console.error("Erro ao atualizar visualizações:", error);
   }
 }
 

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -62,42 +64,6 @@ export default function Blog({
               <p className="text-xl text-gray-400 max-w-2xl">
                 Novidades, guias e dicas sobre games retro e emulação
               </p>
-            </div>
-
-            {/* Search Box */}
-            <div className="mt-6 md:mt-0">
-              <form
-                className="flex border border-gray-700 rounded-lg overflow-hidden bg-gray-800"
-                action="/blog"
-                method="get"
-              >
-                <input
-                  type="text"
-                  name="search"
-                  placeholder="Buscar no blog..."
-                  defaultValue={search || ""}
-                  className="px-4 py-2 bg-transparent w-full focus:outline-none text-white"
-                />
-                <button
-                  type="submit"
-                  className="bg-[#ff0884] px-4 flex items-center"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                  </svg>
-                </button>
-              </form>
             </div>
           </div>
 
@@ -341,6 +307,43 @@ export default function Blog({
             {/* Sidebar */}
             <div className="md:col-span-1">
               <div className="sticky top-24 space-y-8">
+                {/* Search Box */}
+                <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
+                  <h3 className="text-2xl font-medium mb-4">Buscar</h3>
+                  <form
+                    className="flex border border-gray-700 rounded-lg overflow-hidden bg-gray-700"
+                    action="/blog"
+                    method="get"
+                  >
+                    <input
+                      type="text"
+                      name="search"
+                      placeholder="Buscar no blog..."
+                      defaultValue={search || ""}
+                      className="px-4 py-2 bg-transparent w-full focus:outline-none text-white"
+                    />
+                    <button
+                      type="submit"
+                      className="bg-[#ff0884] px-4 flex items-center"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    </button>
+                  </form>
+                </div>
+
                 {/* Categories */}
                 <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
                   <h3 className="text-2xl font-medium mb-4">Categorias</h3>
