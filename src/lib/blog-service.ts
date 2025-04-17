@@ -6,7 +6,6 @@ import {
   BlogStats,
   QueryParams,
 } from "../types/blog";
-import { supabaseAdmin } from "./supabase-admin";
 
 // Initialize Supabase client (client-side safe)
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -225,31 +224,11 @@ export async function getFeaturedPosts(limit = 5): Promise<BlogPost[]> {
 
 export async function updatePostViews(postId: string): Promise<void> {
   try {
-    // Usamos o cliente admin que ignora as políticas RLS
-    const { data: post, error: fetchError } = await supabaseAdmin
-      .from("blog_posts")
-      .select("views")
-      .eq("id", postId)
-      .single();
-
-    if (fetchError) {
-      console.error("Erro ao buscar visualizações do post:", fetchError);
-      return;
-    }
-
-    // Incrementar as visualizações em 1
-    const currentViews = post?.views || 0;
-    const newViews = currentViews + 1;
-
-    // Atualizar a contagem de visualizações usando cliente admin
-    const { error: updateError } = await supabaseAdmin
-      .from("blog_posts")
-      .update({ views: newViews })
-      .eq("id", postId);
-
-    if (updateError) {
-      console.error("Erro ao atualizar visualizações do post:", updateError);
-    }
+    // Sempre usar a API para atualizar visualizações
+    // Esta abordagem funciona tanto no cliente quanto no servidor
+    await fetch(`/api/update-post-views?id=${postId}`, {
+      method: "POST",
+    });
   } catch (error) {
     console.error("Erro ao atualizar visualizações:", error);
   }
