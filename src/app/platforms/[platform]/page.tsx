@@ -245,7 +245,7 @@ export default function PlatformPage({
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Header />
 
-      <main className={`flex-grow pt-24 ${robotoCondensed.className}`}>
+      <main className={`flex-grow ${robotoCondensed.className}`}>
         <div
           className="w-full h-[40vh] relative bg-cover bg-center"
           style={{ background: bgGradient }}

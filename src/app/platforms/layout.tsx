@@ -1,20 +1,20 @@
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "All Platforms - RIESCADE",
+  title: "Plataformas - RIESCADE",
   description:
-    "Browse all gaming platforms available on RIESCADE, from retro consoles to modern systems.",
+    "Navegue por todas as plataformas de jogos disponíveis no RIESCADE, desde consoles retrô até sistemas modernos.",
   openGraph: {
-    title: "All Platforms - RIESCADE",
+    title: "Plataformas - RIESCADE",
     description:
-      "Browse all gaming platforms available on RIESCADE, from retro consoles to modern systems.",
+      "Navegue por todas as plataformas de jogos disponíveis no RIESCADE, desde consoles retrô até sistemas modernos.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "All Platforms - RIESCADE",
+    title: "Plataformas - RIESCADE",
     description:
-      "Browse all gaming platforms available on RIESCADE, from retro consoles to modern systems.",
+      "Navegue por todas as plataformas de jogos disponíveis no RIESCADE, desde consoles retrô até sistemas modernos.",
   },
 };
 

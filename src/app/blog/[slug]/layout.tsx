@@ -16,8 +16,8 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
 
   if (!post) {
     return {
-      title: "Post Not Found | RIESCADE",
-      description: "The requested blog post could not be found.",
+      title: "Postagem não encontrada | RIESCADE",
+      description: "A postagem de blog solicitada não pôde ser encontrada.",
     };
   }
 
@@ -28,7 +28,7 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
       title: post.title,
       description: post.excerpt || post.title,
       url: `https://riescade.com/blog/${resolvedParams.slug}`,
-      siteName: "RIESCADE Blog",
+      siteName: "RIESCADE",
       images: post.cover_image
         ? [
             {

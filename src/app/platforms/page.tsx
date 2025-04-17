@@ -180,11 +180,11 @@ export default function PlatformsPage() {
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center p-8">
               <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                Gaming Platforms
+                RIESCADE Platforms
               </h1>
               <p className="text-xl md:text-2xl max-w-3xl">
-                Discover our comprehensive collection of retro and modern gaming
-                platforms
+                Descubra nossa coleção completa de plataformas de jogos retrô e
+                modernas
               </p>
             </div>
           </div>
