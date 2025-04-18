@@ -52,7 +52,7 @@ export default function Blog({
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Header />
 
-      <main className={`flex-grow pt-20 ${robotoCondensed.className}`}>
+      <main className={`flex-grow ${robotoCondensed.className}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start mb-12">
             <div>
@@ -306,8 +306,7 @@ export default function Blog({
             <div className="md:col-span-1">
               <div className="sticky top-24 space-y-8">
                 {/* Search Box */}
-                <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
-                  <h3 className="text-2xl font-medium mb-4">Buscar</h3>
+                <div className="p-0">
                   <form
                     className="flex border border-gray-700 rounded-lg overflow-hidden bg-gray-700"
                     action="/blog"
