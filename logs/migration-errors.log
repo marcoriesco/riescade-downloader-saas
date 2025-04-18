@@ -54,3 +54,11 @@ Error: Erro ao inserir post "RPGs: A Evolução do Gênero que Transformou os Vi
 Error: Erro ao inserir post "A Ascensão dos eSports: Como os Videogames se Tornaram um Fenômeno Competitivo Global": Could not find the 'publish_date' column of 'blog_posts' in the schema cache
     at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:174:13)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-18T21:38:57.545Z - ERROR: Erro ao processar arquivo criar-posts.json: Cannot read properties of undefined (reading 'toLowerCase')
+Error: Erro ao processar arquivo criar-posts.json: Cannot read properties of undefined (reading 'toLowerCase')
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:186:11)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-18T21:41:52.498Z - ERROR: Erro ao processar arquivo criar-posts.json: Cannot read properties of undefined (reading 'toLowerCase')
+Error: Erro ao processar arquivo criar-posts.json: Cannot read properties of undefined (reading 'toLowerCase')
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:186:11)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
