@@ -12,6 +12,16 @@ const robotoCondensed = Roboto_Condensed({
 
 export const revalidate = 3600;
 
+// Manually defined categories
+const categories = [
+  { id: "1", name: "Tutoriais", slug: "tutoriais", post_count: 5 },
+  { id: "2", name: "Retrogaming", slug: "retrograming", post_count: 8 },
+  { id: "3", name: "Emulação", slug: "emulacao", post_count: 12 },
+  { id: "4", name: "Consoles", slug: "consoles", post_count: 6 },
+  { id: "5", name: "Jogos", slug: "jogos", post_count: 9 },
+  { id: "6", name: "Dicas", slug: "dicas", post_count: 7 },
+];
+
 export default function Blog({
   searchParams,
 }: {
@@ -290,6 +300,116 @@ export default function Blog({
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Sidebar */}
+            <div className="md:col-span-1">
+              <div className="sticky top-24 space-y-8">
+                {/* Search Box */}
+                <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
+                  <h3 className="text-2xl font-medium mb-4">Buscar</h3>
+                  <form
+                    className="flex border border-gray-700 rounded-lg overflow-hidden bg-gray-700"
+                    action="/blog"
+                    method="get"
+                  >
+                    <input
+                      type="text"
+                      name="search"
+                      placeholder="Buscar no blog..."
+                      defaultValue={search || ""}
+                      className="px-4 py-2 bg-transparent w-full focus:outline-none text-white"
+                    />
+                    <button
+                      type="submit"
+                      className="bg-[#ff0884] px-4 flex items-center"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    </button>
+                  </form>
+                </div>
+
+                {/* Categories */}
+                <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
+                  <h3 className="text-2xl font-medium mb-4">Categorias</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {categories && categories.length > 0 ? (
+                      categories.map((category) => (
+                        <Link
+                          key={category.id}
+                          href={`/blog?category=${category.slug}`}
+                          className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                        >
+                          {category.name}
+                          <span className="ml-2 text-xs bg-gray-600 text-gray-300 px-1.5 py-0.5 rounded-full">
+                            {category.post_count}
+                          </span>
+                        </Link>
+                      ))
+                    ) : (
+                      <p className="text-gray-400">
+                        Nenhuma categoria encontrada
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Popular Tags */}
+                <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
+                  <h3 className="text-2xl font-medium mb-4">Tags Populares</h3>
+                  <div className="flex flex-wrap gap-2">
+                    <Link
+                      href="/blog?tag=emulacao"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                    >
+                      #emulacao
+                    </Link>
+                    <Link
+                      href="/blog?tag=retroarch"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                    >
+                      #retroarch
+                    </Link>
+                    <Link
+                      href="/blog?tag=nintendo"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                    >
+                      #nintendo
+                    </Link>
+                    <Link
+                      href="/blog?tag=arcade"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                    >
+                      #arcade
+                    </Link>
+                    <Link
+                      href="/blog?tag=playstation"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                    >
+                      #playstation
+                    </Link>
+                    <Link
+                      href="/blog?tag=retrogames"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                    >
+                      #retrogames
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
