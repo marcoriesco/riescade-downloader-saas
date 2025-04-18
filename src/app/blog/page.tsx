@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getBlogPosts } from "@/lib/blog-service";
 import { Header } from "@/components/Header";
 import { Roboto_Condensed } from "next/font/google";
+import Footer from "@/components/Footer";
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -413,6 +414,8 @@ export default function Blog({
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
