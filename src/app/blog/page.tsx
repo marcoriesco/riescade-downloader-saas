@@ -308,7 +308,7 @@ export default function Blog({
                 {/* Search Box */}
                 <div className="p-0">
                   <form
-                    className="flex border border-gray-700 rounded-lg overflow-hidden bg-gray-700"
+                    className="flex border border-gray-800 rounded-lg overflow-hidden bg-gray-800"
                     action="/blog"
                     method="get"
                   >
