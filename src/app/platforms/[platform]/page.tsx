@@ -5,12 +5,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileDownload } from "@fortawesome/free-solid-svg-icons";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 
 // Import platform data
 import platformsData from "@/data/platforms.json";
+import { faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 
 interface PlatformData {
   name: string;
@@ -163,12 +163,12 @@ export default function PlatformPage({
       <main className="flex-grow">
         {/* Hero Section with Platform Info */}
         <div
-          className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8"
+          className="relative pt-16 px-4 sm:px-6 lg:px-8"
           style={{ background: backgroundGradient }}
         >
           <div className="max-w-7xl mx-auto">
             {/* Platform Header */}
-            <div className="text-center md:text-left">
+            <div className="flex flex-col items-center justify-center text-center">
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
                 {platformInfo.fullName || platform}
               </h1>
@@ -181,7 +181,7 @@ export default function PlatformPage({
                     className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
                   >
                     <FontAwesomeIcon
-                      icon={faFileDownload}
+                      icon={faGoogleDrive}
                       className="mr-2 h-5 w-5"
                     />
                     Acessar No Google Drive
@@ -192,7 +192,7 @@ export default function PlatformPage({
                     className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
                   >
                     <FontAwesomeIcon
-                      icon={faFileDownload}
+                      icon={faGoogleDrive}
                       className="mr-2 h-5 w-5"
                     />
                     Fazer Login para Acessar
