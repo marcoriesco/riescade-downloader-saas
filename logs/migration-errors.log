@@ -62,3 +62,7 @@ Error: Erro ao processar arquivo criar-posts.json: Cannot read properties of und
 Error: Erro ao processar arquivo criar-posts.json: Cannot read properties of undefined (reading 'toLowerCase')
     at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:186:11)
     at processTicksAndRejections (node:internal/process/task_queues:105:5)
+2025-04-19T09:03:54.888Z - ERROR: Erro ao processar arquivo criar-posts.json: Cannot read properties of undefined (reading 'toLowerCase')
+Error: Erro ao processar arquivo criar-posts.json: Cannot read properties of undefined (reading 'toLowerCase')
+    at migratePostsToSupabase (Y:\images\RIESCADE_Downloader\saas\src\scripts\migrate-posts-to-supabase.ts:186:11)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
