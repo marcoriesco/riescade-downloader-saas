@@ -2,7 +2,6 @@ import { createClient } from "@supabase/supabase-js";
 import { promises as fs } from "fs";
 import path from "path";
 import * as dotenv from "dotenv";
-import fetch from "node-fetch";
 
 // Carregar variáveis de ambiente
 dotenv.config({ path: ".env.local" });
@@ -24,6 +23,24 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+// Definir interface para a resposta da API
+interface ImageApiResponse {
+  success: boolean;
+  data?: string;
+  error?: string;
+  invalidContent?: string;
+  aspectRatio?: string;
+  promptUsed?: string;
+}
+
+// Definir interface para posts com imagens ausentes
+interface MissingImage {
+  id: string;
+  title: string;
+  slug: string;
+  imagePath?: string;
+}
+
 // Função para gerar um nome de arquivo a partir do slug
 function generateImageFilename(slug: string): string {
   return `${slug}.webp`;
@@ -37,6 +54,9 @@ function generatePrompt(title: string): string {
 // Função para baixar a imagem da URL e salvá-la no sistema de arquivos
 async function downloadImage(url: string, filename: string): Promise<string> {
   try {
+    // Importar fetch dinamicamente
+    const { default: fetch } = await import("node-fetch");
+
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -59,8 +79,11 @@ async function generateMissingBlogImagesFromList() {
   console.log("🔍 Gerando imagens para posts com imagens ausentes...");
 
   try {
+    // Importar fetch dinamicamente
+    const { default: fetch } = await import("node-fetch");
+
     // Verificar se o arquivo com a lista de imagens ausentes existe
-    let missingImages: any[] = [];
+    let missingImages: MissingImage[] = [];
     try {
       const missingImagesJson = await fs.readFile(
         "missing-blog-images.json",
@@ -100,7 +123,7 @@ async function generateMissingBlogImagesFromList() {
         try {
           // Verificar se o arquivo existe
           await fs.access(fullImagePath);
-        } catch (error) {
+        } catch {
           // Arquivo não existe
           missingImages.push({
             id: post.id,
@@ -147,7 +170,7 @@ async function generateMissingBlogImagesFromList() {
         if (!imageResponse.ok) {
           const errorText = await imageResponse.text();
           try {
-            const errorJson = JSON.parse(errorText);
+            const errorJson = JSON.parse(errorText) as ImageApiResponse;
             if (errorJson.invalidContent) {
               console.error(
                 `Conteúdo inválido recebido: "${errorJson.invalidContent}"`
@@ -159,7 +182,7 @@ async function generateMissingBlogImagesFromList() {
           throw new Error(`Erro na API: ${errorText}`);
         }
 
-        const imageResult = await imageResponse.json();
+        const imageResult = (await imageResponse.json()) as ImageApiResponse;
 
         if (!imageResult.success || !imageResult.data) {
           throw new Error("Resposta da API inválida");

@@ -81,7 +81,7 @@ async function checkMissingBlogImages() {
       try {
         // Verificar se o arquivo existe
         await fs.access(fullImagePath);
-      } catch (error) {
+      } catch {
         // Arquivo não existe
         missingImages.push({
           id: post.id,
