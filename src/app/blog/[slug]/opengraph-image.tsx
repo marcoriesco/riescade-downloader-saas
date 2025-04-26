@@ -18,36 +18,19 @@ export default async function Image({ params }: { params: { slug: string } }) {
   try {
     const post = await getBlogPostBySlug(params.slug);
 
-    if (!post) {
-      // Return default image if post not found
-      return new ImageResponse(
-        (
-          <div
-            style={{
-              display: "flex",
-              fontSize: 60,
-              color: "white",
-              background: "linear-gradient(to bottom, #151515, #303030)",
-              width: "100%",
-              height: "100%",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 40,
-            }}
-          >
-            <div style={{ fontSize: 40, color: "#ff0884" }}>RIESCADE Blog</div>
-            <div
-              style={{ fontWeight: "bold", textAlign: "center", marginTop: 20 }}
-            >
-              Post not found
-            </div>
-          </div>
-        ),
-        { ...size }
-      );
+    // Se não houver post ou se o post não tiver imagem de capa, retorna null
+    if (!post || !post.cover_image) {
+      return null;
     }
 
+    // Usa a imagem de capa diretamente se existir
+    if (post.cover_image) {
+      // Retorna null para permitir que o Next.js use a imagem de capa diretamente
+      return null;
+    }
+
+    // Esse código nunca será alcançado devido ao retorno anterior,
+    // mas mantemos para mostrar como seria a geração da imagem se necessário no futuro
     return new ImageResponse(
       (
         <div
@@ -103,30 +86,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
       { ...size }
     );
   } catch (error) {
-    // Return default image in case of error
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            display: "flex",
-            fontSize: 60,
-            color: "white",
-            background: "linear-gradient(to bottom, #151515, #303030)",
-            width: "100%",
-            height: "100%",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 40,
-          }}
-        >
-          <div style={{ fontSize: 40, color: "#ff0884" }}>RIESCADE Blog</div>
-          <div style={{ fontSize: 32, marginTop: 40 }}>
-            Error generating image: {String(error)}
-          </div>
-        </div>
-      ),
-      { ...size }
-    );
+    // Em caso de erro, retorna null para não exibir imagem alguma
+    return null;
   }
 }
