@@ -85,7 +85,7 @@ export default async function Image({ params }: { params: { slug: string } }) {
       ),
       { ...size }
     );
-  } catch (error) {
+  } catch {
     // Em caso de erro, retorna null para não exibir imagem alguma
     return null;
   }
