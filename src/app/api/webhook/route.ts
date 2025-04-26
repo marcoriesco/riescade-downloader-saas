@@ -10,7 +10,9 @@ import {
 
 // Configuração para o Next.js tratar corretamente os webhooks
 export const config = {
-  runtime: "nodejs", // Isso executa no NodeJS em vez de edge runtime
+  api: {
+    bodyParser: false,
+  },
 };
 
 // Desativamos análise automática do corpo para processar o raw body
@@ -109,43 +111,75 @@ async function manageGoogleDriveAccess(
 }
 
 export async function POST(request: Request) {
+  // Não usar async/await até obter o corpo, para garantir integridade
+  console.log("[Webhook] Webhook do Stripe recebido");
+
+  // Obter assinatura e corpo sem processamento para preservar formato exato
+  const signature = request.headers.get("stripe-signature");
+
+  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error("[Webhook] Erro: Assinatura ou chave secreta não fornecida");
+    return NextResponse.json(
+      { message: "Missing signature or webhook secret" },
+      { status: 400 }
+    );
+  }
+
+  const stripe = getStripe();
+  if (!stripe) {
+    console.error("[Webhook] Erro: Cliente Stripe não inicializado");
+    return NextResponse.json(
+      { message: "Stripe is not initialized" },
+      { status: 500 }
+    );
+  }
+
   try {
-    // Obter corpo da requisição como texto bruto, preservando exatamente como recebido
-    const rawBody = await request.text();
-    const signature = request.headers.get("stripe-signature");
+    // Clone a requisição para trabalhar com o corpo bruto, preservando integridade
+    const clonedRequest = request.clone();
+    const rawBody = await clonedRequest.text();
 
-    if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
-      console.error("Webhook error: Missing signature or webhook secret");
-      return NextResponse.json(
-        { message: "Missing signature or webhook secret" },
-        { status: 400 }
-      );
+    // Log detalhado para diagnóstico
+    console.log(`[Webhook] Comprimento do corpo: ${rawBody.length} bytes`);
+    console.log(
+      `[Webhook] Comprimento da assinatura: ${signature.length} bytes`
+    );
+
+    // Verificar se o corpo é um JSON válido para diagnóstico
+    try {
+      JSON.parse(rawBody);
+      console.log("[Webhook] Corpo é um JSON válido");
+    } catch {
+      console.log("[Webhook] ATENÇÃO: Corpo não é um JSON válido");
     }
 
-    const stripe = getStripe();
-    if (!stripe) {
-      console.error("Webhook error: Stripe is not initialized");
-      return NextResponse.json(
-        { message: "Stripe is not initialized" },
-        { status: 500 }
-      );
-    }
-
-    // Verifica o evento com o Stripe, usando o corpo bruto
+    // Construir o evento com o corpo bruto
     let event;
     try {
-      // Usa o corpo exatamente como recebido para validação da assinatura
       event = stripe.webhooks.constructEvent(
         rawBody,
         signature,
         process.env.STRIPE_WEBHOOK_SECRET
       );
+      console.log(`[Webhook] Evento verificado com sucesso: ${event.type}`);
     } catch (err: unknown) {
-      // Tratamento seguro do erro
       const errorMessage =
         err instanceof Error ? err.message : "Erro desconhecido";
-      console.error("Erro na verificação do webhook:", errorMessage);
-      // Este é o ponto crítico onde o Stripe está recebendo erro 400
+      console.error(`[Webhook] Erro na verificação: ${errorMessage}`);
+      // Para debug, mostrar parte da assinatura e do corpo
+      console.error(
+        `[Webhook] Primeiros 20 caracteres da assinatura: ${signature.substring(
+          0,
+          20
+        )}...`
+      );
+      console.error(
+        `[Webhook] Primeiros 50 caracteres do corpo: ${rawBody.substring(
+          0,
+          50
+        )}...`
+      );
+
       return NextResponse.json(
         { message: `Webhook Error: ${errorMessage}` },
         { status: 400 }
