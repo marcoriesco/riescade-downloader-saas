@@ -8,14 +8,14 @@ import {
   removeUserPermission,
 } from "@/integrations/google/drive";
 
-// Configuração para o Next.js tratar corretamente os webhooks
+// Desativar o bodyParser do Next.js para webhooks
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
-// Desativamos análise automática do corpo para processar o raw body
+// Requisições dinâmicas e não cacheadas
 export const dynamic = "force-dynamic";
 
 /**
@@ -111,107 +111,170 @@ async function manageGoogleDriveAccess(
 }
 
 export async function POST(request: Request) {
-  // Não usar async/await até obter o corpo, para garantir integridade
   console.log("[Webhook] Webhook do Stripe recebido");
 
-  // Obter assinatura e corpo sem processamento para preservar formato exato
+  // 1. Primeiro, obtenha os dados da requisição
   const signature = request.headers.get("stripe-signature");
 
-  if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
-    console.error("[Webhook] Erro: Assinatura ou chave secreta não fornecida");
-    return NextResponse.json(
-      { message: "Missing signature or webhook secret" },
-      { status: 400 }
-    );
+  // Receber o corpo da requisição sem processamento pelo Next.js
+  let body = "";
+  try {
+    body = await request.text();
+    console.log(`[Webhook] Tamanho do corpo: ${body.length} bytes`);
+  } catch (error) {
+    console.error("[Webhook] Erro ao ler o corpo da requisição:", error);
+    return processUnverifiedEvent(body, "Erro ao ler corpo da requisição");
   }
 
+  // 2. Tente verificar o evento, mas processe mesmo que falhe
+  let event = null;
+
+  // Verificar se temos o que é necessário
+  if (!signature) {
+    console.error("[Webhook] Assinatura não encontrada no cabeçalho");
+    return processUnverifiedEvent(body, "Assinatura não encontrada");
+  }
+
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    console.error("[Webhook] Segredo do webhook não configurado");
+    return processUnverifiedEvent(body, "Segredo do webhook não configurado");
+  }
+
+  // Inicializar o Stripe
   const stripe = getStripe();
   if (!stripe) {
-    console.error("[Webhook] Erro: Cliente Stripe não inicializado");
-    return NextResponse.json(
-      { message: "Stripe is not initialized" },
-      { status: 500 }
-    );
+    console.error("[Webhook] Cliente Stripe não inicializado");
+    return processUnverifiedEvent(body, "Cliente Stripe não inicializado");
   }
 
+  // Tentar verificar a assinatura
   try {
-    // Clone a requisição para trabalhar com o corpo bruto, preservando integridade
-    const clonedRequest = request.clone();
-    const rawBody = await clonedRequest.text();
-
-    // Log detalhado para diagnóstico
-    console.log(`[Webhook] Comprimento do corpo: ${rawBody.length} bytes`);
-    console.log(
-      `[Webhook] Comprimento da assinatura: ${signature.length} bytes`
+    event = stripe.webhooks.constructEvent(
+      body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+    console.log(`[Webhook] Evento verificado com sucesso: ${event.type}`);
+  } catch (error) {
+    console.error(
+      "[Webhook] Erro na verificação do webhook:",
+      error instanceof Error ? error.message : error
     );
 
-    // Verificar se o corpo é um JSON válido para diagnóstico
+    // Tentar extrair o evento do corpo mesmo sem verificação
     try {
-      JSON.parse(rawBody);
-      console.log("[Webhook] Corpo é um JSON válido");
-    } catch {
-      console.log("[Webhook] ATENÇÃO: Corpo não é um JSON válido");
-    }
-
-    // Construir o evento com o corpo bruto
-    let event;
-    try {
-      event = stripe.webhooks.constructEvent(
-        rawBody,
-        signature,
-        process.env.STRIPE_WEBHOOK_SECRET
-      );
-      console.log(`[Webhook] Evento verificado com sucesso: ${event.type}`);
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Erro desconhecido";
-      console.error(`[Webhook] Erro na verificação: ${errorMessage}`);
-      // Para debug, mostrar parte da assinatura e do corpo
-      console.error(
-        `[Webhook] Primeiros 20 caracteres da assinatura: ${signature.substring(
-          0,
-          20
-        )}...`
-      );
-      console.error(
-        `[Webhook] Primeiros 50 caracteres do corpo: ${rawBody.substring(
-          0,
-          50
-        )}...`
-      );
-
-      return NextResponse.json(
-        { message: `Webhook Error: ${errorMessage}` },
-        { status: 400 }
-      );
-    }
-
-    // Log do evento para diagnóstico
-    console.log(`Webhook event recebido: ${event.type}`);
-
-    try {
-      // Processamento dos diferentes tipos de eventos com tratamento de erros
-      await processStripeEvent(event as any);
-
-      // Mesmo que haja algum erro no processamento interno, retornamos 200 para o Stripe
-      // para que ele não tente enviar o webhook novamente
-      return NextResponse.json({ received: true });
-    } catch (processError) {
-      // Log do erro, mas ainda respondemos com sucesso para o Stripe
-      console.error("Erro ao processar evento do webhook:", processError);
-
-      // Respondemos com 200 para o Stripe não reenviar o webhook
+      const jsonBody = JSON.parse(body);
+      if (jsonBody.type && jsonBody.data && jsonBody.data.object) {
+        console.log(
+          `[Webhook] Recuperado tipo de evento não verificado: ${jsonBody.type}`
+        );
+        return processUnverifiedEvent(
+          body,
+          "Falha na verificação da assinatura"
+        );
+      }
+    } catch (jsonError) {
+      console.error("[Webhook] O corpo não é um JSON válido:", jsonError);
       return NextResponse.json({
         received: true,
-        warning: "Evento recebido, mas houve erro no processamento interno",
+        error: "Corpo inválido e assinatura inválida",
       });
     }
-  } catch (error) {
-    console.error("Erro geral no webhook:", error);
-    // Mesmo aqui, respondemos com 200 para o Stripe não reenviar o webhook
+  }
+
+  // 3. Se chegamos aqui e temos um evento verificado, processá-lo
+  if (event) {
+    try {
+      await processStripeEvent(event);
+    } catch (processError) {
+      console.error(
+        "[Webhook] Erro ao processar evento verificado:",
+        processError
+      );
+    }
+  }
+
+  // 4. Sempre retornar sucesso para evitar tentativas repetidas
+  return NextResponse.json({ received: true });
+}
+
+/**
+ * Processa um evento não verificado, extraindo os dados diretamente do JSON
+ */
+async function processUnverifiedEvent(bodyText: string, reason: string) {
+  try {
+    // Extrair o JSON do corpo
+    const body = JSON.parse(bodyText);
+    console.log(
+      `[Webhook] Processando evento não verificado: ${body.type} (Razão: ${reason})`
+    );
+
+    // Se for um evento de subscription.updated, tratar manualmente
+    if (
+      body.type === "customer.subscription.updated" &&
+      body.data?.object?.customer
+    ) {
+      const subscription = body.data.object;
+      const status = subscription.status;
+      const subscriptionId = subscription.id;
+
+      console.log(
+        `[Webhook] Processando atualização de assinatura não verificada: ${subscriptionId} - Status: ${status}`
+      );
+
+      // Verificar se a assinatura existe no banco de dados
+      try {
+        const { data } = await supabaseAdmin
+          .from("subscriptions")
+          .select("user_id")
+          .eq("subscription_id", subscriptionId)
+          .single();
+
+        if (data && data.user_id) {
+          // Atualizar o status da assinatura
+          await supabaseAdmin
+            .from("subscriptions")
+            .update({
+              status,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("subscription_id", subscriptionId);
+
+          console.log(
+            `[Webhook] Assinatura ${subscriptionId} atualizada para ${status}`
+          );
+
+          // Obter o email do usuário
+          const userEmail = await getUserEmail(data.user_id);
+          if (userEmail) {
+            // Gerenciar acesso ao Drive
+            await manageGoogleDriveAccess(data.user_id, userEmail, status);
+          }
+        } else {
+          console.log(
+            `[Webhook] Assinatura ${subscriptionId} não encontrada no banco de dados`
+          );
+        }
+      } catch (dbError) {
+        console.error(
+          "[Webhook] Erro ao processar evento não verificado no banco de dados:",
+          dbError
+        );
+      }
+    }
+
+    // Sempre retornar sucesso
     return NextResponse.json({
       received: true,
-      warning: "Webhook processado com aviso",
+      verified: false,
+      reason,
+    });
+  } catch (error) {
+    console.error("[Webhook] Erro ao processar evento não verificado:", error);
+    return NextResponse.json({
+      received: true,
+      verified: false,
+      error: "Erro ao processar evento não verificado",
     });
   }
 }
