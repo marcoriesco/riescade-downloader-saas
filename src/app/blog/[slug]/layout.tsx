@@ -21,8 +21,8 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
     };
   }
 
-  // Metadata base
-  const metadata: Metadata = {
+  // Metadata simples sem opengraph ou twitter card
+  const baseMetadata: Metadata = {
     title: `${post.title} | RIESCADE`,
     description: post.excerpt || post.title,
     alternates: {
@@ -30,33 +30,36 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
     },
   };
 
-  // Adiciona OpenGraph e Twitter card apenas se houver imagem de capa
+  // Adiciona opengraph e twitter card apenas se houver imagem de capa
   if (post.cover_image) {
-    metadata.openGraph = {
-      title: post.title,
-      description: post.excerpt || post.title,
-      url: `https://riescade.com/blog/${resolvedParams.slug}`,
-      siteName: "RIESCADE",
-      images: [
-        {
-          url: post.cover_image,
-          width: 1200,
-          height: 630,
-          alt: post.title,
-        },
-      ],
-      type: "article",
-    };
-
-    metadata.twitter = {
-      card: "summary_large_image",
-      title: post.title,
-      description: post.excerpt || post.title,
-      images: [post.cover_image],
+    return {
+      ...baseMetadata,
+      openGraph: {
+        title: post.title,
+        description: post.excerpt || post.title,
+        url: `https://riescade.com/blog/${resolvedParams.slug}`,
+        siteName: "RIESCADE",
+        images: [
+          {
+            url: post.cover_image,
+            width: 1200,
+            height: 630,
+            alt: post.title,
+          },
+        ],
+        type: "article",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: post.title,
+        description: post.excerpt || post.title,
+        images: [post.cover_image],
+      },
     };
   }
 
-  return metadata;
+  // Retorna apenas os metadados básicos se não houver imagem
+  return baseMetadata;
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {

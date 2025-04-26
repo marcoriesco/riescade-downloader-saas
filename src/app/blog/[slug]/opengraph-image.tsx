@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { getBlogPostBySlug } from "@/lib/blog-service";
+import { NextResponse } from "next/server";
 
 // Route segment config
 export const runtime = "edge";
@@ -18,19 +19,32 @@ export default async function Image({ params }: { params: { slug: string } }) {
   try {
     const post = await getBlogPostBySlug(params.slug);
 
-    // Se não houver post ou se o post não tiver imagem de capa, retorna null
+    // Se não houver post ou se o post não tiver imagem de capa, retorna uma imagem vazia
     if (!post || !post.cover_image) {
-      return null;
+      // Retornar uma imagem transparente 1x1 como fallback, em vez de null
+      return new ImageResponse(
+        (
+          <div
+            style={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              backgroundColor: "transparent",
+            }}
+          ></div>
+        ),
+        { ...size }
+      );
     }
 
-    // Usa a imagem de capa diretamente se existir
+    // Se tiver uma imagem de capa, redireciona para ela
     if (post.cover_image) {
-      // Retorna null para permitir que o Next.js use a imagem de capa diretamente
-      return null;
+      // Em vez de retornar null, redirecionamos para a imagem original
+      return NextResponse.redirect(post.cover_image);
     }
 
     // Esse código nunca será alcançado devido ao retorno anterior,
-    // mas mantemos para mostrar como seria a geração da imagem se necessário no futuro
+    // mas mantemos como fallback adicional
     return new ImageResponse(
       (
         <div
@@ -86,7 +100,19 @@ export default async function Image({ params }: { params: { slug: string } }) {
       { ...size }
     );
   } catch {
-    // Em caso de erro, retorna null para não exibir imagem alguma
-    return null;
+    // Em caso de erro, retorna uma imagem vazia em vez de null
+    return new ImageResponse(
+      (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            backgroundColor: "transparent",
+          }}
+        ></div>
+      ),
+      { ...size }
+    );
   }
 }
