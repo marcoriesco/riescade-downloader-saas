@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextResponse } from "next/server";
 import { getStripe } from "@/lib/stripe";
 import { supabase } from "@/lib/supabase";
@@ -6,6 +7,14 @@ import {
   addUserPermission,
   removeUserPermission,
 } from "@/integrations/google/drive";
+
+// Configuração para o Next.js tratar corretamente os webhooks
+export const config = {
+  runtime: "nodejs", // Isso executa no NodeJS em vez de edge runtime
+};
+
+// Desativamos análise automática do corpo para processar o raw body
+export const dynamic = "force-dynamic";
 
 /**
  * Obtém o email do usuário para gerenciar permissões no Google Drive
@@ -101,10 +110,12 @@ async function manageGoogleDriveAccess(
 
 export async function POST(request: Request) {
   try {
-    const body = await request.text();
+    // Obter corpo da requisição como texto bruto, preservando exatamente como recebido
+    const rawBody = await request.text();
     const signature = request.headers.get("stripe-signature");
 
     if (!signature || !process.env.STRIPE_WEBHOOK_SECRET) {
+      console.error("Webhook error: Missing signature or webhook secret");
       return NextResponse.json(
         { message: "Missing signature or webhook secret" },
         { status: 400 }
@@ -113,291 +124,329 @@ export async function POST(request: Request) {
 
     const stripe = getStripe();
     if (!stripe) {
+      console.error("Webhook error: Stripe is not initialized");
       return NextResponse.json(
         { message: "Stripe is not initialized" },
         { status: 500 }
       );
     }
 
-    // Verifica o evento com o Stripe
+    // Verifica o evento com o Stripe, usando o corpo bruto
     let event;
     try {
+      // Usa o corpo exatamente como recebido para validação da assinatura
       event = stripe.webhooks.constructEvent(
-        body,
+        rawBody,
         signature,
         process.env.STRIPE_WEBHOOK_SECRET
       );
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
+    } catch (err: unknown) {
+      // Tratamento seguro do erro
+      const errorMessage =
+        err instanceof Error ? err.message : "Erro desconhecido";
+      console.error("Erro na verificação do webhook:", errorMessage);
+      // Este é o ponto crítico onde o Stripe está recebendo erro 400
       return NextResponse.json(
-        { message: `Webhook Error: ${err.message}` },
+        { message: `Webhook Error: ${errorMessage}` },
         { status: 400 }
       );
     }
 
-    // Processa diferentes tipos de eventos
-    switch (event.type) {
-      case "checkout.session.completed":
-        const session = event.data.object;
-        console.log("Checkout session completed:", session);
+    // Log do evento para diagnóstico
+    console.log(`Webhook event recebido: ${event.type}`);
 
-        // Verifica se temos todos os dados necessários
-        if (
-          !session.customer ||
-          !session.subscription ||
-          !session.client_reference_id
-        ) {
-          console.error("Dados incompletos na sessão de checkout:", {
-            customer: !!session.customer,
-            subscription: !!session.subscription,
-            client_reference_id: !!session.client_reference_id,
-          });
-          break;
-        }
+    try {
+      // Processamento dos diferentes tipos de eventos com tratamento de erros
+      await processStripeEvent(event as any);
 
-        console.log("Processando checkout concluído para:", {
-          user_id: session.client_reference_id,
-          customer_id: session.customer,
-          subscription_id: session.subscription,
+      // Mesmo que haja algum erro no processamento interno, retornamos 200 para o Stripe
+      // para que ele não tente enviar o webhook novamente
+      return NextResponse.json({ received: true });
+    } catch (processError) {
+      // Log do erro, mas ainda respondemos com sucesso para o Stripe
+      console.error("Erro ao processar evento do webhook:", processError);
+
+      // Respondemos com 200 para o Stripe não reenviar o webhook
+      return NextResponse.json({
+        received: true,
+        warning: "Evento recebido, mas houve erro no processamento interno",
+      });
+    }
+  } catch (error) {
+    console.error("Erro geral no webhook:", error);
+    // Mesmo aqui, respondemos com 200 para o Stripe não reenviar o webhook
+    return NextResponse.json({
+      received: true,
+      warning: "Webhook processado com aviso",
+    });
+  }
+}
+
+/**
+ * Processa eventos do Stripe e lida com exceções internamente
+ * para não propagar erros de volta para o Stripe
+ */
+async function processStripeEvent(event: {
+  type: string;
+  data: { object: any };
+}) {
+  const stripe = getStripe();
+  if (!stripe) {
+    console.error("Stripe não inicializado no processamento de eventos");
+    return;
+  }
+
+  // Processa diferentes tipos de eventos
+  switch (event.type) {
+    case "checkout.session.completed":
+      const session = event.data.object;
+      console.log("Checkout session completed:", session);
+
+      // Verifica se temos todos os dados necessários
+      if (
+        !session.customer ||
+        !session.subscription ||
+        !session.client_reference_id
+      ) {
+        console.error("Dados incompletos na sessão de checkout:", {
+          customer: !!session.customer,
+          subscription: !!session.subscription,
+          client_reference_id: !!session.client_reference_id,
         });
+        return; // Retornamos sem erro para não interromper o fluxo
+      }
 
-        // Atualiza o banco de dados
-        const { error } = await supabase.from("subscriptions").upsert({
-          user_id: session.client_reference_id,
-          subscription_id: session.subscription,
-          customer_id: session.customer,
-          status: "active",
-          start_date: new Date().toISOString(),
-          end_date: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000
-          ).toISOString(),
-          price_id: session.metadata?.price_id || "",
-          plan_id: "default",
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          payment_provider: "stripe",
-        });
+      console.log("Processando checkout concluído para:", {
+        user_id: session.client_reference_id,
+        customer_id: session.customer,
+        subscription_id: session.subscription,
+      });
 
-        if (error) {
-          console.error("Error updating subscription:", error);
-        } else {
-          // Se temos nome completo nos metadados, atualize o cliente Stripe
-          if (session.metadata?.fullName) {
-            try {
-              await stripe.customers.update(session.customer.toString(), {
-                name: session.metadata.fullName,
-                metadata: {
-                  fullName: session.metadata.fullName,
-                },
-              });
-              console.log(
-                `Nome do cliente atualizado: ${session.metadata.fullName}`
-              );
-            } catch (updateError) {
-              console.error("Erro ao atualizar nome do cliente:", updateError);
-            }
-          }
+      // Atualiza o banco de dados
+      const { error } = await supabase.from("subscriptions").upsert({
+        user_id: session.client_reference_id,
+        subscription_id: session.subscription,
+        customer_id: session.customer,
+        status: "active",
+        start_date: new Date().toISOString(),
+        end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        price_id: session.metadata?.price_id || "",
+        plan_id: "default",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        payment_provider: "stripe",
+      });
 
-          // Obter o email do usuário para gerenciar permissões no Drive
+      if (error) {
+        console.error("Error updating subscription:", error);
+      } else {
+        // Se temos nome completo nos metadados, atualize o cliente Stripe
+        if (session.metadata?.fullName) {
           try {
-            const userEmail = await getUserEmail(session.client_reference_id);
-
-            if (userEmail) {
-              await manageGoogleDriveAccess(
-                session.client_reference_id,
-                userEmail,
-                "active"
-              );
-            } else {
-              console.error(
-                "Não foi possível obter o email do usuário para gerenciar acesso ao Drive"
-              );
-            }
-          } catch (emailError) {
-            console.error("Erro ao obter email do usuário:", emailError);
+            await stripe.customers.update(session.customer.toString(), {
+              name: session.metadata.fullName,
+              metadata: {
+                fullName: session.metadata.fullName,
+              },
+            });
+            console.log(
+              `Nome do cliente atualizado: ${session.metadata.fullName}`
+            );
+          } catch (updateError) {
+            console.error("Erro ao atualizar nome do cliente:", updateError);
           }
         }
-        break;
 
-      case "customer.subscription.updated":
-      case "customer.subscription.deleted":
-        const subscription = event.data.object;
-        const status = subscription.status;
-        console.log(
-          `Evento de subscription ${event.type} recebido:`,
-          subscription.id,
-          status
-        );
+        // Obter o email do usuário para gerenciar permissões no Drive
+        try {
+          const userEmail = await getUserEmail(session.client_reference_id);
 
-        // Tentativa de atualização com supabaseAdmin - maior privilégio
-        console.log("Tentando verificar a assinatura com supabaseAdmin");
-        const { data: adminCheckData, error: adminCheckError } =
-          await supabaseAdmin
-            .from("subscriptions")
-            .select("subscription_id, user_id, customer_id, status")
-            .eq("subscription_id", subscription.id);
-
-        if (adminCheckError) {
-          console.error(
-            "Erro ao verificar existência da assinatura com Admin:",
-            adminCheckError
-          );
-        } else {
-          console.log("Resultado da verificação com Admin:", adminCheckData);
+          if (userEmail) {
+            await manageGoogleDriveAccess(
+              session.client_reference_id,
+              userEmail,
+              "active"
+            );
+          } else {
+            console.error(
+              "Não foi possível obter o email do usuário para gerenciar acesso ao Drive"
+            );
+          }
+        } catch (emailError) {
+          console.error("Erro ao obter email do usuário:", emailError);
         }
+      }
+      break;
 
-        let userIdToUpdate = null;
-        let customerIdToUse = null;
+    case "customer.subscription.updated":
+    case "customer.subscription.deleted":
+      const subscription = event.data.object;
+      const status = subscription.status;
+      console.log(
+        `Evento de subscription ${event.type} recebido:`,
+        subscription.id,
+        status
+      );
 
-        // Estratégia 1: Encontrar pelo subscription_id
-        if (adminCheckData && adminCheckData.length > 0) {
-          console.log("Assinatura encontrada pelo subscription_id");
-          userIdToUpdate = adminCheckData[0].user_id;
-          customerIdToUse = adminCheckData[0].customer_id;
+      // Tentativa de atualização com supabaseAdmin - maior privilégio
+      console.log("Tentando verificar a assinatura com supabaseAdmin");
+      const { data: adminCheckData, error: adminCheckError } =
+        await supabaseAdmin
+          .from("subscriptions")
+          .select("subscription_id, user_id, customer_id, status")
+          .eq("subscription_id", subscription.id);
 
-          // Atualizar diretamente
+      if (adminCheckError) {
+        console.error(
+          "Erro ao verificar existência da assinatura com Admin:",
+          adminCheckError
+        );
+      } else {
+        console.log("Resultado da verificação com Admin:", adminCheckData);
+      }
+
+      let userIdToUpdate = null;
+      let customerIdToUse = null;
+
+      // Estratégia 1: Encontrar pelo subscription_id
+      if (adminCheckData && adminCheckData.length > 0) {
+        console.log("Assinatura encontrada pelo subscription_id");
+        userIdToUpdate = adminCheckData[0].user_id;
+        customerIdToUse = adminCheckData[0].customer_id;
+
+        // Atualizar diretamente
+        const { error: updateError } = await supabaseAdmin
+          .from("subscriptions")
+          .update({
+            status,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("subscription_id", subscription.id);
+
+        if (updateError) {
+          console.error("Erro ao atualizar assinatura:", updateError);
+        } else {
+          console.log(
+            `Assinatura ${subscription.id} atualizada com sucesso para ${status}`
+          );
+
+          // Gerenciar acesso ao Drive
+          await processUserAccess(userIdToUpdate, customerIdToUse, status);
+          return;
+        }
+      }
+      // Estratégia 2: Se não achou pelo subscription_id, procurar pelo customer_id
+      else if (subscription.customer) {
+        console.log(
+          "Tentando encontrar assinatura pelo customer_id:",
+          subscription.customer
+        );
+        const { data: customerData, error: customerError } = await supabaseAdmin
+          .from("subscriptions")
+          .select("subscription_id, user_id, customer_id")
+          .eq("customer_id", subscription.customer);
+
+        if (customerError) {
+          console.error("Erro ao buscar pelo customer_id:", customerError);
+        } else if (customerData && customerData.length > 0) {
+          console.log(
+            "Assinatura encontrada pelo customer_id:",
+            customerData[0]
+          );
+          userIdToUpdate = customerData[0].user_id;
+          customerIdToUse = customerData[0].customer_id;
+
+          // Atualizar todas as assinaturas deste customer
           const { error: updateError } = await supabaseAdmin
             .from("subscriptions")
             .update({
               status,
+              subscription_id: subscription.id, // Atualiza o subscription_id para manter sincronizado
               updated_at: new Date().toISOString(),
             })
-            .eq("subscription_id", subscription.id);
+            .eq("customer_id", subscription.customer);
 
           if (updateError) {
-            console.error("Erro ao atualizar assinatura:", updateError);
+            console.error(
+              "Erro ao atualizar assinatura pelo customer_id:",
+              updateError
+            );
           } else {
             console.log(
-              `Assinatura ${subscription.id} atualizada com sucesso para ${status}`
+              `Assinaturas do customer ${subscription.customer} atualizadas para ${status}`
             );
 
             // Gerenciar acesso ao Drive
             await processUserAccess(userIdToUpdate, customerIdToUse, status);
-            return NextResponse.json({ received: true });
+            return;
           }
-        }
-        // Estratégia 2: Se não achou pelo subscription_id, procurar pelo customer_id
-        else if (subscription.customer) {
-          console.log(
-            "Tentando encontrar assinatura pelo customer_id:",
-            subscription.customer
-          );
-          const { data: customerData, error: customerError } =
-            await supabaseAdmin
-              .from("subscriptions")
-              .select("subscription_id, user_id, customer_id")
-              .eq("customer_id", subscription.customer);
+        } else {
+          console.log("Nenhuma assinatura encontrada para este customer");
 
-          if (customerError) {
-            console.error("Erro ao buscar pelo customer_id:", customerError);
-          } else if (customerData && customerData.length > 0) {
-            console.log(
-              "Assinatura encontrada pelo customer_id:",
-              customerData[0]
-            );
-            userIdToUpdate = customerData[0].user_id;
-            customerIdToUse = customerData[0].customer_id;
+          // Estratégia 3: Como último recurso, verificar diretamente na tabela 'users' do Supabase
+          try {
+            const { data: usersData, error: usersError } = await supabaseAdmin
+              .from("users") // Ou a tabela que você utiliza para usuários
+              .select("id, email")
+              .eq("stripe_customer_id", subscription.customer)
+              .single();
 
-            // Atualizar todas as assinaturas deste customer
-            const { error: updateError } = await supabaseAdmin
-              .from("subscriptions")
-              .update({
-                status,
-                subscription_id: subscription.id, // Atualiza o subscription_id para manter sincronizado
-                updated_at: new Date().toISOString(),
-              })
-              .eq("customer_id", subscription.customer);
-
-            if (updateError) {
-              console.error(
-                "Erro ao atualizar assinatura pelo customer_id:",
-                updateError
-              );
-            } else {
+            if (!usersError && usersData) {
               console.log(
-                `Assinaturas do customer ${subscription.customer} atualizadas para ${status}`
+                "Usuário encontrado pelo customer_id na tabela users:",
+                usersData
               );
 
-              // Gerenciar acesso ao Drive
-              await processUserAccess(userIdToUpdate, customerIdToUse, status);
-              return NextResponse.json({ received: true });
-            }
-          } else {
-            console.log("Nenhuma assinatura encontrada para este customer");
+              // Criar uma entrada nova de assinatura
+              const { error: insertError } = await supabaseAdmin
+                .from("subscriptions")
+                .insert({
+                  user_id: usersData.id,
+                  customer_id: subscription.customer,
+                  subscription_id: subscription.id,
+                  status: status,
+                  updated_at: new Date().toISOString(),
+                  created_at: new Date().toISOString(),
+                  payment_provider: "stripe",
+                });
 
-            // Estratégia 3: Como último recurso, verificar diretamente na tabela 'users' do Supabase
-            try {
-              const { data: usersData, error: usersError } = await supabaseAdmin
-                .from("users") // Ou a tabela que você utiliza para usuários
-                .select("id, email")
-                .eq("stripe_customer_id", subscription.customer)
-                .single();
-
-              if (!usersError && usersData) {
-                console.log(
-                  "Usuário encontrado pelo customer_id na tabela users:",
-                  usersData
-                );
-
-                // Criar uma entrada nova de assinatura
-                const { error: insertError } = await supabaseAdmin
-                  .from("subscriptions")
-                  .insert({
-                    user_id: usersData.id,
-                    customer_id: subscription.customer,
-                    subscription_id: subscription.id,
-                    status: status,
-                    updated_at: new Date().toISOString(),
-                    created_at: new Date().toISOString(),
-                    payment_provider: "stripe",
-                  });
-
-                if (insertError) {
-                  console.error("Erro ao criar nova assinatura:", insertError);
-                } else {
-                  console.log(
-                    "Nova assinatura criada para o usuário:",
-                    usersData.id
-                  );
-
-                  // Gerenciar acesso ao Drive
-                  if (usersData.email) {
-                    await manageGoogleDriveAccess(
-                      usersData.id,
-                      usersData.email,
-                      status
-                    );
-                  }
-                  return NextResponse.json({ received: true });
-                }
+              if (insertError) {
+                console.error("Erro ao criar nova assinatura:", insertError);
               } else {
                 console.log(
-                  "Usuário não encontrado na tabela users:",
-                  usersError
+                  "Nova assinatura criada para o usuário:",
+                  usersData.id
                 );
+
+                // Gerenciar acesso ao Drive
+                if (usersData.email) {
+                  await manageGoogleDriveAccess(
+                    usersData.id,
+                    usersData.email,
+                    status
+                  );
+                }
+                return;
               }
-            } catch (error) {
-              console.error("Erro ao consultar tabela de usuários:", error);
+            } else {
+              console.log(
+                "Usuário não encontrado na tabela users:",
+                usersError
+              );
             }
+          } catch (error) {
+            console.error("Erro ao consultar tabela de usuários:", error);
           }
         }
+      }
 
-        console.log(
-          "Não foi possível atualizar a assinatura por nenhum método conhecido"
-        );
-        break;
+      console.log(
+        "Não foi possível atualizar a assinatura por nenhum método conhecido"
+      );
+      break;
 
-      default:
-        console.log(`Unhandled event type ${event.type}`);
-    }
-
-    return NextResponse.json({ received: true });
-  } catch (error) {
-    console.error("Webhook error:", error);
-    return NextResponse.json(
-      { message: "Something went wrong" },
-      { status: 500 }
-    );
+    default:
+      console.log(`Unhandled event type ${event.type}`);
   }
 }
 
