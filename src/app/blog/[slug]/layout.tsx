@@ -28,10 +28,18 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
     alternates: {
       canonical: `https://riescade.com/blog/${resolvedParams.slug}`,
     },
+    // Desativar explicitamente a geração automática de OpenGraph
+    openGraph: null,
+    twitter: null,
   };
 
   // Adiciona opengraph e twitter card apenas se houver imagem de capa
   if (post.cover_image) {
+    // Certifique-se de que a URL é absoluta
+    const imageUrl = post.cover_image.startsWith("http")
+      ? post.cover_image
+      : `https://riescade.com${post.cover_image}`;
+
     return {
       ...baseMetadata,
       openGraph: {
@@ -41,7 +49,7 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
         siteName: "RIESCADE",
         images: [
           {
-            url: post.cover_image,
+            url: imageUrl,
             width: 1200,
             height: 630,
             alt: post.title,
@@ -53,7 +61,7 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
         card: "summary_large_image",
         title: post.title,
         description: post.excerpt || post.title,
-        images: [post.cover_image],
+        images: [imageUrl],
       },
     };
   }
