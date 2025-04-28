@@ -26,7 +26,7 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
     title: `${post.title} | RIESCADE`,
     description: post.excerpt || post.title,
     alternates: {
-      canonical: `https://riescade.com/blog/${resolvedParams.slug}`,
+      canonical: `https://www.riescade.com.br/blog/${resolvedParams.slug}`,
     },
     // Desativar explicitamente a geração automática de OpenGraph
     openGraph: null,
@@ -35,17 +35,33 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
 
   // Adiciona opengraph e twitter card apenas se houver imagem de capa
   if (post.cover_image) {
-    // Certifique-se de que a URL é absoluta
-    const imageUrl = post.cover_image.startsWith("http")
-      ? post.cover_image
-      : `https://riescade.com${post.cover_image}`;
+    // Certifique-se de que a URL é absoluta e usa o domínio correto
+    // Primeiro, extraímos o caminho da imagem original removendo qualquer domínio
+    let imagePath = post.cover_image;
+    if (imagePath.startsWith("http")) {
+      // Se já é uma URL completa, extrair só o caminho
+      try {
+        const url = new URL(imagePath);
+        imagePath = url.pathname;
+      } catch (e) {
+        console.error("Erro ao processar URL da imagem:", e);
+      }
+    }
+
+    // Se o caminho não começar com /, adicionar
+    if (!imagePath.startsWith("/")) {
+      imagePath = "/" + imagePath;
+    }
+
+    // Construir a URL completa com o domínio correto
+    const imageUrl = `https://www.riescade.com.br${imagePath}`;
 
     return {
       ...baseMetadata,
       openGraph: {
         title: post.title,
         description: post.excerpt || post.title,
-        url: `https://riescade.com/blog/${resolvedParams.slug}`,
+        url: `https://www.riescade.com.br/blog/${resolvedParams.slug}`,
         siteName: "RIESCADE",
         images: [
           {

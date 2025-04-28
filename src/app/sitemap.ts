@@ -8,7 +8,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Criar entradas para cada post do blog
   const blogEntries = blogPosts.map((post: BlogPost) => ({
-    url: `https://riescade.com/blog/${post.slug}`,
+    url: `https://www.riescade.com.br/blog/${post.slug}`,
     lastModified:
       post.updated_at || post.published_at || new Date().toISOString(),
     changeFrequency: "weekly" as const,
@@ -23,19 +23,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Outras páginas do site
   const routes = [
     {
-      url: "https://riescade.com",
+      url: "https://www.riescade.com.br",
       lastModified: new Date().toISOString(),
       changeFrequency: "daily" as const,
       priority: 1,
     },
     {
-      url: "https://riescade.com/blog",
+      url: "https://www.riescade.com.br/blog",
       lastModified: new Date().toISOString(),
       changeFrequency: "daily" as const,
       priority: 0.9,
     },
     {
-      url: "https://riescade.com/sobre",
+      url: "https://www.riescade.com.br/sobre",
       lastModified: new Date().toISOString(),
       changeFrequency: "monthly" as const,
       priority: 0.7,
