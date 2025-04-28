@@ -16,17 +16,24 @@ export async function GET(
     // Obter o caminho completo da imagem a partir dos segmentos
     const { path: pathSegments } = await context.params;
     const imagePath = pathSegments.join("/");
-    console.log(`[static-image] Requisição para: ${imagePath}`);
+
+    // Log mais detalhado
+    console.log(`[static-image] Nova requisição`);
+    console.log(
+      `[static-image] Segmentos da URL: ${JSON.stringify(pathSegments)}`
+    );
+    console.log(`[static-image] Caminho completo: ${imagePath}`);
 
     // Verificar se a imagem está na pasta public
     const publicPath = path.join(process.cwd(), "public", imagePath);
+    console.log(`[static-image] Verificando em: ${publicPath}`);
 
     // Verificar se o arquivo existe na pasta public
     try {
       const stats = await fs.stat(publicPath);
 
       if (stats.isFile()) {
-        console.log(`[static-image] Arquivo encontrado em: ${publicPath}`);
+        console.log(`[static-image] ✅ Arquivo encontrado em: ${publicPath}`);
         const fileBuffer = await fs.readFile(publicPath);
 
         // Determinar o tipo de conteúdo baseado na extensão
@@ -37,30 +44,48 @@ export async function GET(
         headersList.set("Content-Type", contentType);
         headersList.set("Cache-Control", "public, max-age=86400");
 
+        console.log(
+          `[static-image] Servindo arquivo: ${imagePath} (${contentType})`
+        );
+
         return new NextResponse(fileBuffer, {
           status: 200,
           headers: headersList,
         });
+      } else {
+        console.log(
+          `[static-image] Caminho existe mas não é um arquivo: ${publicPath}`
+        );
       }
-    } catch {
+    } catch (err) {
       console.log(
-        `[static-image] Arquivo não encontrado em public: ${publicPath}`
+        `[static-image] ❌ Arquivo não encontrado em public: ${publicPath}`
+      );
+      console.log(
+        `[static-image] Erro: ${
+          err instanceof Error ? err.message : String(err)
+        }`
       );
     }
 
     // Se não estiver na pasta public, verificar na pasta de uploads (opcional)
     // Adaptar se houver outras pastas onde imagens podem estar armazenadas
     const uploadsPath = path.join(process.cwd(), "uploads", imagePath);
+    console.log(`[static-image] Verificando em: ${uploadsPath}`);
 
     try {
       const stats = await fs.stat(uploadsPath);
 
       if (stats.isFile()) {
-        console.log(`[static-image] Arquivo encontrado em: ${uploadsPath}`);
+        console.log(`[static-image] ✅ Arquivo encontrado em: ${uploadsPath}`);
         const fileBuffer = await fs.readFile(uploadsPath);
 
         // Determinar o tipo de conteúdo baseado na extensão
         const contentType = getContentType(imagePath);
+
+        console.log(
+          `[static-image] Servindo arquivo: ${imagePath} (${contentType})`
+        );
 
         return new NextResponse(fileBuffer, {
           status: 200,
@@ -69,19 +94,78 @@ export async function GET(
             "Cache-Control": "public, max-age=86400",
           },
         });
+      } else {
+        console.log(
+          `[static-image] Caminho existe mas não é um arquivo: ${uploadsPath}`
+        );
       }
-    } catch {
+    } catch (err) {
       console.log(
-        `[static-image] Arquivo não encontrado em uploads: ${uploadsPath}`
+        `[static-image] ❌ Arquivo não encontrado em uploads: ${uploadsPath}`
+      );
+      console.log(
+        `[static-image] Erro: ${
+          err instanceof Error ? err.message : String(err)
+        }`
       );
     }
 
+    // Verificar se é uma imagem do blog e tentar com path alternativo
+    if (imagePath.includes("blog/") && !imagePath.startsWith("images/")) {
+      // Tentar novamente com 'images/' prefixado
+      const alternativePath = `images/${imagePath}`;
+      const altPublicPath = path.join(process.cwd(), "public", alternativePath);
+
+      console.log(
+        `[static-image] Tentando caminho alternativo: ${altPublicPath}`
+      );
+
+      try {
+        const stats = await fs.stat(altPublicPath);
+
+        if (stats.isFile()) {
+          console.log(
+            `[static-image] ✅ Arquivo encontrado em caminho alternativo: ${altPublicPath}`
+          );
+          const fileBuffer = await fs.readFile(altPublicPath);
+          const contentType = getContentType(alternativePath);
+
+          return new NextResponse(fileBuffer, {
+            status: 200,
+            headers: {
+              "Content-Type": contentType,
+              "Cache-Control": "public, max-age=86400",
+            },
+          });
+        }
+      } catch {
+        console.log(
+          `[static-image] ❌ Arquivo não encontrado no caminho alternativo: ${altPublicPath}`
+        );
+      }
+    }
+
     // Se a imagem não foi encontrada, retornar 404
-    console.log(`[static-image] Imagem não encontrada: ${imagePath}`);
-    return new NextResponse("Imagem não encontrada", { status: 404 });
+    console.log(`[static-image] ❌ Imagem não encontrada: ${imagePath}`);
+    return new NextResponse("Imagem não encontrada", {
+      status: 404,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+    });
   } catch (error) {
-    console.error("[static-image] Erro ao processar imagem:", error);
-    return new NextResponse("Erro ao processar imagem", { status: 500 });
+    console.error("[static-image] ⚠️ Erro ao processar imagem:", error);
+    return new NextResponse(
+      `Erro ao processar imagem: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "text/plain",
+        },
+      }
+    );
   }
 }
 

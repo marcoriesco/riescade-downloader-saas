@@ -51,12 +51,17 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
           imagePath = `images/${imagePath}`;
         }
 
-        // Usar a nova rota static-image para qualquer tipo de imagem
-        // Isso garante acesso consistente em todos os ambientes
+        // Usar caminhos relativos para a API, que funcionam tanto em desenvolvimento quanto em produção
         const staticImagePath = imagePath.replace(/^\//, "");
-        directImageUrl = `https://www.riescade.com.br/api/static-image/${staticImagePath}`;
 
-        console.log("Usando rota static-image para:", staticImagePath);
+        // Em produção, usar o domínio completo
+        const baseUrl =
+          process.env.NEXT_PUBLIC_BASE_URL || "https://www.riescade.com.br";
+        directImageUrl = `${baseUrl}/api/static-image/${staticImagePath}`;
+
+        // Apenas para depuração, mostrar ambos os caminhos
+        console.log("URL da imagem:", directImageUrl);
+        console.log("Caminho da imagem:", staticImagePath);
       } else {
         // URL absoluta, usar diretamente
         directImageUrl = imagePath;
@@ -65,27 +70,14 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
       // Limpar a URL (remover espaços, etc)
       const imageUrl = directImageUrl.trim();
 
-      // Testar se a imagem existe
-      fetch(imageUrl, { method: "HEAD" })
-        .then((response) => {
-          if (!response.ok) {
-            console.warn("Imagem OG não acessível, usando fallback:", imageUrl);
-          } else {
-            console.log("Imagem OG confirmada acessível:", imageUrl);
-          }
-        })
-        .catch(() => {
-          console.warn(
-            "Erro ao verificar imagem OG, usando fallback:",
-            imageUrl
-          );
-        });
-
       // URL de fallback caso a imagem não possa ser carregada
-      const fallbackUrl = `https://www.riescade.com.br/api/og-fallback?title=${encodeURIComponent(
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || "https://www.riescade.com.br";
+      const fallbackUrl = `${baseUrl}/api/og-fallback?title=${encodeURIComponent(
         post.title
       )}`;
 
+      // Em vez de testar com fetch, vamos confiar na rota static-image para lidar com casos de erro
       console.log("OpenGraph image URL:", imageUrl);
 
       return {
@@ -93,7 +85,7 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
         openGraph: {
           title: post.title,
           description: post.excerpt || post.title,
-          url: `https://www.riescade.com.br/blog/${resolvedParams.slug}`,
+          url: `${baseUrl}/blog/${resolvedParams.slug}`,
           siteName: "RIESCADE",
           images: [
             {
@@ -122,7 +114,9 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
     } catch (e) {
       console.error("Erro ao processar URL da imagem:", e);
       // Fallback direto para a rota de imagem gerada em caso de erro
-      const fallbackUrl = `https://www.riescade.com.br/api/og-fallback?title=${encodeURIComponent(
+      const baseUrl =
+        process.env.NEXT_PUBLIC_BASE_URL || "https://www.riescade.com.br";
+      const fallbackUrl = `${baseUrl}/api/og-fallback?title=${encodeURIComponent(
         post.title
       )}`;
 
@@ -132,7 +126,7 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
         openGraph: {
           title: post.title,
           description: post.excerpt || post.title,
-          url: `https://www.riescade.com.br/blog/${resolvedParams.slug}`,
+          url: `${baseUrl}/blog/${resolvedParams.slug}`,
           siteName: "RIESCADE",
           images: [
             {
