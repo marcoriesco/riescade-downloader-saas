@@ -35,51 +35,114 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
 
   // Adiciona opengraph e twitter card apenas se houver imagem de capa
   if (post.cover_image) {
-    // Certifique-se de que a URL é absoluta e usa o domínio correto
-    // Primeiro, extraímos o caminho da imagem original removendo qualquer domínio
-    let imagePath = post.cover_image;
-    if (imagePath.startsWith("http")) {
-      // Se já é uma URL completa, extrair só o caminho
-      try {
-        const url = new URL(imagePath);
-        imagePath = url.pathname;
-      } catch (e) {
-        console.error("Erro ao processar URL da imagem:", e);
+    try {
+      // Processar a URL da imagem para garantir que seja acessível
+      let imagePath = post.cover_image;
+
+      if (!imagePath.startsWith("http")) {
+        // Remover "/" inicial se existir e adicionar à URL base
+        if (imagePath.startsWith("/")) {
+          imagePath = imagePath.substring(1);
+        }
+
+        // Se o caminho não inclui "images/", adicionar
+        if (!imagePath.includes("images/") && !imagePath.includes("_next/")) {
+          imagePath = `images/${imagePath}`;
+        }
+
+        // Construir a URL completa
+        imagePath = `https://www.riescade.com.br/${imagePath}`;
       }
+
+      // Limpar a URL (remover espaços, etc)
+      const imageUrl = imagePath.trim();
+
+      // Testar se a imagem existe
+      fetch(imageUrl, { method: "HEAD" })
+        .then((response) => {
+          if (!response.ok) {
+            console.warn("Imagem OG não acessível, usando fallback:", imageUrl);
+          }
+        })
+        .catch(() => {
+          console.warn(
+            "Erro ao verificar imagem OG, usando fallback:",
+            imageUrl
+          );
+        });
+
+      // URL de fallback caso a imagem não possa ser carregada
+      const fallbackUrl = `https://www.riescade.com.br/api/og-fallback?title=${encodeURIComponent(
+        post.title
+      )}`;
+
+      console.log("OpenGraph image URL:", imageUrl);
+      console.log("Fallback URL:", fallbackUrl);
+
+      return {
+        ...baseMetadata,
+        openGraph: {
+          title: post.title,
+          description: post.excerpt || post.title,
+          url: `https://www.riescade.com.br/blog/${resolvedParams.slug}`,
+          siteName: "RIESCADE",
+          images: [
+            {
+              url: imageUrl,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+            // Fallback image como segunda opção
+            {
+              url: fallbackUrl,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ],
+          type: "article",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: post.title,
+          description: post.excerpt || post.title,
+          images: [imageUrl, fallbackUrl],
+        },
+      };
+    } catch (e) {
+      console.error("Erro ao processar URL da imagem:", e);
+      // Fallback direto para a rota de imagem gerada em caso de erro
+      const fallbackUrl = `https://www.riescade.com.br/api/og-fallback?title=${encodeURIComponent(
+        post.title
+      )}`;
+
+      // Retornar configuração de fallback
+      return {
+        ...baseMetadata,
+        openGraph: {
+          title: post.title,
+          description: post.excerpt || post.title,
+          url: `https://www.riescade.com.br/blog/${resolvedParams.slug}`,
+          siteName: "RIESCADE",
+          images: [
+            {
+              url: fallbackUrl,
+              width: 1200,
+              height: 630,
+              alt: post.title,
+            },
+          ],
+          type: "article",
+        },
+        twitter: {
+          card: "summary_large_image",
+          title: post.title,
+          description: post.excerpt || post.title,
+          images: [fallbackUrl],
+        },
+      };
     }
-
-    // Se o caminho não começar com /, adicionar
-    if (!imagePath.startsWith("/")) {
-      imagePath = "/" + imagePath;
-    }
-
-    // Construir a URL completa com o domínio correto
-    const imageUrl = `https://www.riescade.com.br${imagePath}`;
-
-    return {
-      ...baseMetadata,
-      openGraph: {
-        title: post.title,
-        description: post.excerpt || post.title,
-        url: `https://www.riescade.com.br/blog/${resolvedParams.slug}`,
-        siteName: "RIESCADE",
-        images: [
-          {
-            url: imageUrl,
-            width: 1200,
-            height: 630,
-            alt: post.title,
-          },
-        ],
-        type: "article",
-      },
-      twitter: {
-        card: "summary_large_image",
-        title: post.title,
-        description: post.excerpt || post.title,
-        images: [imageUrl],
-      },
-    };
   }
 
   // Retorna apenas os metadados básicos se não houver imagem
