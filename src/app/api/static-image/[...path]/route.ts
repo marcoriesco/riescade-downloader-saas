@@ -7,17 +7,15 @@ import path from "path";
  *
  * Esta rota permite acesso a qualquer imagem do projeto, independente de onde está armazenada.
  * Útil especialmente para garantir que imagens OpenGraph sejam acessíveis para crawlers.
- *
- * @param req - Requisição Next
- * @param params - Parâmetros da rota, incluindo o caminho da imagem
  */
 export async function GET(
-  req: NextRequest,
-  context: { params: { path: string[] } }
+  request: NextRequest,
+  context: { params: Promise<{ path: string[] }> }
 ) {
   try {
     // Obter o caminho completo da imagem a partir dos segmentos
-    const imagePath = context.params.path.join("/");
+    const { path: pathSegments } = await context.params;
+    const imagePath = pathSegments.join("/");
     console.log(`[static-image] Requisição para: ${imagePath}`);
 
     // Verificar se a imagem está na pasta public
