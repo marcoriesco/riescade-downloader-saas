@@ -13,11 +13,11 @@ import path from "path";
  */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { path: string[] } }
+  context: { params: { path: string[] } }
 ) {
   try {
     // Obter o caminho completo da imagem a partir dos segmentos
-    const imagePath = params.path.join("/");
+    const imagePath = context.params.path.join("/");
     console.log(`[static-image] Requisição para: ${imagePath}`);
 
     // Verificar se a imagem está na pasta public
