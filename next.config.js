@@ -20,7 +20,14 @@ const nextConfig = {
       },
     ];
   },
-  // Outras configurações existentes...
+  // Garantir que os módulos do Node.js estejam disponíveis para as APIs
+  experimental: {
+    serverComponentsExternalPackages: ["sharp"],
+  },
+  // Configuração de API para OpenGraph
+  serverRuntimeConfig: {
+    PROJECT_ROOT: __dirname,
+  },
 };
 
 module.exports = nextConfig;

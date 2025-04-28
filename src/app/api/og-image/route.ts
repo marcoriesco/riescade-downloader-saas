@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 
 /**
  * Rota para servir imagens de OpenGraph via proxy
@@ -32,12 +34,63 @@ export async function GET(request: NextRequest) {
       }${decodedUrl}`;
     }
 
+    // Verificar se a imagem é local (caminho dentro do projeto)
+    // Se a URL contém "/images/blog/", podemos tentar carregar direto do sistema de arquivos
+    if (decodedUrl.includes("/images/blog/")) {
+      try {
+        // Extrair o caminho local
+        const localPath = decodedUrl.startsWith("/")
+          ? decodedUrl.substring(1)
+          : decodedUrl;
+
+        // Construir caminho do arquivo no sistema (public/...)
+        const filePath = path.join(process.cwd(), "public", localPath);
+
+        console.log("Tentando carregar imagem local de:", filePath);
+
+        // Verificar se o arquivo existe
+        if (fs.existsSync(filePath)) {
+          const fileBuffer = fs.readFileSync(filePath);
+          const ext = path.extname(filePath).toLowerCase();
+
+          // Determinar o tipo de conteúdo com base na extensão
+          let contentType = "image/jpeg"; // padrão
+          if (ext === ".png") contentType = "image/png";
+          if (ext === ".webp") contentType = "image/webp";
+          if (ext === ".gif") contentType = "image/gif";
+
+          console.log("Imagem local encontrada, servindo diretamente");
+
+          // Retornar a imagem do sistema de arquivos
+          return new NextResponse(fileBuffer, {
+            status: 200,
+            headers: {
+              "Content-Type": contentType,
+              "Cache-Control": "public, max-age=86400", // Cache por 24 horas
+            },
+          });
+        } else {
+          console.log("Arquivo local não encontrado, tentando buscar via URL");
+        }
+      } catch (fsError) {
+        console.error(
+          "Erro ao carregar imagem do sistema de arquivos:",
+          fsError
+        );
+        // Continua para tentar via URL
+      }
+    }
+
+    // Se não conseguir carregar do sistema de arquivos, tenta via fetch
+    console.log("Buscando imagem via URL:", fullImageUrl);
+
     // Buscar a imagem
     const imageResponse = await fetch(fullImageUrl, {
       headers: {
         // Adicionar cabeçalhos para evitar problemas de CORS
         "User-Agent": "Mozilla/5.0 RIESCADE OpenGraph Proxy",
       },
+      next: { revalidate: 86400 }, // Revalidar a cada 24 horas
     });
 
     if (!imageResponse.ok) {

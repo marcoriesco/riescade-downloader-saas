@@ -36,11 +36,12 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
   // Adiciona opengraph e twitter card apenas se houver imagem de capa
   if (post.cover_image) {
     try {
-      // Processar a URL da imagem para garantir que seja acessível
+      // Processar a URL da imagem para garantir acesso direto
       let imagePath = post.cover_image;
+      let directImageUrl = "";
 
       if (!imagePath.startsWith("http")) {
-        // Remover "/" inicial se existir e adicionar à URL base
+        // Remover "/" inicial se existir
         if (imagePath.startsWith("/")) {
           imagePath = imagePath.substring(1);
         }
@@ -50,18 +51,27 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
           imagePath = `images/${imagePath}`;
         }
 
-        // Construir a URL completa
-        imagePath = `https://www.riescade.com.br/${imagePath}`;
+        // Usar a nova rota static-image para qualquer tipo de imagem
+        // Isso garante acesso consistente em todos os ambientes
+        const staticImagePath = imagePath.replace(/^\//, "");
+        directImageUrl = `https://www.riescade.com.br/api/static-image/${staticImagePath}`;
+
+        console.log("Usando rota static-image para:", staticImagePath);
+      } else {
+        // URL absoluta, usar diretamente
+        directImageUrl = imagePath;
       }
 
       // Limpar a URL (remover espaços, etc)
-      const imageUrl = imagePath.trim();
+      const imageUrl = directImageUrl.trim();
 
       // Testar se a imagem existe
       fetch(imageUrl, { method: "HEAD" })
         .then((response) => {
           if (!response.ok) {
             console.warn("Imagem OG não acessível, usando fallback:", imageUrl);
+          } else {
+            console.log("Imagem OG confirmada acessível:", imageUrl);
           }
         })
         .catch(() => {
@@ -77,7 +87,6 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
       )}`;
 
       console.log("OpenGraph image URL:", imageUrl);
-      console.log("Fallback URL:", fallbackUrl);
 
       return {
         ...baseMetadata,
