@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { getBlogPostBySlug } from "@/lib/blog-service";
+import Script from "next/script";
 
 // Props for layout metadata with params as a Promise as expected by Next.js
 type LayoutProps = {
@@ -129,5 +130,23 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <Script id="fix-metatags-in-body" strategy="afterInteractive">
+        {`
+          // Script para mover metadados do body para o head
+          document.addEventListener('DOMContentLoaded', function() {
+            const metaTags = document.querySelectorAll('body > meta');
+            if (metaTags.length > 0) {
+              const head = document.querySelector('head');
+              metaTags.forEach(tag => {
+                head.appendChild(tag);
+              });
+            }
+          });
+        `}
+      </Script>
+      {children}
+    </>
+  );
 }
