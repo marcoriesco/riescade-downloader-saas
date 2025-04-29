@@ -21,19 +21,25 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
     };
   }
 
-  // Metadata simples sem opengraph ou twitter card
+  // URL base para links
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://www.riescade.com.br";
+
+  // Metadata básica que será usada em todos os casos
   const baseMetadata: Metadata = {
     title: `${post.title} | RIESCADE`,
     description: post.excerpt || post.title,
     alternates: {
-      canonical: `https://www.riescade.com.br/blog/${resolvedParams.slug}`,
+      canonical: `${baseUrl}/blog/${resolvedParams.slug}`,
     },
-    // Desativar explicitamente a geração automática de OpenGraph
-    openGraph: null,
-    twitter: null,
   };
 
-  // Adiciona opengraph e twitter card apenas se houver imagem de capa
+  // Fallback URL para quando não houver imagem específica
+  const fallbackUrl = `${baseUrl}/api/og-fallback?title=${encodeURIComponent(
+    post.title
+  )}`;
+
+  // Se tem imagem de capa, usar como imagem principal do OpenGraph
   if (post.cover_image) {
     try {
       // Processar a URL da imagem para garantir acesso direto
@@ -51,17 +57,11 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
           imagePath = `images/${imagePath}`;
         }
 
-        // Usar caminhos relativos para a API, que funcionam tanto em desenvolvimento quanto em produção
-        const staticImagePath = imagePath.replace(/^\//, "");
+        // URL DIRETA para a imagem (sem passar por static-image)
+        directImageUrl = `${baseUrl}/${imagePath}`;
 
-        // Em produção, usar o domínio completo
-        const baseUrl =
-          process.env.NEXT_PUBLIC_BASE_URL || "https://www.riescade.com.br";
-        directImageUrl = `${baseUrl}/api/static-image/${staticImagePath}`;
-
-        // Apenas para depuração, mostrar ambos os caminhos
-        console.log("URL da imagem:", directImageUrl);
-        console.log("Caminho da imagem:", staticImagePath);
+        // Apenas para depuração, mostrar o caminho
+        console.log("URL direta da imagem:", directImageUrl);
       } else {
         // URL absoluta, usar diretamente
         directImageUrl = imagePath;
@@ -70,14 +70,6 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
       // Limpar a URL (remover espaços, etc)
       const imageUrl = directImageUrl.trim();
 
-      // URL de fallback caso a imagem não possa ser carregada
-      const baseUrl =
-        process.env.NEXT_PUBLIC_BASE_URL || "https://www.riescade.com.br";
-      const fallbackUrl = `${baseUrl}/api/og-fallback?title=${encodeURIComponent(
-        post.title
-      )}`;
-
-      // Em vez de testar com fetch, vamos confiar na rota static-image para lidar com casos de erro
       console.log("OpenGraph image URL:", imageUrl);
 
       return {
@@ -113,43 +105,34 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
       };
     } catch (e) {
       console.error("Erro ao processar URL da imagem:", e);
-      // Fallback direto para a rota de imagem gerada em caso de erro
-      const baseUrl =
-        process.env.NEXT_PUBLIC_BASE_URL || "https://www.riescade.com.br";
-      const fallbackUrl = `${baseUrl}/api/og-fallback?title=${encodeURIComponent(
-        post.title
-      )}`;
-
-      // Retornar configuração de fallback
-      return {
-        ...baseMetadata,
-        openGraph: {
-          title: post.title,
-          description: post.excerpt || post.title,
-          url: `${baseUrl}/blog/${resolvedParams.slug}`,
-          siteName: "RIESCADE",
-          images: [
-            {
-              url: fallbackUrl,
-              width: 1200,
-              height: 630,
-              alt: post.title,
-            },
-          ],
-          type: "article",
-        },
-        twitter: {
-          card: "summary_large_image",
-          title: post.title,
-          description: post.excerpt || post.title,
-          images: [fallbackUrl],
-        },
-      };
     }
   }
 
-  // Retorna apenas os metadados básicos se não houver imagem
-  return baseMetadata;
+  // Retornar configuração com fallback ou sem imagem de capa
+  return {
+    ...baseMetadata,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt || post.title,
+      url: `${baseUrl}/blog/${resolvedParams.slug}`,
+      siteName: "RIESCADE",
+      images: [
+        {
+          url: fallbackUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt || post.title,
+      images: [fallbackUrl],
+    },
+  };
 }
 
 export default function Layout({ children }: { children: React.ReactNode }) {
