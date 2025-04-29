@@ -86,13 +86,6 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
               height: 630,
               alt: post.title,
             },
-            // Fallback image como segunda opção
-            {
-              url: fallbackUrl,
-              width: 1200,
-              height: 630,
-              alt: post.title,
-            },
           ],
           type: "article",
         },
@@ -100,7 +93,7 @@ export async function generateMetadata(props: LayoutProps): Promise<Metadata> {
           card: "summary_large_image",
           title: post.title,
           description: post.excerpt || post.title,
-          images: [imageUrl, fallbackUrl],
+          images: [imageUrl],
         },
       };
     } catch (e) {
