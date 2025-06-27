@@ -1122,7 +1122,6 @@ function DashboardContent() {
                             R$ 350,00
                           </span>
                         </div>
-                        <p className="text-gray-400 mt-2">Pagamento à vista</p>
                       </div>
                     </div>
 
