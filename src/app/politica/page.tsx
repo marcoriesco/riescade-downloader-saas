@@ -10,6 +10,7 @@ import {
   Gamepad2,
 } from "lucide-react";
 import { Header } from "@/components/Header";
+import Footer from "@/components/Footer";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
@@ -316,6 +317,8 @@ export default function PrivacyPolicy() {
           </section>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

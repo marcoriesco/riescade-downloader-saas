@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, Package, Mail, Clock } from "lucide-react";
+import Footer from "@/components/Footer";
 
 interface OrderDetails {
   id: number;
@@ -258,6 +259,7 @@ export default function SucessoContent() {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

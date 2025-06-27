@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Header } from "@/components/Header";
+import Footer from "@/components/Footer";
 import {
   Scroll,
   AlertTriangle,
@@ -354,6 +355,8 @@ export default function TermsOfService() {
           </section>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

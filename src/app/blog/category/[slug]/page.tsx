@@ -4,6 +4,7 @@ import Image from "next/image";
 import { getBlogPosts } from "@/lib/blog-service";
 import { Roboto_Condensed } from "next/font/google";
 import { Header } from "@/components/Header";
+import Footer from "@/components/Footer";
 import { Metadata } from "next";
 
 const robotoCondensed = Roboto_Condensed({
@@ -313,6 +314,8 @@ export default function CategoryPage({
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }
