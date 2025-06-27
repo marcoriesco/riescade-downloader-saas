@@ -5,6 +5,7 @@ import { supabase, type Subscription } from "@/lib/supabase";
 import { useRouter, useSearchParams } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { Header } from "@/components/Header";
+import Footer from "@/components/Footer";
 import {
   Zap,
   Flame,
@@ -1022,7 +1023,7 @@ function DashboardContent() {
                 <div className="relative p-6 md:p-8 bg-gradient-to-br from-gray-800/50 via-black/50 to-black/50">
                   <div className="relative aspect-square rounded-lg overflow-hidden">
                     <Image
-                      src="/images/hd_riescade_switch_1tb.webp"
+                      src="/images/hdswitch/hd_riescade_switch_1tb.webp"
                       alt="HD 1TB Nintendo Switch - RIESCADE"
                       fill
                       className="object-cover"
@@ -1147,6 +1148,8 @@ function DashboardContent() {
         {/* Community Section */}
         {/* ... existing code ... */}
       </main>
+
+      <Footer />
     </div>
   );
 }
