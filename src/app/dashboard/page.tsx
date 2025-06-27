@@ -15,6 +15,7 @@ import {
   XCircle,
   ExternalLink,
   Gamepad2,
+  Package,
 } from "lucide-react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -22,6 +23,28 @@ import { faGoogle, faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
 import { CancelSubscriptionModal } from "@/components/CancelSubscriptionModal";
 import { Roboto_Condensed } from "next/font/google";
 import { faDice, faFile, faGamepad } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+
+interface Order {
+  id: number;
+  stripe_session_id: string;
+  customer_email: string;
+  customer_name: string;
+  amount_total: number;
+  currency: string;
+  status: string;
+  shipping_address?: {
+    line1: string;
+    line2?: string;
+    city: string;
+    state: string;
+    postal_code: string;
+  };
+  cep?: string;
+  shipping_value: number;
+  created_at: string;
+  tracking_code?: string;
+}
 
 const robotoCondensed = Roboto_Condensed({
   subsets: ["latin"],
@@ -37,6 +60,8 @@ function DashboardContent() {
   const [verifyingSession, setVerifyingSession] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancellingSubscription, setCancellingSubscription] = useState(false);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const success = searchParams.get("success");
@@ -77,6 +102,33 @@ function DashboardContent() {
       setLoading(false);
     }
   }, []);
+
+  // Fetch orders function
+  const fetchOrders = useCallback(async () => {
+    if (!user?.email) return;
+
+    setLoadingOrders(true);
+    try {
+      const { data, error } = await supabase
+        .from("orders")
+        .select("*")
+        .eq("customer_email", user.email)
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error("Error fetching orders:", error);
+        setOrders([]);
+      } else {
+        console.log("Orders data:", data);
+        setOrders(data || []);
+      }
+    } catch (error) {
+      console.error("Error in fetchOrders:", error);
+      setOrders([]);
+    } finally {
+      setLoadingOrders(false);
+    }
+  }, [user?.email]);
 
   // Handle sign in with OAuth
   const handleSignIn = useCallback(async () => {
@@ -124,6 +176,7 @@ function DashboardContent() {
         if (response.ok) {
           console.log("Sessão verificada com sucesso:", responseData);
           await fetchSubscription(user?.id || "");
+          await fetchOrders();
           router.replace("/dashboard");
         } else {
           console.error("Falha ao verificar sessão:", responseData.message);
@@ -136,7 +189,7 @@ function DashboardContent() {
         setVerifyingSession(false);
       }
     },
-    [user, router, fetchSubscription]
+    [user, router, fetchSubscription, fetchOrders]
   );
 
   // Effect to check if user is authenticated
@@ -151,6 +204,7 @@ function DashboardContent() {
           console.log("User authenticated:", session.user.email);
           setUser(session.user);
           await fetchSubscription(session.user.id);
+          await fetchOrders();
         } else {
           console.log("No authenticated user found");
         }
@@ -162,7 +216,7 @@ function DashboardContent() {
     };
 
     checkUser();
-  }, [fetchSubscription]);
+  }, [fetchSubscription, fetchOrders]);
 
   // Effect to verify session when user returns from checkout
   useEffect(() => {
@@ -422,11 +476,14 @@ function DashboardContent() {
               </svg>
               <span>
                 <span className="block mb-1">
-                  Pagamento confirmado! Sua assinatura está ativa.
+                  {sessionId
+                    ? "Pedido confirmado! Seu HD Nintendo Switch está sendo preparado."
+                    : "Pagamento confirmado! Sua assinatura está ativa."}
                 </span>
                 <span className="block text-sm text-green-300/80">
-                  A liberação de acesso ao Google Drive poderá levar até 12
-                  horas para ser processada.
+                  {sessionId
+                    ? "Você receberá um email com os detalhes do pedido e o código de rastreamento será adicionado aqui assim que disponível."
+                    : "A liberação de acesso ao Google Drive poderá levar até 12 horas para ser processada."}
                 </span>
               </span>
             </p>
@@ -829,6 +886,266 @@ function DashboardContent() {
             )}
           </div>
         </div>
+
+        {/* Seção de Pedidos */}
+        {user && (
+          <div className="mt-8 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
+            <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
+              <Package className="w-5 h-5 text-[#ff0884] mr-2" />
+              <h2 className="text-lg font-medium text-white">Meus Pedidos</h2>
+            </div>
+
+            <div className="p-6">
+              {loadingOrders ? (
+                <div className="text-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#ff0884] mx-auto mb-4"></div>
+                  <p className="text-gray-400">Carregando pedidos...</p>
+                </div>
+              ) : orders.length > 0 ? (
+                <div className="space-y-4">
+                  {orders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="bg-black/30 rounded-lg border border-gray-700 p-4 hover:border-[#ff0884]/50 transition-colors duration-300"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-lg font-semibold text-white">
+                              HD 1TB Nintendo Switch
+                            </h3>
+                            <span
+                              className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                order.status === "paid"
+                                  ? "bg-green-900/50 text-green-400 border border-green-500/50"
+                                  : "bg-amber-900/50 text-amber-400 border border-amber-500/50"
+                              }`}
+                            >
+                              {order.status === "paid" ? "PAGO" : "PENDENTE"}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                            <div>
+                              <span className="text-gray-400">Valor:</span>
+                              <span className="text-white ml-2">
+                                R${" "}
+                                {(order.amount_total / 100)
+                                  .toFixed(2)
+                                  .replace(".", ",")}
+                              </span>
+                            </div>
+                            <div>
+                              <span className="text-gray-400">Data:</span>
+                              <span className="text-white ml-2">
+                                {new Date(
+                                  order.created_at
+                                ).toLocaleDateString()}
+                              </span>
+                            </div>
+                            {order.cep && (
+                              <div>
+                                <span className="text-gray-400">CEP:</span>
+                                <span className="text-white ml-2">
+                                  {order.cep}
+                                </span>
+                              </div>
+                            )}
+                            {order.tracking_code && (
+                              <div>
+                                <span className="text-gray-400">
+                                  Rastreamento:
+                                </span>
+                                <span className="text-[#ff0884] ml-2 font-medium">
+                                  {order.tracking_code}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+
+                          {order.shipping_address && (
+                            <div className="mt-3 p-3 bg-gray-800/50 rounded border border-gray-600">
+                              <span className="text-gray-400 text-sm block mb-1">
+                                Endereço de Entrega:
+                              </span>
+                              <span className="text-white text-sm">
+                                {order.shipping_address.line1}
+                                {order.shipping_address.line2 &&
+                                  `, ${order.shipping_address.line2}`}
+                                <br />
+                                {order.shipping_address.city} -{" "}
+                                {order.shipping_address.state}
+                                <br />
+                                CEP: {order.shipping_address.postal_code}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Package className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-medium text-gray-400 mb-2">
+                    Nenhum pedido encontrado
+                  </h3>
+                  <p className="text-gray-500 mb-6">
+                    Você ainda não fez nenhuma compra de produtos físicos.
+                  </p>
+                  <Link
+                    href="/produtos/hd-switch"
+                    className="px-6 py-2 bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] rounded-md border border-[#ff0884]/30 transition-colors duration-200"
+                  >
+                    Ver Produto
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Produto HD Nintendo Switch Section - VISÍVEL PARA TODOS */}
+        <div className="mt-8 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
+            <Gamepad2 className="w-5 h-5 text-green-400 mr-2" />
+            <h2 className="text-lg font-medium text-white">
+              Produto Exclusivo
+            </h2>
+          </div>
+
+          <div className="p-6">
+            <div className="bg-gradient-to-br from-green-900/20 via-black/50 to-black/50 rounded-lg border border-green-700/30 overflow-hidden">
+              <div className="grid lg:grid-cols-2 gap-0">
+                {/* Lado esquerdo - Imagem do produto */}
+                <div className="relative p-6 md:p-8 bg-gradient-to-br from-gray-800/50 via-black/50 to-black/50">
+                  <div className="relative aspect-square rounded-lg overflow-hidden">
+                    <Image
+                      src="/images/hd_riescade_switch_1tb.webp"
+                      alt="HD 1TB Nintendo Switch - RIESCADE"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* Lado direito - Informações do produto */}
+                <div className="relative p-6 md:p-8 bg-gradient-to-br from-green-900/10 via-black/70 to-black/70 flex flex-col justify-center">
+                  <div className="relative">
+                    <div className="mb-6">
+                      <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">
+                        HD 1TB Nintendo Switch
+                      </h3>
+                      <p className="text-gray-300 mb-6">
+                        Emuladores já configurados + Artes de todos os jogos.
+                        Pronto para conectar e jogar imediatamente.
+                      </p>
+
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-3">
+                          <svg
+                            className="h-5 w-5 text-green-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <span className="text-gray-300">
+                            Emuladores já configurados
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <svg
+                            className="h-5 w-5 text-green-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <span className="text-gray-300">
+                            Artes de todos os jogos
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <svg
+                            className="h-5 w-5 text-green-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <span className="text-gray-300">
+                            Instruções de instalação
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <svg
+                            className="h-5 w-5 text-green-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <span className="text-gray-300">Suporte técnico</span>
+                        </div>
+                      </div>
+
+                      <div className="mb-6">
+                        <div className="flex items-baseline">
+                          <span className="text-3xl font-bold text-green-400">
+                            R$ 350,00
+                          </span>
+                        </div>
+                        <p className="text-gray-400 mt-2">Pagamento à vista</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <Link
+                        href="/produtos/hd-switch"
+                        className="w-full block text-center px-6 py-4 rounded-md font-bold bg-green-600 text-white hover:bg-green-700 shadow-[0_0_15px_rgba(34,197,94,0.4)] transition-all duration-300 transform hover:scale-105"
+                      >
+                        COMPRAR AGORA
+                      </Link>
+
+                      <p className="text-center text-gray-400 text-sm">
+                        Envio para todo Brasil • Pagamento seguro
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Community Section */}
+        {/* ... existing code ... */}
       </main>
     </div>
   );

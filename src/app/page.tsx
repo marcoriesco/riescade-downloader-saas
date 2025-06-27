@@ -385,6 +385,147 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Produto HD Nintendo Switch Section */}
+        <div className="py-20 bg-gradient-to-br from-purple-900/20 via-gray-900 to-gray-900 relative">
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-left mb-16">
+              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
+                <span className="text-[#ff0884]">PRODUTO</span> EXCLUSIVO
+              </h2>
+              <p
+                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
+              >
+                HD 1TB com jogos de Nintendo Switch - Pronto para usar
+              </p>
+            </div>
+
+            <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.3)]">
+              <div className="grid lg:grid-cols-2 gap-0">
+                {/* Lado esquerdo - Imagem do produto */}
+                <div className="relative p-8 md:p-12 bg-gradient-to-br from-gray-800/50 via-black/50 to-black/50">
+                  <div className="relative aspect-square rounded-lg overflow-hidden">
+                    <Image
+                      src="/images/hdswitch/hd_riescade_switch_1tb.webp"
+                      alt="HD 1TB Nintendo Switch - RIESCADE"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+
+                {/* Lado direito - Informações do produto */}
+                <div className="relative p-8 md:p-12 bg-gradient-to-br from-[#ff0884]/10 via-black/70 to-black/70 flex flex-col justify-center">
+                  <div className="relative">
+                    <div className="mb-8">
+                      <h3 className="text-3xl font-bold text-white mb-4">
+                        HD 1TB Nintendo Switch
+                      </h3>
+                      <p className="text-gray-300 mb-6">
+                        Emuladores já configurados + Artes de todos os jogos.
+                        Pronto para conectar e jogar imediatamente.
+                      </p>
+
+                      <div className="space-y-3 mb-6">
+                        <div className="flex items-center gap-3">
+                          <svg
+                            className="h-5 w-5 text-green-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <span className="text-gray-300">
+                            Emuladores já configurados
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <svg
+                            className="h-5 w-5 text-green-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <span className="text-gray-300">
+                            Artes de todos os jogos
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <svg
+                            className="h-5 w-5 text-green-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <span className="text-gray-300">
+                            Instruções de instalação
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <svg
+                            className="h-5 w-5 text-green-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M5 13l4 4L19 7"
+                            ></path>
+                          </svg>
+                          <span className="text-gray-300">Suporte técnico</span>
+                        </div>
+                      </div>
+
+                      <div className="mb-8">
+                        <div className="flex items-baseline">
+                          <span className="text-4xl font-bold text-green-400">
+                            R$ 350,00
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <Link
+                        href="/produtos/hd-switch"
+                        className="w-full block text-center px-6 py-4 rounded-md font-bold bg-green-600 text-white hover:bg-green-700 shadow-[0_0_15px_rgba(34,197,94,0.4)] transition-all duration-300 transform hover:scale-105"
+                      >
+                        COMPRAR AGORA
+                      </Link>
+
+                      <p className="text-center text-gray-400 text-sm">
+                        Envio para todo Brasil • Pagamento seguro
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Blog Recente Section */}
         <div className="py-20 bg-gray-900 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-gray-900 opacity-90"></div>
