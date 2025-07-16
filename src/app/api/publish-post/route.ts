@@ -210,3 +210,93 @@ export async function GET() {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    // Verifica se o body é multipart/form-data
+    const contentType = request.headers.get("content-type") || "";
+    if (!contentType.includes("multipart/form-data")) {
+      return NextResponse.json(
+        { error: "Content-Type deve ser multipart/form-data" },
+        { status: 400 }
+      );
+    }
+
+    // Usar formData API do Next.js (Node 18+)
+    const formData = await request.formData();
+    const title = formData.get("title") as string;
+    const excerpt = formData.get("excerpt") as string;
+    const content = formData.get("content") as string;
+    const image = formData.get("image") as File | null;
+
+    if (!title || !excerpt || !content || !image) {
+      return NextResponse.json(
+        { error: "Todos os campos são obrigatórios." },
+        { status: 400 }
+      );
+    }
+
+    // Gerar slug
+    const slug = generateSlug(title);
+    // Gerar nome de arquivo para imagem
+    const ext = image.name.split(".").pop() || "webp";
+    const imageFileName = `${slug}.${ext}`;
+    const imagePath = path.join(
+      process.cwd(),
+      "public",
+      "images",
+      "blog",
+      imageFileName
+    );
+    const imageUrl = `/images/blog/${imageFileName}`;
+
+    // Salvar imagem no disco
+    const arrayBuffer = await image.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    fs.writeFileSync(imagePath, buffer);
+
+    // Configuração do Supabase
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Variáveis de ambiente do Supabase não configuradas");
+    }
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Criar post no Supabase
+    const now = new Date();
+    const post = {
+      title,
+      slug,
+      content,
+      excerpt,
+      cover_image: imageUrl,
+      status: "published",
+      author: "RIESCADE Team",
+      published_at: now.toISOString(),
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
+      category: "General",
+      tags: [],
+      views: 0,
+      publish_date: now.toISOString().split("T")[0],
+    };
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .insert([post])
+      .select()
+      .single();
+    if (error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ success: true, post: data });
+  } catch (error) {
+    console.error("Erro ao criar post manualmente:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Erro desconhecido" },
+      { status: 500 }
+    );
+  }
+}

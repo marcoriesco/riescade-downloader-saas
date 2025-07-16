@@ -270,7 +270,7 @@ export default function Home() {
                   <div className="mb-8">
                     <div className="flex items-baseline">
                       <span className="text-5xl font-bold text-white">
-                        R$30
+                        R$ 30,00
                       </span>
                       <span className="text-gray-400 ml-2">/mês</span>
                     </div>
