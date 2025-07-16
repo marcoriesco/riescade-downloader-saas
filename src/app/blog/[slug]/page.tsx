@@ -338,7 +338,6 @@ export default function BlogPost() {
                   sizes="(max-width: 768px) 100vw, 768px"
                   className="object-cover !relative"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent"></div>
               </div>
             )}
           </header>
