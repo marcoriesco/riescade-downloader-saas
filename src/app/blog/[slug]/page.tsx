@@ -197,8 +197,8 @@ export default function BlogPost() {
                 domNode.name === "h1"
                   ? "text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-[#ff0884]"
                   : domNode.name === "h2"
-                  ? "text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent"
-                  : "text-2xl md:text-3xl font-bold mb-4 mt-8 text-white"
+                    ? "text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent"
+                    : "text-2xl md:text-3xl font-bold mb-4 mt-8 text-white"
               }
             >
               {domToReact(domNode.children as DOMNode[], options)}
@@ -329,14 +329,14 @@ export default function BlogPost() {
 
             {/* Cover Image */}
             {post.cover_image && (
-              <div className="relative h-80 md:h-[500px] rounded-xl overflow-hidden mb-16 shadow-2xl">
+              <div className="relative rounded-xl overflow-hidden mb-12 shadow-2xl">
                 <Image
                   src={post.cover_image}
                   alt={post.title}
                   fill
                   priority
                   sizes="(max-width: 768px) 100vw, 768px"
-                  className="object-cover"
+                  className="object-cover !relative"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/70 to-transparent"></div>
               </div>
