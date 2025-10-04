@@ -62,6 +62,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+    <head><meta name="6a97888e-site-verification" content="a16de362b88b6fd7387afa5f4d6eba80"></head>
       <body className={`${roboto.className} pt-20`}>
         <Analytics />
         <Providers>{children}</Providers>
