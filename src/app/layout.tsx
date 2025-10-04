@@ -64,6 +64,7 @@ export default function RootLayout({
     <html lang="pt-BR">
     <head>
       <meta name="6a97888e-site-verification" content="a16de362b88b6fd7387afa5f4d6eba80"></meta>
+      <meta name="google-adsense-account" content="ca-pub-4909414903460614"></meta>
     </head>
       <body className={`${roboto.className} pt-20`}>
         <Analytics />
