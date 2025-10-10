@@ -63,6 +63,8 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
     <head>
+      {/* GOOGLE ADS */}
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9318454482729602" crossOrigin="anonymous"></script>
       <meta name="google-adsense-account" content="ca-pub-9318454482729602"/>
     </head>
       <body className={`${roboto.className} pt-20`}>
