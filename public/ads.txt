@@ -1,5 +1,5 @@
-google.com, pub-4909414903460614, DIRECT, f08c47fec0942fa0
 google.com, pub-9318454482729602, DIRECT, f08c47fec0942fa0
+google.com, pub-4909414903460614, DIRECT, f08c47fec0942fa0
 headerlift.com, 32639, DIRECT
 improvedigital.com, 545_32639, DIRECT
 improvedigital.com, 545, RESELLER
