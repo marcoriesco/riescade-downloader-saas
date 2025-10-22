@@ -39,7 +39,6 @@ export default function SucessoContent() {
     } else {
       setLoading(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   const fetchOrderDetails = async (sessionId: string) => {

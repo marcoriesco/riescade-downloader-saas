@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 
 export default function GeradorPosts() {
@@ -197,10 +198,13 @@ export default function GeradorPosts() {
             required
           />
           {preview && (
-            <img
+            <Image
               src={preview}
               alt="Preview"
-              className="mt-2 max-h-48 rounded"
+              width={300}
+              height={192}
+              className="mt-2 max-h-48 rounded object-cover"
+              unoptimized
             />
           )}
         </div>

@@ -17,10 +17,11 @@ export async function GET() {
       alive: true, 
       timestamp: new Date().toISOString() 
     });
-  } catch (err: any) {
-    console.error("Erro no keepalive:", err.message);
+  } catch (err: unknown) {
+    const errorMessage = err instanceof Error ? err.message : 'Erro desconhecido';
+    console.error("Erro no keepalive:", errorMessage);
     return NextResponse.json({ 
-      error: err.message 
+      error: errorMessage 
     }, { status: 500 });
   }
 }
