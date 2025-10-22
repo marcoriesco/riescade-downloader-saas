@@ -10,7 +10,7 @@ const supabase = createClient(
 export async function GET() {
   try {
     // Query leve que conta como atividade no Supabase
-    const { error } = await supabase.from("users").select("id").limit(1);
+    const { error } = await supabase.from("blog_posts").select("id").limit(1);
     if (error) throw error;
     
     return NextResponse.json({ 
