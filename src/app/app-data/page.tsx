@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import {
@@ -70,9 +69,9 @@ export default function AppDataDeletion() {
                 </p>
                 <ol className="list-decimal list-inside text-gray-300 space-y-2">
                   <li>Abra o aplicativo RIESCADE</li>
-                  <li>Vá para "Configurações" ou "Settings"</li>
-                  <li>Procure por "Conta" ou "Account"</li>
-                  <li>Selecione "Excluir Conta" ou "Delete Account"</li>
+                  <li>Vá para &quot;Configurações&quot; ou &quot;Settings&quot;</li>
+                  <li>Procure por &quot;Conta&quot; ou &quot;Account&quot;</li>
+                  <li>Selecione &quot;Excluir Conta&quot; ou &quot;Delete Account&quot;</li>
                   <li>Confirme a exclusão seguindo as instruções na tela</li>
                 </ol>
               </div>
@@ -154,8 +153,8 @@ export default function AppDataDeletion() {
                     </p>
                     <ol className="list-decimal list-inside text-gray-300 space-y-1">
                       <li>Acesse play.google.com/settings</li>
-                      <li>Vá para "Dados salvos nos jogos"</li>
-                      <li>Encontre RIESCADE e clique em "Excluir"</li>
+                      <li>Vá para &quot;Dados salvos nos jogos&quot;</li>
+                      <li>Encontre RIESCADE e clique em &quot;Excluir&quot;</li>
                     </ol>
                   </div>
                   <div className="bg-gray-700/50 rounded-lg p-4">
