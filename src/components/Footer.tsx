@@ -32,6 +32,31 @@ export default function Footer() {
             </p>
           </div>
 
+          {/* Links Legais */}
+          <div className="mb-8 md:mb-0">
+            <h4 className="text-lg font-semibold mb-4">Links Importantes</h4>
+            <div className="flex flex-col space-y-2">
+              <Link
+                href="/politica"
+                className={`${robotoCondensed.className} text-gray-400 hover:text-[#ff0884] transition-colors duration-200`}
+              >
+                Política de Privacidade
+              </Link>
+              <Link
+                href="/termos"
+                className={`${robotoCondensed.className} text-gray-400 hover:text-[#ff0884] transition-colors duration-200`}
+              >
+                Termos e Condições
+              </Link>
+              <Link
+                href="/app-data"
+                className={`${robotoCondensed.className} text-gray-400 hover:text-[#ff0884] transition-colors duration-200`}
+              >
+                Exclusão de Dados
+              </Link>
+            </div>
+          </div>
+
           {/* Redes Sociais */}
           <div className="mt-8 flex flex-col space-y-4">
             <div className={`${robotoCondensed.className} flex space-x-6`}>
