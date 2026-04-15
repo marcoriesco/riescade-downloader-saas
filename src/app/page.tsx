@@ -112,7 +112,7 @@ export default function Home() {
       
       <main className="pt-16">
         {/* HERO SECTION */}
-        <section className="relative min-h-screen overflow-hidden flex items-center grid-overlay mt-[-4rem]">
+        <div className="relative min-h-screen overflow-hidden flex items-center grid-overlay mt-[-4rem]">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,hsl(var(--surface))_0%,transparent_60%)]" />
           <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
@@ -147,10 +147,10 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-10">
+              <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 w-full">
                 <button
                   onClick={handleLoginRedirect}
-                  className="relative group h-14 px-8 inline-flex items-center justify-center bg-primary text-primary-foreground font-display font-bold text-xl uppercase tracking-[0.15em] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] shrink-0"
+                  className="relative group h-14 px-8 inline-flex items-center justify-center bg-primary text-primary-foreground font-display font-bold text-xl uppercase tracking-[0.15em] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] shrink-0 w-full sm:w-auto"
                 >
                   <div className="absolute inset-0 border-2 border-foreground/20 group-hover:border-foreground/50 transition-colors" />
                   <div className="absolute bottom-0 left-0 w-full h-[2px] bg-foreground" />
@@ -159,16 +159,17 @@ export default function Home() {
                   </span>
                 </button>
 
-                <div className="flex flex-col gap-2 font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
-                  <div className="flex items-center gap-2">
-                    <Zap className="size-3 text-accent" />
-                    <span>Emulação Perfeita</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Shield className="size-3 text-muted-foreground" />
-                    <span>Cancele Quando Quiser</span>
-                  </div>
-                </div>
+                <a
+                  href="https://riescade.games"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative group h-14 px-8 inline-flex items-center justify-center bg-surface border-2 border-primary/40 text-foreground font-display font-bold text-xl uppercase tracking-[0.15em] overflow-hidden transition-all duration-300 hover:scale-105 hover:bg-primary/10 hover:border-primary shrink-0 w-full sm:w-auto"
+                >
+                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary/20 group-hover:bg-primary transition-colors" />
+                  <span className="relative z-10 drop-shadow-md">
+                    Jogue Online!
+                  </span>
+                </a>
               </div>
             </div>
 
@@ -215,7 +216,23 @@ export default function Home() {
               </div>
             </div>
           </div>
-        </section>
+
+          {/* Features Footer within Hero */}
+          <div className="absolute bottom-8 left-0 right-0 w-full hidden sm:block z-20">
+            <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center gap-8 font-mono text-[11px] md:text-xs text-muted-foreground uppercase tracking-widest opacity-80 mt-[-2rem]">
+              <div className="flex items-center gap-2">
+                <Zap className="size-4 text-accent" />
+                <span>Emulação Perfeita</span>
+              </div>
+              <div className="w-1 h-1 rounded-full bg-border" />
+              <div className="flex items-center gap-2">
+                <Shield className="size-4 text-primary" />
+                <span>Cancele Quando Quiser</span>
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+        </div>
 
         {/* FEATURES SECTION */}
         <section id="features" className="relative py-24 overflow-hidden">
