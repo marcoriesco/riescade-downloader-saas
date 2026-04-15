@@ -11,13 +11,6 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
-import { Roboto_Condensed } from "next/font/google";
-
-const robotoCondensed = Roboto_Condensed({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
 export function Header() {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
@@ -100,13 +93,13 @@ export function Header() {
 
         {/* Botão de menu para mobile */}
         <button
-          className="md:hidden text-white focus:outline-none"
+          className="md:hidden text-foreground focus:outline-none"
           onClick={toggleMenu}
         >
           {isMenuOpen ? (
-            <X className="h-6 w-6 text-[#ff0884]" />
+            <X className="h-6 w-6 text-primary" />
           ) : (
-            <Menu className="h-6 w-6 text-[#ff0884]" />
+            <Menu className="h-6 w-6 text-primary" />
           )}
         </button>
 
@@ -116,19 +109,19 @@ export function Header() {
             {/* O Dashboard só aparece quando o usuário está logado */}
             <Link
               href="/tutorial"
-              className="text-gray-200 hover:text-[#ff0884] transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors font-medium"
             >
               Tutorial
             </Link>
             <Link
               href="/platforms"
-              className="text-gray-200 hover:text-[#ff0884] transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors font-medium"
             >
               Plataformas
             </Link>
             <Link
               href="/blog"
-              className="text-gray-200 hover:text-[#ff0884] transition-colors"
+              className="text-muted-foreground hover:text-primary transition-colors font-medium"
             >
               Blog
             </Link>
@@ -139,24 +132,22 @@ export function Header() {
               (user ? (
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center mr-4">
-                    <div className="w-8 h-8 rounded-full bg-[#ff0884]/20 border border-[#ff0884]/50 flex items-center justify-center mr-2">
-                      <User className="h-4 w-4 text-[#ff0884]" />
+                    <div className="w-8 h-8 bg-primary/20 border border-primary/50 flex items-center justify-center mr-2">
+                      <User className="h-4 w-4 text-primary" />
                     </div>
-                    <span
-                      className={`${robotoCondensed.className} text-gray-200`}
-                    >
+                    <span className="text-muted-foreground text-sm">
                       {user.email}
                     </span>
                   </div>
                   <Link
                     href="/dashboard"
-                    className="px-4 py-2 text-sm font-medium rounded-md bg-[#ff0884]/20 border border-[#ff0884]/50 text-white hover:bg-[#ff0884]/30 transition-all duration-300"
+                    className="px-4 py-2 text-sm font-medium bg-primary/20 border border-primary/50 text-foreground hover:bg-primary/30 transition-all duration-300"
                   >
                     Dashboard
                   </Link>
                   <button
                     onClick={handleSignOut}
-                    className="px-4 py-2 text-sm font-medium rounded-md border border-[#ff0884]/50 text-white hover:bg-[#ff0884]/10 transition-all duration-300"
+                    className="px-4 py-2 text-sm font-medium border border-primary/50 text-foreground hover:bg-primary/10 transition-all duration-300"
                   >
                     Sair
                   </button>
@@ -165,13 +156,13 @@ export function Header() {
                 <button
                   onClick={handleSignIn}
                   disabled={isLoggingIn}
-                  className={`inline-flex items-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)] ${
+                  className={`inline-flex items-center gap-2 px-4 py-2 border border-primary text-sm font-medium shadow-sm text-foreground bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_hsl(var(--primary)/0.6)] ${
                     isLoggingIn ? "opacity-70 cursor-not-allowed" : ""
                   }`}
                 >
                   {isLoggingIn ? (
                     <>
-                      <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-[#ff0884] border-opacity-50"></div>
+                      <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-primary border-opacity-50"></div>
                       <span>Carregando...</span>
                     </>
                   ) : (
@@ -192,14 +183,14 @@ export function Header() {
 
       {/* Menu mobile */}
       {isMenuOpen && (
-        <div className="md:hidden bg-gray-900/95 backdrop-blur-md border-t border-gray-800">
+        <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-border">
           <div className="px-4 pt-2 pb-6 space-y-4">
             <nav className="flex flex-col space-y-4 mb-6">
               {/* O Dashboard só aparece quando o usuário está logado */}
               {user && (
                 <Link
                   href="/dashboard"
-                  className="text-gray-200 hover:text-[#ff0884] transition-colors py-2 border-b border-gray-800"
+                  className="text-muted-foreground hover:text-primary transition-colors py-2 border-b border-border"
                   onClick={handleLinkClick}
                 >
                   Dashboard
@@ -207,21 +198,21 @@ export function Header() {
               )}
               <Link
                 href="/tutorial"
-                className="text-gray-200 hover:text-[#ff0884] transition-colors py-2 border-b border-gray-800"
+                className="text-muted-foreground hover:text-primary transition-colors py-2 border-b border-border"
                 onClick={handleLinkClick}
               >
                 Tutorial
               </Link>
               <Link
                 href="/platforms"
-                className="text-gray-200 hover:text-[#ff0884] transition-colors py-2 border-b border-gray-800"
+                className="text-muted-foreground hover:text-primary transition-colors py-2 border-b border-border"
                 onClick={handleLinkClick}
               >
                 Plataformas
               </Link>
               <Link
                 href="/blog"
-                className="text-gray-200 hover:text-[#ff0884] transition-colors py-2 border-b border-gray-800"
+                className="text-muted-foreground hover:text-primary transition-colors py-2 border-b border-border"
                 onClick={handleLinkClick}
               >
                 Blog
@@ -230,12 +221,10 @@ export function Header() {
 
             {!loading && user && (
               <div className="flex items-center mb-4">
-                <div className="w-8 h-8 rounded-full bg-[#ff0884]/20 border border-[#ff0884]/50 flex items-center justify-center mr-2">
-                  <User className="h-4 w-4 text-[#ff0884]" />
+                <div className="w-8 h-8 bg-primary/20 border border-primary/50 flex items-center justify-center mr-2">
+                  <User className="h-4 w-4 text-primary" />
                 </div>
-                <span
-                  className={`${robotoCondensed.className} text-gray-200 text-sm`}
-                >
+                <span className="text-muted-foreground text-sm">
                   {user.email}
                 </span>
               </div>
@@ -246,7 +235,7 @@ export function Header() {
                 (user ? (
                   <button
                     onClick={handleSignOut}
-                    className="w-full px-4 py-2 text-sm font-medium rounded-md border border-[#ff0884]/50 text-white hover:bg-[#ff0884]/10 transition-all duration-300"
+                    className="w-full px-4 py-2 text-sm font-medium border border-primary/50 text-foreground hover:bg-primary/10 transition-all duration-300"
                   >
                     Sair
                   </button>
@@ -254,13 +243,13 @@ export function Header() {
                   <button
                     onClick={handleSignIn}
                     disabled={isLoggingIn}
-                    className={`w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)] ${
+                    className={`w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-primary text-sm font-medium shadow-sm text-foreground bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_hsl(var(--primary)/0.6)] ${
                       isLoggingIn ? "opacity-70 cursor-not-allowed" : ""
                     }`}
                   >
                     {isLoggingIn ? (
                       <>
-                        <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-[#ff0884] border-opacity-50"></div>
+                        <div className="h-4 w-4 animate-spin rounded-full border-t-2 border-primary border-opacity-50"></div>
                         <span>Carregando...</span>
                       </>
                     ) : (

@@ -2,91 +2,90 @@
 
 import Link from "next/link";
 import { Header } from "@/components/Header";
-import { Zap, Trophy, Flame } from "lucide-react";
+import Footer from "@/components/Footer";
+import { 
+  Zap, Trophy, Gamepad2, Shield, Users, 
+  Monitor, Download, Sparkles, Check 
+} from "lucide-react";
 import Image from "next/image";
-import { ImageSlider } from "@/components/ImageSlider";
+import { useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import BlogPostsPreview from "@/components/BlogPostsPreview";
 import { GoogleReviews } from "@/components/GoogleReviews";
 
-import { Roboto_Condensed } from "next/font/google";
+const screenshots = [
+  { src: "/screenshots/loading.webp", title: "Loading", subtitle: "RIESCADE" },
+  { src: "/screenshots/allgames.webp", title: "Jogos", subtitle: "RIESCADE" },
+  { src: "/screenshots/emulators.webp", title: "Emuladores", subtitle: "RIESCADE" },
+  { src: "/screenshots/arcade.webp", title: "Arcade", subtitle: "RIESCADE" },
+  { src: "/screenshots/sf3.webp", title: "Street Fighter III", subtitle: "Arcade" },
+  { src: "/screenshots/switch.webp", title: "Nintendo Switch", subtitle: "Consoles" },
+  { src: "/screenshots/mariowonder.webp", title: "Super Mario Bros. Wonder", subtitle: "Nintendo Switch" },
+  { src: "/screenshots/windows.webp", title: "Windows", subtitle: "PC Gamer" },
+  { src: "/screenshots/n64dd.webp", title: "Nintendo 64 Disk", subtitle: "Extensões" },
+  { src: "/screenshots/psvita.webp", title: "PS Vita", subtitle: "Portáteis" },
+  { src: "/screenshots/pinballm.webp", title: "Pinball M", subtitle: "Pinballs" },
+  { src: "/screenshots/doom3.webp", title: "DOOM 3", subtitle: "Ports" },
+];
 
-import { useCallback } from "react";
-import { supabase } from "@/lib/supabase";
-import { Video } from "@/components/Video";
-import BlogPostsPreview from "@/components/BlogPostsPreview";
-import Footer from "@/components/Footer";
+const features = [
+  {
+    icon: Zap,
+    title: "Alto Desempenho",
+    description: "Jogabilidade ultrarrápida com emulação otimizada e latência mínima.",
+  },
+  {
+    icon: Gamepad2,
+    title: "+250 Plataformas",
+    description: "Do Atari ao Nintendo Switch. Todos os consoles e arcades clássicos.",
+  },
+  {
+    icon: Users,
+    title: "Comunidade VIP",
+    description: "Suporte no Discord, WhatsApp e Telegram com a comunidade.",
+  },
+  {
+    icon: Download,
+    title: "Download Ilimitado",
+    description: "Acesso completo a 12TB de jogos via integração com Google Drive.",
+  },
+  {
+    icon: Trophy,
+    title: "RetroAchievements",
+    description: "Integração completa com RetroAchievements e scraping automático.",
+  },
+  {
+    icon: Monitor,
+    title: "5 Temas Premium",
+    description: "Interface personalizável com 5 temas visuais exclusivos.",
+  },
+];
 
-const robotoCondensed = Roboto_Condensed({
-  subsets: ["latin"],
-  weight: ["400"],
-});
+const benefits = [
+  "12TB de Jogos — Download ilimitado",
+  "Google Drive — Acesso integrado",
+  "Comunidade VIP — Suporte prioritário",
+  "250+ Plataformas — Atari até Switch",
+  "RetroAchievements + Scraping automático",
+];
 
 export default function Home() {
-  const gameImages = [
-    {
-      title: "Loading",
-      console: "RIESCADE",
-      image: "/screenshots/loading.webp",
-    },
-    {
-      title: "Jogos",
-      console: "RIESCADE",
-      image: "/screenshots/allgames.webp",
-    },
-    {
-      title: "Emuladores",
-      console: "RIESCADE",
-      image: "/screenshots/emulators.webp",
-    },
-    {
-      title: "Arcade",
-      console: "RIESCADE",
-      image: "/screenshots/arcade.webp",
-    },
-    {
-      title: "Street Fighter III",
-      console: "Arcade",
-      image: "/screenshots/sf3.webp",
-    },
-    {
-      title: "Nintendo Switch",
-      console: "Consoles",
-      image: "/screenshots/switch.webp",
-    },
-    {
-      title: "Super Mario Bros. Wonder",
-      console: "Nintendo Switch",
-      image: "/screenshots/mariowonder.webp",
-    },
-    {
-      title: "Windows",
-      console: "PC Gamer",
-      image: "/screenshots/windows.webp",
-    },
-    {
-      title: "Nintendo 64 Disk",
-      console: "Extensões",
-      image: "/screenshots/n64dd.webp",
-    },
-    {
-      title: "PS Vita",
-      console: "Portáteis",
-      image: "/screenshots/psvita.webp",
-    },
-    {
-      title: "Pinball M",
-      console: "Pinballs",
-      image: "/screenshots/pinballm.webp",
-    },
-    {
-      title: "DOOM 3",
-      console: "Ports",
-      image: "/screenshots/doom3.webp",
-    },
-  ];
+  const router = useRouter();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleLoginRedirect = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault();
+    if (isLoggingIn) return;
+    setIsLoggingIn(true);
+
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (sessionData?.session?.user) {
+        router.push("/dashboard");
+        return;
+      }
+
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
@@ -96,490 +95,386 @@ export default function Home() {
 
       if (error) {
         console.error("Erro ao iniciar login:", error);
+        setIsLoggingIn(false);
       } else if (data) {
         console.log("Login iniciado com sucesso, URL:", data.url);
         window.location.href = data.url;
       }
     } catch (error) {
       console.error("Error signing in:", error);
+      setIsLoggingIn(false);
     }
-  }, []);
+  }, [isLoggingIn, router]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="min-h-screen">
       <Header />
+      
+      <main className="pt-16">
+        {/* HERO SECTION */}
+        <section className="relative min-h-screen overflow-hidden flex items-center grid-overlay mt-[-4rem]">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,hsl(var(--surface))_0%,transparent_60%)]" />
+          <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
+          <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
 
-      <main className="flex-grow">
-        {/* Hero Section com vídeo em tela cheia */}
-        <div className="relative w-full h-screen overflow-hidden">
-          {/* Vídeo de fundo em tela cheia */}
-          <Video video="/video/intro.webm" />
+          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pt-18 pb-24">
+            <div className="lg:col-span-7 flex flex-col justify-center items-start">
 
-          {/* Overlay para melhorar a legibilidade */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent z-20"></div>
+              <h1 className="mt-8 font-display text-4xl sm:text-6xl lg:text-[4.5rem] font-bold uppercase leading-[0.85] tracking-tight text-balance drop-shadow-lg text-foreground">
+                O Melhor <span className="text-gradient-primary text-7xl">Dos Retrogames</span>
+              </h1>
 
-          {/* Container para posicionar o texto na parte inferior esquerda */}
-          <div className="absolute inset-0 z-40 flex flex-col justify-center">
-            <div className="px-4 sm:px-6 lg:px-8 pt-20">
-              <div className="max-w-xl p-6">
-                <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight mb-4 text-left text-shadow-lg">
-                  <span className="text-white drop-shadow-[0_0_25px_rgba(255,8,132,0.8)]">
-                    O MELHOR DOS
+              <p className="mt-6 max-w-[55ch] text-lg sm:text-xl text-muted-foreground leading-relaxed font-medium">
+                Acesso à mais de 250 plataformas de games, consoles e arcades clássicos em um único lugar. Emulação perfeita com interface premium.
+              </p>
+
+              <div className="mt-10 w-full max-w-2xl grid grid-cols-3 gap-[1px] bg-primary/30 p-[1px]" style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.1)" }}>
+                <div className="bg-background/90 backdrop-blur-md px-4 py-5 sm:p-6 flex flex-col">
+                  <span className="font-mono text-2xl sm:text-4xl font-bold text-foreground tracking-tight">
+                    250<span className="text-primary">+</span>
                   </span>
-                  <br />
-                  <span
-                    className={`${robotoCondensed.className} bg-clip-text text-transparent bg-gradient-to-r from-[#ff0884] to-purple-500`}
-                  >
-                    RETROGAMES
+                  <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest mt-1">Plataformas</span>
+                </div>
+                <div className="bg-background/90 backdrop-blur-md px-4 py-5 sm:p-6 flex flex-col">
+                  <span className="font-mono text-2xl sm:text-4xl font-bold text-foreground tracking-tight">
+                    12<span className="text-accent">TB</span>
                   </span>
-                </h1>
-                <p
-                  className={`${robotoCondensed.className} text-xl text-white mb-8 max-w-lg text-left drop-shadow-md`}
+                  <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest mt-1">Acervo de Jogos</span>
+                </div>
+                <div className="bg-background/90 backdrop-blur-md px-4 py-5 sm:p-6 flex flex-col">
+                  <span className="font-mono text-2xl sm:text-4xl font-bold text-foreground tracking-tight">5</span>
+                  <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest mt-1">Temas Premium</span>
+                </div>
+              </div>
+
+              <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-6 sm:gap-10">
+                <button
+                  onClick={handleLoginRedirect}
+                  className="relative group h-14 px-8 inline-flex items-center justify-center bg-primary text-primary-foreground font-display font-bold text-xl uppercase tracking-[0.15em] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] shrink-0"
                 >
-                  Acesso à mais de 250 plataformas de games, consoles e arcades
-                  clássicos em um único lugar.
-                  <span className="block mt-3 font-semibold text-[#ff0884]">
-                    Emulação perfeita + 5 Temas Premium
+                  <div className="absolute inset-0 border-2 border-foreground/20 group-hover:border-foreground/50 transition-colors" />
+                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-foreground" />
+                  <span className="relative z-10 drop-shadow-md">
+                    {isLoggingIn ? "Carregando..." : "Começar Agora"}
                   </span>
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <button
-                    onClick={handleLoginRedirect}
-                    className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884] text-base font-bold rounded-md shadow-[0_0_20px_rgba(255,8,132,0.4)] text-white bg-[#ff0884] hover:bg-[#ff0884]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 transform hover:scale-105"
-                  >
-                    <Flame className="h-5 w-5" />
-                    COMEÇAR AGORA
-                  </button>
-                  <Link
-                    href="#features"
-                    className={`${robotoCondensed.className} inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884]/70 text-base font-bold rounded-md text-white bg-transparent hover:bg-[#ff0884]/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300`}
-                  >
-                    Explorar Recursos
-                  </Link>
+                </button>
+
+                <div className="flex flex-col gap-2 font-mono text-[10px] text-muted-foreground uppercase tracking-wider">
+                  <div className="flex items-center gap-2">
+                    <Zap className="size-3 text-accent" />
+                    <span>Emulação Perfeita</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Shield className="size-3 text-muted-foreground" />
+                    <span>Cancele Quando Quiser</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5 relative h-[400px] lg:h-[700px] w-full mt-8 lg:mt-0 hidden md:block">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[380px] aspect-[4/3] bg-panel border-2 border-primary/50 p-2 z-30 transition-transform duration-700 hover:scale-105" style={{ boxShadow: "0 0 60px hsl(var(--primary) / 0.25)" }}>
+                <div className="w-full h-full bg-card relative overflow-hidden group">
+                  <Image
+                    src="/screenshots/arcade.webp"
+                    alt="Interface Arcade RIESCADE"
+                    fill
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-90"
+                  />
+                  <div className="absolute inset-0 scanlines pointer-events-none mix-blend-overlay" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background/95 to-transparent border-t border-primary/20">
+                    <div className="font-display font-bold text-lg uppercase tracking-wider text-foreground">Arcade Classic</div>
+                    <div className="font-mono text-primary text-[10px] mt-1">250+ SISTEMAS // ONLINE</div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="absolute top-[5%] left-[5%] w-[200px] sm:w-[240px] aspect-[4/3] bg-panel border border-accent/30 p-1 -rotate-6 z-10" style={{ boxShadow: "0 0 30px hsl(var(--accent) / 0.15)" }}>
+                <div className="w-full h-full bg-card overflow-hidden">
+                  <Image
+                    src="/screenshots/sf3.webp"
+                    alt="Street Fighter III"
+                    fill
+                    className="w-full h-full object-cover opacity-50 grayscale"
+                  />
+                </div>
+              </div>
+
+              <div className="absolute bottom-[5%] right-[0%] w-[220px] sm:w-[260px] aspect-square bg-panel border border-primary/20 p-1 rotate-6 z-20" style={{ boxShadow: "0 0 40px hsl(var(--primary) / 0.1)" }}>
+                <div className="w-full h-full bg-card overflow-hidden relative">
+                  <Image
+                    src="/screenshots/switch.webp"
+                    alt="Nintendo Switch"
+                    fill
+                    className="w-full h-full object-cover opacity-70"
+                  />
+                  <div className="absolute top-3 right-3 px-2 py-0.5 bg-background/80 border border-primary/30 font-mono text-[9px] text-primary uppercase">
+                    Switch
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Features Section */}
-        <div id="features" className="py-20 bg-gray-900 relative">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-gray-900"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-left mb-16">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="relative inline-block">
-                  RECURSOS DE GAMES
-                  <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-[#ff0884] to-purple-500"></span>
-                </span>
+        {/* FEATURES SECTION */}
+        <section id="features" className="relative py-24 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--surface))_0%,transparent_50%)]" />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center mb-16">
+              <span className="font-mono text-xs text-primary uppercase tracking-[0.3em] font-bold">
+                RECURSOS
+              </span>
+              <h2 className="mt-4 font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
+                Recursos de <span className="text-gradient-primary">Games</span>
               </h2>
-              <p
-                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
-              >
+              <p className="mt-4 text-muted-foreground max-w-xl mx-auto">
                 Projetado para amantes de jogos retro e arcade clássico
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  icon: <Zap className="w-8 h-8 text-[#ff0884]" />,
-                  title: "Alto Desempenho",
-                  description:
-                    "Experimente uma jogabilidade ultrarrápida com nossa plataforma otimizada.",
-                },
-                {
-                  icon: <Trophy className="w-8 h-8 text-[#ff0884]" />,
-                  title: "+250 Plataformas",
-                  description:
-                    "Acesso a jogos de mais de 250 plataformas diferentes em um único lugar.",
-                },
-                {
-                  icon: <Flame className="w-8 h-8 text-[#ff0884]" />,
-                  title: "Comunidade VIP",
-                  description:
-                    "Acesso à nossa comunidade no Discord, WhatsApp e Telegram para suporte.",
-                },
-              ].map((feature, i) => (
-                <div
-                  key={i}
-                  className="bg-gray-800/60 backdrop-blur-sm p-8 rounded-lg border border-gray-700 hover:border-[#ff0884]/50 shadow-lg hover:shadow-[0_0_20px_rgba(255,8,132,0.2)] transition-all duration-300 transform hover:-translate-y-2"
-                >
-                  <div className="w-16 h-16 bg-gray-900 rounded-lg flex items-center justify-center mb-6 border border-gray-700">
-                    {feature.icon}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-border/50">
+              {features.map((feature) => (
+                <div key={feature.title} className="bg-background p-8 group hover:bg-surface/50 transition-colors duration-300">
+                  <div className="size-12 border border-primary/30 flex items-center justify-center mb-6 group-hover:border-primary/60 transition-colors glow-primary">
+                    <feature.icon className="size-5 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-4">
+                  <h3 className="font-display text-xl font-bold uppercase tracking-wide text-foreground mb-3">
                     {feature.title}
                   </h3>
-                  <p className={`${robotoCondensed.className} text-gray-400`}>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
                     {feature.description}
                   </p>
                 </div>
               ))}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Game Showcase Section */}
-        <div className="py-20 bg-black relative overflow-hidden">
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-left mb-16">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="text-[#ff0884]">MULTISISTEMA</span> COMPLETO
+        {/* SCREENSHOTS SECTION */}
+        <section className="relative py-24 overflow-hidden">
+          <div className="absolute inset-0 grid-overlay opacity-30" />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center mb-16">
+              <span className="font-mono text-xs text-primary uppercase tracking-[0.3em] font-bold">
+                MULTISISTEMA
+              </span>
+              <h2 className="mt-4 font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
+                Mais de 250 <span className="text-gradient-primary">Sistemas</span>
               </h2>
-              <p
-                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
-              >
+              <p className="mt-4 text-muted-foreground">
                 Mais de 250 sistemas em um único lugar
               </p>
             </div>
 
-            {/* Slider de Sistemas */}
-            <ImageSlider images={gameImages} slidesPerView={3} />
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {screenshots.map((shot) => (
+                <div key={shot.title} className="group relative bg-panel border border-border overflow-hidden hover:border-primary/50 transition-all duration-300">
+                  <div className="aspect-video overflow-hidden relative w-full h-full">
+                    <Image
+                      src={shot.src}
+                      alt={shot.title}
+                      fill
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100"
+                    />
+                    <div className="absolute inset-0 scanlines pointer-events-none mix-blend-overlay opacity-30" />
+                  </div>
+                  <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-background/95 to-transparent">
+                    <div className="font-display font-bold text-sm uppercase text-foreground">{shot.title}</div>
+                    <div className="font-mono text-[10px] text-primary uppercase">{shot.subtitle}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+        </section>
 
-        {/* Pricing Section - Redesenhada */}
-        <div className="py-20 bg-[#13111C] relative">
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-left mb-16">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="text-[#ff0884]">POTENCIALIZE</span> SUA
-                EXPERIÊNCIA
+        {/* PRICING SECTION */}
+        <section id="pricing" className="relative py-24 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(var(--surface))_0%,transparent_50%)]" />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center mb-16">
+              <span className="font-mono text-xs text-primary uppercase tracking-[0.3em] font-bold">
+                ACESSO
+              </span>
+              <h2 className="mt-4 font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
+                Potencialize Sua <span className="text-gradient-primary">Experiência</span>
               </h2>
-              <p
-                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
-              >
+              <p className="mt-4 text-muted-foreground">
                 A melhor experiência de jogos retro aguarda por você
               </p>
             </div>
 
-            {/* Design moderno de plano */}
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.3)]">
-              <div className="grid md:grid-cols-2 gap-0">
-                {/* Lado esquerdo - Informações do plano */}
-                <div className="p-8 md:p-12 bg-gradient-to-br from-gray-800/50 via-black/50 to-black/50">
-                  <div className="flex items-center space-x-3 mb-8">
-                    <div className="w-12 h-12 bg-[#ff0884]/20 rounded-full flex items-center justify-center border border-[#ff0884]/30">
-                      <Flame className="h-6 w-6 text-[#ff0884]" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-white">
-                      RIESCADE MEMBRO
-                    </h3>
+            <div className="max-w-lg mx-auto">
+              <div className="relative border-2 border-primary/50 bg-background/80 backdrop-blur-sm overflow-hidden animate-pulse-glow">
+                <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary" />
+                <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary" />
+                <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary" />
+                <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-primary" />
+
+                <div className="p-8 md:p-10">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Sparkles className="size-5 text-primary" />
+                    <span className="font-mono text-xs text-primary uppercase tracking-widest font-bold">Riescade Membro</span>
                   </div>
 
-                  <div className="mb-8">
-                    <div className="flex items-baseline">
-                      <span className="text-5xl font-bold text-white">
-                        R$ 30,00
-                      </span>
-                      <span className="text-gray-400 ml-2">/mês</span>
-                    </div>
-                    <p className="text-gray-400 mt-2">
-                      Assinatura mensal sem fidelidade
-                    </p>
+                  <div className="flex items-baseline gap-2 mt-4">
+                    <span className="font-display text-5xl md:text-6xl font-bold text-foreground">R$ 30</span>
+                    <span className="text-muted-foreground font-mono text-sm">/mês</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-2">Assinatura mensal sem fidelidade</p>
+
+                  <div className="mt-8 space-y-4">
+                    {benefits.map((b) => (
+                      <div key={b} className="flex items-start gap-3">
+                        <div className="size-5 border border-primary/50 flex items-center justify-center shrink-0 mt-0.5">
+                          <Check className="size-3 text-primary" />
+                        </div>
+                        <span className="text-sm text-foreground/80">{b}</span>
+                      </div>
+                    ))}
                   </div>
 
-                  <div className="space-y-4 mb-8">
-                    <p className="text-gray-300">Acesso completo a:</p>
-                    <ul className={`${robotoCondensed.className} space-y-4`}>
-                      {[
-                        {
-                          title: "12TB de Jogos",
-                          desc: "Download ilimitado de todo o conteúdo premium",
-                        },
-                        {
-                          title: "Google Drive",
-                          desc: "Acesso integrado com sua conta Google",
-                        },
-                        {
-                          title: "Comunidade VIP",
-                          desc: "Suporte prioritário e atualizações exclusivas",
-                        },
-                        {
-                          title: "250+ Plataformas",
-                          desc: "Do Atari até os consoles mais recentes",
-                        },
-                        {
-                          title: "Integrações",
-                          desc: "Retroachievements + scraping automático",
-                        },
-                      ].map((feature, index) => (
-                        <li key={index} className="flex">
-                          <svg
-                            className="h-6 w-6 text-[#ff0884] mr-3 flex-shrink-0"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            ></path>
-                          </svg>
-                          <div>
-                            <span className="block text-white font-medium">
-                              {feature.title}
-                            </span>
-                            <span className="block text-gray-400 text-sm">
-                              {feature.desc}
-                            </span>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <button
+                    onClick={handleLoginRedirect}
+                    disabled={isLoggingIn}
+                    className="mt-10 w-full h-14 flex items-center justify-center bg-primary text-primary-foreground font-display font-bold text-xl uppercase tracking-[0.15em] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] disabled:opacity-70 disabled:cursor-not-allowed rounded-none"
+                  >
+                    {isLoggingIn ? "Carregando..." : "Assinar Agora"}
+                  </button>
+                  <p className="text-center text-xs text-muted-foreground mt-4 font-mono">
+                    Processo 100% seguro. Cancele quando quiser.
+                  </p>
                 </div>
+              </div>
 
-                {/* Lado direito - Call to action e imagem */}
-                <div className="relative p-8 md:p-12 bg-gradient-to-br from-[#ff0884]/10 via-black/70 to-black/70 flex flex-col justify-center">
-                  <div className="absolute inset-0 opacity-10">
-                    <Image
-                      src="/images/logos.webp"
-                      alt="RIESCADE Background"
-                      width={500}
-                      height={500}
-                      className="opacity-20 object-cover w-full h-full"
-                    />
-                  </div>
-
-                  <div className="relative">
-                    <div className="mb-8">
-                      <h4 className="text-2xl font-bold text-white mb-4">
-                        Torne-se membro agora
-                      </h4>
-                      <p className="text-gray-300 mb-6">
-                        Junte-se a milhares de jogadores que já estão
-                        aproveitando nossa coleção exclusiva de jogos retro.
-                      </p>
-                    </div>
-
-                    <div className="space-y-4">
-                      <button
-                        onClick={handleLoginRedirect}
-                        className="w-full block text-center px-6 py-4 rounded-md font-bold bg-[#ff0884] text-white hover:bg-[#ff0884]/90 shadow-[0_0_15px_rgba(255,8,132,0.4)] transition-all duration-300 transform hover:scale-105"
-                      >
-                        ASSINAR AGORA
-                      </button>
-
-                      <p className="text-center text-gray-400 text-sm">
-                        Processo 100% seguro. Cancele quando quiser.
-                      </p>
-                    </div>
-
-                    <div className="mt-12 p-4 bg-black/30 border border-gray-700 rounded-lg">
-                      <p className="text-gray-300 text-sm">
-                        &ldquo;O melhor sistema de retrogames que já usei. Vale
-                        cada centavo pela experiência nostálgica!&rdquo;
-                      </p>
-                      <p className="text-right text-[#ff0884] text-sm mt-2">
-                        — Membro desde 2023
-                      </p>
-                    </div>
-                  </div>
-                </div>
+              <div className="mt-8 p-6 border border-border bg-surface/30 text-center">
+                <p className="text-sm text-muted-foreground italic">
+                  &quot;O melhor sistema de retrogames que já usei. Vale cada centavo pela experiência nostálgica!&quot;
+                </p>
+                <span className="text-xs text-primary font-mono mt-3 block">— Membro desde 2023</span>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Produto HD Nintendo Switch Section */}
-        <div className="py-20 bg-gradient-to-br from-purple-900/20 via-gray-900 to-gray-900 relative">
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-left mb-16">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="text-[#ff0884]">PRODUTO</span> EXCLUSIVO
+        {/* PRODUCT SECTION */}
+        <section className="relative py-24 overflow-hidden">
+          <div className="absolute inset-0 grid-overlay opacity-20" />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center mb-16">
+              <span className="font-mono text-xs text-primary uppercase tracking-[0.3em] font-bold">
+                PRODUTO EXCLUSIVO
+              </span>
+              <h2 className="mt-4 font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
+                HD 1TB <span className="text-gradient-primary">Nintendo Switch</span>
               </h2>
-              <p
-                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
-              >
-                HD 1TB com jogos de Nintendo Switch - Pronto para usar
+              <p className="mt-4 text-muted-foreground">
+                Pronto para conectar e jogar imediatamente
               </p>
             </div>
 
-            <div className="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-2xl overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.3)]">
-              <div className="grid lg:grid-cols-2 gap-0">
-                {/* Lado esquerdo - Imagem do produto */}
-                <div className="relative p-8 md:p-12 bg-gradient-to-br from-gray-800/50 via-black/50 to-black/50">
-                  <div className="relative aspect-square rounded-lg overflow-hidden">
-                    <Image
-                      src="/images/hdswitch/hd_riescade_switch_1tb.webp"
-                      alt="HD 1TB Nintendo Switch - RIESCADE"
-                      fill
-                      className="object-cover"
-                    />
+            <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
+              <div className="relative border-2 border-primary/30 p-2 glow-primary">
+                <Image
+                  src="/images/hdswitch/hd_riescade_switch_1tb.webp"
+                  alt="HD 1TB Nintendo Switch - RIESCADE"
+                  width={1000}
+                  height={1000}
+                  className="w-full object-cover"
+                />
+                <div className="absolute inset-0 scanlines pointer-events-none mix-blend-overlay opacity-20" />
+              </div>
+
+              <div className="flex flex-col gap-6">
+                <h3 className="font-display text-3xl font-bold uppercase text-foreground">
+                  HD 1TB Nintendo Switch
+                </h3>
+                <p className="text-muted-foreground">
+                  Emuladores já configurados + Artes de todos os jogos. Pronto para conectar e jogar imediatamente.
+                </p>
+
+                <div className="space-y-3">
+                  {["Emuladores já configurados", "Artes de todos os jogos", "Instruções de instalação", "Suporte técnico"].map((item) => (
+                    <div key={item} className="flex items-center gap-3">
+                      <div className="size-5 border border-accent/50 flex items-center justify-center">
+                        <Check className="size-3 text-accent" />
+                      </div>
+                      <span className="text-sm text-foreground/80">{item}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4">
+                  <div className="font-display text-4xl font-bold text-foreground">
+                    R$ 350<span className="text-muted-foreground text-lg font-mono">,00</span>
                   </div>
                 </div>
 
-                {/* Lado direito - Informações do produto */}
-                <div className="relative p-8 md:p-12 bg-gradient-to-br from-[#ff0884]/10 via-black/70 to-black/70 flex flex-col justify-center">
-                  <div className="relative">
-                    <div className="mb-8">
-                      <h3 className="text-3xl font-bold text-white mb-4">
-                        HD 1TB Nintendo Switch
-                      </h3>
-                      <p className="text-gray-300 mb-6">
-                        Emuladores já configurados + Artes de todos os jogos.
-                        Pronto para conectar e jogar imediatamente.
-                      </p>
-
-                      <div className="space-y-3 mb-6">
-                        <div className="flex items-center gap-3">
-                          <svg
-                            className="h-5 w-5 text-green-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            ></path>
-                          </svg>
-                          <span className="text-gray-300">
-                            Emuladores já configurados
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <svg
-                            className="h-5 w-5 text-green-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            ></path>
-                          </svg>
-                          <span className="text-gray-300">
-                            Artes de todos os jogos
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <svg
-                            className="h-5 w-5 text-green-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            ></path>
-                          </svg>
-                          <span className="text-gray-300">
-                            Instruções de instalação
-                          </span>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <svg
-                            className="h-5 w-5 text-green-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              d="M5 13l4 4L19 7"
-                            ></path>
-                          </svg>
-                          <span className="text-gray-300">Suporte técnico</span>
-                        </div>
-                      </div>
-
-                      <div className="mb-8">
-                        <div className="flex items-baseline">
-                          <span className="text-4xl font-bold text-green-400">
-                            R$ 350,00
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4">
-                      <Link
-                        href="/produtos/hd-switch"
-                        className="w-full block text-center px-6 py-4 rounded-md font-bold bg-green-600 text-white hover:bg-green-700 shadow-[0_0_15px_rgba(34,197,94,0.4)] transition-all duration-300 transform hover:scale-105"
-                      >
-                        COMPRAR AGORA
-                      </Link>
-
-                      <p className="text-center text-gray-400 text-sm">
-                        Envio para todo Brasil • Pagamento seguro
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                <Link
+                  href="/produtos/hd-switch"
+                  className="w-full sm:w-auto h-14 px-10 flex items-center justify-center bg-accent text-accent-foreground font-display font-bold text-lg uppercase tracking-[0.1em] transition-all duration-300 hover:scale-[1.02] glow-accent"
+                >
+                  Comprar Agora
+                </Link>
+                <p className="text-xs text-muted-foreground font-mono">
+                  Envio para todo Brasil • Pagamento seguro
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Blog Recente Section */}
-        <div className="py-20 bg-gray-900 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-800 via-gray-900 to-gray-900 opacity-90"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-left mb-10">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                <span className="text-[#ff0884]">BLOG</span> RIESCADE
+        {/* BLOG SECTION */}
+        <section className="relative py-24 overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--surface))_0%,transparent_50%)]" />
+          <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center mb-16">
+              <span className="font-mono text-xs text-primary uppercase tracking-[0.3em] font-bold">
+                BLOG
+              </span>
+              <h2 className="mt-4 font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
+                Blog <span className="text-gradient-primary">Riescade</span>
               </h2>
-              <p
-                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
-              >
+              <p className="mt-4 text-muted-foreground">
                 Novidades e artigos sobre o universo dos jogos retro
               </p>
             </div>
 
-            {/* Blog posts */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-              {/* Este componente é renderizado do lado do cliente, então não podemos usar diretamente os dados do servidor.
-                  Precisamos usar um servidor component ou fazer a chamada de forma client-side */}
+            <div className="grid md:grid-cols-3 gap-6">
               <BlogPostsPreview />
             </div>
 
-            <div className="text-center">
+            <div className="text-center mt-12">
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 px-6 py-3 border-2 border-[#ff0884]/70 text-base font-bold rounded-md text-white bg-transparent hover:bg-[#ff0884]/10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300"
+                className="inline-flex items-center gap-2 font-mono text-sm text-primary hover:text-accent transition-colors uppercase tracking-widest"
               >
-                Ver todos os artigos
+                Ver todos os artigos →
               </Link>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Avaliações do Google */}
-        <div className="py-20 bg-black relative overflow-hidden">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-gray-800 via-black to-black opacity-90"></div>
-          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-left mb-16">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-                O QUE{" "}
-                <span className="text-[#ff0884]">NOSSOS COLABORADORES</span>{" "}
-                DIZEM
+        {/* TESTIMONIALS (Google Reviews) SECTION */}
+        <section className="relative py-24 overflow-hidden">
+          <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
+            <div className="text-center mb-16">
+              <span className="font-mono text-xs text-primary uppercase tracking-[0.3em] font-bold">
+                DEPOIMENTOS
+              </span>
+              <h2 className="mt-4 font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
+                O Que Nossos <span className="text-gradient-primary">Colaboradores</span> Dizem
               </h2>
-              <p
-                className={`${robotoCondensed.className} max-w-2xl text-xl text-gray-400`}
-              >
+              <p className="mt-4 text-muted-foreground">
                 Avaliações reais de usuários satisfeitos
               </p>
             </div>
 
-            {/* Slider de Avaliações */}
             <GoogleReviews slidesPerView={3} />
           </div>
-        </div>
+        </section>
+
       </main>
 
       <Footer />

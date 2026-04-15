@@ -1,17 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=JetBrains+Mono:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 17, 17, 17;
-  --background-end-rgb: 0, 0, 0;
-  --highlight-color: 255, 8, 132; /* #ff0884 */
-}
+@layer base {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 17, 17, 17;
+    --background-end-rgb: 0, 0, 0;
+    --highlight-color: 255, 8, 132; /* #ff0884 */
+    
+    --background: 270 80% 4%;
+    --foreground: 240 10% 90%;
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(17 24 39);
+    --card: 270 60% 8%;
+    --card-foreground: 240 10% 90%;
+
+    --popover: 270 60% 8%;
+    --popover-foreground: 240 10% 90%;
+
+    --primary: 330 85% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 270 40% 12%;
+    --secondary-foreground: 240 10% 90%;
+
+    --muted: 270 30% 14%;
+    --muted-foreground: 240 10% 50%;
+
+    --accent: 185 100% 50%;
+    --accent-foreground: 270 80% 4%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 270 30% 16%;
+    --input: 270 30% 16%;
+    --ring: 330 85% 52%;
+
+    --radius: 0.25rem;
+
+    /* Custom tokens */
+    --surface: 270 50% 10%;
+    --panel: 270 45% 14%;
+    --glow-primary: 330 85% 52%;
+    --glow-accent: 185 100% 50%;
+
+    --sidebar-background: 270 60% 8%;
+    --sidebar-foreground: 240 10% 90%;
+    --sidebar-primary: 330 85% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 270 40% 12%;
+    --sidebar-accent-foreground: 240 10% 90%;
+    --sidebar-border: 270 30% 16%;
+    --sidebar-ring: 330 85% 52%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    color: rgb(var(--foreground-rgb));
+  }
 }
 
 .header-backdrop {
@@ -21,6 +70,31 @@ body {
 }
 
 @layer utilities {
+  .text-gradient-primary {
+    @apply text-transparent bg-clip-text;
+    background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--accent)));
+  }
+
+  .glow-primary {
+    box-shadow: 0 0 30px hsl(var(--primary) / 0.3);
+  }
+
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--accent) / 0.2);
+  }
+
+  .grid-overlay {
+    background-image:
+      linear-gradient(to right, hsl(var(--primary) / 0.08) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--primary) / 0.08) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  .scanlines {
+    background-image: linear-gradient(transparent 50%, rgba(0,0,0,0.4) 50%);
+    background-size: 100% 4px;
+  }
+
   .bg-grid-white\/5 {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(255 255 255 / 0.02)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e");
   }

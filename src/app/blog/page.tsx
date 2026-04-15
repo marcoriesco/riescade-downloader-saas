@@ -3,13 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { getBlogPosts } from "@/lib/blog-service";
 import { Header } from "@/components/Header";
-import { Roboto_Condensed } from "next/font/google";
 import Footer from "@/components/Footer";
-
-const robotoCondensed = Roboto_Condensed({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
 
 export const revalidate = 3600;
 
@@ -53,7 +47,7 @@ export default function Blog({
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <Header />
 
-      <main className={`flex-grow ${robotoCondensed.className}`}>
+      <main className="flex-grow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex flex-col md:flex-row justify-between items-start mb-12">
             <div>
@@ -68,7 +62,7 @@ export default function Blog({
 
           {/* Filter Information */}
           {(category || tag || search) && (
-            <div className="bg-gray-800/40 rounded-lg p-4 mb-8 flex items-center justify-between border border-gray-700">
+            <div className="bg-gray-800/40 rounded-none p-4 mb-8 flex items-center justify-between border border-gray-700">
               <div className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -86,17 +80,17 @@ export default function Blog({
                 </svg>
                 <span className="font-medium mr-2">Filtros:</span>
                 {category && (
-                  <span className="bg-[#ff0884]/20 text-[#ff0884] px-2 py-1 rounded text-sm mr-2">
+                  <span className="bg-[#ff0884]/20 text-[#ff0884] px-2 py-1 rounded-none text-sm mr-2">
                     Categoria: {category}
                   </span>
                 )}
                 {tag && (
-                  <span className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded text-sm mr-2">
+                  <span className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded-none text-sm mr-2">
                     Tag: #{tag}
                   </span>
                 )}
                 {search && (
-                  <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded text-sm">
+                  <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-none text-sm">
                     Busca: {search}
                   </span>
                 )}
@@ -132,7 +126,7 @@ export default function Blog({
                   {posts.map((post) => (
                     <article
                       key={post.id}
-                      className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-[#ff0884]/5 transition-all duration-300 border border-gray-700 hover:border-[#ff0884]/30 h-full flex flex-col"
+                      className="bg-gray-800 rounded-none overflow-hidden shadow-lg hover:shadow-xl hover:shadow-[#ff0884]/5 transition-all duration-300 border border-gray-700 hover:border-[#ff0884]/30 h-full flex flex-col"
                     >
                       <a href={`/blog/${post.slug}`} className="block">
                         <div className="relative h-48 w-full">
@@ -150,7 +144,7 @@ export default function Blog({
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
                           <div className="absolute bottom-4 left-4">
-                            <span className="bg-[#ff0884]/20 text-[#ff0884] px-2 py-1 rounded text-xs font-bold">
+                            <span className="bg-[#ff0884]/20 text-[#ff0884] px-2 py-1 rounded-none text-xs font-bold">
                               {post.category}
                             </span>
                           </div>
@@ -219,7 +213,7 @@ export default function Blog({
                   ))}
                 </div>
               ) : (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-12 text-center">
+                <div className="bg-gray-800/50 border border-gray-700 rounded-none p-12 text-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-16 w-16 mx-auto mb-6 text-gray-600"
@@ -242,7 +236,7 @@ export default function Blog({
                   </p>
                   <Link
                     href="/blog"
-                    className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#ff0884] hover:bg-[#ff0884]/90"
+                    className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-none text-white bg-[#ff0884] hover:bg-[#ff0884]/90"
                   >
                     Ver todos os posts
                   </Link>
@@ -260,7 +254,7 @@ export default function Blog({
                         }${tag ? `&tag=${tag}` : ""}${
                           search ? `&search=${search}` : ""
                         }`}
-                        className="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors"
+                        className="px-4 py-2 bg-gray-800 text-white rounded-none hover:bg-gray-700 transition-colors"
                       >
                         Anterior
                       </Link>
@@ -275,7 +269,7 @@ export default function Blog({
                           }${tag ? `&tag=${tag}` : ""}${
                             search ? `&search=${search}` : ""
                           }`}
-                          className={`px-4 py-2 rounded-md ${
+                          className={`px-4 py-2 rounded-none ${
                             pageNum === page
                               ? "bg-[#ff0884] text-white"
                               : "bg-gray-800 text-white hover:bg-gray-700"
@@ -293,7 +287,7 @@ export default function Blog({
                         }${tag ? `&tag=${tag}` : ""}${
                           search ? `&search=${search}` : ""
                         }`}
-                        className="px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition-colors"
+                        className="px-4 py-2 bg-gray-800 text-white rounded-none hover:bg-gray-700 transition-colors"
                       >
                         Próximo
                       </Link>
@@ -309,7 +303,7 @@ export default function Blog({
                 {/* Search Box */}
                 <div className="p-0">
                   <form
-                    className="flex border border-gray-800 rounded-lg overflow-hidden bg-gray-800"
+                    className="flex border border-gray-800 rounded-none overflow-hidden bg-gray-800"
                     action="/blog"
                     method="get"
                   >
@@ -343,7 +337,7 @@ export default function Blog({
                 </div>
 
                 {/* Categories */}
-                <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
+                <div className="p-6 bg-gray-800 rounded-none border border-gray-700">
                   <h3 className="text-2xl font-medium mb-4">Categorias</h3>
                   <div className="flex flex-wrap gap-2">
                     {categories && categories.length > 0 ? (
@@ -351,7 +345,7 @@ export default function Blog({
                         <Link
                           key={category.id}
                           href={`/blog?category=${category.slug}`}
-                          className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                          className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
                         >
                           {category.name}
                           <span className="ml-2 text-xs bg-gray-600 text-gray-300 px-1.5 py-0.5 rounded-full">
@@ -368,42 +362,42 @@ export default function Blog({
                 </div>
 
                 {/* Popular Tags */}
-                <div className="p-6 bg-gray-800 rounded-lg border border-gray-700">
+                <div className="p-6 bg-gray-800 rounded-none border border-gray-700">
                   <h3 className="text-2xl font-medium mb-4">Tags Populares</h3>
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href="/blog?tag=emulacao"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
                     >
                       #emulacao
                     </Link>
                     <Link
                       href="/blog?tag=retroarch"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
                     >
                       #retroarch
                     </Link>
                     <Link
                       href="/blog?tag=nintendo"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
                     >
                       #nintendo
                     </Link>
                     <Link
                       href="/blog?tag=arcade"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
                     >
                       #arcade
                     </Link>
                     <Link
                       href="/blog?tag=playstation"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
                     >
                       #playstation
                     </Link>
                     <Link
                       href="/blog?tag=retrogames"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
                     >
                       #retrogames
                     </Link>

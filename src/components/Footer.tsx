@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Roboto_Condensed } from "next/font/google";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTelegramPlane,
@@ -7,14 +6,9 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import Link from "next/link";
 
-const robotoCondensed = Roboto_Condensed({
-  subsets: ["latin"],
-  weight: ["400"],
-});
-
 export default function Footer() {
   return (
-    <footer className="relative bg-black text-white py-12 border-t border-gray-800 z-50">
+    <footer className="relative bg-background text-foreground py-12 border-t border-border z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="md:flex md:justify-between">
           <div className="mb-8 md:mb-0">
@@ -25,32 +19,32 @@ export default function Footer() {
                 width={35}
                 height={35}
               />
-              <h3 className="text-xl font-bold">RIESCADE</h3>
+              <h3 className="text-xl font-display font-bold uppercase">RIESCADE</h3>
             </div>
-            <p className={`${robotoCondensed.className} text-gray-400 mt-2`}>
+            <p className="text-muted-foreground mt-2">
               RetroGames e Games, sempre emulando...
             </p>
           </div>
 
           {/* Links Legais */}
           <div className="mb-8 md:mb-0">
-            <h4 className="text-lg font-semibold mb-4">Links Importantes</h4>
+            <h4 className="text-lg font-display font-semibold mb-4 uppercase">Links Importantes</h4>
             <div className="flex flex-col space-y-2">
               <Link
                 href="/politica"
-                className={`${robotoCondensed.className} text-gray-400 hover:text-[#ff0884] transition-colors duration-200`}
+                className="text-muted-foreground hover:text-primary transition-colors duration-200"
               >
                 Política de Privacidade
               </Link>
               <Link
                 href="/termos"
-                className={`${robotoCondensed.className} text-gray-400 hover:text-[#ff0884] transition-colors duration-200`}
+                className="text-muted-foreground hover:text-primary transition-colors duration-200"
               >
                 Termos e Condições
               </Link>
               <Link
                 href="/app-data"
-                className={`${robotoCondensed.className} text-gray-400 hover:text-[#ff0884] transition-colors duration-200`}
+                className="text-muted-foreground hover:text-primary transition-colors duration-200"
               >
                 Exclusão de Dados
               </Link>
@@ -59,10 +53,10 @@ export default function Footer() {
 
           {/* Redes Sociais */}
           <div className="mt-8 flex flex-col space-y-4">
-            <div className={`${robotoCondensed.className} flex space-x-6`}>
+            <div className="flex space-x-6">
               <Link
                 href="https://t.me/riescade"
-                className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                className="flex items-center text-muted-foreground hover:text-primary transition-colors duration-200"
                 target="_blank"
               >
                 <FontAwesomeIcon
@@ -74,7 +68,7 @@ export default function Footer() {
               </Link>
               <Link
                 href="https://chat.whatsapp.com/Kn2eA8g8FIp0aTYV0iNYSe"
-                className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                className="flex items-center text-muted-foreground hover:text-primary transition-colors duration-200"
                 target="_blank"
               >
                 <FontAwesomeIcon
@@ -88,7 +82,7 @@ export default function Footer() {
                 href="https://facebook.com/riescade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                className="flex items-center text-muted-foreground hover:text-primary transition-colors duration-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -104,7 +98,7 @@ export default function Footer() {
                 href="https://instagram.com/riescade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                className="flex items-center text-muted-foreground hover:text-primary transition-colors duration-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +114,7 @@ export default function Footer() {
                 href="https://youtube.com/@riescade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-gray-400 hover:text-[#ff0884] transition-colors duration-200"
+                className="flex items-center text-muted-foreground hover:text-primary transition-colors duration-200"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
