@@ -122,6 +122,7 @@ export const removeUserPermission = async (
     const targetEmail = email.toLowerCase().trim();
 
     do {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await drive.permissions.list({
         fileId: folderId,
         fields: "nextPageToken, permissions(id, emailAddress)",
@@ -186,6 +187,7 @@ export const hasUserPermission = async (
     const targetEmail = email.toLowerCase().trim();
 
     do {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await drive.permissions.list({
         fileId: folderId,
         fields: "nextPageToken, permissions(id, emailAddress)",
