@@ -117,19 +117,32 @@ export const removeUserPermission = async (
       `Buscando permissão para remover: ${email} da pasta ${folderId}`
     );
 
-    // Primeiro encontrar o ID da permissão do usuário
-    const permissionList = await drive.permissions.list({
-      fileId: folderId,
-      fields: "permissions(id, emailAddress)",
-      supportsAllDrives: true,
-    });
+    let pageToken: string | undefined = undefined;
+    let permissionId: string | undefined = undefined;
+    const targetEmail = email.toLowerCase().trim();
 
-    // Encontrar a permissão pelo email
-    const permission = permissionList.data.permissions?.find(
-      (p) => p.emailAddress === email
-    );
+    do {
+      const permissionList = await drive.permissions.list({
+        fileId: folderId,
+        fields: "nextPageToken, permissions(id, emailAddress)",
+        supportsAllDrives: true,
+        pageSize: 100,
+        pageToken: pageToken,
+      });
 
-    if (!permission || !permission.id) {
+      const permission = permissionList.data.permissions?.find(
+        (p) => p.emailAddress?.toLowerCase().trim() === targetEmail
+      );
+
+      if (permission && permission.id) {
+        permissionId = permission.id;
+        break;
+      }
+
+      pageToken = permissionList.data.nextPageToken || undefined;
+    } while (pageToken);
+
+    if (!permissionId) {
       console.log(`Permissão não encontrada para o email ${email}`);
       return { success: false, message: "Permissão não encontrada" };
     }
@@ -137,7 +150,7 @@ export const removeUserPermission = async (
     // Remover a permissão
     await drive.permissions.delete({
       fileId: folderId,
-      permissionId: permission.id,
+      permissionId: permissionId,
       supportsAllDrives: true,
     });
 
@@ -169,19 +182,28 @@ export const hasUserPermission = async (
     const auth = initAuth();
     const drive = google.drive({ version: "v3", auth });
 
-    // Listar permissões
-    const permissionList = await drive.permissions.list({
-      fileId: folderId,
-      fields: "permissions(id, emailAddress)",
-      supportsAllDrives: true,
-    });
+    let pageToken: string | undefined = undefined;
+    const targetEmail = email.toLowerCase().trim();
 
-    // Verificar se o email já tem permissão
-    const hasPermission = permissionList.data.permissions?.some(
-      (p) => p.emailAddress === email
-    );
+    do {
+      const permissionList = await drive.permissions.list({
+        fileId: folderId,
+        fields: "nextPageToken, permissions(id, emailAddress)",
+        supportsAllDrives: true,
+        pageSize: 100,
+        pageToken: pageToken,
+      });
 
-    return !!hasPermission;
+      const hasPermission = permissionList.data.permissions?.some(
+        (p) => p.emailAddress?.toLowerCase().trim() === targetEmail
+      );
+
+      if (hasPermission) return true;
+
+      pageToken = permissionList.data.nextPageToken || undefined;
+    } while (pageToken);
+
+    return false;
   } catch (error) {
     console.error(`Erro ao verificar permissão para ${email}:`, error);
     return false;
