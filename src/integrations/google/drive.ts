@@ -132,7 +132,8 @@ export const removeUserPermission = async (
       });
 
       const permission = response.data.permissions?.find(
-        (p) => p.emailAddress?.toLowerCase().trim() === targetEmail
+        (p: { id?: string | null; emailAddress?: string | null }) => 
+          p.emailAddress?.toLowerCase().trim() === targetEmail
       );
 
       if (permission && permission.id) {
@@ -197,7 +198,8 @@ export const hasUserPermission = async (
       });
 
       const hasPermission = response.data.permissions?.some(
-        (p) => p.emailAddress?.toLowerCase().trim() === targetEmail
+        (p: { id?: string | null; emailAddress?: string | null }) => 
+          p.emailAddress?.toLowerCase().trim() === targetEmail
       );
 
       if (hasPermission) return true;
