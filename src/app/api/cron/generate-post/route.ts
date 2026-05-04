@@ -73,9 +73,9 @@ Retorne EXATAMENTE e APENAS um objeto JSON válido, sem crases do markdown, com 
 }
 `;
 
-    console.log("🧠 Solicitando criação ao Gemini (gemini-1.5-pro)...");
+    console.log("🧠 Solicitando criação ao Gemini (gemini-2.5-pro)...");
     const response = await ai.models.generateContent({
-      model: "gemini-1.5-pro",
+      model: "gemini-2.5-pro",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
