@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { GoogleGenAI } from "@google/genai";
-import * as fs from "fs";
-import * as path from "path";
 
 // Permite execução longa se necessário
 export const maxDuration = 60;
