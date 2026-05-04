@@ -122,7 +122,7 @@ export const removeUserPermission = async (
     const targetEmail = email.toLowerCase().trim();
 
     do {
-      const permissionList = await drive.permissions.list({
+      const response = await drive.permissions.list({
         fileId: folderId,
         fields: "nextPageToken, permissions(id, emailAddress)",
         supportsAllDrives: true,
@@ -130,7 +130,7 @@ export const removeUserPermission = async (
         pageToken: pageToken,
       });
 
-      const permission = permissionList.data.permissions?.find(
+      const permission = response.data.permissions?.find(
         (p) => p.emailAddress?.toLowerCase().trim() === targetEmail
       );
 
@@ -139,7 +139,7 @@ export const removeUserPermission = async (
         break;
       }
 
-      pageToken = permissionList.data.nextPageToken || undefined;
+      pageToken = response.data.nextPageToken || undefined;
     } while (pageToken);
 
     if (!permissionId) {
@@ -186,7 +186,7 @@ export const hasUserPermission = async (
     const targetEmail = email.toLowerCase().trim();
 
     do {
-      const permissionList = await drive.permissions.list({
+      const response = await drive.permissions.list({
         fileId: folderId,
         fields: "nextPageToken, permissions(id, emailAddress)",
         supportsAllDrives: true,
@@ -194,13 +194,13 @@ export const hasUserPermission = async (
         pageToken: pageToken,
       });
 
-      const hasPermission = permissionList.data.permissions?.some(
+      const hasPermission = response.data.permissions?.some(
         (p) => p.emailAddress?.toLowerCase().trim() === targetEmail
       );
 
       if (hasPermission) return true;
 
-      pageToken = permissionList.data.nextPageToken || undefined;
+      pageToken = response.data.nextPageToken || undefined;
     } while (pageToken);
 
     return false;
