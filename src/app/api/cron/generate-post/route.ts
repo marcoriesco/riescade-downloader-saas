@@ -59,14 +59,14 @@ ${titulosExistentes.length > 0 ? titulosExistentes.join(", ") : "Nenhum ainda."}
 
 Escreva um artigo fascinante e altamente engajante sobre retrogaming (pode ser sobre um console antigo, história de um jogo clássico, dicas de emulação, curiosidades, etc.).
 
-O artigo deve ter formato Markdown e ser pronto para web (use títulos h2, h3, negrito e listas).
+O artigo deve estar formatado em HTML VÁLIDO e pronto para web. Em vez de Markdown, use tags HTML reais como <h2>, <h3>, <p>, <strong>, e <ul>/<li>. Não use a tag <h1> (ela já é inserida automaticamente pela página).
 Crie também um prompt EM INGLÊS detalhado para gerar a imagem de capa (no estilo pixel art, retro ou ilustração vibrante).
 
-Retorne EXATAMENTE e APENAS um objeto JSON válido, sem crases do markdown, com a seguinte estrutura:
+Retorne EXATAMENTE e APENAS um objeto JSON válido, sem as marcações \`\`\`json, com a seguinte estrutura:
 {
   "title": "O título chamativo do post",
   "excerpt": "Um resumo atraente com no máximo 150 caracteres",
-  "content": "O texto completo do artigo em Markdown...",
+  "content": "<p>O texto completo do artigo em <strong>HTML</strong>...</p>",
   "category": "Uma categoria (ex: História, Review, Emulação, Curiosidades)",
   "tags": ["tag1", "tag2", "tag3"],
   "imagePrompt": "A highly detailed retro gaming illustration of..."
@@ -99,35 +99,14 @@ Retorne EXATAMENTE e APENAS um objeto JSON válido, sem crases do markdown, com 
       .replace(/[^\w\s]/g, "")
       .replace(/\s+/g, "-");
 
-    // 7. Baixar a Imagem usando Pollinations
-    console.log("🖼️ Gerando e baixando imagem via Pollinations...");
-    // Adicionamos parâmetros para garantir a qualidade (hd) e evitar logo (nologo)
+    // 7. Gerar URL da Imagem (direto da Pollinations)
+    console.log("🖼️ Gerando URL da imagem via Pollinations...");
     const seed = Math.floor(Math.random() * 1000000);
     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(
       postData.imagePrompt
     )}?width=1200&height=630&nologo=true&seed=${seed}`;
 
-    const imageResponse = await fetch(imageUrl);
-    if (!imageResponse.ok) {
-      throw new Error(`Erro ao baixar imagem: ${imageResponse.statusText}`);
-    }
-
-    const arrayBuffer = await imageResponse.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
-    // Salvar na pasta public
-    const imageFileName = `${slug}.webp`;
-    const imageDir = path.join(process.cwd(), "public", "images", "blog");
-    
-    // Garantir que a pasta existe
-    if (!fs.existsSync(imageDir)) {
-      fs.mkdirSync(imageDir, { recursive: true });
-    }
-    
-    const imagePath = path.join(imageDir, imageFileName);
-    fs.writeFileSync(imagePath, buffer);
-    const localImageUrl = `/images/blog/${imageFileName}`;
-    console.log(`💾 Imagem salva em: ${imagePath}`);
+    console.log(`💾 URL da imagem gerada: ${imageUrl}`);
 
     // 8. Inserir no Supabase
     const now = new Date();
@@ -138,7 +117,7 @@ Retorne EXATAMENTE e APENAS um objeto JSON válido, sem crases do markdown, com 
       slug: slug,
       content: postData.content,
       excerpt: postData.excerpt,
-      cover_image: localImageUrl,
+      cover_image: imageUrl,
       status: "published", // Ou draft se preferir revisar antes
       author: "RIESCADE AI",
       published_at: now.toISOString(),

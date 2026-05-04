@@ -1,7 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["www.riescade.com.br", "riescade.com.br", "riescade.com"],
+    remotePatterns: [
+      { protocol: "https", hostname: "www.riescade.com.br" },
+      { protocol: "https", hostname: "riescade.com.br" },
+      { protocol: "https", hostname: "riescade.com" },
+      { protocol: "https", hostname: "image.pollinations.ai" }
+    ],
     unoptimized: false, // Habilitar otimização para obter melhor qualidade
   },
   // Configuração de segurança para permitir o proxy de imagens
