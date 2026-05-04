@@ -122,7 +122,7 @@ export const removeUserPermission = async (
     const targetEmail = email.toLowerCase().trim();
 
     do {
-      const response = await drive.permissions.list({
+      const response: any = await drive.permissions.list({
         fileId: folderId,
         fields: "nextPageToken, permissions(id, emailAddress)",
         supportsAllDrives: true,
@@ -186,7 +186,7 @@ export const hasUserPermission = async (
     const targetEmail = email.toLowerCase().trim();
 
     do {
-      const response = await drive.permissions.list({
+      const response: any = await drive.permissions.list({
         fileId: folderId,
         fields: "nextPageToken, permissions(id, emailAddress)",
         supportsAllDrives: true,
