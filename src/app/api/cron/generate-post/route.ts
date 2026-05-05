@@ -55,7 +55,7 @@ Eu preciso de um post novo para o meu blog chamado RIESCADE.
 Aqui estão os títulos dos artigos que JÁ TEMOS (não repita o tema):
 ${titulosExistentes.length > 0 ? titulosExistentes.join(", ") : "Nenhum ainda."}
 
-Escreva um artigo fascinante e altamente engajante sobre retrogaming (pode ser sobre um console antigo, história de um jogo clássico, dicas de emulação, curiosidades, etc.).
+Escreva um artigo fascinante e altamente engajante sobre retrogaming (pode ser sobre um console antigo, história de um jogo clássico, dicas de emulação, curiosidades, design dos games, futuro dos games, etc.).
 
 O artigo deve estar formatado em HTML VÁLIDO e pronto para web. Em vez de Markdown, use tags HTML reais como <h2>, <h3>, <p>, <strong>, e <ul>/<li>. Não use a tag <h1> (ela já é inserida automaticamente pela página).
 Crie também um prompt EM INGLÊS detalhado para gerar a imagem de capa (no estilo pixel art, retro ou ilustração vibrante).
