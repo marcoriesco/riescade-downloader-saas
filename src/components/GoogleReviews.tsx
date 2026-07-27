@@ -26,7 +26,7 @@ const reviews: Review[] = [
   {
     name: "Marcos Silva",
     rating: 5,
-    text: "Incrível! Consegui acessar vários jogos de consoles antigos que não encontrava em nenhum outro lugar. A interface é muito intuitiva e o acesso ao Google Drive é rápido.",
+    text: "Incrível! Consegui acessar vários jogos de consoles antigos que não encontrava em nenhum outro lugar. A interface é muito intuitiva e os downloads pelo aplicativo são rápidos.",
     date: "2 meses atrás",
   },
   {

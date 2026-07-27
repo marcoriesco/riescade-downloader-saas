@@ -48,7 +48,7 @@ const features = [
   {
     icon: Download,
     title: "Download Ilimitado",
-    description: "Acesso completo a 12TB de jogos via integração com Google Drive.",
+    description: "Downloads integrados diretamente ao aplicativo RIESCADE OS.",
   },
   {
     icon: Trophy,
@@ -64,7 +64,7 @@ const features = [
 
 const benefits = [
   "12TB de Jogos — Download ilimitado",
-  "Google Drive — Acesso integrado",
+  "Downloads seguros dentro do aplicativo",
   "Comunidade VIP — Suporte prioritário",
   "250+ Plataformas — Atari até Switch",
   "RetroAchievements + Scraping automático",

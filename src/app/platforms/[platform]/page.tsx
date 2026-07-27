@@ -10,12 +10,11 @@ import Footer from "@/components/Footer";
 
 // Import platform data
 import platformsData from "@/data/platforms.json";
-import { faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
+import { faDownload } from "@fortawesome/free-solid-svg-icons";
 
 interface PlatformData {
   name: string;
   image: string;
-  url: string;
   fullName: string;
 }
 
@@ -72,7 +71,7 @@ export default function PlatformPage({
       // Implement your authentication logic here
       // For demo, just simulate a redirect
       setTimeout(() => {
-        window.location.href = platformInfo.url;
+        window.location.href = "/dashboard";
       }, 1500);
     } catch (error) {
       console.error("Authentication error:", error);
@@ -80,11 +79,10 @@ export default function PlatformPage({
     }
   };
 
-  // Redirect directly to the URL if authenticated
+  // O download dos jogos acontece exclusivamente dentro do aplicativo.
   const handleRedirectToUrl = () => {
-    if (platformInfo.url) {
-      window.open(platformInfo.url, "_blank");
-    }
+    window.location.href =
+      "https://github.com/marcoriesco/RIESCADE-OS/releases/latest/download/RIESCADE_OS.7z";
   };
 
   useEffect(() => {
@@ -146,8 +144,7 @@ export default function PlatformPage({
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff0884] mx-auto mb-6"></div>
             <h1 className="text-2xl font-bold mb-4">Redirecionando...</h1>
             <p className="text-gray-400">
-              Você está sendo redirecionado para o Google Drive de{" "}
-              {platformInfo.fullName}
+              Abrindo o aplicativo RIESCADE OS para {platformInfo.fullName}
             </p>
           </div>
         </main>
@@ -181,10 +178,10 @@ export default function PlatformPage({
                     className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
                   >
                     <FontAwesomeIcon
-                      icon={faGoogleDrive}
+                      icon={faDownload}
                       className="mr-2 h-5 w-5"
                     />
-                    Acessar No Google Drive
+                    Baixar RIESCADE OS
                   </button>
                 ) : (
                   <button
@@ -192,7 +189,7 @@ export default function PlatformPage({
                     className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
                   >
                     <FontAwesomeIcon
-                      icon={faGoogleDrive}
+                      icon={faDownload}
                       className="mr-2 h-5 w-5"
                     />
                     Fazer Login para Acessar
@@ -382,7 +379,7 @@ export default function PlatformPage({
                   Ainda não temos metadados detalhados para esta plataforma.
                   Nossa equipe está trabalhando para adicionar mais informações
                   sobre {platformInfo.fullName}. Enquanto isso, você pode
-                  acessar todos os jogos usando o link do Google Drive acima.
+                  acessar os jogos desta plataforma pelo aplicativo RIESCADE OS.
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mt-8">
@@ -425,7 +422,7 @@ export default function PlatformPage({
                       onClick={handleRedirectToUrl}
                       className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity font-medium self-center"
                     >
-                      Ver Arquivos no Google Drive
+                      Baixar RIESCADE OS
                     </button>
                   </div>
                 </div>

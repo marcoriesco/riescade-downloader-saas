@@ -1,54 +1,25 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { NextResponse } from "next/server";
+import { authenticateSupabaseRequest, AppApiError } from "@/lib/server/app-auth";
+import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: Promise<{ sessionId: string }> }
 ) {
   try {
+    const user = await authenticateSupabaseRequest(request);
     const { sessionId } = await params;
-
-    if (!sessionId) {
-      return NextResponse.json(
-        { error: "Session ID é obrigatório" },
-        { status: 400 }
-      );
-    }
-
-    // Buscar pedido no Supabase
-    const { data: order, error } = await supabase
+    const { data, error } = await getSupabaseAdmin()
       .from("orders")
       .select("*")
       .eq("stripe_session_id", sessionId)
+      .eq("user_id", user.id)
       .maybeSingle();
-
-    if (error) {
-      console.error("Erro ao buscar pedido:", error);
-      return NextResponse.json(
-        { error: "Erro ao buscar pedido" },
-        { status: 500 }
-      );
-    }
-
-    if (!order) {
-      console.log(`Pedido não encontrado para session_id: ${sessionId}`);
-      return NextResponse.json(
-        { error: "Pedido não encontrado" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json(order);
+    if (error) throw error;
+    if (!data) return NextResponse.json({ error: "Pedido não encontrado" }, { status: 404 });
+    return NextResponse.json(data);
   } catch (error) {
-    console.error("Erro na API de busca de pedido:", error);
-    return NextResponse.json(
-      { error: "Erro interno do servidor" },
-      { status: 500 }
-    );
+    const status = error instanceof AppApiError ? error.status : 500;
+    return NextResponse.json({ error: "Não foi possível consultar o pedido" }, { status });
   }
 }

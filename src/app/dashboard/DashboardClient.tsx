@@ -20,7 +20,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle, faGoogleDrive } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { CancelSubscriptionModal } from "@/components/CancelSubscriptionModal";
 import { faDice, faFile, faGamepad } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
@@ -159,6 +159,7 @@ export default function DashboardClient() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
           },
           body: JSON.stringify({
             sessionId,
@@ -251,13 +252,10 @@ export default function DashboardClient() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
         body: JSON.stringify({
           priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_ID || "price_1",
-          userId: user.id,
-          userEmail: user.email,
-          userName:
-            user.user_metadata?.full_name || user.user_metadata?.name || "",
         }),
       });
 
@@ -290,10 +288,10 @@ export default function DashboardClient() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
         body: JSON.stringify({
           subscriptionId: subscription.subscription_id,
-          userId: user.id,
         }),
       });
 
@@ -390,46 +388,32 @@ export default function DashboardClient() {
     );
   }
 
-  // Downloads section data
   const downloadOptions = [
     {
-      id: "drive-membro",
-      title: "Google Drive de Membro",
-      description: "Acesso completo a 12TB de conteúdo exclusivo para membros",
-      url: "https://bit.ly/gamecc-drive",
-      icon: faGoogleDrive,
-      highlight: true,
-      badge: "12TB",
+      id: "app",
+      title: "RIESCADE OS",
+      description: "Versão mais recente do aplicativo",
+      url: "https://github.com/marcoriesco/RIESCADE-OS/releases/latest/download/RIESCADE_OS.7z",
+      icon: faGamepad,
+      badge: "Atualizado",
       bgClass: "bg-gradient-to-br from-purple-900/60 to-[#ff0884]/60",
     },
     {
-      id: "base-membros",
-      title: "RIESCADE BASE Membros",
-      description: "1 jogo por Plataforma - Coleção criada para membros",
-      url: "https://drive.google.com/drive/folders/1zte41dcZ3hIUE5JU8S4KPsk8bB03u4lR",
-      icon: faGamepad,
-      highlight: false,
-      badge: "Premium",
-      bgClass: "bg-gradient-to-br from-blue-900/60",
-    },
-    {
-      id: "base-free",
+      id: "platforms",
       title: "Plataformas",
       description: "Lista completa de plataformas disponíveis",
       url: "/platforms",
       icon: faDice,
-      highlight: false,
-      badge: "Novo",
+      badge: "Catálogo",
       bgClass: "bg-gradient-to-br from-green-900/60",
     },
     {
-      id: "apps-necessarios",
-      title: "Arquivos Necessários",
-      description: "Aplicativos e ferramentas essenciais para o RIESCADE",
-      url: "https://bit.ly/riescade-apps",
+      id: "instructions",
+      title: "Instruções",
+      description: "Use Configurações → Minha conta dentro do app",
+      url: "/dashboard",
       icon: faFile,
-      highlight: false,
-      badge: "Essencial",
+      badge: "Ajuda",
       bgClass: "bg-gradient-to-br from-amber-900/60",
     },
   ];
@@ -478,7 +462,7 @@ export default function DashboardClient() {
                 <span className="block text-sm text-green-300/80">
                   {sessionId
                     ? "Você receberá um email com os detalhes do pedido e o código de rastreamento será adicionado aqui assim que disponível."
-                    : "A liberação de acesso ao Google Drive poderá levar até 12 horas para ser processada."}
+                    : "Baixe o aplicativo abaixo e entre com a mesma conta Google usada na assinatura."}
                 </span>
               </span>
             </p>
@@ -727,32 +711,31 @@ export default function DashboardClient() {
                   <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row items-center">
                     <div className="mb-6 sm:mb-0 sm:mr-8 flex-shrink-0 bg-black/30 p-4 rounded-full border border-[#ff0884]/50 shadow-[0_0_15px_rgba(255,8,132,0.3)]">
                       <FontAwesomeIcon
-                        icon={faGoogleDrive}
+                        icon={faGamepad}
                         className="h-10 w-10 sm:h-16 sm:w-16 text-[#ff0884]"
                       />
                     </div>
 
                     <div className="text-center sm:text-left flex-grow">
                       <div className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#ff0884]/20 text-[#ff0884] border border-[#ff0884]/30 mb-8">
-                        12TB DE CONTEÚDO
+                        VERSÃO MAIS RECENTE
                       </div>
                       <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-                        Google Drive de Membro
+                        Aplicativo RIESCADE OS
                       </h3>
                       <p className="text-gray-300 mb-4 max-w-2xl">
-                        Acesso completo à nossa biblioteca exclusiva para
-                        membros com mais de 12TB de conteúdo. Atualizações
-                        regulares com os últimos lançamentos.
+                        Baixe a versão mais recente do aplicativo e faça os
+                        downloads diretamente pela biblioteca integrada.
                       </p>
 
                       <button
                         onClick={() =>
-                          handleOpenLink("https://bit.ly/gamecc-drive")
+                          handleOpenLink("https://github.com/marcoriesco/RIESCADE-OS/releases/latest/download/RIESCADE_OS.7z")
                         }
                         className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-none text-white bg-[#ff0884] hover:bg-[#ff0884]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-colors duration-200 shadow-[0_0_10px_rgba(255,8,132,0.4)]"
                       >
                         <ExternalLink className="w-5 h-5 mr-2" />
-                        Acessar Google Drive
+                        Baixar versão mais recente
                       </button>
                     </div>
                   </div>
@@ -814,34 +797,19 @@ export default function DashboardClient() {
                       </h4>
                       <ol className="list-decimal list-inside space-y-2 text-gray-300">
                         <li>
-                          Clique no botão &quot;Acessar Google Drive&ldquo; para
-                          abrir o Google Drive
+                          Baixe e extraia o arquivo RIESCADE_OS.7z
                         </li>
                         <li>
-                          Faça login com a mesma conta Google que você usou para
-                          virar membro
+                          Abra o app e acesse Configurações → Minha conta
                         </li>
                         <li>
-                          Navegue pelas pastas para encontrar o conteúdo
-                          desejado
+                          Entre com a mesma conta Google usada na assinatura
                         </li>
                         <li>
-                          Para baixar, selecione os arquivos e clique com o
-                          botão direito → Fazer download
+                          Escolha um jogo e faça o download dentro do app
                         </li>
                         <li>
-                          Qualquer dúvida leia o manual de instalação:{" "}
-                          <a
-                            title="Manual de Instalação"
-                            className="cursor-pointer underline"
-                            onClick={() =>
-                              handleOpenLink(
-                                "https://docs.google.com/document/d/15JzOSYLXrAy7Ocj166NoIiUWE2z7dbYY/edit?usp=drive_link&ouid=115405130796003234712&rtpof=true&sd=true"
-                              )
-                            }
-                          >
-                            Manual de Instalação
-                          </a>
+                          O botão sempre aponta para a versão mais recente publicada
                         </li>
                       </ol>
                     </div>
@@ -855,7 +823,7 @@ export default function DashboardClient() {
                           O acesso ao conteúdo é exclusivo para membros com
                           assinatura ativa
                         </li>
-                        <li>Não compartilhe os links com não-membros</li>
+                        <li>Use sua conta somente em seus próprios dispositivos</li>
                         <li>Para problemas de acesso, contate o suporte</li>
                       </ul>
                     </div>

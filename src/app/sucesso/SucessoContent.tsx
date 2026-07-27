@@ -5,6 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, Package, Mail, Clock } from "lucide-react";
 import Footer from "@/components/Footer";
+import { supabase } from "@/lib/supabase";
 
 interface OrderDetails {
   id: number;
@@ -43,7 +44,10 @@ export default function SucessoContent() {
 
   const fetchOrderDetails = async (sessionId: string) => {
     try {
-      const response = await fetch(`/api/orders/${sessionId}`);
+      const token = (await supabase.auth.getSession()).data.session?.access_token;
+      const response = await fetch(`/api/orders/${sessionId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (response.ok) {
         const data = await response.json();
         setOrderDetails(data);

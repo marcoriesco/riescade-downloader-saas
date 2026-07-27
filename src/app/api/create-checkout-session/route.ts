@@ -1,198 +1,97 @@
 import { NextResponse } from "next/server";
-import { getStripe } from "@/lib/stripe";
-import { createClient } from "@supabase/supabase-js";
 import Stripe from "stripe";
-import { STRIPE_CONFIG } from "@/lib/constants";
+import { authenticateSupabaseRequest, AppApiError } from "@/lib/server/app-auth";
+import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
+import { getStripe } from "@/lib/stripe";
 
-// Cliente Supabase com permissões de serviço
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || "",
-  { auth: { persistSession: false } }
-);
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://riescade.com.br";
 
 export async function POST(request: Request) {
   try {
-    console.log("=== INICIANDO CRIAÇÃO DE SESSÃO DE CHECKOUT ===");
+    const user = await authenticateSupabaseRequest(request);
+    const { priceId, shippingValue, cep } = await request.json();
+    const subscriptionPrice = process.env.NEXT_PUBLIC_STRIPE_PRICE_ID;
+    const physicalPrice = process.env.NEXT_PUBLIC_STRIPE_HDSWITCH1TB_PRICE_ID;
 
-    const { priceId, userId, userEmail, userName, shippingValue, cep } =
-      await request.json();
-
-    console.log("Dados recebidos:", {
-      priceId,
-      userId,
-      userEmail,
-      userName,
-      shippingValue,
-      cep,
-    });
-
-    console.log("Variáveis de ambiente disponíveis:", {
-      NEXT_PUBLIC_STRIPE_HDSWITCH1TB_PRICE_ID:
-        process.env.NEXT_PUBLIC_STRIPE_HDSWITCH1TB_PRICE_ID,
-      STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY
-        ? "✅ Configurada"
-        : "❌ Não configurada",
-    });
-
-    if (!priceId || !userId || !userEmail) {
-      console.error("Missing required fields:", { priceId, userId, userEmail });
-      return NextResponse.json(
-        { message: "Missing required fields" },
-        { status: 400 }
-      );
+    if (!priceId || ![subscriptionPrice, physicalPrice].includes(priceId)) {
+      return NextResponse.json({ message: "Produto inválido" }, { status: 400 });
     }
 
-    // Verificar se é um produto físico (HD) ou assinatura
-    const isPhysicalProduct = priceId === STRIPE_CONFIG.HD_SWITCH_1TB_PRICE_ID;
-
-    console.log("Product type check:", {
-      priceId,
-      expectedPriceId: STRIPE_CONFIG.HD_SWITCH_1TB_PRICE_ID,
-      isPhysicalProduct,
-    });
-
+    const isPhysicalProduct = priceId === physicalPrice;
+    const supabase = getSupabaseAdmin();
     if (!isPhysicalProduct) {
-      // Lógica existente para assinaturas
-      const { data: existingSubscriptions, error: subError } =
-        await supabaseAdmin
-          .from("subscriptions")
-          .select("*")
-          .eq("user_id", userId)
-          .eq("status", "active");
-
-      if (subError) {
-        console.error("Erro ao verificar assinaturas existentes:", subError);
-      } else if (existingSubscriptions && existingSubscriptions.length > 0) {
-        console.log(`Usuário ${userId} já possui uma assinatura ativa`);
-
-        return NextResponse.json({
-          message: "Assinatura ativa encontrada",
-          url: `${process.env.NEXTAUTH_URL}/dashboard?success=true&existing=true`,
-          subscription: existingSubscriptions[0],
-        });
+      const { data } = await supabase
+        .from("subscriptions")
+        .select("status")
+        .eq("user_id", user.id)
+        .in("status", ["active", "trialing"])
+        .maybeSingle();
+      if (data) {
+        return NextResponse.json({ url: `${SITE_URL}/dashboard?existing=true` });
       }
     }
 
-    // Check if we have a Stripe customer already
-    const { data: customerData } = await supabaseAdmin
+    const { data: existing } = await supabase
       .from("subscriptions")
       .select("customer_id")
-      .eq("user_id", userId)
-      .single();
-
-    let customerId = customerData?.customer_id;
+      .eq("user_id", user.id)
+      .maybeSingle();
 
     const stripe = getStripe();
-    if (!stripe) {
-      return NextResponse.json(
-        { message: "Stripe client not initialized" },
-        { status: 500 }
-      );
-    }
-
-    // Create a customer if we don't have one
+    if (!stripe) throw new Error("Stripe não configurado");
+    const name =
+      user.user_metadata?.full_name || user.user_metadata?.name || undefined;
+    let customerId = existing?.customer_id as string | undefined;
     if (!customerId) {
       const customer = await stripe.customers.create({
-        email: userEmail,
-        name: userName || undefined,
-        metadata: {
-          userId,
-          fullName: userName || "",
-        },
+        email: user.email,
+        name,
+        metadata: { userId: user.id },
       });
       customerId = customer.id;
-    } else if (userName) {
-      await stripe.customers.update(customerId, {
-        name: userName,
-        metadata: {
-          fullName: userName,
-        },
-      });
     }
 
-    // Configuração base da sessão
-    const sessionConfig: Stripe.Checkout.SessionCreateParams = {
+    const params: Stripe.Checkout.SessionCreateParams = {
       customer: customerId,
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1,
-        },
-      ],
-      success_url: `${
-        request.headers.get("origin") || "http://localhost:3000"
-      }/dashboard?success=true&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${
-        request.headers.get("origin") || "http://localhost:3000"
-      }/dashboard?canceled=true`,
-      metadata: {
-        userId,
-        price_id: priceId,
-        fullName: userName || "",
-        cep: cep || "",
-      },
-      client_reference_id: userId,
+      client_reference_id: user.id,
+      line_items: [{ price: priceId, quantity: 1 }],
+      success_url: `${SITE_URL}/${isPhysicalProduct ? "sucesso" : "dashboard"}?success=true&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${SITE_URL}/${isPhysicalProduct ? "produtos/hd-switch" : "dashboard"}?canceled=true`,
+      metadata: { userId: user.id, price_id: priceId, cep: cep || "" },
+      mode: isPhysicalProduct ? "payment" : "subscription",
     };
 
     if (isPhysicalProduct) {
-      // Configuração para produto físico
-      sessionConfig.mode = "payment";
-      sessionConfig.shipping_address_collection = {
-        allowed_countries: ["BR"],
-      };
-
-      if (shippingValue && shippingValue > 0) {
-        sessionConfig.shipping_options = [
-          {
-            shipping_rate_data: {
-              type: "fixed_amount",
-              fixed_amount: { amount: shippingValue, currency: "brl" },
-              display_name: "Frete calculado",
-              delivery_estimate: {
-                minimum: { unit: "business_day", value: 3 },
-                maximum: { unit: "business_day", value: 10 },
-              },
+      params.shipping_address_collection = { allowed_countries: ["BR"] };
+      const amount = Number(shippingValue);
+      if (!Number.isInteger(amount) || amount < 0 || amount > 10000) {
+        return NextResponse.json({ message: "Frete inválido" }, { status: 400 });
+      }
+      if (amount > 0) {
+        params.shipping_options = [{
+          shipping_rate_data: {
+            type: "fixed_amount",
+            fixed_amount: { amount, currency: "brl" },
+            display_name: "Frete calculado",
+            delivery_estimate: {
+              minimum: { unit: "business_day", value: 3 },
+              maximum: { unit: "business_day", value: 10 },
             },
           },
-        ];
+        }];
       }
     } else {
-      // Configuração para assinatura
-      sessionConfig.mode = "subscription";
+      params.subscription_data = { metadata: { userId: user.id } };
     }
 
-    // Create checkout session
-    const session = await stripe.checkout.sessions.create(sessionConfig);
-
-    console.log("Sessão criada com sucesso:", {
-      sessionId: session.id,
-      url: session.url,
-      mode: session.mode,
-      customerId: session.customer,
-    });
-
-    // Salvar relação inicial no banco de dados (apenas para assinaturas)
-    if (!isPhysicalProduct) {
-      await supabaseAdmin.from("subscriptions").upsert({
-        user_id: userId,
-        customer_id: customerId,
-        price_id: priceId,
-        status: "incomplete",
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
-    }
-
-    console.log("=== SESSÃO DE CHECKOUT CRIADA COM SUCESSO ===");
+    const session = await stripe.checkout.sessions.create(params);
     return NextResponse.json({ url: session.url });
-  } catch (error: unknown) {
-    console.error("=== ERRO NA CRIAÇÃO DE SESSÃO DE CHECKOUT ===");
-    console.error("Error creating checkout session:", error);
+  } catch (error) {
+    const status = error instanceof AppApiError ? error.status : 500;
+    console.error("Checkout Stripe falhou:", error);
     return NextResponse.json(
-      { message: error instanceof Error ? error.message : "An error occurred" },
-      { status: 500 }
+      { message: status === 500 ? "Não foi possível iniciar o pagamento" : (error as Error).message },
+      { status }
     );
   }
 }

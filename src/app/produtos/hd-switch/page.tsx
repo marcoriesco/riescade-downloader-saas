@@ -112,6 +112,7 @@ export default function HDProductPage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
         },
         body: JSON.stringify({ cep }),
       });
@@ -161,9 +162,6 @@ export default function HDProductPage() {
         },
         body: JSON.stringify({
           priceId: process.env.NEXT_PUBLIC_STRIPE_HDSWITCH1TB_PRICE_ID,
-          userId: user.id,
-          userEmail: user.email,
-          userName: user.user_metadata?.full_name || user.email,
           shippingValue: selectedShippingOption?.shippingValue || 0,
           cep: cep,
         }),
