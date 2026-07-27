@@ -1,0 +1,5188 @@
+{
+  "version": 1,
+  "updated_at": "2026-07-27",
+  "platforms": [
+    {
+      "id": "flash",
+      "name": "Flash",
+      "extensions": [
+        ".swf"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "j2me",
+      "name": "Java 2 MicroEdition",
+      "extensions": [
+        ".jar"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "mame",
+      "name": "MAME",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "hbmame",
+      "name": "MAME Homebrew",
+      "extensions": [
+        ".zip",
+        ".hb"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "fbneo",
+      "name": "Final Burn",
+      "extensions": [
+        ".fba",
+        ".zip",
+        ".chd",
+        ".7z",
+        ".bin"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cave",
+      "name": "CAVE",
+      "extensions": [
+        ".fba",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "laseractive",
+      "name": "Pioneer Laserdisc",
+      "extensions": [
+        ".mmi"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "daphne",
+      "name": "Laserdisc",
+      "extensions": [
+        ".daphne",
+        ".hypseus",
+        ".7z",
+        ".rar",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "singe",
+      "name": "Singe",
+      "extensions": [
+        ".hypseus",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "actionmax",
+      "name": "Actionmax",
+      "extensions": [
+        ".actionmax"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cps1",
+      "name": "CPS-I",
+      "extensions": [
+        ".fba",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cps2",
+      "name": "CPS-II",
+      "extensions": [
+        ".fba",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cps3",
+      "name": "CPS-III",
+      "extensions": [
+        ".fba",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "dice",
+      "name": "DICE",
+      "extensions": [
+        ".zip",
+        ".dmy"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "neogeo",
+      "name": "Neo Geo",
+      "extensions": [
+        ".zip",
+        ".wad",
+        ".neo",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "neogeocd",
+      "name": "Neo Geo CD",
+      "extensions": [
+        ".m3u",
+        ".cue",
+        ".iso",
+        ".cso",
+        ".chd",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "model2",
+      "name": "Model 2",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "model3",
+      "name": "Model 3",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "atomiswave",
+      "name": "Atomiswave",
+      "extensions": [
+        ".bin",
+        ".lst",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "naomi",
+      "name": "Naomi",
+      "extensions": [
+        ".bin",
+        ".dat",
+        ".lst",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "naomi2",
+      "name": "Naomi 2",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "hikaru",
+      "name": "Hikaru",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gaelco",
+      "name": "Gaelco PowerVR",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "chihiro",
+      "name": "Chihiro",
+      "extensions": [
+        ".xbe",
+        ".iso"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "triforce",
+      "name": "Triforce",
+      "extensions": [
+        ".iso",
+        ".zip",
+        ".cue",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "lindbergh",
+      "name": "Sega Lindbergh",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sg1000",
+      "name": "SG-1000",
+      "extensions": [
+        ".sms",
+        ".gg",
+        ".sg",
+        ".bin",
+        ".rom",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "multivision",
+      "name": "Multivision",
+      "extensions": [
+        ".sms",
+        ".gg",
+        ".sg",
+        ".bin",
+        ".rom",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "mastersystem",
+      "name": "Master System - Mark III",
+      "extensions": [
+        ".bin",
+        ".sms",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "megadrive",
+      "name": "Megadrive - Genesis",
+      "extensions": [
+        ".68k",
+        ".sgd",
+        ".smd",
+        ".bin",
+        ".gen",
+        ".md",
+        ".sg",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "megadrive-msu",
+      "name": "MD-MSU",
+      "extensions": [
+        ".68k",
+        ".sgd",
+        ".smd",
+        ".bin",
+        ".cue",
+        ".gen",
+        ".md",
+        ".sg",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "megacd",
+      "name": "Mega CD",
+      "extensions": [
+        ".cue",
+        ".iso",
+        ".cso",
+        ".zip",
+        ".7z",
+        ".chd",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sega32x",
+      "name": "32X",
+      "extensions": [
+        ".32x",
+        ".smd",
+        ".bin",
+        ".md",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "saturn",
+      "name": "Saturn",
+      "extensions": [
+        ".zip",
+        ".cue",
+        ".toc",
+        ".m3u",
+        ".ccd",
+        ".chd",
+        ".iso",
+        ".cso",
+        ".mds",
+        ".chd",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "segastv",
+      "name": "ST-V",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "dreamcast",
+      "name": "Dreamcast",
+      "extensions": [
+        ".mds",
+        ".mdf",
+        ".cue",
+        ".cdi",
+        ".gdi",
+        ".chd",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "fds",
+      "name": "Nintendo Family Computer Disk System",
+      "extensions": [
+        ".nes",
+        ".fds",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "nes",
+      "name": "Nintendo Entertainment System - Famicom",
+      "extensions": [
+        ".fds",
+        ".nes",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "snes",
+      "name": "Super Nintendo Entertainment System",
+      "extensions": [
+        ".smc",
+        ".fig",
+        ".sfc",
+        ".gd3",
+        ".gd7",
+        ".dx2",
+        ".bsx",
+        ".swc",
+        ".rom",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "riescade-roms-snes",
+        "details_url": "https://archive.org/details/riescade-roms-snes",
+        "metadata_url": "https://archive.org/metadata/riescade-roms-snes",
+        "torrent_url": "https://archive.org/download/riescade-roms-snes/riescade-roms-snes_archive.torrent"
+      }
+    },
+    {
+      "id": "snes-msu1",
+      "name": "Super NES MSU-1",
+      "extensions": [
+        ".smc",
+        ".sfc",
+        ".squashfs",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sgb-msu1",
+      "name": "GameBoy MSU",
+      "extensions": [
+        ".gb",
+        ".gbc",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "satellaview",
+      "name": "Satellaview",
+      "extensions": [
+        ".st",
+        ".fig",
+        ".bs",
+        ".smc",
+        ".sfc",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sufami",
+      "name": "SuFami Turbo",
+      "extensions": [
+        ".st",
+        ".fig",
+        ".bs",
+        ".smc",
+        ".sfc",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "virtualboy",
+      "name": "Virtual Boy",
+      "extensions": [
+        ".vb",
+        ".vboy",
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "n64",
+      "name": "Nintendo 64",
+      "extensions": [
+        ".v64",
+        ".z64",
+        ".n64",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "n64recomp",
+      "name": "Nintendo 64 Recompilation",
+      "extensions": [
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "n64dd",
+      "name": "Nintendo 64 Disk Drive",
+      "extensions": [
+        ".v64",
+        ".z64",
+        ".n64",
+        ".wad",
+        ".zip",
+        ".7z",
+        ".ndd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gamecube",
+      "name": "GameCube",
+      "extensions": [
+        ".dol",
+        ".gcz",
+        ".iso",
+        ".ciso",
+        ".wbfs",
+        ".wad",
+        ".rvz",
+        ".wia",
+        ".m3u",
+        ".zip",
+        ".7z",
+        ".squashfs",
+        ".json"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "wii",
+      "name": "Wii",
+      "extensions": [
+        ".gcz",
+        ".iso",
+        ".ciso",
+        ".dol",
+        ".wbfs",
+        ".wad",
+        ".rvz",
+        ".wia",
+        ".zip",
+        ".7z",
+        ".squashfs",
+        ".json",
+        ".elf"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "wiiu",
+      "name": "Wii U",
+      "extensions": [
+        ".iso",
+        ".rpx",
+        ".wud",
+        ".wux",
+        ".wua",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "switch",
+      "name": "Nintendo Switch",
+      "extensions": [
+        ".nso",
+        ".nro",
+        ".nca",
+        ".xci",
+        ".nsp",
+        ".kip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pcengine",
+      "name": "PC Engine",
+      "extensions": [
+        ".pce",
+        ".bin",
+        ".zip",
+        ".7z",
+        ".wad",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pcenginecd",
+      "name": "PC Engine CD",
+      "extensions": [
+        ".pce",
+        ".cue",
+        ".ccd",
+        ".iso",
+        ".cso",
+        ".img",
+        ".bin",
+        ".chd",
+        ".m3u",
+        ".zip",
+        ".7z",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "supergrafx",
+      "name": "SuperGrafx",
+      "extensions": [
+        ".pce",
+        ".zip",
+        ".7z",
+        ".fba"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pcfx",
+      "name": "PC-FX",
+      "extensions": [
+        ".cue",
+        ".ccd",
+        ".m3u",
+        ".toc",
+        ".chd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "psx",
+      "name": "PlayStation",
+      "extensions": [
+        ".cue",
+        ".img",
+        ".mdf",
+        ".pbp",
+        ".toc",
+        ".cbn",
+        ".m3u",
+        ".ccd",
+        ".chd",
+        ".zip",
+        ".7z",
+        ".iso",
+        ".cso",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ps2",
+      "name": "Playstation 2",
+      "extensions": [
+        ".iso",
+        ".cso",
+        ".bin",
+        ".mdf",
+        ".gz",
+        ".chd",
+        ".m3u",
+        ".zip",
+        ".7z",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ps3",
+      "name": "Playstation 3",
+      "extensions": [
+        ".m3u",
+        ".lnk",
+        ".ps3",
+        ".iso",
+        ".7z",
+        ".zip",
+        ".rar",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ps4",
+      "name": "Playstation 4",
+      "extensions": [
+        ".ps4",
+        ".m3u",
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "xbox",
+      "name": "Xbox",
+      "extensions": [
+        ".xbe",
+        ".iso"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "xbox360",
+      "name": "Xbox 360",
+      "extensions": [
+        ".iso",
+        ".xex",
+        ".xcp",
+        ".zar",
+        ".m3u",
+        ".xbox360"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "3do",
+      "name": "3DO",
+      "extensions": [
+        ".cue",
+        ".iso",
+        ".chd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "amiga500",
+      "name": "Amiga OCS/ECS",
+      "extensions": [
+        ".adf",
+        ".uae",
+        ".ipf",
+        ".dms",
+        ".adz",
+        ".lha",
+        ".rp9",
+        ".uae",
+        ".hdf",
+        ".ags",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "amiga1200",
+      "name": "Amiga AGA",
+      "extensions": [
+        ".adf",
+        ".uae",
+        ".ipf",
+        ".dms",
+        ".adz",
+        ".lha",
+        ".rp9",
+        ".uae",
+        ".hdf",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "amiga4000",
+      "name": "Amiga 4000",
+      "extensions": [
+        ".adf",
+        ".uae",
+        ".ipf",
+        ".dms",
+        ".adz",
+        ".lha",
+        ".rp9",
+        ".uae",
+        ".hdf",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "amigacd32",
+      "name": "Amiga CD32",
+      "extensions": [
+        ".iso",
+        ".cso",
+        ".cue",
+        ".zip",
+        ".7z",
+        ".lha",
+        ".rp9",
+        ".chd",
+        ".ccd",
+        ".nrg",
+        ".mds"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "amigacdtv",
+      "name": "Amiga CDTV",
+      "extensions": [
+        ".cue",
+        ".iso",
+        ".cso",
+        ".rp9",
+        ".ccd",
+        ".nrg",
+        ".mds",
+        ".chd",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "amstradcpc",
+      "name": "Amstrad CPC",
+      "extensions": [
+        ".dsk",
+        ".kcr",
+        ".sna",
+        ".tap",
+        ".cdt",
+        ".voc",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gx4000",
+      "name": "Amstrad GX4000",
+      "extensions": [
+        ".dsk",
+        ".m3u",
+        ".cpr",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "apple2",
+      "name": "Apple II",
+      "extensions": [
+        ".nib",
+        ".do",
+        ".po",
+        ".dsk",
+        ".woz",
+        ".m3u",
+        ".hdv",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "apple2gs",
+      "name": "Apple IIGS",
+      "extensions": [
+        ".2mg",
+        ".woz",
+        ".m3u",
+        ".hdv",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "atari800",
+      "name": "Atari 800",
+      "extensions": [
+        ".rom",
+        ".xfd",
+        ".atr",
+        ".atx",
+        ".cdm",
+        ".cas",
+        ".bin",
+        ".a52",
+        ".xex",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "atari2600",
+      "name": "Atari 2600",
+      "extensions": [
+        ".7z",
+        ".a26",
+        ".bin",
+        ".gz",
+        ".rom",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "atari5200",
+      "name": "Atari 5200",
+      "extensions": [
+        ".rom",
+        ".xfd",
+        ".atr",
+        ".atx",
+        ".cdm",
+        ".cas",
+        ".bin",
+        ".a52",
+        ".xex",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "atari7800",
+      "name": "Atari 7800",
+      "extensions": [
+        ".a78",
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "atarist",
+      "name": "Atari ST",
+      "extensions": [
+        ".st",
+        ".msa",
+        ".stx",
+        ".dim",
+        ".ipf",
+        ".m3u",
+        ".gemdos",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "xegs",
+      "name": "Atari XE Game System",
+      "extensions": [
+        ".atr",
+        ".dsk",
+        ".xfd",
+        ".bin",
+        ".rom",
+        ".car",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "jaguar",
+      "name": "Jaguar",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".cue",
+        ".cdi",
+        ".j64",
+        ".jag",
+        ".rom",
+        ".abs",
+        ".cof",
+        ".bin",
+        ".prg",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "jaguarcd",
+      "name": "Jaguar CD",
+      "extensions": [
+        ".cue",
+        ".cdi",
+        ".bigpimg",
+        ".zip",
+        ".7z",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "colecovision",
+      "name": "ColecoVision",
+      "extensions": [
+        ".rom",
+        ".ri",
+        ".mx1",
+        ".mx2",
+        ".col",
+        ".dsk",
+        ".cas",
+        ".sg",
+        ".sc",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "c16",
+      "name": "Commodore 16",
+      "extensions": [
+        ".d64",
+        ".prg",
+        ".tap",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "c20",
+      "name": "VIC-20",
+      "extensions": [
+        ".nib",
+        ".a0",
+        ".b0",
+        ".crt",
+        ".d64",
+        ".d81",
+        ".prg",
+        ".tap",
+        ".t64",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "c64",
+      "name": "Commodore 64",
+      "extensions": [
+        ".crt",
+        ".d64",
+        ".d71",
+        ".d81",
+        ".g64",
+        ".nib",
+        ".prg",
+        ".t64",
+        ".tap",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cplus4",
+      "name": "Commodore Plus4",
+      "extensions": [
+        ".d64",
+        ".prg",
+        ".tap",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pet",
+      "name": "Commodore PET",
+      "extensions": [
+        ".a0",
+        ".b0",
+        ".crt",
+        ".d64",
+        ".d81",
+        ".prg",
+        ".tap",
+        ".t64",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "c128",
+      "name": "Commodore 128",
+      "extensions": [
+        ".d64",
+        ".d81",
+        ".prg",
+        ".lnx",
+        ".tap",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "intellivision",
+      "name": "Mattel Intellivision",
+      "extensions": [
+        ".int",
+        ".bin",
+        ".rom",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "aquarius",
+      "name": "Mattel Aquarius",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "channelf",
+      "name": "Fairchild Channel F",
+      "extensions": [
+        ".bin",
+        ".rom",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "enterprise",
+      "name": "Enterprise",
+      "extensions": [
+        ".zip",
+        ".bas",
+        ".com",
+        ".img",
+        ".dsk",
+        ".dtf",
+        ".tap"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "msx1",
+      "name": "MSX",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".rom",
+        ".ri",
+        ".mx1",
+        ".mx2",
+        ".col",
+        ".dsk",
+        ".cas",
+        ".wav",
+        ".ogv",
+        ".sg",
+        ".sc",
+        ".m3u",
+        ".ogv"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "msx2",
+      "name": "MSX2",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".rom",
+        ".ri",
+        ".mx1",
+        ".mx2",
+        ".col",
+        ".dsk",
+        ".cas",
+        ".wav",
+        ".ogv",
+        ".sg",
+        ".sc",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "msx2+",
+      "name": "MSX2+",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".rom",
+        ".ri",
+        ".mx1",
+        ".mx2",
+        ".col",
+        ".dsk",
+        ".cas",
+        ".wav",
+        ".ogv",
+        ".sg",
+        ".sc",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "msxturbor",
+      "name": "MSX turbo R",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".rom",
+        ".ri",
+        ".mx1",
+        ".mx2",
+        ".col",
+        ".dsk",
+        ".cas",
+        ".wav",
+        ".ogv",
+        ".sg",
+        ".sc",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "spectravideo",
+      "name": "Spectravideo SV-318",
+      "extensions": [
+        ".cas",
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "oricatmos",
+      "name": "Oric/Atmos",
+      "extensions": [
+        ".dsk",
+        ".tap"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pc88",
+      "name": "PC-8800",
+      "extensions": [
+        ".d88",
+        ".u88",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pc98",
+      "name": "PC-9800",
+      "extensions": [
+        ".d98",
+        ".zip",
+        ".98d",
+        ".fdi",
+        ".fdd",
+        ".2hd",
+        ".tfd",
+        ".d88",
+        ".88d",
+        ".hdm",
+        ".xdf",
+        ".dup",
+        ".cmd",
+        ".hdi",
+        ".thd",
+        ".nhd",
+        ".hdd",
+        ".hdn",
+        ".cue",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "samcoupe",
+      "name": "Samcoupé",
+      "extensions": [
+        ".dsk",
+        ".mgt",
+        ".sbt",
+        ".sad"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "x68000",
+      "name": "Sharp X68000",
+      "extensions": [
+        ".dim",
+        ".img",
+        ".d88",
+        ".88d",
+        ".hdm",
+        ".dup",
+        ".2hd",
+        ".xdf",
+        ".hdf",
+        ".cmd",
+        ".m3u",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "x1",
+      "name": "Sharp X1",
+      "extensions": [
+        ".dx1",
+        ".zip",
+        ".2d",
+        ".2hd",
+        ".tfd",
+        ".d88",
+        ".88d",
+        ".hdm",
+        ".xdf",
+        ".dup",
+        ".cmd",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "thomson",
+      "name": "Thomson - MO/TO",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".fd",
+        ".sap",
+        ".k7",
+        ".rom",
+        ".m7",
+        ".m5"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "vectrex",
+      "name": "Vectrex",
+      "extensions": [
+        ".bin",
+        ".gam",
+        ".vec",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "odyssey2",
+      "name": "Odyssey² - Videopac",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "p2000t",
+      "name": "P2000T",
+      "extensions": [
+        ".cas",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "vg5k",
+      "name": "VG5000",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "zx81",
+      "name": "ZX 81",
+      "extensions": [
+        ".tzx",
+        ".tap",
+        ".z80",
+        ".Z80",
+        ".rzx",
+        ".scl",
+        ".trd",
+        ".zip",
+        ".7z",
+        ".p"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "zxspectrum",
+      "name": "ZX Spectrum",
+      "extensions": [
+        ".tzx",
+        ".tap",
+        ".z80",
+        ".rzx",
+        ".scl",
+        ".trd",
+        ".dsk",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "lynx",
+      "name": "Lynx",
+      "extensions": [
+        ".lnx",
+        ".zip",
+        ".o",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gamegear",
+      "name": "Game Gear",
+      "extensions": [
+        ".gg",
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gw",
+      "name": "Game and Watch",
+      "extensions": [
+        ".mgw",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gb",
+      "name": "Game Boy",
+      "extensions": [
+        ".gb",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gb2players",
+      "name": "Game Boy 2 Players",
+      "extensions": [
+        ".gb",
+        ".zip",
+        ".m3u",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gbc",
+      "name": "Game Boy Color",
+      "extensions": [
+        ".gbc",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gbc2players",
+      "name": "Game Boy Color 2 Players",
+      "extensions": [
+        ".gbc",
+        ".zip",
+        ".m3u",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gba",
+      "name": "Game Boy Advance",
+      "extensions": [
+        ".gba",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gba2players",
+      "name": "Game Boy Advance 2 Players",
+      "extensions": [
+        ".gba"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "karaoke",
+      "name": "Karaoke",
+      "extensions": [
+        ".cdg"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pokemini",
+      "name": "Pokemon-Mini",
+      "extensions": [
+        ".min",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "nds",
+      "name": "Nintendo DS",
+      "extensions": [
+        ".nds",
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "3ds",
+      "name": "Nintendo 3DS",
+      "extensions": [
+        ".3ds",
+        ".3dsx",
+        ".z3dsx",
+        ".cia",
+        ".zcia",
+        ".elf",
+        ".axf",
+        ".cci",
+        ".zcci",
+        ".cxi",
+        ".zcxi",
+        ".app",
+        ".m3u",
+        ".zip",
+        ".7z",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "psp",
+      "name": "PlayStation Portable",
+      "extensions": [
+        ".iso",
+        ".cso",
+        ".pbp",
+        ".elf",
+        ".prx",
+        ".chd",
+        ".zip",
+        ".7z",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ngp",
+      "name": "Neo Geo Pocket",
+      "extensions": [
+        ".ngp",
+        ".ngc",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ngpc",
+      "name": "Neo Geo Pocket Color",
+      "extensions": [
+        ".ngp",
+        ".ngc",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "supervision",
+      "name": "Watara SuperVision",
+      "extensions": [
+        ".sv",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "wswan",
+      "name": "WonderSwan",
+      "extensions": [
+        ".ws",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "wswanc",
+      "name": "WonderSwan Color",
+      "extensions": [
+        ".wsc",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "scummvm",
+      "name": "ScummVM",
+      "extensions": [
+        ".scummvm",
+        ".7z",
+        ".zip",
+        ".rar",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ports",
+      "name": "Ports",
+      "extensions": [
+        ".libretro"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "love",
+      "name": "LÖVE",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".lua",
+        ".love",
+        ".lutro",
+        ".exe"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "lutro",
+      "name": "Lutro Lua Framework",
+      "extensions": [
+        ".love",
+        ".lua",
+        ".lutro",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "devilutionx",
+      "name": "DevilutionX - Diablo Open-Source Implementation",
+      "extensions": [
+        ".game",
+        ".win"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "easyrpg",
+      "name": "EasyRPG - RPG Maker 2000/2003 player",
+      "extensions": [
+        ".easyrpg",
+        ".lbd",
+        ".7z",
+        ".zip",
+        ".rar",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ecwolf",
+      "name": "ECWolf",
+      "extensions": [
+        ".pk3",
+        ".exe"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gemrb",
+      "name": "GemRB - Infinity Engine Open-Source Implementation",
+      "extensions": [
+        ".auto",
+        ".bg1",
+        ".bg2",
+        ".how",
+        ".iwd",
+        ".iwd2",
+        ".pst"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "prboom",
+      "name": "PrBoom",
+      "extensions": [
+        ".wad",
+        ".iwad",
+        ".pwad"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gzdoom",
+      "name": "GZDoom",
+      "extensions": [
+        ".wad",
+        ".iwad",
+        ".pwad",
+        ".pk3",
+        ".ipk3",
+        ".gzdoom"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "raze",
+      "name": "Raze",
+      "extensions": [
+        ".raze"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "doom3",
+      "name": "Doom 3",
+      "extensions": [
+        ".boom3",
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "quake",
+      "name": "Quake",
+      "extensions": [
+        ".pak",
+        ".quake"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "quake2",
+      "name": "Quake II",
+      "extensions": [
+        ".pak",
+        ".quake2"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "rtcw",
+      "name": "RealRTCW",
+      "extensions": [
+        ".rtcw"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "halflife",
+      "name": "Half-Life",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "bstone",
+      "name": "Blake Stone",
+      "extensions": [
+        ".bstone"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cavestory",
+      "name": "Cavestory",
+      "extensions": [
+        ".libretro",
+        ".exe"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "powerbomberman",
+      "name": "Power Bomberman",
+      "extensions": [
+        ".pb"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ikemen",
+      "name": "IKEMEN",
+      "extensions": [
+        ".game",
+        ".pc",
+        ".win",
+        ".ikemen"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "mugen",
+      "name": "MUGEN",
+      "extensions": [
+        ".game",
+        ".pc",
+        ".win",
+        ".mugen"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "openbor",
+      "name": "Openbor",
+      "extensions": [
+        ".pak",
+        ".exe"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "solarus",
+      "name": "Solarus",
+      "extensions": [
+        ".solarus",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "teknoparrot",
+      "name": "TeknoParrot",
+      "extensions": [
+        ".teknoparrot",
+        ".parrot",
+        ".game",
+        ".7z",
+        ".zip",
+        ".rar"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "zinc",
+      "name": "Zinc",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "namco2x6",
+      "name": "Namco 246/256",
+      "extensions": [
+        ".acgame"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "namco3xx",
+      "name": "Namco 357/369",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "dos",
+      "name": "DOS",
+      "extensions": [
+        ".dosbox",
+        ".pc",
+        ".dos",
+        ".dosz",
+        ".zip",
+        ".m3u8",
+        ".bat",
+        ".cmd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "exodos",
+      "name": "eXoDOS",
+      "extensions": [
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "exowin3x",
+      "name": "eXoWin3x",
+      "extensions": [
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "exowin9x",
+      "name": "eXoWin9x",
+      "extensions": [
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "amazon",
+      "name": "Amazon Prime Gaming",
+      "extensions": [
+        ".bat",
+        ".url",
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "steam",
+      "name": "Steam",
+      "extensions": [
+        ".bat",
+        ".url"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gog",
+      "name": "GOG.com",
+      "extensions": [
+        ".bat",
+        ".url",
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "epic",
+      "name": "EPIC",
+      "extensions": [
+        ".bat",
+        ".url",
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "eagames",
+      "name": "EA Games",
+      "extensions": [
+        ".bat",
+        ".url",
+        ".lnk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "Windows",
+      "name": "Games for Windows",
+      "extensions": [
+        ".exe",
+        ".bat",
+        ".cmd",
+        ".lnk",
+        ".game",
+        ".url",
+        ".pc",
+        ".win",
+        ".windows",
+        ".wine",
+        ".7z",
+        ".zip",
+        ".rar",
+        ".wsquashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "vpinball",
+      "name": "Visual Pinball",
+      "extensions": [
+        ".vpx",
+        ".7z",
+        ".zip",
+        ".rar"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "fpinball",
+      "name": "Future Pinball",
+      "extensions": [
+        ".fpt",
+        ".7z",
+        ".zip",
+        ".rar"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pinballfx",
+      "name": "Pinball FX",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pinballm",
+      "name": "Pinball M",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pinballfx2",
+      "name": "Pinball FX2",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pinballfx3",
+      "name": "Pinball FX3",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "zaccariapinball",
+      "name": "Zaccaria Pinball",
+      "extensions": [
+        ".table"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pico8",
+      "name": "PICO-8",
+      "extensions": [
+        ".png",
+        ".p8",
+        ".exe"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "tic80",
+      "name": "TIC-80",
+      "extensions": [
+        ".tic"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "wasm4",
+      "name": "WASM-4",
+      "extensions": [
+        ".wasm",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cdi",
+      "name": "Philips CD-i",
+      "extensions": [
+        ".chd",
+        ".cue",
+        ".toc",
+        ".nrg",
+        ".gdi",
+        ".iso",
+        ".cdr"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ngage",
+      "name": "N-Gage",
+      "extensions": [
+        ".ngage",
+        ".symbian"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "advision",
+      "name": "Adventure Vision",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "tvgames",
+      "name": "TV Games",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "megaduck",
+      "name": "Mega Duck",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "arduboy",
+      "name": "Arduboy",
+      "extensions": [
+        ".hex",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "uzebox",
+      "name": "Uzebox",
+      "extensions": [
+        ".uze"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "lowresnx",
+      "name": "Lowres NX",
+      "extensions": [
+        ".nx"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "vircon32",
+      "name": "Vircon32",
+      "extensions": [
+        ".v32",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pv1000",
+      "name": "PV-1000",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "bk",
+      "name": "Elektronika BK",
+      "extensions": [
+        ".bin",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "casloopy",
+      "name": "Casio Loopy",
+      "extensions": [
+        ".bin",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "crvision",
+      "name": "CreatiVision",
+      "extensions": [
+        ".bin",
+        ".rom",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gamecom",
+      "name": "Game.com",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z",
+        ".tgc"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gamepock",
+      "name": "Game Pocket Computer",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gp32",
+      "name": "Game Park 32",
+      "extensions": [
+        ".smc",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pegasus",
+      "name": "Pegasus",
+      "extensions": [
+        ".bin",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cassettevision",
+      "name": "Cassette Vision",
+      "extensions": [
+        ".bin777",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "scv",
+      "name": "Super Cassette Vision",
+      "extensions": [
+        ".bin",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "fm7",
+      "name": "FM-7",
+      "extensions": [
+        ".wav",
+        ".t77",
+        ".mfi",
+        ".dfi",
+        ".hfe",
+        ".mfm",
+        ".td0",
+        ".imd",
+        ".d77",
+        ".d88",
+        ".1dd",
+        ".cqm",
+        ".cqi",
+        ".dsk",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "apfm1000",
+      "name": "APF M-1000",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "bbcmicro",
+      "name": "BBC Micro",
+      "extensions": [
+        ".ssd",
+        ".dsd",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "electron",
+      "name": "Electron",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "adam",
+      "name": "ADAM",
+      "extensions": [
+        ".wav",
+        ".ddp",
+        ".mfi",
+        ".dfi",
+        ".hfe",
+        ".mfm",
+        ".td0",
+        ".imd",
+        ".d77",
+        ".d88",
+        ".1dd",
+        ".cqm",
+        ".cqi",
+        ".dsk",
+        ".rom",
+        ".col",
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "atom",
+      "name": "Atom",
+      "extensions": [
+        ".wav",
+        ".tap",
+        ".csw",
+        ".uef",
+        ".mfi",
+        ".dfi",
+        ".hfe",
+        ".mfm",
+        ".td0",
+        ".imd",
+        ".d77",
+        ".d88",
+        ".1dd",
+        ".cqm",
+        ".cqi",
+        ".dsk",
+        ".40t",
+        ".atm",
+        ".bin",
+        ".rom",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "archimedes",
+      "name": "Archimedes",
+      "extensions": [
+        ".mfi",
+        ".dfi",
+        ".hfe",
+        ".mfm",
+        ".td0",
+        ".imd",
+        ".d77",
+        ".d88",
+        ".1dd",
+        ".cqm",
+        ".cqi",
+        ".dsk",
+        ".ima",
+        ".img",
+        ".ufi",
+        ".360",
+        ".ipf",
+        ".adf",
+        ".apd",
+        ".jfd",
+        ".ads",
+        ".adm",
+        ".adl",
+        ".ssd",
+        ".bbc",
+        ".dsd",
+        ".st",
+        ".msa",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "arcadia",
+      "name": "Arcadia 2001",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gmaster",
+      "name": "Game Master",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "astrocade",
+      "name": "Astrocade",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ti99",
+      "name": "TI-99/4A",
+      "extensions": [
+        ".rpk",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "tutor",
+      "name": "Tutor",
+      "extensions": [
+        ".bin",
+        ".wav",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "coco",
+      "name": "TRS-80 Color Computer",
+      "extensions": [
+        ".wav",
+        ".cas",
+        ".ccc",
+        ".rom",
+        ".dsk",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "dragon32",
+      "name": "Dragon 32/64",
+      "extensions": [
+        ".wav",
+        ".cas",
+        ".dmk",
+        ".jvc",
+        ".dsk",
+        ".os9",
+        ".vdk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "fmtowns",
+      "name": "FM Towns",
+      "extensions": [
+        ".m3u",
+        ".d88",
+        ".d77",
+        ".xdf",
+        ".cue",
+        ".iso",
+        ".game",
+        ".cd",
+        ".chd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "lcdgames",
+      "name": "LCD Games",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "vsmile",
+      "name": "V.Smile",
+      "extensions": [
+        ".bin",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "camplynx",
+      "name": "Camputers Lynx",
+      "extensions": [
+        ".bin",
+        ".tap",
+        ".zip",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "vc4000",
+      "name": "VC4000",
+      "extensions": [
+        ".bin",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "supracan",
+      "name": "Super A'Can",
+      "extensions": [
+        ".bin",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gamate",
+      "name": "Gamate",
+      "extensions": [
+        ".bin",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sgb",
+      "name": "Super Game Boy",
+      "extensions": [
+        ".gb",
+        ".gbc",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "neogeo64",
+      "name": "Hyper Neo Geo 64",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "psvita",
+      "name": "PlayStation Vita",
+      "extensions": [
+        ".m3u",
+        ".psvita",
+        ".vpk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "bennugd",
+      "name": "BennuGD",
+      "extensions": [
+        ".dat",
+        ".dcb"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "bsyndrome",
+      "name": "Bermuda Syndrome",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cannonball",
+      "name": "Cannonball",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cdogs",
+      "name": "CDogs",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cgenius",
+      "name": "Commander Genius",
+      "extensions": [
+        ".cgenius"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "corsixth",
+      "name": "CorsixTH",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "openlara",
+      "name": "OpenLara",
+      "extensions": [
+        ".croft"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "opengoal",
+      "name": "OpenGOAL",
+      "extensions": [
+        ".opengoal"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "openjazz",
+      "name": "OpenJazz",
+      "extensions": [
+        ".openjazz"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pdark",
+      "name": "Perfect Dark",
+      "extensions": [
+        ".z64"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "soh",
+      "name": "Ship of Harkinian",
+      "extensions": [
+        ".z64",
+        ".n64"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "2ship",
+      "name": "2 Ship 2 Harkinian",
+      "extensions": [
+        ".z64",
+        ".n64"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "dusklight",
+      "name": "DuskLight",
+      "extensions": [
+        ".m3u",
+        ".iso"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ghostship",
+      "name": "Ghostship",
+      "extensions": [
+        ".z64"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sonic3-air",
+      "name": "Sonic 3 AIR",
+      "extensions": [
+        ".bin"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sonic-mania",
+      "name": "Sonic Mania",
+      "extensions": [
+        ".rsdk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sonicretro",
+      "name": "Sonic Retro",
+      "extensions": [
+        ".rsdk"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "starship",
+      "name": "Starship",
+      "extensions": [
+        ".z64"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "dinothawr",
+      "name": "Dinothawr",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "eduke32",
+      "name": "Duke Nukem 3D",
+      "extensions": [
+        ".eduke32"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "theforceengine",
+      "name": "The Force Engine",
+      "extensions": [
+        ".game"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "superbroswar",
+      "name": "Super Mario War",
+      "extensions": [
+        ".sbw"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "reminiscence",
+      "name": "REminiscence",
+      "extensions": [
+        ".rem"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "3doj",
+      "name": "3DO Japan",
+      "extensions": [
+        ".m3u",
+        ".cue",
+        ".iso",
+        ".chd",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "AAE",
+      "name": "AAE",
+      "extensions": [
+        ".zip",
+        ".ZIP",
+        ".7z",
+        ".7Z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "android",
+      "name": "Android",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "arcade",
+      "name": "Arcade",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "bigfish",
+      "name": "BigFish Games",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "btm",
+      "name": "Beatmania/Hiphopmania",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "Casino",
+      "name": "Casino Games",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "cinematronics",
+      "name": "Cinematronics",
+      "extensions": [
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ddr",
+      "name": "Dance Dance Revolution!",
+      "extensions": [
+        ".zip",
+        ".7z",
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "elektronika",
+      "name": "Elektronika IM",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "fc",
+      "name": "Nintendo Famicom",
+      "extensions": [
+        ".fds",
+        ".nes",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "fightcade",
+      "name": "Fightcade",
+      "extensions": [
+        ".bat",
+        ".pc",
+        ".wsquashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "fruit",
+      "name": "Fruit Machines",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "gamegearh",
+      "name": "Game Gear Hacks",
+      "extensions": [
+        ".gg",
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "genesis",
+      "name": "Genesis",
+      "extensions": [
+        ".68k",
+        ".sgd",
+        ".smd",
+        ".bin",
+        ".gen",
+        ".md",
+        ".sg",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ique",
+      "name": "iQue Player",
+      "extensions": [
+        ".v64",
+        ".z64",
+        ".n64",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "jakks",
+      "name": "JAKKS Pacific TV Games",
+      "extensions": [
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "konamih",
+      "name": "Konami Handheld",
+      "extensions": [
+        ".zip",
+        ".ZIP",
+        ".7z",
+        ".7Z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "locomalito",
+      "name": "Locomalito Games",
+      "extensions": [
+        ".bat",
+        ".BAT"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "magazine",
+      "name": "Magazines",
+      "extensions": [
+        ".pdf"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "mastersystemfm",
+      "name": "Master System FM",
+      "extensions": [
+        ".bin",
+        ".sms",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "mastersystemh",
+      "name": "Master System Hacks",
+      "extensions": [
+        ".bin",
+        ".sms",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "megadriveh",
+      "name": "Megadrive Hacks",
+      "extensions": [
+        ".68k",
+        ".sgd",
+        ".smd",
+        ".bin",
+        ".gen",
+        ".md",
+        ".sg",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "n64h",
+      "name": "Nintendo 64 Hacks",
+      "extensions": [
+        ".v64",
+        ".z64",
+        ".n64",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "n64j",
+      "name": "Nintendo 64 Japan",
+      "extensions": [
+        ".v64",
+        ".z64",
+        ".n64",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "neogeoaes",
+      "name": "Neo Geo AES",
+      "extensions": [
+        ".zip",
+        ".wad",
+        ".neo",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "neogeoh",
+      "name": "Neo Geo Hacks",
+      "extensions": [
+        ".zip",
+        ".wad",
+        ".neo",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "nes3d",
+      "name": "Nintendo Entertainment System 3D",
+      "extensions": [
+        ".3dsen"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "nesb",
+      "name": "Nintendo Entertainment Homebrew",
+      "extensions": [
+        ".fds",
+        ".nes",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "nesh",
+      "name": "Nintendo Entertainment Hacks",
+      "extensions": [
+        ".fds",
+        ".nes",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "neshd",
+      "name": "Nintendo HD",
+      "extensions": [
+        ".fds",
+        ".nes",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ouya",
+      "name": "OUYA",
+      "extensions": [
+        ".bat",
+        ".BAT"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "palm",
+      "name": "Palm OS",
+      "extensions": [
+        ".prc",
+        ".pqa",
+        ".img",
+        ".pdb",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pinballhd",
+      "name": "Pinball HD",
+      "extensions": [
+        ".pc",
+        ".exe",
+        ".squashfs",
+        ".wtgz"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pippin",
+      "name": "Apple Bandai Pippin",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "Popcap",
+      "name": "Popcap",
+      "extensions": [
+        ".bat"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ps2br",
+      "name": "Playstation 2 PT-BR",
+      "extensions": [
+        ".iso",
+        ".cso",
+        ".bin",
+        ".mdf",
+        ".gz",
+        ".chd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ps2h",
+      "name": "Playstation 2 Hacks",
+      "extensions": [
+        ".iso",
+        ".cso",
+        ".bin",
+        ".mdf",
+        ".gz",
+        ".chd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ps3br",
+      "name": "Playstation 3 PT-BR",
+      "extensions": [
+        ".m3u",
+        ".ps3",
+        ".iso",
+        ".7z",
+        ".zip",
+        ".rar",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "ps3j",
+      "name": "Playstation 3 Japan",
+      "extensions": [
+        ".m3u",
+        ".ps3",
+        ".iso",
+        ".7z",
+        ".zip",
+        ".rar",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "pspminis",
+      "name": "PlayStation Portable Minis",
+      "extensions": [
+        ".iso",
+        ".ISO",
+        ".cso",
+        ".CSO",
+        ".pbp",
+        ".PBP",
+        ".elf",
+        ".ELF",
+        ".prx",
+        ".PRX"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "psxh",
+      "name": "PlayStation Hacks",
+      "extensions": [
+        ".cue",
+        ".img",
+        ".mdf",
+        ".pbp",
+        ".toc",
+        ".cbn",
+        ".m3u",
+        ".ccd",
+        ".chd",
+        ".zip",
+        ".7z",
+        ".iso",
+        ".cso"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "quake3",
+      "name": "Quake III Arena",
+      "extensions": [
+        ".quake3"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "saturnj",
+      "name": "Saturn Japan",
+      "extensions": [
+        ".zip",
+        ".cue",
+        ".toc",
+        ".m3u",
+        ".ccd",
+        ".chd",
+        ".iso",
+        ".cso",
+        ".mds",
+        ".chd",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sega32xh",
+      "name": "32X Hacks",
+      "extensions": [
+        ".32x",
+        ".smd",
+        ".bin",
+        ".md",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "segaages2500",
+      "name": "Sega Ages 2500",
+      "extensions": [
+        ".iso",
+        ".mdf",
+        ".nrg",
+        ".bin",
+        ".img",
+        ".dump",
+        ".gz",
+        ".cso",
+        ".chd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "sfc",
+      "name": "Super Famicom",
+      "extensions": [
+        ".smc",
+        ".fig",
+        ".sfc",
+        ".gd3",
+        ".gd7",
+        ".dx2",
+        ".bsx",
+        ".swc",
+        ".rom",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "snesh",
+      "name": "Super Nintendo Entertainment System Hacks",
+      "extensions": [
+        ".smc",
+        ".fig",
+        ".sfc",
+        ".gd3",
+        ".gd7",
+        ".dx2",
+        ".bsx",
+        ".swc",
+        ".rom",
+        ".wad",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "socrates",
+      "name": "Socrates",
+      "extensions": [
+        ".rom",
+        ".bin",
+        ".7z",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "m5",
+      "name": "Sord M5",
+      "extensions": [
+        ".rom",
+        ".bin",
+        ".7z",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "supercharger",
+      "name": "Starpath Supercharger",
+      "extensions": [
+        ".7z",
+        ".a26",
+        ".bin",
+        ".gz",
+        ".rom",
+        ".zip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "svmu",
+      "name": "Dreamcast VMU",
+      "extensions": [
+        ".vms",
+        ".bin",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "switch2",
+      "name": "Nintendo Switch 2",
+      "extensions": [
+        ".nso",
+        ".nro",
+        ".nca",
+        ".xci",
+        ".nsp",
+        ".kip"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "tg16",
+      "name": "TurboGrafx-16",
+      "extensions": [
+        ".pce",
+        ".bin",
+        ".zip",
+        ".7z",
+        ".wad"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "tg16cd",
+      "name": "TurboGrafx-16 CD",
+      "extensions": [
+        ".pce",
+        ".cue",
+        ".ccd",
+        ".iso",
+        ".cso",
+        ".img",
+        ".bin",
+        ".chd",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "tiger",
+      "name": "Tiger Handhelds",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z",
+        ".tgc"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "tigerrz",
+      "name": "Tiger R-Zone",
+      "extensions": [
+        ".bin",
+        ".zip",
+        ".7z",
+        ".tgc"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "touhou",
+      "name": "Touhou Project",
+      "extensions": [
+        ".bat",
+        ".hdi"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "turboduo",
+      "name": "NEC Turbo Duo",
+      "extensions": [
+        ".pce",
+        ".cue",
+        ".ccd",
+        ".iso",
+        ".cso",
+        ".img",
+        ".bin",
+        ".chd",
+        ".zip",
+        ".7z"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "unity",
+      "name": "Unity",
+      "extensions": [
+        ".unity3d",
+        ".unity"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "wiih",
+      "name": "Wii Hacks",
+      "extensions": [
+        ".gcz",
+        ".iso",
+        ".ciso",
+        ".wbfs",
+        ".wad",
+        ".rvz",
+        ".wia",
+        ".zip",
+        ".7z",
+        ".squashfs"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "wiiu-sky",
+      "name": "Wii U - Skylanders",
+      "extensions": [
+        ".bat",
+        ".BAT"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "wiiware",
+      "name": "Wii Ware",
+      "extensions": [
+        ".gcz",
+        ".iso",
+        ".ciso",
+        ".wbfs",
+        ".wad",
+        ".rvz",
+        ".GCZ",
+        ".ISO",
+        ".CSO",
+        ".WBFS",
+        ".WAD",
+        ".RVZ"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "windows9x",
+      "name": "Windows 98",
+      "extensions": [
+        ".dosbox",
+        ".pc",
+        ".dos",
+        ".dosz",
+        ".zip",
+        ".m3u8",
+        ".bat",
+        ".cmd"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "xboxlivearcade",
+      "name": "Xbox Live Arcade",
+      "extensions": [
+        ".iso",
+        ".m3u"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "zeebo",
+      "name": "Zeebo",
+      "extensions": [
+        ".zip",
+        ".ZIP"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    },
+    {
+      "id": "zmachine",
+      "name": "Infocom Z-machine",
+      "extensions": [
+        ".dat",
+        ".DAT",
+        ".z1",
+        ".Z1",
+        ".z2",
+        ".Z2",
+        ".z3",
+        ".Z3",
+        ".z4",
+        ".Z4",
+        ".z5",
+        ".Z5",
+        ".z6",
+        ".Z6",
+        ".z7",
+        ".Z7",
+        ".z8",
+        ".Z8",
+        ".zlb",
+        ".ZLB",
+        ".zblorb",
+        ".ZBLORB",
+        ".zip",
+        ".ZIP"
+      ],
+      "archive": {
+        "identifier": "",
+        "details_url": "",
+        "metadata_url": "",
+        "torrent_url": ""
+      }
+    }
+  ]
+}

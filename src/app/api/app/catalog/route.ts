@@ -6,8 +6,8 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    const assets = await listSnesAssets();
-    return NextResponse.json({ platform: "snes", assets });
+    const catalog = await listSnesAssets();
+    return NextResponse.json({ platform: "snes", ...catalog });
   } catch (error) {
     const status = error instanceof AppApiError ? error.status : 500;
     const message =
