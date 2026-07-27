@@ -1,7 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import {
   BlogPost,
-  BlogCategory,
   CalendarEntry,
   BlogStats,
   QueryParams,
@@ -257,48 +256,6 @@ export async function updatePostViews(postId: string): Promise<void> {
   }
 }
 
-// Categories
-export async function getBlogCategories(): Promise<BlogCategory[]> {
-  try {
-    const { data, error } = await supabase
-      .from("blog_categories")
-      .select("*")
-      .order("name", { ascending: true });
-
-    if (error) {
-      console.error("Error fetching blog categories:", error);
-      return [];
-    }
-
-    return data as BlogCategory[];
-  } catch (error) {
-    console.error("Error in getBlogCategories:", error);
-    return [];
-  }
-}
-
-export async function getCategoryBySlug(
-  slug: string
-): Promise<BlogCategory | null> {
-  try {
-    const { data, error } = await supabase
-      .from("blog_categories")
-      .select("*")
-      .eq("slug", slug)
-      .single();
-
-    if (error) {
-      console.error("Error fetching category:", error);
-      return null;
-    }
-
-    return data as BlogCategory;
-  } catch (error) {
-    console.error("Error in getCategoryBySlug:", error);
-    return null;
-  }
-}
-
 // Calendar
 export async function getCalendarEntries(): Promise<CalendarEntry[]> {
   try {
@@ -435,56 +392,6 @@ export async function deleteBlogPost(id: string): Promise<boolean> {
 
   if (error) {
     console.error("Error deleting blog post:", error);
-    return false;
-  }
-
-  return true;
-}
-
-export async function createCategory(
-  category: Omit<BlogCategory, "id" | "post_count" | "created_at">
-): Promise<BlogCategory | null> {
-  const { data, error } = await supabase
-    .from("blog_categories")
-    .insert([category])
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Error creating category:", error);
-    return null;
-  }
-
-  return data as BlogCategory;
-}
-
-export async function updateCategory(
-  id: string,
-  updates: Partial<BlogCategory>
-): Promise<BlogCategory | null> {
-  const { data, error } = await supabase
-    .from("blog_categories")
-    .update(updates)
-    .eq("id", id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error("Error updating category:", error);
-    return null;
-  }
-
-  return data as BlogCategory;
-}
-
-export async function deleteCategory(id: string): Promise<boolean> {
-  const { error } = await supabase
-    .from("blog_categories")
-    .delete()
-    .eq("id", id);
-
-  if (error) {
-    console.error("Error deleting category:", error);
     return false;
   }
 

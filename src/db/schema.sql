@@ -25,61 +25,6 @@ CREATE INDEX blog_posts_status_idx ON blog_posts(status);
 CREATE INDEX blog_posts_category_idx ON blog_posts(category);
 CREATE INDEX blog_posts_featured_idx ON blog_posts(featured);
 
--- Tabela para armazenar categorias
-CREATE TABLE blog_categories (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL UNIQUE,
-  slug TEXT NOT NULL UNIQUE,
-  description TEXT,
-  post_count INTEGER DEFAULT 0,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
-);
-
--- Trigger para atualizar o contador de posts por categoria
-CREATE OR REPLACE FUNCTION update_category_post_count()
-RETURNS TRIGGER AS $$
-BEGIN
-  -- Se for INSERT ou UPDATE com alteração na categoria
-  IF (TG_OP = 'INSERT') OR (TG_OP = 'UPDATE' AND OLD.category <> NEW.category) THEN
-    -- Incrementa contagem na nova categoria se o post está publicado
-    IF NEW.status = 'published' THEN
-      UPDATE blog_categories SET post_count = post_count + 1 WHERE name = NEW.category;
-    END IF;
-    
-    -- Se for UPDATE, decrementa contagem na categoria antiga se o post estava publicado
-    IF TG_OP = 'UPDATE' AND OLD.status = 'published' THEN
-      UPDATE blog_categories SET post_count = post_count - 1 WHERE name = OLD.category;
-    END IF;
-  END IF;
-  
-  -- Se for UPDATE com alteração no status
-  IF TG_OP = 'UPDATE' AND OLD.status <> NEW.status THEN
-    -- Post foi publicado
-    IF NEW.status = 'published' THEN
-      UPDATE blog_categories SET post_count = post_count + 1 WHERE name = NEW.category;
-    -- Post foi despublicado
-    ELSIF OLD.status = 'published' THEN
-      UPDATE blog_categories SET post_count = post_count - 1 WHERE name = NEW.category;
-    END IF;
-  END IF;
-  
-  -- Se for DELETE
-  IF TG_OP = 'DELETE' THEN
-    -- Decrementa contagem se o post estava publicado
-    IF OLD.status = 'published' THEN
-      UPDATE blog_categories SET post_count = post_count - 1 WHERE name = OLD.category;
-    END IF;
-  END IF;
-  
-  RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
-
--- Aplicar trigger na tabela de posts
-CREATE TRIGGER blog_posts_category_count
-AFTER INSERT OR UPDATE OR DELETE ON blog_posts
-FOR EACH ROW EXECUTE FUNCTION update_category_post_count();
-
 -- Tabela para armazenar o calendário editorial
 CREATE TABLE blog_calendar (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -111,17 +56,9 @@ CREATE POLICY "Public can read published posts"
 ON blog_posts FOR SELECT 
 USING (status = 'published');
 
-CREATE POLICY "Public can read categories" 
-ON blog_categories FOR SELECT 
-TO PUBLIC;
-
 -- Politicas RLS para administradores gerenciarem posts
 CREATE POLICY "Authenticated users can manage posts" 
 ON blog_posts FOR ALL 
-TO authenticated;
-
-CREATE POLICY "Authenticated users can manage categories" 
-ON blog_categories FOR ALL 
 TO authenticated;
 
 CREATE POLICY "Authenticated users can manage calendar" 
@@ -130,4 +67,4 @@ TO authenticated;
 
 CREATE POLICY "Authenticated users can manage stats" 
 ON blog_stats FOR ALL 
-TO authenticated; 
+TO authenticated;
