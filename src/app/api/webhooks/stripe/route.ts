@@ -11,8 +11,11 @@ export async function POST(request: Request) {
   const stripe = getStripe();
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   const signature = request.headers.get("stripe-signature");
-  if (!stripe || !secret || !signature) {
+  if (!stripe || !secret) {
     return NextResponse.json({ error: "Webhook não configurado" }, { status: 500 });
+  }
+  if (!signature) {
+    return NextResponse.json({ error: "Assinatura ausente" }, { status: 400 });
   }
   let event: Stripe.Event;
   try {
