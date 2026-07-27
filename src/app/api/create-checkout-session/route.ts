@@ -88,7 +88,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ url: session.url });
   } catch (error) {
     const status = error instanceof AppApiError ? error.status : 500;
-    console.error("Checkout Stripe falhou:", error);
+    if (!(error instanceof AppApiError)) {
+      console.error("Checkout Stripe falhou:", error);
+    }
     return NextResponse.json(
       { message: status === 500 ? "Não foi possível iniciar o pagamento" : (error as Error).message },
       { status }

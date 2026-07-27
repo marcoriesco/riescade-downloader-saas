@@ -27,7 +27,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, status: subscription.status });
   } catch (error) {
     const status = error instanceof AppApiError ? error.status : 500;
-    console.error("Cancelamento Stripe falhou:", error);
+    if (!(error instanceof AppApiError)) {
+      console.error("Cancelamento Stripe falhou:", error);
+    }
     return NextResponse.json({ message: "Não foi possível cancelar a assinatura" }, { status });
   }
 }

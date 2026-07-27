@@ -32,7 +32,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     const status = error instanceof AppApiError ? error.status : 500;
-    console.error("Verificação Stripe falhou:", error);
+    if (!(error instanceof AppApiError)) {
+      console.error("Verificação Stripe falhou:", error);
+    }
     return NextResponse.json({ message: "Não foi possível verificar a assinatura" }, { status });
   }
 }
