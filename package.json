@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
     "test-webhook": "node scripts/test-webhook.js",
     "cron": "ts-node src/scripts/cron-scheduler.ts",
     "publish-post": "ts-node src/scripts/cron-scheduler.ts --run-now",
@@ -18,6 +20,8 @@
     "fix-missing-images": "npx tsx src/scripts/generate-missing-blog-images-from-list.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.1095.0",
+    "@aws-sdk/s3-request-presigner": "3.1095.0",
     "@google/genai": "^0.9.0",
     "@stripe/react-stripe-js": "^3.5.1",
     "@stripe/stripe-js": "^6.1.0",
@@ -37,8 +41,8 @@
     "node-cron": "^3.0.3",
     "node-fetch": "^3.3.2",
     "openai": "^4.95.1",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "19.0.8",
+    "react-dom": "19.0.8",
     "resend": "^4.6.0",
     "stripe": "^17.7.0",
     "xml2js": "^0.6.2"
@@ -58,6 +62,7 @@
     "postcss": "^8.5.3",
     "swiper": "^11.2.6",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "3.2.7"
   }
 }
