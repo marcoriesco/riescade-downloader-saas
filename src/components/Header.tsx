@@ -79,15 +79,19 @@ export function Header() {
   return (
     <header className="fixed w-full top-0 z-50 header-backdrop">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center space-x-2">
-          <div className="flex items-center">
+        <Link href="/" className="group flex items-center gap-3" aria-label="RIESCADE OS — Início">
+          <div className="relative flex h-11 w-11 items-center justify-center">
             <Image
               src="/images/logo.webp"
               alt="RIESCADE Logo"
-              width={240}
-              height={40}
-              className="mr-2"
+              width={52}
+              height={52}
+              className="h-12 w-12 object-contain drop-shadow-[0_0_14px_hsl(var(--primary)/0.45)] transition-transform duration-300 group-hover:scale-105"
             />
+          </div>
+          <div className="font-brand-condensed text-[1.65rem] leading-none tracking-[-0.035em] text-white">
+            <span className="font-bold">RIESCADE</span>
+            <span className="ml-1.5 text-primary">OS</span>
           </div>
         </Link>
 

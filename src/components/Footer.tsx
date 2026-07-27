@@ -16,10 +16,14 @@ export default function Footer() {
               <Image
                 src="/images/logos.webp"
                 alt="RIESCADE Logo"
-                width={35}
-                height={35}
+                width={52}
+                height={52}
+                className="h-12 w-12 object-contain"
               />
-              <h3 className="text-xl font-display font-bold uppercase">RIESCADE</h3>
+              <h3 className="font-brand-condensed text-2xl tracking-tight">
+                <span className="font-bold">RIESCADE</span>
+                <span className="ml-1 text-primary">OS</span>
+              </h3>
             </div>
             <p className="text-muted-foreground mt-2">
               RetroGames e Games, sempre emulando...

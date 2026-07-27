@@ -118,7 +118,7 @@ export default function Home() {
           <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
 
           <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pt-18 pb-24">
-            <div className="lg:col-span-7 flex flex-col justify-center items-start">
+            <div className="lg:col-span-6 flex flex-col justify-center items-start">
 
               <h1 className="mt-8 font-display text-4xl sm:text-6xl lg:text-[4.5rem] font-bold uppercase leading-[0.85] tracking-tight text-balance drop-shadow-lg text-foreground">
                 O Melhor <span className="text-gradient-primary text-7xl">Dos Retrogames</span>
@@ -173,45 +173,32 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="lg:col-span-5 relative h-[400px] lg:h-[700px] w-full mt-8 lg:mt-0 hidden md:block">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[280px] sm:w-[380px] aspect-[4/3] bg-panel border-2 border-primary/50 p-2 z-30 transition-transform duration-700 hover:scale-105" style={{ boxShadow: "0 0 60px hsl(var(--primary) / 0.25)" }}>
-                <div className="w-full h-full bg-card relative overflow-hidden group">
-                  <Image
-                    src="/screenshots/arcade.webp"
-                    alt="Interface Arcade RIESCADE"
-                    fill
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-90"
-                  />
-                  <div className="absolute inset-0 scanlines pointer-events-none mix-blend-overlay" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-background/95 to-transparent border-t border-primary/20">
-                    <div className="font-display font-bold text-lg uppercase tracking-wider text-foreground">Arcade Classic</div>
-                    <div className="font-mono text-primary text-[10px] mt-1">250+ SISTEMAS // ONLINE</div>
-                  </div>
+            <div className="lg:col-span-6 relative flex w-full items-center justify-center mt-2 lg:mt-0">
+              <div className="absolute -inset-10 bg-primary/20 blur-[90px] opacity-70 pointer-events-none" />
+              <div className="relative w-full max-w-[640px] overflow-hidden border border-primary/40 bg-black/70 p-2 shadow-[0_0_80px_hsl(var(--primary)/0.22)]">
+                <div className="absolute left-5 top-5 z-20 flex items-center gap-2 border border-white/10 bg-black/60 px-3 py-2 backdrop-blur-md">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-green-400 shadow-[0_0_10px_#4ade80]" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/75">RIESCADE OS em execução</span>
                 </div>
-              </div>
-
-              <div className="absolute top-[5%] left-[5%] w-[200px] sm:w-[240px] aspect-[4/3] bg-panel border border-accent/30 p-1 -rotate-6 z-10" style={{ boxShadow: "0 0 30px hsl(var(--accent) / 0.15)" }}>
-                <div className="w-full h-full bg-card overflow-hidden">
-                  <Image
-                    src="/screenshots/sf3.webp"
-                    alt="Street Fighter III"
-                    fill
-                    className="w-full h-full object-cover opacity-50 grayscale"
-                  />
+                <div className="relative aspect-video overflow-hidden bg-black">
+                  <video
+                    className="h-full w-full object-cover"
+                    autoPlay
+                    muted
+                    loop
+                    playsInline
+                    preload="metadata"
+                    poster="/screenshots/loading.webp"
+                    aria-label="Demonstração da interface do RIESCADE OS"
+                  >
+                    <source src="/video/riescade-os.mp4" type="video/mp4" />
+                  </video>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/15 pointer-events-none" />
+                  <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
                 </div>
-              </div>
-
-              <div className="absolute bottom-[5%] right-[0%] w-[220px] sm:w-[260px] aspect-square bg-panel border border-primary/20 p-1 rotate-6 z-20" style={{ boxShadow: "0 0 40px hsl(var(--primary) / 0.1)" }}>
-                <div className="w-full h-full bg-card overflow-hidden relative">
-                  <Image
-                    src="/screenshots/switch.webp"
-                    alt="Nintendo Switch"
-                    fill
-                    className="w-full h-full object-cover opacity-70"
-                  />
-                  <div className="absolute top-3 right-3 px-2 py-0.5 bg-background/80 border border-primary/30 font-mono text-[9px] text-primary uppercase">
-                    Switch
-                  </div>
+                <div className="flex items-center justify-between border-t border-white/10 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-white/45">
+                  <span>Biblioteca unificada</span>
+                  <span className="text-primary">250+ sistemas</span>
                 </div>
               </div>
             </div>

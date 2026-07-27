@@ -25,7 +25,7 @@ import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { CancelSubscriptionModal } from "@/components/CancelSubscriptionModal";
-import { faDice, faFile, faGamepad } from "@fortawesome/free-solid-svg-icons";
+import { faGamepad } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 
 interface Order {
@@ -424,36 +424,6 @@ export default function DashboardClient() {
     );
   }
 
-  const downloadOptions = [
-    {
-      id: "app",
-      title: "RIESCADE OS",
-      description: "Versão mais recente do aplicativo",
-      url: "https://github.com/marcoriesco/RIESCADE-OS/releases/latest/download/RIESCADE_OS.7z",
-      icon: faGamepad,
-      badge: "Atualizado",
-      bgClass: "bg-gradient-to-br from-purple-900/60 to-[#ff0884]/60",
-    },
-    {
-      id: "platforms",
-      title: "Plataformas",
-      description: "Lista completa de plataformas disponíveis",
-      url: "/platforms",
-      icon: faDice,
-      badge: "Catálogo",
-      bgClass: "bg-gradient-to-br from-green-900/60",
-    },
-    {
-      id: "instructions",
-      title: "Instruções",
-      description: "Use Configurações → Minha conta dentro do app",
-      url: "/dashboard",
-      icon: faFile,
-      badge: "Ajuda",
-      bgClass: "bg-gradient-to-br from-amber-900/60",
-    },
-  ];
-
   // Main dashboard content - only shown when authenticated
   return (
     <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
@@ -528,10 +498,10 @@ export default function DashboardClient() {
           </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
           {/* Player Profile Card */}
-          <div className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
+          <div className="xl:col-span-2 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
+            <div className="px-6 py-5 border-b border-gray-700 bg-gradient-to-r from-[#ff0884]/10 to-transparent flex items-center">
               <UserIcon className="w-5 h-5 text-[#ff0884] mr-2" />
               <h2 className="text-lg font-medium text-white">
                 Minha Conta
@@ -540,28 +510,29 @@ export default function DashboardClient() {
 
             <div className="p-6">
               {user && (
-                <div>
-                  <div className="flex flex-col items-center mb-6">
-                    <div className="w-20 h-20 rounded-full bg-[#ff0884]/20 border-2 border-[#ff0884]/50 flex items-center justify-center mb-3 animate-pulse-glow">
-                      <UserIcon className="h-10 w-10 text-[#ff0884]" />
+                <div className="space-y-6">
+                  <div className="flex items-center gap-4 border-b border-gray-700/70 pb-6">
+                    <div className="w-16 h-16 rounded-full bg-[#ff0884]/15 border border-[#ff0884]/50 flex items-center justify-center shrink-0 shadow-[0_0_24px_rgba(255,8,132,0.18)]">
+                      <UserIcon className="h-8 w-8 text-[#ff0884]" />
                     </div>
-                    <h3 className="text-xl text-white font-bold m-1">
-                      {user.user_metadata?.full_name || "User"}
-                    </h3>
-                    <p className="text-muted-foreground text-sm">
-                      {user.email}
-                    </p>
+                    <div className="min-w-0">
+                      <p className="text-xs uppercase tracking-[0.18em] text-[#ff0884]">Perfil RIESCADE</p>
+                      <h3 className="truncate text-xl text-white font-bold mt-1">
+                        {user.user_metadata?.full_name || "Usuário"}
+                      </h3>
+                      <p className="truncate text-muted-foreground text-sm">{user.email}</p>
+                    </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="flex items-start gap-3 rounded-lg border border-gray-700 bg-black/30 p-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
+                    <div className="flex items-start gap-3 rounded-lg border border-gray-700/80 bg-black/25 p-4">
                       <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
                       <div className="min-w-0">
                         <p className="text-xs text-gray-400">Email da conta</p>
                         <p className="truncate text-sm text-white">{user.email}</p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-3 rounded-lg border border-gray-700 bg-black/30 p-3">
+                    <div className="flex items-start gap-3 rounded-lg border border-gray-700/80 bg-black/25 p-4">
                       <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
                       <div>
                         <p className="text-xs text-gray-400">Usuário desde</p>
@@ -573,7 +544,7 @@ export default function DashboardClient() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-3 rounded-lg border border-gray-700 bg-black/30 p-3">
+                    <div className="flex items-start gap-3 rounded-lg border border-gray-700/80 bg-black/25 p-4">
                       <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
                       <div>
                         <p className="text-xs text-gray-400">Último acesso</p>
@@ -582,7 +553,7 @@ export default function DashboardClient() {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-3 rounded-lg border border-gray-700 bg-black/30 p-3">
+                    <div className="flex items-start gap-3 rounded-lg border border-gray-700/80 bg-black/25 p-4">
                       <Shield className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
                       <div>
                         <p className="text-xs text-gray-400">Plano atual</p>
@@ -606,8 +577,8 @@ export default function DashboardClient() {
           </div>
 
           {/* Subscription Card */}
-          <div className="lg:col-span-2 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
+          <div className="xl:col-span-3 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
+            <div className="px-6 py-5 border-b border-gray-700 bg-gradient-to-r from-[#ff0884]/10 to-transparent flex items-center">
               <Shield className="w-5 h-5 text-[#ff0884] mr-2" />
               <h2 className="text-lg font-medium text-white">
                 Status da Assinatura
@@ -617,11 +588,14 @@ export default function DashboardClient() {
             <div className="p-6 pb-0">
               {subscription ? (
                 <div className="space-y-6">
-                  <div className="bg-black/30 p-4 rounded-lg border border-gray-700">
-                    <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-lg font-bold text-white flex items-center ml-2">
+                  <div className="bg-gradient-to-br from-black/35 to-[#ff0884]/5 p-5 rounded-lg border border-gray-700">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                      <div>
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Plano atual</p>
+                        <h3 className="text-2xl font-bold text-white mt-1">
                         RIESCADE MEMBRO
-                      </h3>
+                        </h3>
+                      </div>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-medium 
                         ${
@@ -634,21 +608,19 @@ export default function DashboardClient() {
                       </span>
                     </div>
 
-                    <div className="bg-black/40 rounded-lg p-4 border border-gray-700 mb-1">
-                      <h4 className="text-sm font-medium text-gray-400 mb-2">
-                        Assinante desde
-                      </h4>
-                      <p className="text-white mb-4">
-                        {formatAccountDate(subscription.created_at)}
-                      </p>
-
-                      <h4 className="text-sm font-medium text-gray-400 mb-2">
-                        Período atual
-                      </h4>
-                      <p className="text-white">
-                        {new Date(subscription.start_date).toLocaleDateString()}{" "}
-                        - {new Date(subscription.end_date).toLocaleDateString()}
-                      </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div className="bg-black/35 rounded-lg p-4 border border-gray-700/80">
+                        <h4 className="text-xs uppercase tracking-wider text-gray-500 mb-2">Assinante desde</h4>
+                        <p className="text-white font-medium">{formatAccountDate(subscription.created_at)}</p>
+                      </div>
+                      <div className="bg-black/35 rounded-lg p-4 border border-gray-700/80">
+                        <h4 className="text-xs uppercase tracking-wider text-gray-500 mb-2">Período atual</h4>
+                        <p className="text-white font-medium">
+                          {new Date(subscription.start_date).toLocaleDateString()}{" "}
+                          <span className="text-gray-500">—</span>{" "}
+                          {new Date(subscription.end_date).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
                   </div>
 
@@ -805,48 +777,6 @@ export default function DashboardClient() {
                       </button>
                     </div>
                   </div>
-                </div>
-
-                {/* Grid de opções de download */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {downloadOptions.slice(1).map((item) => (
-                    <div
-                      key={item.id}
-                      className={`${item.bgClass} rounded-lg border border-gray-700/50 p-5 flex flex-col hover:border-[#ff0884]/30 hover:shadow-[0_0_15px_rgba(255,8,132,0.15)] transition-all duration-300 transform hover:-translate-y-1 relative overflow-hidden`}
-                    >
-                      <div className="absolute top-2 right-2 z-10">
-                        <span className="inline-block px-2 py-1 text-xs font-semibold rounded-full bg-black/30 text-white border border-gray-700/50">
-                          {item.badge}
-                        </span>
-                      </div>
-
-                      <div className="mb-4 flex items-center justify-center">
-                        <div className="p-3 rounded-full bg-black/30 border border-gray-700/50">
-                          <FontAwesomeIcon
-                            icon={item.icon}
-                            className="h-8 w-8 text-[#ff0884]"
-                          />
-                        </div>
-                      </div>
-
-                      <h3 className="text-xl font-bold text-white text-center mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-300 mb-4 text-center text-sm flex-grow">
-                        {item.description}
-                      </p>
-
-                      <button
-                        onClick={() => handleOpenLink(item.url)}
-                        className="w-full py-2 px-4 bg-black/30 hover:bg-[#ff0884]/20 border border-gray-700 hover:border-[#ff0884]/50 rounded-none text-white transition-colors duration-200 flex items-center justify-center"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        {item.id === "base-free"
-                          ? "Acessar Plataformas"
-                          : "Acessar Link"}
-                      </button>
-                    </div>
-                  ))}
                 </div>
 
                 {/* Seção de instruções */}
