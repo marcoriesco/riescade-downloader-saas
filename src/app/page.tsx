@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { 
-  Zap, Trophy, Gamepad2, Shield, Users, 
+  Zap, Trophy, Gamepad2, Users,
   Monitor, Download, Sparkles, Check 
 } from "lucide-react";
 import Image from "next/image";
@@ -57,13 +57,13 @@ const features = [
   },
   {
     icon: Monitor,
-    title: "5 Temas Premium",
-    description: "Interface personalizável com 5 temas visuais exclusivos.",
+    title: "Biblioteca Inteligente",
+    description: "Plataformas, favoritos e coleções em uma interface unificada.",
   },
 ];
 
 const benefits = [
-  "12TB de Jogos — Download ilimitado",
+  "Biblioteca integrada ao RIESCADE OS",
   "Downloads seguros dentro do aplicativo",
   "Comunidade VIP — Suporte prioritário",
   "250+ Plataformas — Atari até Switch",
@@ -112,114 +112,40 @@ export default function Home() {
       
       <main className="pt-16">
         {/* HERO SECTION */}
-        <div className="relative min-h-screen overflow-hidden flex items-center grid-overlay mt-[-4rem]">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_100%,hsl(var(--surface))_0%,transparent_60%)]" />
-          <div className="absolute top-[-10%] right-[-5%] w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-[-10%] left-[-10%] w-[600px] h-[600px] bg-accent/10 rounded-full blur-[100px] pointer-events-none" />
+        <section className="relative h-[100svh] min-h-[620px] overflow-hidden mt-[-4rem] bg-black">
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/screenshots/loading.webp"
+            aria-label="Demonstração da interface do RIESCADE OS"
+          >
+            <source src="/video/riescade-os.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/5 to-black/85" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
 
-          <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 pt-18 pb-24">
-            <div className="lg:col-span-6 flex flex-col justify-center items-start">
-
-              <h1 className="mt-8 font-display text-4xl sm:text-6xl lg:text-[4.5rem] font-bold uppercase leading-[0.85] tracking-tight text-balance drop-shadow-lg text-foreground">
-                O Melhor <span className="text-gradient-primary text-7xl">Dos Retrogames</span>
-              </h1>
-
-              <p className="mt-6 max-w-[55ch] text-lg sm:text-xl text-muted-foreground leading-relaxed font-medium">
-                Acesso à mais de 250 plataformas de games, consoles e arcades clássicos em um único lugar. Emulação perfeita com interface premium.
-              </p>
-
-              <div className="mt-10 w-full max-w-2xl grid grid-cols-3 gap-[1px] bg-primary/30 p-[1px]" style={{ boxShadow: "0 0 30px hsl(var(--primary) / 0.1)" }}>
-                <div className="bg-background/90 backdrop-blur-md px-4 py-5 sm:p-6 flex flex-col">
-                  <span className="font-mono text-2xl sm:text-4xl font-bold text-foreground tracking-tight">
-                    250<span className="text-primary">+</span>
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest mt-1">Plataformas</span>
-                </div>
-                <div className="bg-background/90 backdrop-blur-md px-4 py-5 sm:p-6 flex flex-col">
-                  <span className="font-mono text-2xl sm:text-4xl font-bold text-foreground tracking-tight">
-                    12<span className="text-accent">TB</span>
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest mt-1">Acervo de Jogos</span>
-                </div>
-                <div className="bg-background/90 backdrop-blur-md px-4 py-5 sm:p-6 flex flex-col">
-                  <span className="font-mono text-2xl sm:text-4xl font-bold text-foreground tracking-tight">5</span>
-                  <span className="text-[10px] sm:text-xs text-muted-foreground uppercase tracking-widest mt-1">Temas Premium</span>
-                </div>
-              </div>
-
-              <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 w-full">
-                <button
-                  onClick={handleLoginRedirect}
-                  className="relative group h-14 px-8 inline-flex items-center justify-center bg-primary text-primary-foreground font-display font-bold text-xl uppercase tracking-[0.15em] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] shrink-0 w-full sm:w-auto"
-                >
-                  <div className="absolute inset-0 border-2 border-foreground/20 group-hover:border-foreground/50 transition-colors" />
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-foreground" />
-                  <span className="relative z-10 drop-shadow-md">
-                    {isLoggingIn ? "Carregando..." : "Começar Agora"}
-                  </span>
-                </button>
-
-                <a
-                  href="https://riescade.games"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="relative group h-14 px-8 inline-flex items-center justify-center bg-surface border-2 border-primary/40 text-foreground font-display font-bold text-xl uppercase tracking-[0.15em] overflow-hidden transition-all duration-300 hover:scale-105 hover:bg-primary/10 hover:border-primary shrink-0 w-full sm:w-auto"
-                >
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-primary/20 group-hover:bg-primary transition-colors" />
-                  <span className="relative z-10 drop-shadow-md">
-                    Jogue Online!
-                  </span>
-                </a>
-              </div>
-            </div>
-
-            <div className="lg:col-span-6 relative flex w-full items-center justify-center mt-2 lg:mt-0">
-              <div className="absolute -inset-10 bg-primary/20 blur-[90px] opacity-70 pointer-events-none" />
-              <div className="relative w-full max-w-[640px] overflow-hidden border border-primary/40 bg-black/70 p-2 shadow-[0_0_80px_hsl(var(--primary)/0.22)]">
-                <div className="absolute left-5 top-5 z-20 flex items-center gap-2 border border-white/10 bg-black/60 px-3 py-2 backdrop-blur-md">
-                  <span className="h-2 w-2 animate-pulse rounded-full bg-green-400 shadow-[0_0_10px_#4ade80]" />
-                  <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-white/75">RIESCADE OS em execução</span>
-                </div>
-                <div className="relative aspect-video overflow-hidden bg-black">
-                  <video
-                    className="h-full w-full object-cover"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
-                    poster="/screenshots/loading.webp"
-                    aria-label="Demonstração da interface do RIESCADE OS"
-                  >
-                    <source src="/video/riescade-os.mp4" type="video/mp4" />
-                  </video>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-black/15 pointer-events-none" />
-                  <div className="absolute inset-0 scanlines opacity-20 pointer-events-none" />
-                </div>
-                <div className="flex items-center justify-between border-t border-white/10 px-3 py-2 font-mono text-[9px] uppercase tracking-[0.16em] text-white/45">
-                  <span>Biblioteca unificada</span>
-                  <span className="text-primary">250+ sistemas</span>
-                </div>
-              </div>
-            </div>
+          <div className="absolute inset-x-0 bottom-12 z-10 flex flex-col items-center justify-center gap-3 px-6 sm:bottom-16 sm:flex-row">
+            <button
+              onClick={handleLoginRedirect}
+              disabled={isLoggingIn}
+              className="inline-flex h-14 w-full max-w-xs items-center justify-center bg-primary px-8 font-display text-lg font-bold uppercase tracking-[0.14em] text-primary-foreground shadow-[0_12px_50px_hsl(var(--primary)/0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_60px_hsl(var(--primary)/0.5)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+            >
+              {isLoggingIn ? "Carregando..." : "Começar Agora"}
+            </button>
+            <a
+              href="https://riescade.games"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-14 w-full max-w-xs items-center justify-center border border-white/30 bg-black/55 px-8 font-display text-lg font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/60 hover:bg-black/75 sm:w-auto"
+            >
+              Jogue Online
+            </a>
           </div>
-
-          {/* Features Footer within Hero */}
-          <div className="absolute bottom-8 left-0 right-0 w-full hidden sm:block z-20">
-            <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center gap-8 font-mono text-[11px] md:text-xs text-muted-foreground uppercase tracking-widest opacity-80 mt-[-2rem]">
-              <div className="flex items-center gap-2">
-                <Zap className="size-4 text-accent" />
-                <span>Emulação Perfeita</span>
-              </div>
-              <div className="w-1 h-1 rounded-full bg-border" />
-              <div className="flex items-center gap-2">
-                <Shield className="size-4 text-primary" />
-                <span>Cancele Quando Quiser</span>
-              </div>
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
-        </div>
+        </section>
 
         {/* FEATURES SECTION */}
         <section id="features" className="relative py-24 overflow-hidden">
@@ -357,73 +283,6 @@ export default function Home() {
                   &quot;O melhor sistema de retrogames que já usei. Vale cada centavo pela experiência nostálgica!&quot;
                 </p>
                 <span className="text-xs text-primary font-mono mt-3 block">— Membro desde 2023</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* PRODUCT SECTION */}
-        <section className="relative py-24 overflow-hidden">
-          <div className="absolute inset-0 grid-overlay opacity-20" />
-          <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
-            <div className="text-center mb-16">
-              <span className="font-mono text-xs text-primary uppercase tracking-[0.3em] font-bold">
-                PRODUTO EXCLUSIVO
-              </span>
-              <h2 className="mt-4 font-display text-4xl md:text-5xl font-bold uppercase tracking-tight text-foreground">
-                HD 1TB <span className="text-gradient-primary">Nintendo Switch</span>
-              </h2>
-              <p className="mt-4 text-muted-foreground">
-                Pronto para conectar e jogar imediatamente
-              </p>
-            </div>
-
-            <div className="grid lg:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-              <div className="relative border-2 border-primary/30 p-2 glow-primary">
-                <Image
-                  src="/images/hdswitch/hd_riescade_switch_1tb.webp"
-                  alt="HD 1TB Nintendo Switch - RIESCADE"
-                  width={1000}
-                  height={1000}
-                  className="w-full object-cover"
-                />
-                <div className="absolute inset-0 scanlines pointer-events-none mix-blend-overlay opacity-20" />
-              </div>
-
-              <div className="flex flex-col gap-6">
-                <h3 className="font-display text-3xl font-bold uppercase text-foreground">
-                  HD 1TB Nintendo Switch
-                </h3>
-                <p className="text-muted-foreground">
-                  Emuladores já configurados + Artes de todos os jogos. Pronto para conectar e jogar imediatamente.
-                </p>
-
-                <div className="space-y-3">
-                  {["Emuladores já configurados", "Artes de todos os jogos", "Instruções de instalação", "Suporte técnico"].map((item) => (
-                    <div key={item} className="flex items-center gap-3">
-                      <div className="size-5 border border-accent/50 flex items-center justify-center">
-                        <Check className="size-3 text-accent" />
-                      </div>
-                      <span className="text-sm text-foreground/80">{item}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-4">
-                  <div className="font-display text-4xl font-bold text-foreground">
-                    R$ 350<span className="text-muted-foreground text-lg font-mono">,00</span>
-                  </div>
-                </div>
-
-                <Link
-                  href="/produtos/hd-switch"
-                  className="w-full sm:w-auto h-14 px-10 flex items-center justify-center bg-accent text-accent-foreground font-display font-bold text-lg uppercase tracking-[0.1em] transition-all duration-300 hover:scale-[1.02] glow-accent"
-                >
-                  Comprar Agora
-                </Link>
-                <p className="text-xs text-muted-foreground font-mono">
-                  Envio para todo Brasil • Pagamento seguro
-                </p>
               </div>
             </div>
           </div>

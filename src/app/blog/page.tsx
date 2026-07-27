@@ -1,21 +1,11 @@
 import React, { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { getBlogPosts } from "@/lib/blog-service";
+import { getBlogFilters, getBlogPosts } from "@/lib/blog-service";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const revalidate = 3600;
-
-// Manually defined categories
-const categories = [
-  { id: "1", name: "Tutoriais", slug: "tutoriais", post_count: 5 },
-  { id: "2", name: "Retrogaming", slug: "retrograming", post_count: 8 },
-  { id: "3", name: "Emulação", slug: "emulacao", post_count: 12 },
-  { id: "4", name: "Consoles", slug: "consoles", post_count: 6 },
-  { id: "5", name: "Jogos", slug: "jogos", post_count: 9 },
-  { id: "6", name: "Dicas", slug: "dicas", post_count: 7 },
-];
 
 export default function Blog({
   searchParams,
@@ -39,6 +29,7 @@ export default function Blog({
       limit: 9,
     })
   );
+  const { categories, tags } = use(getBlogFilters());
 
   // Calculate pagination
   const totalPages = Math.ceil(count / 9);
@@ -341,15 +332,19 @@ export default function Blog({
                   <h3 className="text-2xl font-medium mb-4">Categorias</h3>
                   <div className="flex flex-wrap gap-2">
                     {categories && categories.length > 0 ? (
-                      categories.map((category) => (
+                      categories.map((item) => (
                         <Link
-                          key={category.id}
-                          href={`/blog?category=${category.slug}`}
-                          className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
+                          key={item.name}
+                          href={`/blog?category=${encodeURIComponent(item.name)}`}
+                          className={`inline-block px-3 py-1 rounded-none text-sm transition-colors ${
+                            category === item.name
+                              ? "bg-[#ff0884] text-white"
+                              : "bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884]"
+                          }`}
                         >
-                          {category.name}
+                          {item.name}
                           <span className="ml-2 text-xs bg-gray-600 text-gray-300 px-1.5 py-0.5 rounded-full">
-                            {category.post_count}
+                            {item.count}
                           </span>
                         </Link>
                       ))
@@ -365,42 +360,19 @@ export default function Blog({
                 <div className="p-6 bg-gray-800 rounded-none border border-gray-700">
                   <h3 className="text-2xl font-medium mb-4">Tags Populares</h3>
                   <div className="flex flex-wrap gap-2">
-                    <Link
-                      href="/blog?tag=emulacao"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
-                    >
-                      #emulacao
-                    </Link>
-                    <Link
-                      href="/blog?tag=retroarch"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
-                    >
-                      #retroarch
-                    </Link>
-                    <Link
-                      href="/blog?tag=nintendo"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
-                    >
-                      #nintendo
-                    </Link>
-                    <Link
-                      href="/blog?tag=arcade"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
-                    >
-                      #arcade
-                    </Link>
-                    <Link
-                      href="/blog?tag=playstation"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
-                    >
-                      #playstation
-                    </Link>
-                    <Link
-                      href="/blog?tag=retrogames"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-none text-sm transition-colors"
-                    >
-                      #retrogames
-                    </Link>
+                    {tags.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={`/blog?tag=${encodeURIComponent(item.name)}`}
+                        className={`inline-block px-3 py-1 rounded-none text-sm transition-colors ${
+                          tag === item.name
+                            ? "bg-[#ff0884] text-white"
+                            : "bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884]"
+                        }`}
+                      >
+                        #{item.name}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>

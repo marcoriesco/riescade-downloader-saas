@@ -117,6 +117,53 @@ export async function getBlogPosts(
   }
 }
 
+export async function getBlogFilters(): Promise<{
+  categories: { name: string; count: number }[];
+  tags: { name: string; count: number }[];
+}> {
+  try {
+    const { data, error } = await supabase
+      .from("blog_posts")
+      .select("category,tags")
+      .eq("status", "published");
+
+    if (error) throw error;
+
+    const categoryCounts = new Map<string, number>();
+    const tagCounts = new Map<string, number>();
+
+    for (const post of data || []) {
+      if (post.category) {
+        categoryCounts.set(
+          post.category,
+          (categoryCounts.get(post.category) || 0) + 1
+        );
+      }
+      for (const tag of post.tags || []) {
+        if (tag) tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+      }
+    }
+
+    const byCountThenName = (
+      a: { name: string; count: number },
+      b: { name: string; count: number }
+    ) => b.count - a.count || a.name.localeCompare(b.name, "pt-BR");
+
+    return {
+      categories: [...categoryCounts]
+        .map(([name, count]) => ({ name, count }))
+        .sort(byCountThenName),
+      tags: [...tagCounts]
+        .map(([name, count]) => ({ name, count }))
+        .sort(byCountThenName)
+        .slice(0, 16),
+    };
+  } catch (error) {
+    console.error("Error fetching blog filters:", error);
+    return { categories: [], tags: [] };
+  }
+}
+
 export async function getBlogPostBySlug(
   slug: string
 ): Promise<BlogPost | null> {

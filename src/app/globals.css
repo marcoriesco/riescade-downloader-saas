@@ -19,49 +19,49 @@
     --background-end-rgb: 0, 0, 0;
     --highlight-color: 255, 8, 132; /* #ff0884 */
     
-    --background: 270 80% 4%;
+    --background: 0 0% 3%;
     --foreground: 240 10% 90%;
 
-    --card: 270 60% 8%;
+    --card: 0 0% 7%;
     --card-foreground: 240 10% 90%;
 
-    --popover: 270 60% 8%;
+    --popover: 0 0% 7%;
     --popover-foreground: 240 10% 90%;
 
     --primary: 330 85% 52%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 40% 12%;
+    --secondary: 0 0% 10%;
     --secondary-foreground: 240 10% 90%;
 
-    --muted: 270 30% 14%;
+    --muted: 0 0% 12%;
     --muted-foreground: 240 10% 50%;
 
     --accent: 185 100% 50%;
-    --accent-foreground: 270 80% 4%;
+    --accent-foreground: 0 0% 3%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 270 30% 16%;
-    --input: 270 30% 16%;
+    --border: 0 0% 16%;
+    --input: 0 0% 16%;
     --ring: 330 85% 52%;
 
     --radius: 0.25rem;
 
     /* Custom tokens */
-    --surface: 270 50% 10%;
-    --panel: 270 45% 14%;
+    --surface: 0 0% 7%;
+    --panel: 0 0% 10%;
     --glow-primary: 330 85% 52%;
     --glow-accent: 185 100% 50%;
 
-    --sidebar-background: 270 60% 8%;
+    --sidebar-background: 0 0% 7%;
     --sidebar-foreground: 240 10% 90%;
     --sidebar-primary: 330 85% 52%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 40% 12%;
+    --sidebar-accent: 0 0% 10%;
     --sidebar-accent-foreground: 240 10% 90%;
-    --sidebar-border: 270 30% 16%;
+    --sidebar-border: 0 0% 16%;
     --sidebar-ring: 330 85% 52%;
   }
 
