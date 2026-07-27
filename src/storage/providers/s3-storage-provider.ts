@@ -1,11 +1,13 @@
 import {
   GetObjectCommand,
+  ListObjectsV2Command,
   S3Client,
   type GetObjectCommandInput,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import type {
   DownloadObject,
+  DownloadObjectInfo,
   SignedDownload,
   StorageProvider,
 } from "../storage-provider";
@@ -64,5 +66,21 @@ export class S3StorageProvider implements StorageProvider {
       url,
       expiresAt: new Date(Date.now() + expiresInSeconds * 1000).toISOString(),
     };
+  }
+
+  async listDownloadObjects(
+    bucket: string,
+    prefix: string
+  ): Promise<DownloadObjectInfo[]> {
+    const response = await this.getClient().send(new ListObjectsV2Command({
+      Bucket: bucket || this.config.bucket,
+      Prefix: prefix,
+    }));
+    return (response.Contents ?? [])
+      .filter((object) => typeof object.Key === "string")
+      .map((object) => ({
+        objectKey: object.Key!,
+        size: typeof object.Size === "number" ? object.Size : null,
+      }));
   }
 }

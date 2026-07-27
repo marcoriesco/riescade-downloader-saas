@@ -19,7 +19,8 @@ export async function POST(request: Request, context: RouteContext) {
     const result = await authorizeSnesDownload(
       user,
       assetId,
-      typeof body.clientVersion === "string" ? body.clientVersion : undefined
+      typeof body.clientVersion === "string" ? body.clientVersion : undefined,
+      body.mediaTypes
     );
 
     return NextResponse.json(result, {

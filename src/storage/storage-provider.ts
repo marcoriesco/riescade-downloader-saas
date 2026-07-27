@@ -10,9 +10,18 @@ export interface SignedDownload {
   expiresAt: string;
 }
 
+export interface DownloadObjectInfo {
+  objectKey: string;
+  size: number | null;
+}
+
 export interface StorageProvider {
   createDownloadUrl(
     object: DownloadObject,
     expiresInSeconds: number
   ): Promise<SignedDownload>;
+  listDownloadObjects(
+    bucket: string,
+    prefix: string
+  ): Promise<DownloadObjectInfo[]>;
 }

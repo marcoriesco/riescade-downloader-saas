@@ -6,6 +6,10 @@ import { getStorageConfig } from "@/storage/storage-config";
 
 const PILOT_PLATFORM = "snes";
 const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["active", "trialing"]);
+const MEDIA_TYPES = new Set([
+  "cartdridge", "cover", "cover3d", "coverback", "fanart", "logo",
+  "manual", "marquee", "mix", "screenshot", "title", "video",
+]);
 
 interface GameAsset {
   id: string;
@@ -108,7 +112,8 @@ export async function listSnesAssets() {
 export async function authorizeSnesDownload(
   user: User,
   assetId: string,
-  clientVersion?: string
+  clientVersion?: string,
+  requestedMediaTypes?: unknown
 ) {
   await assertDownloadAccess(user);
   await assertRateLimit(user.id);
@@ -129,6 +134,42 @@ export async function authorizeSnesDownload(
     },
     config.downloadUrlTtl
   );
+
+  const gameBaseName = asset.download_name.replace(/\.[^.]+$/, "");
+  const mediaTypes = Array.isArray(requestedMediaTypes)
+    ? [...new Set(requestedMediaTypes)]
+        .filter((type): type is string => typeof type === "string" && MEDIA_TYPES.has(type))
+        .slice(0, MEDIA_TYPES.size)
+    : [];
+  const media = (
+    await Promise.all(mediaTypes.map(async (type) => {
+      const prefix = `${asset.platform}/media/${type}/${gameBaseName}`;
+      const objects = await getStorageProvider().listDownloadObjects(
+        asset.bucket || config.bucket,
+        prefix
+      );
+      const matchingObject = objects.find((object) => {
+        const filename = object.objectKey.split("/").pop() ?? "";
+        return filename.replace(/\.[^.]+$/, "") === gameBaseName;
+      });
+      if (!matchingObject) return null;
+      const filename = matchingObject.objectKey.split("/").pop()!;
+      const mediaSigned = await getStorageProvider().createDownloadUrl(
+        {
+          bucket: asset.bucket || config.bucket,
+          objectKey: matchingObject.objectKey,
+          downloadName: filename,
+        },
+        config.downloadUrlTtl
+      );
+      return {
+        type,
+        filename,
+        size: matchingObject.size,
+        downloadUrl: mediaSigned.url,
+      };
+    }))
+  ).filter((item): item is NonNullable<typeof item> => item !== null);
 
   const { error } = await getSupabaseAdmin().from("download_requests").insert({
     user_id: user.id,
@@ -154,5 +195,6 @@ export async function authorizeSnesDownload(
     },
     downloadUrl: signed.url,
     expiresAt: signed.expiresAt,
+    media,
   };
 }
