@@ -45,33 +45,6 @@ NEXTAUTH_SECRET=your_nextauth_secret
    - `payment_intent.succeeded`
 5. Copie o **Signing secret** e adicione como `STRIPE_WEBHOOK_SECRET`
 
-## Configurar tabela de pedidos no Supabase
-
-Execute este SQL no Supabase SQL Editor:
-
-```sql
-CREATE TABLE orders (
-  id SERIAL PRIMARY KEY,
-  stripe_session_id TEXT UNIQUE NOT NULL,
-  customer_email TEXT,
-  customer_name TEXT,
-  amount_total INTEGER,
-  currency TEXT,
-  status TEXT,
-  shipping_address JSONB,
-  cep TEXT,
-  shipping_value INTEGER,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Criar índice para busca por email
-CREATE INDEX idx_orders_customer_email ON orders(customer_email);
-
--- Criar índice para busca por status
-CREATE INDEX idx_orders_status ON orders(status);
-```
-
 ## Configurar envio de emails
 
 Para enviar emails reais, você pode usar:
