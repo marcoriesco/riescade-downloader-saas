@@ -5,7 +5,8 @@ import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { 
   Zap, Trophy, Gamepad2, Users,
-  Monitor, Download, Sparkles, Check 
+  Monitor, Download, Sparkles, Check, Play,
+  Cpu, SlidersHorizontal, Cloud, ChevronDown
 } from "lucide-react";
 import Image from "next/image";
 import { useState, useCallback } from "react";
@@ -70,6 +71,34 @@ const benefits = [
   "RetroAchievements + Scraping automático",
 ];
 
+const heroCards = [
+  {
+    icon: Monitor,
+    title: "Tudo organizado",
+    description: "Sua biblioteca de jogos organizada e pronta para jogar.",
+  },
+  {
+    icon: Zap,
+    title: "Desempenho máximo",
+    description: "Otimizações exclusivas para a melhor performance.",
+  },
+  {
+    icon: SlidersHorizontal,
+    title: "Personalização total",
+    description: "Temas, layouts e configurações do seu jeito.",
+  },
+  {
+    icon: Users,
+    title: "Jogue junto",
+    description: "Multiplayer, desafios e comunidade ativa.",
+  },
+  {
+    icon: Cloud,
+    title: "Sempre evoluindo",
+    description: "Atualizações constantes e novos recursos.",
+  },
+];
+
 export default function Home() {
   const router = useRouter();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -110,41 +139,90 @@ export default function Home() {
     <div className="min-h-screen">
       <Header />
       
-      <main className="pt-16">
+      <main>
         {/* HERO SECTION */}
-        <section className="relative h-[100svh] min-h-[620px] overflow-hidden mt-[-4rem] bg-black">
-          <video
-            className="absolute inset-0 h-full w-full object-cover"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster="/screenshots/loading.webp"
-            aria-label="Demonstração da interface do RIESCADE OS"
-          >
-            <source src="/video/riescade-os.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/5 to-black/90" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_55%,hsl(var(--primary)/0.16),transparent_30%),radial-gradient(circle_at_78%_45%,hsl(var(--accent)/0.1),transparent_28%)]" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
+        <section className="relative overflow-hidden border-b border-white/10 bg-black pt-28 lg:h-[100svh] lg:min-h-[820px] lg:pt-0">
+          <Image
+            src="/images/hero-riescade-cyber.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-[68%_center] opacity-95"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/45 to-transparent lg:via-black/15" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
 
-          <div className="absolute inset-x-0 bottom-12 z-10 flex flex-col items-center justify-center gap-3 px-6 sm:bottom-16 sm:flex-row">
-            <button
-              onClick={handleLoginRedirect}
-              disabled={isLoggingIn}
-              className="inline-flex h-14 w-full max-w-xs items-center justify-center rounded-xl border border-primary/80 bg-primary px-8 font-display text-lg font-bold uppercase tracking-[0.14em] text-primary-foreground shadow-[0_12px_50px_hsl(var(--primary)/0.35)] transition-all duration-300 hover:-translate-y-1 hover:bg-accent hover:shadow-[0_16px_60px_hsl(var(--primary)/0.5)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
-            >
-              {isLoggingIn ? "Carregando..." : "Começar Agora"}
-            </button>
-            <a
-              href="https://riescade.games"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-14 w-full max-w-xs items-center justify-center rounded-xl border border-white/30 bg-black/55 px-8 font-display text-lg font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/70 hover:bg-primary/10 sm:w-auto"
-            >
-              Jogue Online
-            </a>
+          <div className="relative z-10 mx-auto flex min-h-[700px] max-w-[1380px] items-center px-6 py-16 sm:px-10 lg:h-[calc(100%-180px)] lg:min-h-0 lg:px-14 lg:py-0 lg:pt-28">
+            <div className="max-w-[570px]">
+              <div className="mb-7 inline-flex items-center gap-2 rounded-xl border border-primary/25 bg-primary/[0.08] px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.12em] text-primary">
+                <Gamepad2 className="h-4 w-4" />
+                Feito para jogadores. Feito para você.
+              </div>
+
+              <h1 className="font-display text-[3.4rem] font-black uppercase leading-[0.98] tracking-[-0.035em] text-white sm:text-7xl">
+                Seu arcade.
+                <span className="mt-2 block text-primary">Do seu jeito.</span>
+              </h1>
+
+              <p className="mt-6 max-w-md text-lg leading-relaxed text-white/62">
+                Todos os seus jogos, em uma experiência criada para transformar
+                seu PC em uma <span className="font-semibold text-green-400">central de jogos definitiva.</span>
+              </p>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <button
+                  onClick={handleLoginRedirect}
+                  disabled={isLoggingIn}
+                  className="inline-flex h-14 items-center justify-center gap-3 rounded-xl border border-primary bg-primary px-8 font-display text-sm font-bold uppercase tracking-[0.12em] text-white shadow-[0_12px_45px_hsl(var(--primary)/0.36)] transition-all hover:-translate-y-1 hover:bg-accent disabled:opacity-60"
+                >
+                  <Download className="h-5 w-5" />
+                  {isLoggingIn ? "Carregando..." : "Baixar RIESCADE OS"}
+                </button>
+                <a
+                  href="#features"
+                  className="inline-flex h-14 items-center justify-center gap-3 rounded-xl border border-white/45 bg-black/40 px-8 font-display text-sm font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition-all hover:-translate-y-1 hover:border-primary hover:bg-primary/10"
+                >
+                  <Play className="h-5 w-5" />
+                  Conhecer recursos
+                </a>
+              </div>
+              <p className="ml-20 mt-2 text-xs text-white/38">Grátis para Windows 11</p>
+
+              <div className="mt-9 flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-medium text-white/70">
+                <span className="flex items-center gap-2"><Monitor className="h-4 w-4 text-primary" />Windows 11</span>
+                <span className="h-4 w-px bg-white/15" />
+                <span className="flex items-center gap-2"><Gamepad2 className="h-4 w-4 text-primary" />+250 plataformas</span>
+                <span className="h-4 w-px bg-white/15" />
+                <span className="flex items-center gap-2"><Cpu className="h-4 w-4 text-primary" />Emuladores</span>
+                <span className="h-4 w-px bg-white/15" />
+                <span className="flex items-center gap-2"><SlidersHorizontal className="h-4 w-4 text-primary" />Controles</span>
+                <span className="h-4 w-px bg-white/15" />
+                <span className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" />Multiplayer</span>
+              </div>
+            </div>
+          </div>
+
+          <a href="#features" className="absolute bottom-[184px] left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.12em] text-primary lg:flex">
+            Scroll para explorar
+            <ChevronDown className="h-5 w-5" />
+          </a>
+
+          <div className="relative z-10 border-t border-white/10 bg-[#05060b]/88 px-5 py-5 backdrop-blur-xl lg:absolute lg:inset-x-0 lg:bottom-0 lg:h-[180px] lg:px-10 lg:py-8">
+            <div className="mx-auto grid max-w-[1380px] grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
+              {heroCards.map((card) => (
+                <div key={card.title} className="group rounded-2xl border border-white/10 bg-white/[0.025] px-5 py-5 transition-all hover:border-primary/35 hover:bg-primary/[0.045]">
+                  <div className="flex items-start gap-4">
+                    <card.icon className="h-8 w-8 shrink-0 text-primary" strokeWidth={1.7} />
+                    <div>
+                      <h2 className="font-display text-sm font-bold uppercase tracking-wide text-white">{card.title}</h2>
+                      <p className="mt-2 text-xs leading-relaxed text-white/48">{card.description}</p>
+                      <div className="mt-3 h-0.5 w-10 bg-primary" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -183,7 +261,7 @@ export default function Home() {
         </section>
 
         {/* SCREENSHOTS SECTION */}
-        <section className="relative py-24 overflow-hidden">
+        <section id="platforms" className="relative scroll-mt-24 py-24 overflow-hidden">
           <div className="absolute inset-0 grid-overlay opacity-30" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
             <div className="text-center mb-16">
@@ -221,7 +299,7 @@ export default function Home() {
         </section>
 
         {/* PRICING SECTION */}
-        <section id="pricing" className="relative py-24 overflow-hidden">
+        <section id="about" className="relative scroll-mt-24 py-24 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,hsl(var(--surface))_0%,transparent_50%)]" />
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
             <div className="text-center mb-16">
@@ -321,7 +399,7 @@ export default function Home() {
         </section>
 
         {/* TESTIMONIALS (Google Reviews) SECTION */}
-        <section className="relative py-24 overflow-hidden">
+        <section id="support" className="relative scroll-mt-24 py-24 overflow-hidden">
           <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
             <div className="text-center mb-16">
               <span className="font-mono text-xs text-primary uppercase tracking-[0.3em] font-bold">
