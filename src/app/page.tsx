@@ -15,7 +15,6 @@ import {
 	Play,
 	Cpu,
 	SlidersHorizontal,
-	Cloud,
 	ChevronDown,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -107,34 +106,6 @@ const benefits = [
 	'Comunidade VIP — Suporte prioritário',
 	'250+ Plataformas — Atari até Switch',
 	'RetroAchievements + Scraping automático',
-];
-
-const heroCards = [
-	{
-		icon: Monitor,
-		title: 'Tudo organizado',
-		description: 'Sua biblioteca de jogos organizada e pronta para jogar.',
-	},
-	{
-		icon: Zap,
-		title: 'Desempenho máximo',
-		description: 'Otimizações exclusivas para a melhor performance.',
-	},
-	{
-		icon: SlidersHorizontal,
-		title: 'Personalização total',
-		description: 'Temas, layouts e configurações do seu jeito.',
-	},
-	{
-		icon: Users,
-		title: 'Jogue junto',
-		description: 'Multiplayer, desafios e comunidade ativa.',
-	},
-	{
-		icon: Cloud,
-		title: 'Sempre evoluindo',
-		description: 'Atualizações constantes e novos recursos.',
-	},
 ];
 
 export default function Home() {
