@@ -125,14 +125,15 @@ export default function Home() {
           >
             <source src="/video/riescade-os.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-black/5 to-black/85" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/5 to-black/90" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_55%,hsl(var(--primary)/0.16),transparent_30%),radial-gradient(circle_at_78%_45%,hsl(var(--accent)/0.1),transparent_28%)]" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
 
           <div className="absolute inset-x-0 bottom-12 z-10 flex flex-col items-center justify-center gap-3 px-6 sm:bottom-16 sm:flex-row">
             <button
               onClick={handleLoginRedirect}
               disabled={isLoggingIn}
-              className="inline-flex h-14 w-full max-w-xs items-center justify-center bg-primary px-8 font-display text-lg font-bold uppercase tracking-[0.14em] text-primary-foreground shadow-[0_12px_50px_hsl(var(--primary)/0.35)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_16px_60px_hsl(var(--primary)/0.5)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
+              className="inline-flex h-14 w-full max-w-xs items-center justify-center rounded-xl border border-primary/80 bg-primary px-8 font-display text-lg font-bold uppercase tracking-[0.14em] text-primary-foreground shadow-[0_12px_50px_hsl(var(--primary)/0.35)] transition-all duration-300 hover:-translate-y-1 hover:bg-accent hover:shadow-[0_16px_60px_hsl(var(--primary)/0.5)] disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
             >
               {isLoggingIn ? "Carregando..." : "Começar Agora"}
             </button>
@@ -140,7 +141,7 @@ export default function Home() {
               href="https://riescade.games"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-14 w-full max-w-xs items-center justify-center border border-white/30 bg-black/55 px-8 font-display text-lg font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/60 hover:bg-black/75 sm:w-auto"
+              className="inline-flex h-14 w-full max-w-xs items-center justify-center rounded-xl border border-white/30 bg-black/55 px-8 font-display text-lg font-bold uppercase tracking-[0.14em] text-white backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/70 hover:bg-primary/10 sm:w-auto"
             >
               Jogue Online
             </a>
@@ -163,10 +164,10 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[1px] bg-border/50">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {features.map((feature) => (
-                <div key={feature.title} className="bg-background p-8 group hover:bg-surface/50 transition-colors duration-300">
-                  <div className="size-12 border border-primary/30 flex items-center justify-center mb-6 group-hover:border-primary/60 transition-colors glow-primary">
+                <div key={feature.title} className="group rounded-2xl border border-white/10 bg-gradient-to-br from-card to-primary/[0.035] p-8 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-[0_20px_60px_hsl(var(--primary)/0.08)]">
+                  <div className="size-12 rounded-xl border border-primary/30 bg-primary/10 flex items-center justify-center mb-6 group-hover:border-primary/60 transition-colors glow-primary">
                     <feature.icon className="size-5 text-primary" />
                   </div>
                   <h3 className="font-display text-xl font-bold uppercase tracking-wide text-foreground mb-3">
@@ -199,7 +200,7 @@ export default function Home() {
 
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {screenshots.map((shot) => (
-                <div key={shot.title} className="group relative bg-panel border border-border overflow-hidden hover:border-primary/50 transition-all duration-300">
+                <div key={shot.title} className="group relative rounded-2xl bg-panel border border-border overflow-hidden hover:border-primary/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_18px_50px_hsl(var(--primary)/0.1)]">
                   <div className="aspect-video overflow-hidden relative w-full h-full">
                     <Image
                       src={shot.src}
@@ -236,7 +237,7 @@ export default function Home() {
             </div>
 
             <div className="max-w-lg mx-auto">
-              <div className="relative border-2 border-primary/50 bg-background/80 backdrop-blur-sm overflow-hidden animate-pulse-glow">
+              <div className="relative rounded-3xl border-2 border-primary/50 bg-gradient-to-b from-primary/[0.07] to-background/90 backdrop-blur-sm overflow-hidden animate-pulse-glow">
                 <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-primary" />
                 <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-primary" />
                 <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-primary" />
@@ -257,7 +258,7 @@ export default function Home() {
                   <div className="mt-8 space-y-4">
                     {benefits.map((b) => (
                       <div key={b} className="flex items-start gap-3">
-                        <div className="size-5 border border-primary/50 flex items-center justify-center shrink-0 mt-0.5">
+                        <div className="size-5 rounded-md border border-primary/50 bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
                           <Check className="size-3 text-primary" />
                         </div>
                         <span className="text-sm text-foreground/80">{b}</span>
@@ -268,7 +269,7 @@ export default function Home() {
                   <button
                     onClick={handleLoginRedirect}
                     disabled={isLoggingIn}
-                    className="mt-10 w-full h-14 flex items-center justify-center bg-primary text-primary-foreground font-display font-bold text-xl uppercase tracking-[0.15em] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] disabled:opacity-70 disabled:cursor-not-allowed rounded-none"
+                    className="mt-10 w-full h-14 rounded-xl flex items-center justify-center bg-primary text-primary-foreground font-display font-bold text-xl uppercase tracking-[0.15em] transition-all duration-300 hover:scale-[1.02] hover:bg-accent hover:shadow-[0_0_40px_hsl(var(--primary)/0.6)] disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isLoggingIn ? "Carregando..." : "Assinar Agora"}
                   </button>
@@ -278,7 +279,7 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="mt-8 p-6 border border-border bg-surface/30 text-center">
+              <div className="mt-8 rounded-2xl p-6 border border-border bg-surface/30 text-center">
                 <p className="text-sm text-muted-foreground italic">
                   &quot;O melhor sistema de retrogames que já usei. Vale cada centavo pela experiência nostálgica!&quot;
                 </p>

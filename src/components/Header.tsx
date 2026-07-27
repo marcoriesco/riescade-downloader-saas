@@ -77,8 +77,8 @@ export function Header() {
   };
 
   return (
-    <header className="fixed w-full top-0 z-50 header-backdrop">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4">
+      <div className="header-backdrop max-w-7xl mx-auto rounded-2xl border border-white/10 px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
         <Link href="/" className="group flex items-center gap-3" aria-label="RIESCADE OS — Início">
           <div className="relative flex h-11 w-11 items-center justify-center">
             <Image
@@ -136,7 +136,7 @@ export function Header() {
               (user ? (
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center mr-4">
-                    <div className="w-8 h-8 bg-primary/20 border border-primary/50 flex items-center justify-center mr-2">
+                    <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center mr-2">
                       <User className="h-4 w-4 text-primary" />
                     </div>
                     <span className="text-muted-foreground text-sm">
@@ -145,13 +145,13 @@ export function Header() {
                   </div>
                   <Link
                     href="/dashboard"
-                    className="px-4 py-2 text-sm font-medium bg-primary/20 border border-primary/50 text-foreground hover:bg-primary/30 transition-all duration-300"
+                    className="rounded-xl px-5 py-2.5 text-sm font-medium bg-primary/20 border border-primary/50 text-primary hover:bg-primary/30 transition-all duration-300"
                   >
                     Dashboard
                   </Link>
                   <button
                     onClick={handleSignOut}
-                    className="px-4 py-2 text-sm font-medium border border-primary/50 text-foreground hover:bg-primary/10 transition-all duration-300"
+                    className="rounded-xl px-5 py-2.5 text-sm font-medium border border-white/25 text-foreground hover:border-primary/50 hover:bg-primary/10 transition-all duration-300"
                   >
                     Sair
                   </button>
@@ -160,7 +160,7 @@ export function Header() {
                 <button
                   onClick={handleSignIn}
                   disabled={isLoggingIn}
-                  className={`inline-flex items-center gap-2 px-4 py-2 border border-primary text-sm font-medium shadow-sm text-foreground bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_hsl(var(--primary)/0.6)] ${
+                  className={`inline-flex items-center gap-2 rounded-xl px-5 py-2.5 border border-primary text-sm font-medium shadow-sm text-foreground bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_hsl(var(--primary)/0.6)] ${
                     isLoggingIn ? "opacity-70 cursor-not-allowed" : ""
                   }`}
                 >
@@ -187,7 +187,7 @@ export function Header() {
 
       {/* Menu mobile */}
       {isMenuOpen && (
-        <div className="md:hidden bg-background/95 backdrop-blur-md border-t border-border">
+        <div className="header-backdrop mx-auto mt-2 max-w-7xl rounded-2xl border border-white/10 md:hidden">
           <div className="px-4 pt-2 pb-6 space-y-4">
             <nav className="flex flex-col space-y-4 mb-6">
               {/* O Dashboard só aparece quando o usuário está logado */}
@@ -225,7 +225,7 @@ export function Header() {
 
             {!loading && user && (
               <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-primary/20 border border-primary/50 flex items-center justify-center mr-2">
+                <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center mr-2">
                   <User className="h-4 w-4 text-primary" />
                 </div>
                 <span className="text-muted-foreground text-sm">
@@ -239,7 +239,7 @@ export function Header() {
                 (user ? (
                   <button
                     onClick={handleSignOut}
-                    className="w-full px-4 py-2 text-sm font-medium border border-primary/50 text-foreground hover:bg-primary/10 transition-all duration-300"
+                    className="w-full rounded-xl px-4 py-2.5 text-sm font-medium border border-primary/50 text-foreground hover:bg-primary/10 transition-all duration-300"
                   >
                     Sair
                   </button>
@@ -247,7 +247,7 @@ export function Header() {
                   <button
                     onClick={handleSignIn}
                     disabled={isLoggingIn}
-                    className={`w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-primary text-sm font-medium shadow-sm text-foreground bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_hsl(var(--primary)/0.6)] ${
+                    className={`w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 border border-primary text-sm font-medium shadow-sm text-foreground bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_hsl(var(--primary)/0.6)] ${
                       isLoggingIn ? "opacity-70 cursor-not-allowed" : ""
                     }`}
                   >
