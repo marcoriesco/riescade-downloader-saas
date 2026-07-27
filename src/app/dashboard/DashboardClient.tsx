@@ -17,6 +17,9 @@ import {
   ExternalLink,
   Gamepad2,
   Package,
+  CalendarDays,
+  Mail,
+  Clock3,
 } from "lucide-react";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -46,6 +49,49 @@ interface Order {
   tracking_code?: string;
 }
 
+const formatAccountDate = (value?: string | null) =>
+  value
+    ? new Intl.DateTimeFormat("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      }).format(new Date(value))
+    : "Não informado";
+
+const formatAccountDateTime = (value?: string | null) =>
+  value
+    ? new Intl.DateTimeFormat("pt-BR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(new Date(value))
+    : "Não informado";
+
+const formatAccountAge = (value?: string | null) => {
+  if (!value) return "Não informado";
+  const createdAt = new Date(value);
+  const now = new Date();
+  const months =
+    (now.getFullYear() - createdAt.getFullYear()) * 12 +
+    now.getMonth() -
+    createdAt.getMonth();
+  if (months < 1) {
+    const days = Math.max(
+      1,
+      Math.floor((now.getTime() - createdAt.getTime()) / 86_400_000)
+    );
+    return `${days} ${days === 1 ? "dia" : "dias"}`;
+  }
+  if (months < 12) return `${months} ${months === 1 ? "mês" : "meses"}`;
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+  return remainingMonths
+    ? `${years} ${years === 1 ? "ano" : "anos"} e ${remainingMonths} ${remainingMonths === 1 ? "mês" : "meses"}`
+    : `${years} ${years === 1 ? "ano" : "anos"}`;
+};
+
 // Componente que usa useSearchParams
 export default function DashboardClient() {
   const [user, setUser] = useState<User | null>(null);
@@ -62,16 +108,6 @@ export default function DashboardClient() {
   const success = searchParams.get("success");
   const canceled = searchParams.get("canceled");
   const sessionId = searchParams.get("session_id");
-
-  const now = new Date();
-  const currentYear = now.getFullYear();
-  const startOfYear = new Date(currentYear, 0, 1);
-  const endOfYear = new Date(currentYear, 11, 31);
-  const totalDaysInYear =
-    (endOfYear.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24) + 1;
-  const daysSoFar =
-    (now.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24) + 1;
-  const percentage = (daysSoFar / totalDaysInYear) * 100;
 
   // Fetch subscription function
   const fetchSubscription = useCallback(async (userId: string) => {
@@ -498,7 +534,7 @@ export default function DashboardClient() {
             <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
               <UserIcon className="w-5 h-5 text-[#ff0884] mr-2" />
               <h2 className="text-lg font-medium text-white">
-                Perfil do Jogador
+                Minha Conta
               </h2>
             </div>
 
@@ -512,26 +548,56 @@ export default function DashboardClient() {
                     <h3 className="text-xl text-white font-bold m-1">
                       {user.user_metadata?.full_name || "User"}
                     </h3>
-                    <p
-                      className="text-muted-foreground text-sm"
-                    >
+                    <p className="text-muted-foreground text-sm">
                       {user.email}
                     </p>
                   </div>
 
-                  <div className="mb-4">
-                    <div className="text-sm font-medium text-gray-400 mb-1">
-                      Temporada
+                  <div className="space-y-3">
+                    <div className="flex items-start gap-3 rounded-lg border border-gray-700 bg-black/30 p-3">
+                      <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
+                      <div className="min-w-0">
+                        <p className="text-xs text-gray-400">Email da conta</p>
+                        <p className="truncate text-sm text-white">{user.email}</p>
+                      </div>
                     </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div
-                        className="bg-gradient-to-r from-[#ff0884] to-purple-500 h-2 rounded-full"
-                        style={{ width: `${percentage.toFixed(2)}%` }}
-                      ></div>
+                    <div className="flex items-start gap-3 rounded-lg border border-gray-700 bg-black/30 p-3">
+                      <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
+                      <div>
+                        <p className="text-xs text-gray-400">Usuário desde</p>
+                        <p className="text-sm text-white">
+                          {formatAccountDate(user.created_at)}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          Há {formatAccountAge(user.created_at)}
+                        </p>
+                      </div>
                     </div>
-                    <div className="flex justify-between text-xs text-gray-500 mt-1">
-                      <span>1</span>
-                      <span>12</span>
+                    <div className="flex items-start gap-3 rounded-lg border border-gray-700 bg-black/30 p-3">
+                      <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
+                      <div>
+                        <p className="text-xs text-gray-400">Último acesso</p>
+                        <p className="text-sm text-white">
+                          {formatAccountDateTime(user.last_sign_in_at)}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start gap-3 rounded-lg border border-gray-700 bg-black/30 p-3">
+                      <Shield className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
+                      <div>
+                        <p className="text-xs text-gray-400">Plano atual</p>
+                        <p className="text-sm text-white">
+                          {subscription?.status === "active"
+                            ? "RIESCADE Membro — Ativo"
+                            : "Sem assinatura ativa"}
+                        </p>
+                        {subscription && (
+                          <p className="text-xs text-gray-500">
+                            Assinante desde{" "}
+                            {formatAccountDate(subscription.created_at)}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -570,10 +636,10 @@ export default function DashboardClient() {
 
                     <div className="bg-black/40 rounded-lg p-4 border border-gray-700 mb-1">
                       <h4 className="text-sm font-medium text-gray-400 mb-2">
-                        Criado em
+                        Assinante desde
                       </h4>
                       <p className="text-white mb-4">
-                        {new Date(subscription.created_at).toLocaleDateString()}
+                        {formatAccountDate(subscription.created_at)}
                       </p>
 
                       <h4 className="text-sm font-medium text-gray-400 mb-2">
