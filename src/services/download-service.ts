@@ -133,7 +133,7 @@ export function hasActiveSubscription(
   return !subscription.end_date || new Date(subscription.end_date) > now;
 }
 
-async function assertDownloadAccess(user: User): Promise<void> {
+export async function assertDownloadAccess(user: User): Promise<void> {
   if (isDownloadTester(user.id)) return;
 
   const { data, error } = await getSupabaseAdmin()
