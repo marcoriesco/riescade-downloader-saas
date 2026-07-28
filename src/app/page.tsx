@@ -157,10 +157,9 @@ export default function Home() {
 					<Image
 						src="/images/hero-riescade-cyber.png"
 						alt=""
-						fill
 						priority
 						sizes="100vw"
-						className="object-cover object-[68%_center] opacity-95"
+						className="object-contain object-[68%_center]"
 					/>
 					<div className="absolute inset-0 bg-gradient-to-r from-black via-black/45 to-transparent lg:via-black/15" />
 					<div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
