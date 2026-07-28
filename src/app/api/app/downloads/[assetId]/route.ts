@@ -3,7 +3,7 @@ import {
   AppApiError,
   authenticateAppRequest,
 } from "@/lib/server/app-auth";
-import { authorizeSnesDownload } from "@/services/download-service";
+import { authorizePlatformDownload } from "@/services/download-service";
 
 export const dynamic = "force-dynamic";
 
@@ -16,8 +16,9 @@ export async function POST(request: Request, context: RouteContext) {
     const user = await authenticateAppRequest(request);
     const { assetId } = await context.params;
     const body = await request.json().catch(() => ({}));
-    const result = await authorizeSnesDownload(
+    const result = await authorizePlatformDownload(
       user,
+      body.platform,
       assetId,
       typeof body.clientVersion === "string" ? body.clientVersion : undefined,
       body.mediaTypes
@@ -33,7 +34,7 @@ export async function POST(request: Request, context: RouteContext) {
     const message =
       error instanceof AppApiError ? error.message : "Unable to authorize download";
     if (status === 500) {
-      console.error("SNES download authorization error:", error);
+      console.error("Platform download authorization error:", error);
     }
     return NextResponse.json(
       { error: message },

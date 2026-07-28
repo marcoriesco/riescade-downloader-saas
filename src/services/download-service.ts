@@ -4,7 +4,6 @@ import gamesCatalog from "@/data/games-catalog.json";
 import { AppApiError, isDownloadTester } from "@/lib/server/app-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 
-const PILOT_PLATFORM = "snes";
 const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["active", "trialing"]);
 const MEDIA_TYPES = new Set([
   "cartdridge", "cover", "cover3d", "coverback", "fanart", "logo",
@@ -13,6 +12,7 @@ const MEDIA_TYPES = new Set([
 const MEDIA_EXTENSIONS = new Set([
   ".webp", ".png", ".jpg", ".jpeg", ".gif", ".mp4", ".mkv", ".avi", ".pdf",
 ]);
+const FULL_MEDIA_ARCHIVE_NAMES = new Set(["_media.zip", "_media.7z"]);
 
 interface ArchiveFile {
   name?: string;
@@ -106,6 +106,9 @@ async function listArchiveAssets(platform: string): Promise<ArchiveAsset[]> {
       (file): file is ArchiveFile & { name: string } =>
         typeof file.name === "string" &&
         file.source === "original" &&
+        !FULL_MEDIA_ARCHIVE_NAMES.has(
+          (file.name.split("/").pop() || file.name).toLowerCase()
+        ) &&
         allowedExtensions.has(extensionOf(file.name))
     )
     .map((file) => ({
@@ -167,8 +170,12 @@ async function assertRateLimit(userId: string): Promise<void> {
 }
 
 export async function listSnesAssets() {
-  const config = getPlatformConfig(PILOT_PLATFORM);
-  const assets = await listArchiveAssets(PILOT_PLATFORM);
+  return listPlatformAssets("snes");
+}
+
+export async function listPlatformAssets(platform: string) {
+  const config = getPlatformConfig(platform);
+  const assets = await listArchiveAssets(platform);
   return {
     assets: assets.map((asset) => ({
       id: asset.id,
@@ -188,13 +195,33 @@ export async function authorizeSnesDownload(
   clientVersion?: string,
   requestedMediaTypes?: unknown
 ) {
+  return authorizePlatformDownload(
+    user,
+    "snes",
+    requestedAssetId,
+    clientVersion,
+    requestedMediaTypes
+  );
+}
+
+export async function authorizePlatformDownload(
+  user: User,
+  platform: unknown,
+  requestedAssetId: string,
+  clientVersion?: string,
+  requestedMediaTypes?: unknown
+) {
   await assertDownloadAccess(user);
   await assertRateLimit(user.id);
 
-  const config = getPlatformConfig(PILOT_PLATFORM);
-  const assets = await listArchiveAssets(PILOT_PLATFORM);
+  if (typeof platform !== "string" || !/^[a-z0-9_-]{1,64}$/.test(platform)) {
+    throw new AppApiError(400, "Invalid platform");
+  }
+
+  const config = getPlatformConfig(platform);
+  const assets = await listArchiveAssets(platform);
   const asset = assets.find((item) => item.id === requestedAssetId);
-  if (!asset) throw new AppApiError(404, "SNES download not found");
+  if (!asset) throw new AppApiError(404, `${config.name} download not found`);
 
   const metadata = await getArchiveMetadata(config);
   const gameBaseName = titleOf(asset.download_name);
