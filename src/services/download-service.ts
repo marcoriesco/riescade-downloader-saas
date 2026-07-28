@@ -5,13 +5,6 @@ import { AppApiError, isDownloadTester } from "@/lib/server/app-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 
 const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["active", "trialing"]);
-const MEDIA_TYPES = new Set([
-  "cartdridge", "cover", "cover3d", "coverback", "fanart", "logo",
-  "manual", "marquee", "mix", "screenshot", "title", "video",
-]);
-const MEDIA_EXTENSIONS = new Set([
-  ".webp", ".png", ".jpg", ".jpeg", ".gif", ".mp4", ".mkv", ".avi", ".pdf",
-]);
 const FULL_MEDIA_ARCHIVE_NAMES = new Set(["_media.zip", "_media.7z"]);
 
 interface ArchiveFile {
@@ -210,15 +203,13 @@ export async function listPlatformAssets(platform: string) {
 export async function authorizeSnesDownload(
   user: User,
   requestedAssetId: string,
-  clientVersion?: string,
-  requestedMediaTypes?: unknown
+  clientVersion?: string
 ) {
   return authorizePlatformDownload(
     user,
     "snes",
     requestedAssetId,
-    clientVersion,
-    requestedMediaTypes
+    clientVersion
   );
 }
 
@@ -226,8 +217,7 @@ export async function authorizePlatformDownload(
   user: User,
   platform: unknown,
   requestedAssetId: string,
-  clientVersion?: string,
-  requestedMediaTypes?: unknown
+  clientVersion?: string
 ) {
   await assertDownloadAccess(user);
   await assertRateLimit(user.id);
@@ -240,39 +230,6 @@ export async function authorizePlatformDownload(
   const assets = await listArchiveAssets(platform);
   const asset = assets.find((item) => item.id === requestedAssetId);
   if (!asset) throw new AppApiError(404, `${config.name} download not found`);
-
-  const metadata = await getArchiveMetadata(config);
-  const gameBaseName = titleOf(asset.download_name);
-  const mediaTypes = Array.isArray(requestedMediaTypes)
-    ? [...new Set(requestedMediaTypes)]
-        .filter((type): type is string => typeof type === "string" && MEDIA_TYPES.has(type))
-        .slice(0, MEDIA_TYPES.size)
-    : [];
-  const media = mediaTypes.flatMap((type) => {
-    const matchingFile = (metadata.files || []).find((file) => {
-      if (typeof file.name !== "string" || file.source !== "original") return false;
-      const normalized = file.name.replace(/\\/g, "/");
-      const basename = normalized.split("/").pop() || normalized;
-      const pathMatches =
-        normalized.includes(`/media/${type}/`) ||
-        normalized.startsWith(`media/${type}/`);
-      return (
-        pathMatches &&
-        titleOf(basename) === gameBaseName &&
-        MEDIA_EXTENSIONS.has(extensionOf(basename))
-      );
-    });
-    if (!matchingFile?.name) return [];
-    return [{
-      type,
-      filename: matchingFile.name.split("/").pop() || matchingFile.name,
-      size:
-        typeof matchingFile.size === "string" && /^\d+$/.test(matchingFile.size)
-          ? Number(matchingFile.size)
-          : null,
-      downloadUrl: archiveFileUrl(config.archive.identifier, matchingFile.name),
-    }];
-  });
 
   const expiresAt = new Date(Date.now() + 60 * 60_000).toISOString();
   const { error } = await getSupabaseAdmin().from("download_requests").insert({
@@ -298,6 +255,5 @@ export async function authorizePlatformDownload(
     },
     downloadUrl: archiveFileUrl(config.archive.identifier, asset.object_key),
     expiresAt,
-    media,
   };
 }

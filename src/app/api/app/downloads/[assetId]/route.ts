@@ -20,8 +20,7 @@ export async function POST(request: Request, context: RouteContext) {
       user,
       body.platform,
       assetId,
-      typeof body.clientVersion === "string" ? body.clientVersion : undefined,
-      body.mediaTypes
+      typeof body.clientVersion === "string" ? body.clientVersion : undefined
     );
 
     return NextResponse.json(result, {
