@@ -43,7 +43,8 @@ describe("game installation mode", () => {
       const config = gamesCatalog.platforms.find((item) => item.id === platform);
       expect(config?.install_mode).toBe("extract");
       expect(config?.install_extension).toBe(installExtension);
-      expect(config?.extensions).toContain(".zip");
+      expect(config?.extensions).toContain(".game");
+      expect(config?.extensions).not.toContain(".zip");
     }
   );
 });

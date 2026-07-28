@@ -11,7 +11,10 @@ export async function GET(request: Request) {
       throw new AppApiError(400, "Platform is required");
     }
     const catalog = await listPlatformAssets(platform);
-    return NextResponse.json({ platform, ...catalog });
+    return NextResponse.json(
+      { platform, ...catalog },
+      { headers: { "Cache-Control": "no-store" } }
+    );
   } catch (error) {
     const status = error instanceof AppApiError ? error.status : 500;
     const message =

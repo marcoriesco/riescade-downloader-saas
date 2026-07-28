@@ -93,7 +93,7 @@ async function getArchiveMetadata(config: PlatformConfig): Promise<ArchiveMetada
     `https://archive.org/metadata/${encodeURIComponent(config.archive.identifier)}`;
   const response = await fetch(metadataUrl, {
     headers: { "User-Agent": "RIESCADE-Catalog/1.0" },
-    next: { revalidate: 300 },
+    cache: "no-store",
   });
   if (!response.ok) {
     throw new Error(`Archive.org metadata request failed (${response.status})`);

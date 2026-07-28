@@ -2136,7 +2136,7 @@
 			"name": "TeknoParrot",
 			"install_mode": "extract",
 			"install_extension": ".game",
-			"extensions": [".game", ".7z", ".zip", ".rar"],
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-teknoparrot",
 				"details_url": "https://archive.org/details/riescade-roms-teknoparrot",
@@ -2290,22 +2290,7 @@
 			"name": "Games for Windows",
 			"install_mode": "extract",
 			"install_extension": ".game",
-			"extensions": [
-				".exe",
-				".bat",
-				".cmd",
-				".lnk",
-				".game",
-				".url",
-				".pc",
-				".win",
-				".windows",
-				".wine",
-				".7z",
-				".zip",
-				".rar",
-				".wsquashfs"
-			],
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-windows",
 				"details_url": "https://archive.org/details/riescade-roms-windows",
