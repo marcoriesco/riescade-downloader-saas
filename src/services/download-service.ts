@@ -46,7 +46,9 @@ interface ArchiveAsset {
 }
 
 function getPlatformConfig(platform: string): PlatformConfig {
-  const config = gamesCatalog.platforms.find((item) => item.id === platform);
+  const config = gamesCatalog.platforms.find(
+    (item) => item.id.toLowerCase() === platform.toLowerCase()
+  );
   if (!config) throw new AppApiError(404, "Platform not found");
   if (!config.archive.identifier) {
     throw new AppApiError(404, "Platform downloads are not configured yet");

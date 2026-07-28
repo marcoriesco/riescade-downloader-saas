@@ -35,7 +35,7 @@ describe("download access", () => {
 
 describe("game installation mode", () => {
   it.each([
-    ["Windows", ".game"],
+    ["windows", ".game"],
     ["teknoparrot", ".game"],
   ])(
     "marks %s packages for automatic extraction into %s folders",
