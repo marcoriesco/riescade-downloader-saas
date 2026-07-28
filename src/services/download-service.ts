@@ -30,6 +30,8 @@ interface PlatformConfig {
   id: string;
   name: string;
   extensions: string[];
+  install_mode?: "file" | "extract";
+  install_extension?: string;
   archive: {
     identifier: string;
     details_url: string;
@@ -46,6 +48,8 @@ interface ArchiveAsset {
   file_size: number | null;
   sha256: null;
   object_key: string;
+  install_mode: "file" | "extract";
+  install_name: string;
 }
 
 function getPlatformConfig(platform: string): PlatformConfig {
@@ -54,7 +58,15 @@ function getPlatformConfig(platform: string): PlatformConfig {
   if (!config.archive.identifier) {
     throw new AppApiError(404, "Platform downloads are not configured yet");
   }
-  return config;
+  return {
+    ...config,
+    install_mode: config.install_mode === "extract" ? "extract" : "file",
+    install_extension:
+      typeof config.install_extension === "string" &&
+      /^\.[a-z0-9_-]+$/i.test(config.install_extension)
+        ? config.install_extension.toLowerCase()
+        : undefined,
+  };
 }
 
 function archiveFileUrl(identifier: string, filename: string): string {
@@ -96,10 +108,12 @@ async function getArchiveMetadata(config: PlatformConfig): Promise<ArchiveMetada
 
 async function listArchiveAssets(platform: string): Promise<ArchiveAsset[]> {
   const config = getPlatformConfig(platform);
-  const allowedExtensions = new Set(
-    config.extensions.map((extension) => extension.toLowerCase())
-  );
+  const allowedExtensions = config.install_mode === "extract"
+    ? new Set([".zip"])
+    : new Set(config.extensions.map((extension) => extension.toLowerCase()));
   const metadata = await getArchiveMetadata(config);
+  const installMode: ArchiveAsset["install_mode"] =
+    config.install_mode === "extract" ? "extract" : "file";
 
   return (metadata.files || [])
     .filter(
@@ -122,6 +136,8 @@ async function listArchiveAssets(platform: string): Promise<ArchiveAsset[]> {
           : null,
       sha256: null,
       object_key: file.name,
+      install_mode: installMode,
+      install_name: `${titleOf(file.name)}${config.install_extension || ""}`,
     }))
     .sort((left, right) => left.title.localeCompare(right.title, "pt-BR"));
 }
@@ -183,6 +199,8 @@ export async function listPlatformAssets(platform: string) {
       download_name: asset.download_name,
       file_size: asset.file_size,
       sha256: asset.sha256,
+      install_mode: asset.install_mode,
+      install_name: asset.install_name,
     })),
     detailsUrl: config.archive.details_url,
     torrentUrl: config.archive.torrent_url,
@@ -275,6 +293,8 @@ export async function authorizePlatformDownload(
       filename: asset.download_name,
       size: asset.file_size,
       sha256: null,
+      install_mode: asset.install_mode,
+      install_name: asset.install_name,
     },
     downloadUrl: archiveFileUrl(config.archive.identifier, asset.object_key),
     expiresAt,
