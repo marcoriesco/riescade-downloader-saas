@@ -1881,6 +1881,7 @@
 		{
 			"id": "scummvm",
 			"name": "ScummVM",
+			"install_mode": "extract",
 			"extensions": [".scummvm", ".7z", ".zip", ".rar", ".squashfs"],
 			"archive": {
 				"identifier": "riescade-roms-scummvm",
@@ -2090,7 +2091,9 @@
 		{
 			"id": "ikemen",
 			"name": "IKEMEN",
-			"extensions": [".game", ".pc", ".win", ".ikemen"],
+			"install_mode": "extract",
+			"install_extension": ".game",
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-ikemen",
 				"details_url": "https://archive.org/details/riescade-roms-ikemen",
@@ -2101,7 +2104,9 @@
 		{
 			"id": "mugen",
 			"name": "MUGEN",
-			"extensions": [".game", ".pc", ".win", ".mugen"],
+			"install_mode": "extract",
+			"install_extension": ".game",
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-mugen",
 				"details_url": "https://archive.org/details/riescade-roms-mugen",
@@ -2255,7 +2260,9 @@
 		{
 			"id": "gog",
 			"name": "GOG.com",
-			"extensions": [".bat", ".url", ".lnk"],
+			"install_mode": "extract",
+			"install_extension": ".game",
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-gog",
 				"details_url": "https://archive.org/details/riescade-roms-gog",
@@ -3282,7 +3289,9 @@
 		{
 			"id": "bigfish",
 			"name": "BigFish Games",
-			"extensions": [".bat"],
+			"install_mode": "extract",
+			"install_extension": ".game",
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-bigfish",
 				"details_url": "https://archive.org/details/riescade-roms-bigfish",
@@ -3601,7 +3610,9 @@
 		{
 			"id": "ouya",
 			"name": "OUYA",
-			"extensions": [".bat", ".BAT"],
+			"install_mode": "extract",
+			"install_extension": ".game",
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-ouya",
 				"details_url": "https://archive.org/details/riescade-roms-ouya",
@@ -3643,9 +3654,11 @@
 			}
 		},
 		{
-			"id": "Popcap",
+			"id": "popcap",
 			"name": "Popcap",
-			"extensions": [".bat"],
+			"install_mode": "extract",
+			"install_extension": ".game",
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-Popcap",
 				"details_url": "https://archive.org/details/riescade-roms-Popcap",
@@ -3987,7 +4000,9 @@
 		{
 			"id": "touhou",
 			"name": "Touhou Project",
-			"extensions": [".bat", ".hdi"],
+			"install_mode": "extract",
+			"install_extension": ".game",
+			"extensions": [".game"],
 			"archive": {
 				"identifier": "riescade-roms-touhou",
 				"details_url": "https://archive.org/details/riescade-roms-touhou",

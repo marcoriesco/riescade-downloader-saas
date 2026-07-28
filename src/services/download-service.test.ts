@@ -37,6 +37,13 @@ describe("game installation mode", () => {
   it.each([
     ["windows", ".game"],
     ["teknoparrot", ".game"],
+    ["touhou", ".game"],
+    ["gog", ".game"],
+    ["bigfish", ".game"],
+    ["ikemen", ".game"],
+    ["mugen", ".game"],
+    ["ouya", ".game"],
+    ["popcap", ".game"],
   ])(
     "marks %s packages for automatic extraction into %s folders",
     (platform, installExtension) => {
@@ -47,4 +54,11 @@ describe("game installation mode", () => {
       expect(config?.extensions).not.toContain(".zip");
     }
   );
+
+  it("extracts ScummVM ZIPs without adding the .game suffix", () => {
+    const config = gamesCatalog.platforms.find((item) => item.id === "scummvm");
+    expect(config?.install_mode).toBe("extract");
+    expect(config?.install_extension).toBeUndefined();
+    expect(config?.extensions).toContain(".scummvm");
+  });
 });
