@@ -38,6 +38,7 @@ Platforms that support arcade ROM downloads and updates declare a
 ```json
 {
   "version": "v0.288",
+  "catalog": "mame.json",
   "identifier": "mame-roms-non-merged",
   "details_url": "https://archive.org/details/mame-roms-non-merged",
   "metadata_url": "https://archive.org/metadata/mame-roms-non-merged",

@@ -1,6 +1,7 @@
 import { createHash } from "crypto";
 import type { User } from "@supabase/supabase-js";
 import gamesCatalog from "@/data/games-catalog.json";
+import mameCatalog from "@/data/mame.json";
 import { AppApiError, isDownloadTester } from "@/lib/server/app-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 
@@ -32,6 +33,19 @@ const romsetCatalogCache = new Map<
   { expiresAt: number; assets: RomsetCatalogAsset[] }
 >();
 
+interface MameCatalogGame {
+  title: string;
+  year?: string;
+  manufacturer?: string;
+  cloneof?: string;
+  romof?: string;
+  mechanical?: boolean;
+}
+
+const ROMSET_CATALOGS: Record<string, Record<string, MameCatalogGame>> = {
+  "mame.json": mameCatalog.games as Record<string, MameCatalogGame>,
+};
+
 interface PlatformConfig {
   id: string;
   name: string;
@@ -40,6 +54,7 @@ interface PlatformConfig {
   install_extension?: string;
   romset?: {
     version: string;
+    catalog: string;
     identifier: string;
     details_url: string;
     metadata_url: string;
@@ -248,6 +263,10 @@ export async function listRomsetCatalog(
   if (!romset || !romset.allow_downloads) {
     throw new AppApiError(404, "Romset downloads are not configured for this platform");
   }
+  const curatedCatalog = ROMSET_CATALOGS[romset.catalog];
+  if (!curatedCatalog) {
+    throw new Error(`Unknown romset catalog: ${romset.catalog}`);
+  }
 
   const cacheKey = `${romset.identifier}\0${romset.version}`;
   let cached = romsetCatalogCache.get(cacheKey);
@@ -266,13 +285,16 @@ export async function listRomsetCatalog(
           typeof file.name === "string" &&
           file.source === "original" &&
           file.name.startsWith(romset.directory) &&
-          extensionOf(file.name) === ".zip"
+          extensionOf(file.name) === ".zip" &&
+          Boolean(curatedCatalog[titleOf(file.name)])
       )
       .map((file) => {
         const filename = file.name.split("/").pop() || file.name;
+        const shortname = titleOf(filename);
+        const curated = curatedCatalog[shortname];
         return {
           id: assetId(platform, file.name),
-          title: titleOf(filename),
+          title: curated.title || shortname,
           download_name: filename,
           file_size:
             typeof file.size === "string" && /^\d+$/.test(file.size)
