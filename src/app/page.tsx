@@ -187,7 +187,7 @@ export default function Home() {
 								</span>
 							</p>
 
-							<div className="mt-8 flex flex-col gap-3 sm:flex-row">
+							<div className="mt-12 flex flex-col gap-3 sm:flex-row">
 								<button
 									onClick={handleLoginRedirect}
 									disabled={isLoggingIn}
