@@ -69,6 +69,7 @@ function mapAsset(asset: DownloadAssetRow) {
     download_name: asset.filename,
     file_size: asset.file_size,
     sha256: null,
+    md5: asset.md5_checksum,
     install_mode: asset.install_mode,
     install_name: asset.install_name,
     romset_version: asset.romset_version,
@@ -299,6 +300,7 @@ export async function listRomsetCatalog(
       title: asset.title,
       download_name: asset.filename,
       file_size: asset.file_size,
+      md5: asset.md5_checksum,
       romset_version: asset.romset_version,
     })),
   };
@@ -342,6 +344,7 @@ async function authorizeIndexedAsset(
       filename: asset.filename,
       size: asset.file_size,
       sha256: null,
+      md5: asset.md5_checksum,
       install_mode: asset.install_mode,
       install_name: asset.install_name,
       romset_version: asset.romset_version,

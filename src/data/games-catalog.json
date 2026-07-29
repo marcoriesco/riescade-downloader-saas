@@ -1,6 +1,6 @@
 {
 	"version": 1,
-	"updated_at": "2026-07-27",
+	"updated_at": "2026-07-29",
 	"platforms": [
 		{
 			"id": "flash",
@@ -47,7 +47,13 @@
 				".chd",
 				".7z",
 				".bin"
-			]
+			],
+			"romset": {
+				"version": "v1.0.0.03",
+				"catalog": "fbneo.json",
+				"allow_downloads": true,
+				"allow_updates": true
+			}
 		},
 		{
 			"id": "cave",

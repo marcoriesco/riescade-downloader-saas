@@ -82,6 +82,18 @@ describe("Google Drive catalog configuration", () => {
     expect(JSON.stringify(gamesCatalog)).not.toContain("archive.org");
     expect(gamesCatalog).not.toHaveProperty("google_drive");
   });
+
+  it.each([
+    ["mame", "v0.288"],
+    ["fbneo", "v1.0.0.03"],
+  ])("enables managed romset downloads and updates for %s", (platform, version) => {
+    const config = gamesCatalog.platforms.find((item) => item.id === platform);
+    expect(config?.romset).toMatchObject({
+      version,
+      allow_downloads: true,
+      allow_updates: true,
+    });
+  });
 });
 
 describe("reserved platform assets", () => {
