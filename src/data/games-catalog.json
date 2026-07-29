@@ -28,19 +28,14 @@
 			"id": "mame",
 			"name": "MAME",
 			"extensions": [".zip", ".7z"],
-			"romset_update": {
+			"romset": {
 				"version": "v0.288",
-				"archive": {
-					"identifier": "mame-roms-non-merged",
-					"metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
-					"directory": "MAME ROMs (non-merged)/"
-				}
-			},
-			"archive": {
-				"identifier": "riescade-roms-mame",
-				"details_url": "https://archive.org/details/riescade-roms-mame",
-				"metadata_url": "https://archive.org/metadata/riescade-roms-mame",
-				"torrent_url": "https://archive.org/download/riescade-roms-mame/riescade-roms-mame_archive.torrent"
+				"identifier": "mame-roms-non-merged",
+				"details_url": "https://archive.org/details/mame-roms-non-merged",
+				"metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
+				"directory": "MAME ROMs (non-merged)/",
+				"allow_downloads": true,
+				"allow_updates": true
 			}
 		},
 		{
@@ -3287,19 +3282,14 @@
 			"id": "arcade",
 			"name": "Arcade",
 			"extensions": [".zip", ".7z"],
-			"romset_update": {
+			"romset": {
 				"version": "v0.288",
-				"archive": {
-					"identifier": "mame-roms-non-merged",
-					"metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
-					"directory": "MAME ROMs (non-merged)/"
-				}
-			},
-			"archive": {
-				"identifier": "riescade-roms-arcade",
-				"details_url": "https://archive.org/details/riescade-roms-arcade",
-				"metadata_url": "https://archive.org/metadata/riescade-roms-arcade",
-				"torrent_url": "https://archive.org/download/riescade-roms-arcade/riescade-roms-arcade_archive.torrent"
+				"identifier": "mame-roms-non-merged",
+				"details_url": "https://archive.org/details/mame-roms-non-merged",
+				"metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
+				"directory": "MAME ROMs (non-merged)/",
+				"allow_downloads": true,
+				"allow_updates": true
 			}
 		},
 		{

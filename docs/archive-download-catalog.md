@@ -32,17 +32,18 @@ workflow, but it cannot make an Archive.org file private.
 
 ## Romset updates
 
-Platforms that support updating installed arcade ROMs declare a
-`romset_update` object in `games-catalog.json`:
+Platforms that support arcade ROM downloads and updates declare a
+`romset` object in `games-catalog.json`:
 
 ```json
 {
   "version": "v0.288",
-  "archive": {
-    "identifier": "mame-roms-non-merged",
-    "metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
-    "directory": "MAME ROMs (non-merged)/"
-  }
+  "identifier": "mame-roms-non-merged",
+  "details_url": "https://archive.org/details/mame-roms-non-merged",
+  "metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
+  "directory": "MAME ROMs (non-merged)/",
+  "allow_downloads": true,
+  "allow_updates": true
 }
 ```
 

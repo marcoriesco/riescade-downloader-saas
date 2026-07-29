@@ -19,21 +19,35 @@ interface ArchiveMetadata {
   files?: ArchiveFile[];
 }
 
+interface RomsetCatalogAsset {
+  id: string;
+  title: string;
+  download_name: string;
+  file_size: number | null;
+  romset_version: string;
+}
+
+const romsetCatalogCache = new Map<
+  string,
+  { expiresAt: number; assets: RomsetCatalogAsset[] }
+>();
+
 interface PlatformConfig {
   id: string;
   name: string;
   extensions: string[];
   install_mode?: "file" | "extract";
   install_extension?: string;
-  romset_update?: {
+  romset?: {
     version: string;
-    archive: {
-      identifier: string;
-      metadata_url: string;
-      directory: string;
-    };
+    identifier: string;
+    details_url: string;
+    metadata_url: string;
+    directory: string;
+    allow_downloads: boolean;
+    allow_updates: boolean;
   };
-  archive: {
+  archive?: {
     identifier: string;
     details_url: string;
     metadata_url: string;
@@ -60,7 +74,7 @@ function getPlatformConfig(platform: string): PlatformConfig {
     (item) => item.id.toLowerCase() === platform.toLowerCase()
   );
   if (!config) throw new AppApiError(404, "Platform not found");
-  if (!config.archive.identifier) {
+  if (!config.archive?.identifier && !config.romset?.identifier) {
     throw new AppApiError(404, "Platform downloads are not configured yet");
   }
   return {
@@ -98,6 +112,7 @@ function titleOf(filename: string): string {
 }
 
 async function getArchiveMetadata(config: PlatformConfig): Promise<ArchiveMetadata> {
+  if (!config.archive) return { files: [] };
   const metadataUrl = config.archive.metadata_url ||
     `https://archive.org/metadata/${encodeURIComponent(config.archive.identifier)}`;
   const response = await fetch(metadataUrl, {
@@ -112,8 +127,8 @@ async function getArchiveMetadata(config: PlatformConfig): Promise<ArchiveMetada
 
 async function listArchiveAssets(platform: string): Promise<ArchiveAsset[]> {
   const config = getPlatformConfig(platform);
-  const romsetUpdate = config.romset_update;
-  const archiveIdentifier = romsetUpdate?.archive.identifier || config.archive.identifier;
+  const romsetUpdate = config.romset;
+  const archiveIdentifier = romsetUpdate?.identifier || config.archive?.identifier || "";
   const allowedExtensions = config.install_mode === "extract"
     ? new Set([".zip"])
     : new Set(config.extensions.map((extension) => extension.toLowerCase()));
@@ -142,7 +157,7 @@ async function listArchiveAssets(platform: string): Promise<ArchiveAsset[]> {
           : null,
       sha256: null,
       object_key: romsetUpdate
-        ? `${romsetUpdate.archive.directory}${file.name.split("/").pop() || file.name}`
+        ? `${romsetUpdate.directory}${file.name.split("/").pop() || file.name}`
         : file.name,
       install_mode: installMode,
       install_name: `${titleOf(file.name)}${config.install_extension || ""}`,
@@ -213,10 +228,82 @@ export async function listPlatformAssets(platform: string) {
       install_name: asset.install_name,
       romset_version: asset.romset_version,
     })),
-    detailsUrl: config.archive.details_url,
-    torrentUrl: config.archive.torrent_url,
-    romsetVersion: config.romset_update?.version || null,
-    supportsRomsetUpdate: Boolean(config.romset_update),
+    detailsUrl: config.archive?.details_url || config.romset?.details_url || null,
+    torrentUrl: config.archive?.torrent_url || null,
+    romsetVersion: config.romset?.version || null,
+    supportsRomsetUpdate: Boolean(config.romset?.allow_updates),
+    supportsRomsetDownloads: Boolean(config.romset?.allow_downloads),
+    supportsFullPlatformDownload: Boolean(config.archive?.torrent_url),
+  };
+}
+
+export async function listRomsetCatalog(
+  platform: string,
+  search = "",
+  offset = 0,
+  limit = 500
+) {
+  const config = getPlatformConfig(platform);
+  const romset = config.romset;
+  if (!romset || !romset.allow_downloads) {
+    throw new AppApiError(404, "Romset downloads are not configured for this platform");
+  }
+
+  const cacheKey = `${romset.identifier}\0${romset.version}`;
+  let cached = romsetCatalogCache.get(cacheKey);
+  if (!cached || cached.expiresAt <= Date.now()) {
+    const response = await fetch(romset.metadata_url, {
+      headers: { "User-Agent": "RIESCADE-Romset-Catalog/1.0" },
+      next: { revalidate: 21600 },
+    });
+    if (!response.ok) {
+      throw new Error(`Archive.org romset metadata request failed (${response.status})`);
+    }
+    const metadata = (await response.json()) as ArchiveMetadata;
+    const assets = (metadata.files || [])
+      .filter(
+        (file): file is ArchiveFile & { name: string } =>
+          typeof file.name === "string" &&
+          file.source === "original" &&
+          file.name.startsWith(romset.directory) &&
+          extensionOf(file.name) === ".zip"
+      )
+      .map((file) => {
+        const filename = file.name.split("/").pop() || file.name;
+        return {
+          id: assetId(platform, file.name),
+          title: titleOf(filename),
+          download_name: filename,
+          file_size:
+            typeof file.size === "string" && /^\d+$/.test(file.size)
+              ? Number(file.size)
+              : null,
+          romset_version: romset.version,
+        };
+      })
+      .sort((left, right) => left.title.localeCompare(right.title, "pt-BR"));
+    cached = { expiresAt: Date.now() + 6 * 60 * 60_000, assets };
+    romsetCatalogCache.set(cacheKey, cached);
+  }
+
+  const normalizedSearch = search.trim().toLocaleLowerCase("pt-BR");
+  const filtered = normalizedSearch
+    ? cached.assets.filter(
+        (asset) =>
+          asset.title.toLocaleLowerCase("pt-BR").includes(normalizedSearch) ||
+          asset.download_name.toLocaleLowerCase("pt-BR").includes(normalizedSearch)
+      )
+    : cached.assets;
+  const safeOffset = Math.max(0, Math.trunc(offset));
+  const safeLimit = Math.min(1000, Math.max(1, Math.trunc(limit)));
+
+  return {
+    platform,
+    version: romset.version,
+    total: filtered.length,
+    offset: safeOffset,
+    limit: safeLimit,
+    assets: filtered.slice(safeOffset, safeOffset + safeLimit),
   };
 }
 
@@ -248,7 +335,7 @@ export async function authorizePlatformDownload(
   const config = getPlatformConfig(platform);
   await assertRateLimit(
     user.id,
-    config.romset_update
+    config.romset
       ? Number(process.env.ROMSET_UPDATE_REQUESTS_PER_MINUTE ?? "2000")
       : undefined
   );
@@ -273,13 +360,74 @@ export async function authorizePlatformDownload(
       platform: asset.platform,
       title: asset.title,
       filename: asset.download_name,
-      size: config.romset_update ? null : asset.file_size,
+      size: config.romset ? null : asset.file_size,
       sha256: null,
       install_mode: asset.install_mode,
       install_name: asset.install_name,
       romset_version: asset.romset_version,
     },
     downloadUrl: archiveFileUrl(asset.archive_identifier, asset.object_key),
+    expiresAt,
+  };
+}
+
+export async function authorizeRomsetUpdate(
+  user: User,
+  platform: unknown,
+  filename: unknown,
+  clientVersion?: string
+) {
+  await assertDownloadAccess(user);
+
+  if (typeof platform !== "string" || !/^[a-z0-9_-]{1,64}$/.test(platform)) {
+    throw new AppApiError(400, "Invalid platform");
+  }
+  if (
+    typeof filename !== "string" ||
+    filename !== filename.split("/").pop() ||
+    filename !== filename.split("\\").pop() ||
+    !/^[^<>:"/\\|?*\u0000-\u001f]+\.zip$/i.test(filename)
+  ) {
+    throw new AppApiError(400, "Invalid ROM filename");
+  }
+
+  const config = getPlatformConfig(platform);
+  const romsetUpdate = config.romset;
+  if (!romsetUpdate || !romsetUpdate.allow_updates) {
+    throw new AppApiError(404, "Romset updates are not configured for this platform");
+  }
+
+  await assertRateLimit(
+    user.id,
+    Number(process.env.ROMSET_UPDATE_REQUESTS_PER_MINUTE ?? "2000")
+  );
+
+  const objectKey = `${romsetUpdate.directory}${filename}`;
+  const id = assetId(platform, objectKey);
+  const expiresAt = new Date(Date.now() + 60 * 60_000).toISOString();
+  const { error } = await getSupabaseAdmin().from("download_requests").insert({
+    user_id: user.id,
+    asset_id: id,
+    status: "authorized",
+    provider: "archive_org",
+    client_version: clientVersion?.slice(0, 64) || null,
+    expires_at: expiresAt,
+  });
+  if (error) throw new Error(`Failed to register download: ${error.message}`);
+
+  return {
+    asset: {
+      id,
+      platform,
+      title: titleOf(filename),
+      filename,
+      size: null,
+      sha256: null,
+      install_mode: "file" as const,
+      install_name: titleOf(filename),
+      romset_version: romsetUpdate.version,
+    },
+    downloadUrl: archiveFileUrl(romsetUpdate.identifier, objectKey),
     expiresAt,
   };
 }
