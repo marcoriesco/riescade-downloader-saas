@@ -105,3 +105,33 @@ export function isGoogleDriveFolder(file: GoogleDriveFile): boolean {
   return file.mimeType === FOLDER_MIME_TYPE;
 }
 
+export function getGoogleSharedDriveId(): string {
+  const driveId = requiredEnv("GOOGLE_SHARED_DRIVE_ID");
+  assertDriveId(driveId, "Google shared drive ID");
+  return driveId;
+}
+
+export async function findUniqueGoogleDriveFolder(
+  parentFolderId: string,
+  expectedName: string
+): Promise<GoogleDriveFile> {
+  const normalizedName = expectedName.trim().toLocaleLowerCase();
+  const matches = (await listGoogleDriveFolder(parentFolderId)).filter(
+    (file) =>
+      isGoogleDriveFolder(file) &&
+      file.name.trim().toLocaleLowerCase() === normalizedName
+  );
+
+  if (matches.length === 0) {
+    throw new Error(
+      `Google Drive folder "${expectedName}" was not found inside ${parentFolderId}`
+    );
+  }
+  if (matches.length > 1) {
+    throw new Error(
+      `Google Drive folder "${expectedName}" is duplicated inside ${parentFolderId}`
+    );
+  }
+
+  return matches[0];
+}

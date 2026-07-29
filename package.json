@@ -9,6 +9,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "verify-google-drive": "node scripts/verify-google-drive.mjs",
+    "sync-google-drive": "node scripts/sync-google-drive.mjs",
     "test-webhook": "node scripts/test-webhook.js",
     "cron": "ts-node src/scripts/cron-scheduler.ts",
     "publish-post": "ts-node src/scripts/cron-scheduler.ts --run-now",

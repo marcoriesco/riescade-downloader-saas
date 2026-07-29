@@ -17,8 +17,10 @@ RIESCADE/
     └── ...
 ```
 
-Google Drive folder IDs are canonical. Folder names are only for human
-organization and may change without breaking the catalog.
+Only the shared-drive ID is configured. On every synchronization, the server
+finds `bios` and `roms` at the drive root and matches each direct child of
+`roms` to the platform `id` in `games-catalog.json`, ignoring letter case.
+Folder names are therefore part of the catalog contract.
 
 The service account must be a member of the shared drive and only needs
 read-only access. Its email and private key are server-only environment
@@ -26,21 +28,38 @@ variables and must never be exposed to the desktop app or browser.
 
 ## Platform configuration
 
-Every enabled platform declares its Drive folder ID:
+Each platform declares its stable folder name as `id`:
 
 ```json
 {
   "id": "snes",
   "name": "Super Nintendo",
-  "extensions": [".zip", ".7z", ".smc", ".sfc"],
-  "folder_id": "GOOGLE_DRIVE_FOLDER_ID"
+  "extensions": [".zip", ".7z", ".smc", ".sfc"]
 }
 ```
 
-A platform with an empty `folder_id` remains visible in the general platform
-catalog but its downloads are disabled.
+No individual Drive folder IDs are stored. A missing platform folder is skipped
+during a complete synchronization and reported as an error when that platform
+is explicitly requested. Duplicate folder names fail safely.
 
 ## Synchronization
+
+From the website project directory, synchronize the complete catalog with:
+
+```text
+npm run sync-google-drive
+```
+
+To synchronize a single platform:
+
+```text
+npm run sync-google-drive -- snes
+```
+
+The command starts the website backend on a temporary local port, calls the
+protected synchronization endpoint, prints the result, and stops the temporary
+server. It is a website maintenance command and is never executed by the
+RIESCADE OS desktop app.
 
 The private endpoint below lists configured Drive folders and updates
 `public.download_assets`:
@@ -60,11 +79,13 @@ To synchronize only one platform:
 
 The synchronization:
 
-1. Lists every file directly inside the configured folder.
-2. Ignores subfolders, non-downloadable files, files without a browser download
+1. Discovers `bios`, `roms`, and the platform folders from the shared-drive
+   root.
+2. Lists every file directly inside each discovered folder.
+3. Ignores subfolders, non-downloadable files, files without a browser download
    link, and extensions not allowed by the platform.
-3. Upserts file metadata using the stable Google Drive file ID.
-4. Marks files removed from that folder as inactive.
+4. Upserts file metadata using the stable Google Drive file ID.
+5. Marks files removed from that folder as inactive.
 
 Nested platform folders are intentionally not traversed. If a platform needs
 subfolders, each downloadable folder must be represented explicitly in a
@@ -95,6 +116,6 @@ Google download quotas with the SNES pilot before migrating the full library.
 3. Add the service-account email to the Google Workspace shared drive.
 4. Configure the server environment variables documented in `.env.example`.
 5. Apply the `download_assets` database migration.
-6. Add the BIOS and platform folder IDs to `games-catalog.json`.
+6. Set `GOOGLE_SHARED_DRIVE_ID` to the shared-drive root ID.
 7. Run the synchronization endpoint.
 8. Test catalog and download authorization with a pilot account.

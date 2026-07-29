@@ -4,6 +4,8 @@ import { createHash } from "node:crypto";
 import gamesCatalogJson from "@/data/games-catalog.json";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 import {
+  findUniqueGoogleDriveFolder,
+  getGoogleSharedDriveId,
   isGoogleDriveFolder,
   listGoogleDriveFolder,
   type GoogleDriveFile,
@@ -15,7 +17,6 @@ interface PlatformConfig {
   id: string;
   name: string;
   extensions: string[];
-  folder_id?: string;
   install_mode?: InstallMode;
   install_extension?: string;
   romset?: {
@@ -27,11 +28,6 @@ interface PlatformConfig {
 }
 
 interface GamesCatalog {
-  google_drive?: {
-    root_folder_id?: string;
-    bios_folder_id?: string;
-    roms_folder_id?: string;
-  };
   platforms: PlatformConfig[];
 }
 
@@ -61,9 +57,11 @@ export interface GoogleDriveSyncResult {
   skipped: number;
   platforms: Array<{
     platform: string;
+    folderId: string;
     assets: number;
     skipped: number;
   }>;
+  unmappedFolders: string[];
 }
 
 const gamesCatalog = gamesCatalogJson as GamesCatalog;
@@ -196,16 +194,29 @@ export async function syncGoogleDriveCatalog(
   platformFilter?: string
 ): Promise<GoogleDriveSyncResult> {
   const normalizedFilter = platformFilter?.trim().toLowerCase();
-  const configuredPlatforms = gamesCatalog.platforms.filter(
-    (platform) =>
-      Boolean(platform.folder_id?.trim()) &&
-      (!normalizedFilter || platform.id === normalizedFilter)
+  const selectedPlatforms = gamesCatalog.platforms.filter(
+    (platform) => !normalizedFilter || platform.id === normalizedFilter
   );
 
-  if (normalizedFilter && configuredPlatforms.length === 0) {
-    throw new Error(
-      `Platform ${normalizedFilter} has no Google Drive folder configured`
-    );
+  if (normalizedFilter && selectedPlatforms.length === 0) {
+    throw new Error(`Platform ${normalizedFilter} is not in the game catalog`);
+  }
+
+  const rootFolderId = getGoogleSharedDriveId();
+  const romsFolder = await findUniqueGoogleDriveFolder(rootFolderId, "roms");
+  const platformFolders = (await listGoogleDriveFolder(romsFolder.id)).filter(
+    isGoogleDriveFolder
+  );
+  const folderNames = new Map<string, GoogleDriveFile>();
+
+  for (const folder of platformFolders) {
+    const normalizedName = folder.name.trim().toLocaleLowerCase();
+    if (folderNames.has(normalizedName)) {
+      throw new Error(
+        `Google Drive platform folder "${folder.name}" is duplicated inside roms`
+      );
+    }
+    folderNames.set(normalizedName, folder);
   }
 
   const result: GoogleDriveSyncResult = {
@@ -213,26 +224,44 @@ export async function syncGoogleDriveCatalog(
     assets: 0,
     skipped: 0,
     platforms: [],
+    unmappedFolders: platformFolders
+      .filter(
+        (folder) =>
+          !gamesCatalog.platforms.some(
+            (platform) =>
+              platform.id.toLocaleLowerCase() ===
+              folder.name.trim().toLocaleLowerCase()
+          )
+      )
+      .map((folder) => folder.name),
   };
 
   if (!normalizedFilter) {
-    const biosFolderId = gamesCatalog.google_drive?.bios_folder_id?.trim();
-    if (biosFolderId) {
-      const bios = await syncFolder(biosFolderId, null);
-      result.folders += 1;
-      result.assets += bios.assets;
-      result.skipped += bios.skipped;
-    }
+    const biosFolder = await findUniqueGoogleDriveFolder(rootFolderId, "bios");
+    const bios = await syncFolder(biosFolder.id, null);
+    result.folders += 1;
+    result.assets += bios.assets;
+    result.skipped += bios.skipped;
   }
 
-  for (const platform of configuredPlatforms) {
-    const folderId = platform.folder_id!.trim();
-    const synced = await syncFolder(folderId, platform);
+  for (const platform of selectedPlatforms) {
+    const folder = folderNames.get(platform.id.toLocaleLowerCase());
+    if (!folder) {
+      if (normalizedFilter) {
+        throw new Error(
+          `Google Drive folder "roms/${platform.id}" was not found`
+        );
+      }
+      continue;
+    }
+
+    const synced = await syncFolder(folder.id, platform);
     result.folders += 1;
     result.assets += synced.assets;
     result.skipped += synced.skipped;
     result.platforms.push({
       platform: platform.id,
+      folderId: folder.id,
       assets: synced.assets,
       skipped: synced.skipped,
     });
@@ -240,4 +269,3 @@ export async function syncGoogleDriveCatalog(
 
   return result;
 }
-

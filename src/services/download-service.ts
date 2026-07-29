@@ -12,7 +12,6 @@ interface PlatformConfig {
   id: string;
   name: string;
   extensions: string[];
-  folder_id?: string;
   install_mode?: InstallMode;
   install_extension?: string;
   romset?: {
@@ -52,12 +51,6 @@ function getPlatformConfig(platform: string): PlatformConfig {
     (item) => item.id.toLowerCase() === platform.toLowerCase()
   );
   if (!config) throw new AppApiError(404, "Platform not found");
-  if (!config.folder_id?.trim()) {
-    throw new AppApiError(
-      404,
-      "Platform downloads are not configured in Google Drive yet"
-    );
-  }
   return {
     ...config,
     install_mode: config.install_mode === "extract" ? "extract" : "file",

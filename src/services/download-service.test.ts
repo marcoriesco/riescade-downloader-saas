@@ -64,15 +64,9 @@ describe("game installation mode", () => {
 });
 
 describe("Google Drive catalog configuration", () => {
-  it("uses Google Drive folder IDs without Archive.org configuration", () => {
-    expect(gamesCatalog.google_drive).toEqual({
-      root_folder_id: "",
-      bios_folder_id: "",
-      roms_folder_id: "",
-    });
-
+  it("discovers Google Drive folders dynamically without Archive.org configuration", () => {
     for (const platform of gamesCatalog.platforms) {
-      expect(platform).toHaveProperty("folder_id");
+      expect(platform).not.toHaveProperty("folder_id");
       expect(platform).not.toHaveProperty("archive");
       if ("romset" in platform && platform.romset) {
         expect(platform.romset).not.toHaveProperty("identifier");
@@ -83,5 +77,6 @@ describe("Google Drive catalog configuration", () => {
     }
 
     expect(JSON.stringify(gamesCatalog)).not.toContain("archive.org");
+    expect(gamesCatalog).not.toHaveProperty("google_drive");
   });
 });
