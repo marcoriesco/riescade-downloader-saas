@@ -29,3 +29,25 @@ https://archive.org/download/{identifier}/{identifier}_archive.torrent
 
 Archive.org URLs are public. Authentication controls discovery and the app
 workflow, but it cannot make an Archive.org file private.
+
+## Romset updates
+
+Platforms that support updating installed arcade ROMs declare a
+`romset_update` object in `games-catalog.json`:
+
+```json
+{
+  "version": "v0.288",
+  "platforms": ["mame", "arcade"],
+  "archive": {
+    "identifier": "mame-roms-non-merged",
+    "metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
+    "directory": "MAME ROMs (non-merged)/"
+  }
+}
+```
+
+The regular platform archive remains responsible for catalog discovery. When
+an installed ROM is updated, its basename is resolved inside the configured
+romset directory. This avoids loading the complete external romset into the app
+as missing games.

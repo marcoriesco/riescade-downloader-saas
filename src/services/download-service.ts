@@ -25,6 +25,15 @@ interface PlatformConfig {
   extensions: string[];
   install_mode?: "file" | "extract";
   install_extension?: string;
+  romset_update?: {
+    version: string;
+    platforms: string[];
+    archive: {
+      identifier: string;
+      metadata_url: string;
+      directory: string;
+    };
+  };
   archive: {
     identifier: string;
     details_url: string;
@@ -43,6 +52,8 @@ interface ArchiveAsset {
   object_key: string;
   install_mode: "file" | "extract";
   install_name: string;
+  romset_version: string | null;
+  archive_identifier: string;
 }
 
 function getPlatformConfig(platform: string): PlatformConfig {
@@ -88,8 +99,7 @@ function titleOf(filename: string): string {
 }
 
 async function getArchiveMetadata(config: PlatformConfig): Promise<ArchiveMetadata> {
-  const metadataUrl =
-    config.archive.metadata_url ||
+  const metadataUrl = config.archive.metadata_url ||
     `https://archive.org/metadata/${encodeURIComponent(config.archive.identifier)}`;
   const response = await fetch(metadataUrl, {
     headers: { "User-Agent": "RIESCADE-Catalog/1.0" },
@@ -103,6 +113,8 @@ async function getArchiveMetadata(config: PlatformConfig): Promise<ArchiveMetada
 
 async function listArchiveAssets(platform: string): Promise<ArchiveAsset[]> {
   const config = getPlatformConfig(platform);
+  const romsetUpdate = config.romset_update;
+  const archiveIdentifier = romsetUpdate?.archive.identifier || config.archive.identifier;
   const allowedExtensions = config.install_mode === "extract"
     ? new Set([".zip"])
     : new Set(config.extensions.map((extension) => extension.toLowerCase()));
@@ -130,9 +142,13 @@ async function listArchiveAssets(platform: string): Promise<ArchiveAsset[]> {
           ? Number(file.size)
           : null,
       sha256: null,
-      object_key: file.name,
+      object_key: romsetUpdate
+        ? `${romsetUpdate.archive.directory}${file.name.split("/").pop() || file.name}`
+        : file.name,
       install_mode: installMode,
       install_name: `${titleOf(file.name)}${config.install_extension || ""}`,
+      romset_version: romsetUpdate?.version || null,
+      archive_identifier: archiveIdentifier,
     }))
     .sort((left, right) => left.title.localeCompare(right.title, "pt-BR"));
 }
@@ -165,8 +181,8 @@ export async function assertDownloadAccess(user: User): Promise<void> {
   }
 }
 
-async function assertRateLimit(userId: string): Promise<void> {
-  const limit = Number(process.env.DOWNLOAD_REQUESTS_PER_MINUTE ?? "10");
+async function assertRateLimit(userId: string, configuredLimit?: number): Promise<void> {
+  const limit = configuredLimit ?? Number(process.env.DOWNLOAD_REQUESTS_PER_MINUTE ?? "10");
   const since = new Date(Date.now() - 60_000).toISOString();
   const { count, error } = await getSupabaseAdmin()
     .from("download_requests")
@@ -196,9 +212,12 @@ export async function listPlatformAssets(platform: string) {
       sha256: asset.sha256,
       install_mode: asset.install_mode,
       install_name: asset.install_name,
+      romset_version: asset.romset_version,
     })),
     detailsUrl: config.archive.details_url,
     torrentUrl: config.archive.torrent_url,
+    romsetVersion: config.romset_update?.version || null,
+    supportsRomsetUpdate: Boolean(config.romset_update),
   };
 }
 
@@ -222,13 +241,18 @@ export async function authorizePlatformDownload(
   clientVersion?: string
 ) {
   await assertDownloadAccess(user);
-  await assertRateLimit(user.id);
 
   if (typeof platform !== "string" || !/^[a-z0-9_-]{1,64}$/.test(platform)) {
     throw new AppApiError(400, "Invalid platform");
   }
 
   const config = getPlatformConfig(platform);
+  await assertRateLimit(
+    user.id,
+    config.romset_update
+      ? Number(process.env.ROMSET_UPDATE_REQUESTS_PER_MINUTE ?? "2000")
+      : undefined
+  );
   const assets = await listArchiveAssets(platform);
   const asset = assets.find((item) => item.id === requestedAssetId);
   if (!asset) throw new AppApiError(404, `${config.name} download not found`);
@@ -250,12 +274,13 @@ export async function authorizePlatformDownload(
       platform: asset.platform,
       title: asset.title,
       filename: asset.download_name,
-      size: asset.file_size,
+      size: config.romset_update ? null : asset.file_size,
       sha256: null,
       install_mode: asset.install_mode,
       install_name: asset.install_name,
+      romset_version: asset.romset_version,
     },
-    downloadUrl: archiveFileUrl(config.archive.identifier, asset.object_key),
+    downloadUrl: archiveFileUrl(asset.archive_identifier, asset.object_key),
     expiresAt,
   };
 }

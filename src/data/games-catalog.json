@@ -28,6 +28,15 @@
 			"id": "mame",
 			"name": "MAME",
 			"extensions": [".zip", ".7z"],
+			"romset_update": {
+				"version": "v0.288",
+				"platforms": ["mame", "arcade"],
+				"archive": {
+					"identifier": "mame-roms-non-merged",
+					"metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
+					"directory": "MAME ROMs (non-merged)/"
+				}
+			},
 			"archive": {
 				"identifier": "riescade-roms-mame",
 				"details_url": "https://archive.org/details/riescade-roms-mame",
@@ -3279,6 +3288,15 @@
 			"id": "arcade",
 			"name": "Arcade",
 			"extensions": [".zip", ".7z"],
+			"romset_update": {
+				"version": "v0.288",
+				"platforms": ["mame", "arcade"],
+				"archive": {
+					"identifier": "mame-roms-non-merged",
+					"metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
+					"directory": "MAME ROMs (non-merged)/"
+				}
+			},
 			"archive": {
 				"identifier": "riescade-roms-arcade",
 				"details_url": "https://archive.org/details/riescade-roms-arcade",
