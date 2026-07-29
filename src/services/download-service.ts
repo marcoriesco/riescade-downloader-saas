@@ -107,6 +107,53 @@ async function listIndexedPlatformAssets(
   return assets;
 }
 
+async function listIndexedPlatformAssetsPage(
+  platform: string,
+  offset: number,
+  limit: number
+): Promise<{ assets: DownloadAssetRow[]; total: number }> {
+  const { data, error, count } = await getSupabaseAdmin()
+    .from("download_assets")
+    .select(
+      "id,drive_file_id,drive_folder_id,category,platform,filename,title,mime_type,file_size,md5_checksum,web_content_link,install_mode,install_name,romset_version,active",
+      { count: "exact" }
+    )
+    .eq("category", "rom")
+    .eq("platform", platform)
+    .eq("active", true)
+    .neq("filename", "_media.zip")
+    .order("title", { ascending: true })
+    .range(offset, offset + limit - 1);
+
+  if (error) {
+    throw new Error(`Failed to load download catalog: ${error.message}`);
+  }
+  return {
+    assets: (data ?? []) as DownloadAssetRow[],
+    total: count ?? 0,
+  };
+}
+
+export async function getPlatformCatalogRevision(
+  platform: string
+): Promise<string> {
+  const config = getPlatformConfig(platform);
+  const { data, error } = await getSupabaseAdmin()
+    .from("download_assets")
+    .select("synced_at")
+    .eq("category", "rom")
+    .eq("platform", config.id)
+    .eq("active", true)
+    .order("synced_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to load catalog revision: ${error.message}`);
+  }
+  return typeof data?.synced_at === "string" ? data.synced_at : "empty";
+}
+
 async function listIndexedBiosAssets(): Promise<DownloadAssetRow[]> {
   const { data, error } = await getSupabaseAdmin()
     .from("download_assets")
@@ -243,13 +290,21 @@ export async function listBiosAssets() {
   };
 }
 
-export async function listPlatformAssets(platform: string) {
+export async function listPlatformAssets(
+  platform: string,
+  options?: { offset?: number; limit?: number }
+) {
   const config = getPlatformConfig(platform);
-  const assets = await listIndexedPlatformAssets(config.id);
+  const offset = Math.max(0, Math.trunc(options?.offset ?? 0));
+  const limit = Math.min(500, Math.max(1, Math.trunc(options?.limit ?? 250)));
+  const page = await listIndexedPlatformAssetsPage(config.id, offset, limit);
   return {
-    assets: assets
+    assets: page.assets
       .filter((asset) => !isReservedPlatformAsset(asset.filename))
       .map(mapAsset),
+    total: page.total,
+    offset,
+    limit,
     detailsUrl: null,
     torrentUrl: null,
     romsetVersion: config.romset?.version ?? null,
