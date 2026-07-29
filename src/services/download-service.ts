@@ -5,6 +5,7 @@ import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 
 const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["active", "trialing"]);
 const DATABASE_PAGE_SIZE = 1000;
+const RESERVED_PLATFORM_FILENAMES = new Set(["_media.zip"]);
 
 type InstallMode = "file" | "extract";
 
@@ -45,6 +46,10 @@ interface DownloadAssetRow {
 }
 
 const gamesCatalog = gamesCatalogJson as GamesCatalog;
+
+export function isReservedPlatformAsset(filename: string): boolean {
+  return RESERVED_PLATFORM_FILENAMES.has(filename.toLocaleLowerCase("pt-BR"));
+}
 
 function getPlatformConfig(platform: string): PlatformConfig {
   const config = gamesCatalog.platforms.find(
@@ -241,7 +246,9 @@ export async function listPlatformAssets(platform: string) {
   const config = getPlatformConfig(platform);
   const assets = await listIndexedPlatformAssets(config.id);
   return {
-    assets: assets.map(mapAsset),
+    assets: assets
+      .filter((asset) => !isReservedPlatformAsset(asset.filename))
+      .map(mapAsset),
     detailsUrl: null,
     torrentUrl: null,
     romsetVersion: config.romset?.version ?? null,
@@ -268,13 +275,16 @@ export async function listRomsetCatalog(
 
   const assets = await listIndexedPlatformAssets(config.id);
   const normalizedSearch = search.trim().toLocaleLowerCase("pt-BR");
+  const downloadableAssets = assets.filter(
+    (asset) => !isReservedPlatformAsset(asset.filename)
+  );
   const filtered = normalizedSearch
-    ? assets.filter(
+    ? downloadableAssets.filter(
         (asset) =>
           asset.title.toLocaleLowerCase("pt-BR").includes(normalizedSearch) ||
           asset.filename.toLocaleLowerCase("pt-BR").includes(normalizedSearch)
       )
-    : assets;
+    : downloadableAssets;
   const safeOffset = Math.max(0, Math.trunc(offset));
   const safeLimit = Math.min(1000, Math.max(1, Math.trunc(limit)));
 
@@ -389,6 +399,29 @@ export async function authorizeBiosDownload(
   }
 
   return authorizeIndexedAsset(user, "bios", asset, clientVersion);
+}
+
+export async function authorizePlatformMediaDownload(
+  user: User,
+  platform: unknown,
+  clientVersion?: string
+) {
+  await assertDownloadAccess(user);
+  if (typeof platform !== "string" || !/^[a-z0-9_-]{1,64}$/.test(platform)) {
+    throw new AppApiError(400, "Invalid platform");
+  }
+
+  const config = getPlatformConfig(platform);
+  await assertRateLimit(user.id);
+  const asset = await findIndexedAssetByFilename(config.id, "_media.zip");
+  if (!asset) {
+    throw new AppApiError(
+      404,
+      `${config.name} full media pack is not available`
+    );
+  }
+
+  return authorizeIndexedAsset(user, config.id, asset, clientVersion);
 }
 
 export async function authorizeRomsetUpdate(

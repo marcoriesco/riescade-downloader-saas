@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { hasActiveSubscription } from "./download-service";
+import {
+  hasActiveSubscription,
+  isReservedPlatformAsset,
+} from "./download-service";
 import gamesCatalog from "@/data/games-catalog.json";
 
 describe("download access", () => {
@@ -78,5 +81,13 @@ describe("Google Drive catalog configuration", () => {
 
     expect(JSON.stringify(gamesCatalog)).not.toContain("archive.org");
     expect(gamesCatalog).not.toHaveProperty("google_drive");
+  });
+});
+
+describe("reserved platform assets", () => {
+  it("keeps the full media pack out of game catalogs", () => {
+    expect(isReservedPlatformAsset("_media.zip")).toBe(true);
+    expect(isReservedPlatformAsset("_MEDIA.ZIP")).toBe(true);
+    expect(isReservedPlatformAsset("game.zip")).toBe(false);
   });
 });
