@@ -62,3 +62,26 @@ describe("game installation mode", () => {
     expect(config?.extensions).toContain(".scummvm");
   });
 });
+
+describe("Google Drive catalog configuration", () => {
+  it("uses Google Drive folder IDs without Archive.org configuration", () => {
+    expect(gamesCatalog.google_drive).toEqual({
+      root_folder_id: "",
+      bios_folder_id: "",
+      roms_folder_id: "",
+    });
+
+    for (const platform of gamesCatalog.platforms) {
+      expect(platform).toHaveProperty("folder_id");
+      expect(platform).not.toHaveProperty("archive");
+      if ("romset" in platform && platform.romset) {
+        expect(platform.romset).not.toHaveProperty("identifier");
+        expect(platform.romset).not.toHaveProperty("metadata_url");
+        expect(platform.romset).not.toHaveProperty("details_url");
+        expect(platform.romset).not.toHaveProperty("directory");
+      }
+    }
+
+    expect(JSON.stringify(gamesCatalog)).not.toContain("archive.org");
+  });
+});

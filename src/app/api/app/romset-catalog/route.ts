@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
-import { AppApiError } from "@/lib/server/app-auth";
-import { listRomsetCatalog } from "@/services/download-service";
+import {
+  AppApiError,
+  authenticateAppRequest,
+} from "@/lib/server/app-auth";
+import {
+  assertDownloadAccess,
+  listRomsetCatalog,
+} from "@/services/download-service";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   try {
+    const user = await authenticateAppRequest(request);
+    await assertDownloadAccess(user);
     const url = new URL(request.url);
     const platform = url.searchParams.get("platform")?.trim().toLowerCase();
     if (!platform || !/^[a-z0-9_-]{1,64}$/.test(platform)) {
@@ -16,7 +24,7 @@ export async function GET(request: Request) {
     const limit = Number(url.searchParams.get("limit") || 500);
     const result = await listRomsetCatalog(platform, search, offset, limit);
     return NextResponse.json(result, {
-      headers: { "Cache-Control": "public, s-maxage=300, stale-while-revalidate=3600" },
+      headers: { "Cache-Control": "private, no-store" },
     });
   } catch (error) {
     const status = error instanceof AppApiError ? error.status : 500;

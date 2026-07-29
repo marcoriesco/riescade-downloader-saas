@@ -1,11 +1,19 @@
 import { NextResponse } from "next/server";
-import { AppApiError } from "@/lib/server/app-auth";
-import { listPlatformAssets } from "@/services/download-service";
+import {
+  AppApiError,
+  authenticateAppRequest,
+} from "@/lib/server/app-auth";
+import {
+  assertDownloadAccess,
+  listPlatformAssets,
+} from "@/services/download-service";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   try {
+    const user = await authenticateAppRequest(request);
+    await assertDownloadAccess(user);
     const platform = new URL(request.url).searchParams.get("platform")?.trim().toLowerCase();
     if (!platform) {
       throw new AppApiError(400, "Platform is required");

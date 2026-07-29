@@ -1,185 +1,188 @@
-import { createHash } from "crypto";
 import type { User } from "@supabase/supabase-js";
-import gamesCatalog from "@/data/games-catalog.json";
-import mameCatalog from "@/data/mame.json";
+import gamesCatalogJson from "@/data/games-catalog.json";
 import { AppApiError, isDownloadTester } from "@/lib/server/app-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 
 const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["active", "trialing"]);
-const FULL_MEDIA_ARCHIVE_NAMES = new Set(["_media.zip", "_media.7z"]);
+const DATABASE_PAGE_SIZE = 1000;
 
-interface ArchiveFile {
-  name?: string;
-  source?: string;
-  size?: string;
-  sha1?: string;
-  md5?: string;
-}
-
-interface ArchiveMetadata {
-  files?: ArchiveFile[];
-}
-
-interface RomsetCatalogAsset {
-  id: string;
-  title: string;
-  download_name: string;
-  file_size: number | null;
-  romset_version: string;
-}
-
-const romsetCatalogCache = new Map<
-  string,
-  { expiresAt: number; assets: RomsetCatalogAsset[] }
->();
-
-interface MameCatalogGame {
-  title: string;
-  year?: string;
-  manufacturer?: string;
-  cloneof?: string;
-  romof?: string;
-  mechanical?: boolean;
-}
-
-const ROMSET_CATALOGS: Record<string, Record<string, MameCatalogGame>> = {
-  "mame.json": mameCatalog.games as Record<string, MameCatalogGame>,
-};
+type InstallMode = "file" | "extract";
 
 interface PlatformConfig {
   id: string;
   name: string;
   extensions: string[];
-  install_mode?: "file" | "extract";
+  folder_id?: string;
+  install_mode?: InstallMode;
   install_extension?: string;
   romset?: {
     version: string;
     catalog: string;
-    identifier: string;
-    details_url: string;
-    metadata_url: string;
-    directory: string;
     allow_downloads: boolean;
     allow_updates: boolean;
   };
-  archive?: {
-    identifier: string;
-    details_url: string;
-    metadata_url: string;
-    torrent_url: string;
-  };
 }
 
-interface ArchiveAsset {
+interface GamesCatalog {
+  platforms: PlatformConfig[];
+}
+
+interface DownloadAssetRow {
   id: string;
-  platform: string;
+  drive_file_id: string;
+  drive_folder_id: string;
+  category: "bios" | "rom";
+  platform: string | null;
+  filename: string;
   title: string;
-  download_name: string;
+  mime_type: string;
   file_size: number | null;
-  sha256: null;
-  object_key: string;
-  install_mode: "file" | "extract";
+  md5_checksum: string | null;
+  web_content_link: string;
+  install_mode: InstallMode;
   install_name: string;
   romset_version: string | null;
-  archive_identifier: string;
+  active: boolean;
 }
+
+const gamesCatalog = gamesCatalogJson as GamesCatalog;
 
 function getPlatformConfig(platform: string): PlatformConfig {
   const config = gamesCatalog.platforms.find(
     (item) => item.id.toLowerCase() === platform.toLowerCase()
   );
   if (!config) throw new AppApiError(404, "Platform not found");
-  if (!config.archive?.identifier && !config.romset?.identifier) {
-    throw new AppApiError(404, "Platform downloads are not configured yet");
+  if (!config.folder_id?.trim()) {
+    throw new AppApiError(
+      404,
+      "Platform downloads are not configured in Google Drive yet"
+    );
   }
   return {
     ...config,
     install_mode: config.install_mode === "extract" ? "extract" : "file",
-    install_extension:
-      typeof config.install_extension === "string" &&
-      /^\.[a-z0-9_-]+$/i.test(config.install_extension)
-        ? config.install_extension.toLowerCase()
-        : undefined,
   };
 }
 
-function archiveFileUrl(identifier: string, filename: string): string {
-  const encodedPath = filename
-    .split("/")
-    .map((part) => encodeURIComponent(part))
-    .join("/");
-  return `https://archive.org/download/${encodeURIComponent(identifier)}/${encodedPath}`;
+function mapAsset(asset: DownloadAssetRow) {
+  return {
+    id: asset.id,
+    title: asset.title,
+    download_name: asset.filename,
+    file_size: asset.file_size,
+    sha256: null,
+    install_mode: asset.install_mode,
+    install_name: asset.install_name,
+    romset_version: asset.romset_version,
+  };
 }
 
-function assetId(platform: string, filename: string): string {
-  return createHash("sha256").update(`${platform}\0${filename}`).digest("hex");
-}
+async function listIndexedPlatformAssets(
+  platform: string
+): Promise<DownloadAssetRow[]> {
+  const assets: DownloadAssetRow[] = [];
+  let offset = 0;
 
-function extensionOf(filename: string): string {
-  const dot = filename.lastIndexOf(".");
-  return dot >= 0 ? filename.slice(dot).toLowerCase() : "";
-}
+  while (true) {
+    const { data, error } = await getSupabaseAdmin()
+      .from("download_assets")
+      .select(
+        "id,drive_file_id,drive_folder_id,category,platform,filename,title,mime_type,file_size,md5_checksum,web_content_link,install_mode,install_name,romset_version,active"
+      )
+      .eq("category", "rom")
+      .eq("platform", platform)
+      .eq("active", true)
+      .order("title", { ascending: true })
+      .range(offset, offset + DATABASE_PAGE_SIZE - 1);
 
-function titleOf(filename: string): string {
-  const basename = filename.split("/").pop() || filename;
-  const dot = basename.lastIndexOf(".");
-  return dot > 0 ? basename.slice(0, dot) : basename;
-}
+    if (error) {
+      throw new Error(`Failed to load download catalog: ${error.message}`);
+    }
 
-async function getArchiveMetadata(config: PlatformConfig): Promise<ArchiveMetadata> {
-  if (!config.archive) return { files: [] };
-  const metadataUrl = config.archive.metadata_url ||
-    `https://archive.org/metadata/${encodeURIComponent(config.archive.identifier)}`;
-  const response = await fetch(metadataUrl, {
-    headers: { "User-Agent": "RIESCADE-Catalog/1.0" },
-    cache: "no-store",
-  });
-  if (!response.ok) {
-    throw new Error(`Archive.org metadata request failed (${response.status})`);
+    const page = (data ?? []) as DownloadAssetRow[];
+    assets.push(...page);
+    if (page.length < DATABASE_PAGE_SIZE) break;
+    offset += DATABASE_PAGE_SIZE;
   }
-  return (await response.json()) as ArchiveMetadata;
+
+  return assets;
 }
 
-async function listArchiveAssets(platform: string): Promise<ArchiveAsset[]> {
-  const config = getPlatformConfig(platform);
-  const romsetUpdate = config.romset;
-  const archiveIdentifier = romsetUpdate?.identifier || config.archive?.identifier || "";
-  const allowedExtensions = config.install_mode === "extract"
-    ? new Set([".zip"])
-    : new Set(config.extensions.map((extension) => extension.toLowerCase()));
-  const metadata = await getArchiveMetadata(config);
-  const installMode: ArchiveAsset["install_mode"] =
-    config.install_mode === "extract" ? "extract" : "file";
-
-  return (metadata.files || [])
-    .filter(
-      (file): file is ArchiveFile & { name: string } =>
-        typeof file.name === "string" &&
-        file.source === "original" &&
-        !FULL_MEDIA_ARCHIVE_NAMES.has(
-          (file.name.split("/").pop() || file.name).toLowerCase()
-        ) &&
-        allowedExtensions.has(extensionOf(file.name))
+async function listIndexedBiosAssets(): Promise<DownloadAssetRow[]> {
+  const { data, error } = await getSupabaseAdmin()
+    .from("download_assets")
+    .select(
+      "id,drive_file_id,drive_folder_id,category,platform,filename,title,mime_type,file_size,md5_checksum,web_content_link,install_mode,install_name,romset_version,active"
     )
-    .map((file) => ({
-      id: assetId(platform, file.name),
-      platform,
-      title: titleOf(file.name),
-      download_name: file.name.split("/").pop() || file.name,
-      file_size:
-        typeof file.size === "string" && /^\d+$/.test(file.size)
-          ? Number(file.size)
-          : null,
-      sha256: null,
-      object_key: romsetUpdate
-        ? `${romsetUpdate.directory}${file.name.split("/").pop() || file.name}`
-        : file.name,
-      install_mode: installMode,
-      install_name: `${titleOf(file.name)}${config.install_extension || ""}`,
-      romset_version: romsetUpdate?.version || null,
-      archive_identifier: archiveIdentifier,
-    }))
-    .sort((left, right) => left.title.localeCompare(right.title, "pt-BR"));
+    .eq("category", "bios")
+    .eq("active", true)
+    .order("title", { ascending: true });
+
+  if (error) {
+    throw new Error(`Failed to load BIOS catalog: ${error.message}`);
+  }
+  return (data ?? []) as DownloadAssetRow[];
+}
+
+async function findIndexedAsset(
+  platform: string,
+  assetId: string
+): Promise<DownloadAssetRow | null> {
+  const { data, error } = await getSupabaseAdmin()
+    .from("download_assets")
+    .select(
+      "id,drive_file_id,drive_folder_id,category,platform,filename,title,mime_type,file_size,md5_checksum,web_content_link,install_mode,install_name,romset_version,active"
+    )
+    .eq("id", assetId)
+    .eq("category", "rom")
+    .eq("platform", platform)
+    .eq("active", true)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to find Google Drive asset: ${error.message}`);
+  }
+  return (data as DownloadAssetRow | null) ?? null;
+}
+
+async function findIndexedAssetByFilename(
+  platform: string,
+  filename: string
+): Promise<DownloadAssetRow | null> {
+  const { data, error } = await getSupabaseAdmin()
+    .from("download_assets")
+    .select(
+      "id,drive_file_id,drive_folder_id,category,platform,filename,title,mime_type,file_size,md5_checksum,web_content_link,install_mode,install_name,romset_version,active"
+    )
+    .eq("category", "rom")
+    .eq("platform", platform)
+    .eq("filename", filename)
+    .eq("active", true)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to find Google Drive asset: ${error.message}`);
+  }
+  return (data as DownloadAssetRow | null) ?? null;
+}
+
+async function findIndexedBiosAsset(
+  assetId: string
+): Promise<DownloadAssetRow | null> {
+  const { data, error } = await getSupabaseAdmin()
+    .from("download_assets")
+    .select(
+      "id,drive_file_id,drive_folder_id,category,platform,filename,title,mime_type,file_size,md5_checksum,web_content_link,install_mode,install_name,romset_version,active"
+    )
+    .eq("id", assetId)
+    .eq("category", "bios")
+    .eq("active", true)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(`Failed to find Google Drive BIOS asset: ${error.message}`);
+  }
+  return (data as DownloadAssetRow | null) ?? null;
 }
 
 export function hasActiveSubscription(
@@ -210,8 +213,13 @@ export async function assertDownloadAccess(user: User): Promise<void> {
   }
 }
 
-async function assertRateLimit(userId: string, configuredLimit?: number): Promise<void> {
-  const limit = configuredLimit ?? Number(process.env.DOWNLOAD_REQUESTS_PER_MINUTE ?? "10");
+async function assertRateLimit(
+  userId: string,
+  configuredLimit?: number
+): Promise<void> {
+  const limit =
+    configuredLimit ??
+    Number(process.env.DOWNLOAD_REQUESTS_PER_MINUTE ?? "10");
   const since = new Date(Date.now() - 60_000).toISOString();
   const { count, error } = await getSupabaseAdmin()
     .from("download_requests")
@@ -229,26 +237,24 @@ export async function listSnesAssets() {
   return listPlatformAssets("snes");
 }
 
+export async function listBiosAssets() {
+  const assets = await listIndexedBiosAssets();
+  return {
+    assets: assets.map(mapAsset),
+  };
+}
+
 export async function listPlatformAssets(platform: string) {
   const config = getPlatformConfig(platform);
-  const assets = await listArchiveAssets(platform);
+  const assets = await listIndexedPlatformAssets(config.id);
   return {
-    assets: assets.map((asset) => ({
-      id: asset.id,
-      title: asset.title,
-      download_name: asset.download_name,
-      file_size: asset.file_size,
-      sha256: asset.sha256,
-      install_mode: asset.install_mode,
-      install_name: asset.install_name,
-      romset_version: asset.romset_version,
-    })),
-    detailsUrl: config.archive?.details_url || config.romset?.details_url || null,
-    torrentUrl: config.archive?.torrent_url || null,
-    romsetVersion: config.romset?.version || null,
+    assets: assets.map(mapAsset),
+    detailsUrl: null,
+    torrentUrl: null,
+    romsetVersion: config.romset?.version ?? null,
     supportsRomsetUpdate: Boolean(config.romset?.allow_updates),
     supportsRomsetDownloads: Boolean(config.romset?.allow_downloads),
-    supportsFullPlatformDownload: Boolean(config.archive?.torrent_url),
+    supportsFullPlatformDownload: false,
   };
 }
 
@@ -260,72 +266,38 @@ export async function listRomsetCatalog(
 ) {
   const config = getPlatformConfig(platform);
   const romset = config.romset;
-  if (!romset || !romset.allow_downloads) {
-    throw new AppApiError(404, "Romset downloads are not configured for this platform");
-  }
-  const curatedCatalog = ROMSET_CATALOGS[romset.catalog];
-  if (!curatedCatalog) {
-    throw new Error(`Unknown romset catalog: ${romset.catalog}`);
-  }
-
-  const cacheKey = `${romset.identifier}\0${romset.version}`;
-  let cached = romsetCatalogCache.get(cacheKey);
-  if (!cached || cached.expiresAt <= Date.now()) {
-    const response = await fetch(romset.metadata_url, {
-      headers: { "User-Agent": "RIESCADE-Romset-Catalog/1.0" },
-      next: { revalidate: 21600 },
-    });
-    if (!response.ok) {
-      throw new Error(`Archive.org romset metadata request failed (${response.status})`);
-    }
-    const metadata = (await response.json()) as ArchiveMetadata;
-    const assets = (metadata.files || [])
-      .filter(
-        (file): file is ArchiveFile & { name: string } =>
-          typeof file.name === "string" &&
-          file.source === "original" &&
-          file.name.startsWith(romset.directory) &&
-          extensionOf(file.name) === ".zip" &&
-          Boolean(curatedCatalog[titleOf(file.name)])
-      )
-      .map((file) => {
-        const filename = file.name.split("/").pop() || file.name;
-        const shortname = titleOf(filename);
-        const curated = curatedCatalog[shortname];
-        return {
-          id: assetId(platform, file.name),
-          title: curated.title || shortname,
-          download_name: filename,
-          file_size:
-            typeof file.size === "string" && /^\d+$/.test(file.size)
-              ? Number(file.size)
-              : null,
-          romset_version: romset.version,
-        };
-      })
-      .sort((left, right) => left.title.localeCompare(right.title, "pt-BR"));
-    cached = { expiresAt: Date.now() + 6 * 60 * 60_000, assets };
-    romsetCatalogCache.set(cacheKey, cached);
+  if (!romset?.allow_downloads) {
+    throw new AppApiError(
+      404,
+      "Romset downloads are not configured for this platform"
+    );
   }
 
+  const assets = await listIndexedPlatformAssets(config.id);
   const normalizedSearch = search.trim().toLocaleLowerCase("pt-BR");
   const filtered = normalizedSearch
-    ? cached.assets.filter(
+    ? assets.filter(
         (asset) =>
           asset.title.toLocaleLowerCase("pt-BR").includes(normalizedSearch) ||
-          asset.download_name.toLocaleLowerCase("pt-BR").includes(normalizedSearch)
+          asset.filename.toLocaleLowerCase("pt-BR").includes(normalizedSearch)
       )
-    : cached.assets;
+    : assets;
   const safeOffset = Math.max(0, Math.trunc(offset));
   const safeLimit = Math.min(1000, Math.max(1, Math.trunc(limit)));
 
   return {
-    platform,
+    platform: config.id,
     version: romset.version,
     total: filtered.length,
     offset: safeOffset,
     limit: safeLimit,
-    assets: filtered.slice(safeOffset, safeOffset + safeLimit),
+    assets: filtered.slice(safeOffset, safeOffset + safeLimit).map((asset) => ({
+      id: asset.id,
+      title: asset.title,
+      download_name: asset.filename,
+      file_size: asset.file_size,
+      romset_version: asset.romset_version,
+    })),
   };
 }
 
@@ -342,6 +314,40 @@ export async function authorizeSnesDownload(
   );
 }
 
+async function authorizeIndexedAsset(
+  user: User,
+  platform: string,
+  asset: DownloadAssetRow,
+  clientVersion?: string
+) {
+  const expiresAt = new Date(Date.now() + 60 * 60_000).toISOString();
+  const { error } = await getSupabaseAdmin().from("download_requests").insert({
+    user_id: user.id,
+    asset_id: asset.id,
+    status: "authorized",
+    provider: "google_drive",
+    client_version: clientVersion?.slice(0, 64) || null,
+    expires_at: expiresAt,
+  });
+  if (error) throw new Error(`Failed to register download: ${error.message}`);
+
+  return {
+    asset: {
+      id: asset.id,
+      platform,
+      title: asset.title,
+      filename: asset.filename,
+      size: asset.file_size,
+      sha256: null,
+      install_mode: asset.install_mode,
+      install_name: asset.install_name,
+      romset_version: asset.romset_version,
+    },
+    downloadUrl: asset.web_content_link,
+    expiresAt,
+  };
+}
+
 export async function authorizePlatformDownload(
   user: User,
   platform: unknown,
@@ -353,6 +359,9 @@ export async function authorizePlatformDownload(
   if (typeof platform !== "string" || !/^[a-z0-9_-]{1,64}$/.test(platform)) {
     throw new AppApiError(400, "Invalid platform");
   }
+  if (!/^[a-f0-9]{64}$/.test(requestedAssetId)) {
+    throw new AppApiError(400, "Invalid asset");
+  }
 
   const config = getPlatformConfig(platform);
   await assertRateLimit(
@@ -361,36 +370,32 @@ export async function authorizePlatformDownload(
       ? Number(process.env.ROMSET_UPDATE_REQUESTS_PER_MINUTE ?? "2000")
       : undefined
   );
-  const assets = await listArchiveAssets(platform);
-  const asset = assets.find((item) => item.id === requestedAssetId);
-  if (!asset) throw new AppApiError(404, `${config.name} download not found`);
 
-  const expiresAt = new Date(Date.now() + 60 * 60_000).toISOString();
-  const { error } = await getSupabaseAdmin().from("download_requests").insert({
-    user_id: user.id,
-    asset_id: asset.id,
-    status: "authorized",
-    provider: "archive_org",
-    client_version: clientVersion?.slice(0, 64) || null,
-    expires_at: expiresAt,
-  });
-  if (error) throw new Error(`Failed to register download: ${error.message}`);
+  const asset = await findIndexedAsset(config.id, requestedAssetId);
+  if (!asset) {
+    throw new AppApiError(404, `${config.name} download not found`);
+  }
 
-  return {
-    asset: {
-      id: asset.id,
-      platform: asset.platform,
-      title: asset.title,
-      filename: asset.download_name,
-      size: config.romset ? null : asset.file_size,
-      sha256: null,
-      install_mode: asset.install_mode,
-      install_name: asset.install_name,
-      romset_version: asset.romset_version,
-    },
-    downloadUrl: archiveFileUrl(asset.archive_identifier, asset.object_key),
-    expiresAt,
-  };
+  return authorizeIndexedAsset(user, config.id, asset, clientVersion);
+}
+
+export async function authorizeBiosDownload(
+  user: User,
+  requestedAssetId: string,
+  clientVersion?: string
+) {
+  await assertDownloadAccess(user);
+  if (!/^[a-f0-9]{64}$/.test(requestedAssetId)) {
+    throw new AppApiError(400, "Invalid asset");
+  }
+
+  await assertRateLimit(user.id);
+  const asset = await findIndexedBiosAsset(requestedAssetId);
+  if (!asset) {
+    throw new AppApiError(404, "BIOS download not found");
+  }
+
+  return authorizeIndexedAsset(user, "bios", asset, clientVersion);
 }
 
 export async function authorizeRomsetUpdate(
@@ -414,9 +419,11 @@ export async function authorizeRomsetUpdate(
   }
 
   const config = getPlatformConfig(platform);
-  const romsetUpdate = config.romset;
-  if (!romsetUpdate || !romsetUpdate.allow_updates) {
-    throw new AppApiError(404, "Romset updates are not configured for this platform");
+  if (!config.romset?.allow_updates) {
+    throw new AppApiError(
+      404,
+      "Romset updates are not configured for this platform"
+    );
   }
 
   await assertRateLimit(
@@ -424,32 +431,10 @@ export async function authorizeRomsetUpdate(
     Number(process.env.ROMSET_UPDATE_REQUESTS_PER_MINUTE ?? "2000")
   );
 
-  const objectKey = `${romsetUpdate.directory}${filename}`;
-  const id = assetId(platform, objectKey);
-  const expiresAt = new Date(Date.now() + 60 * 60_000).toISOString();
-  const { error } = await getSupabaseAdmin().from("download_requests").insert({
-    user_id: user.id,
-    asset_id: id,
-    status: "authorized",
-    provider: "archive_org",
-    client_version: clientVersion?.slice(0, 64) || null,
-    expires_at: expiresAt,
-  });
-  if (error) throw new Error(`Failed to register download: ${error.message}`);
+  const asset = await findIndexedAssetByFilename(config.id, filename);
+  if (!asset) {
+    throw new AppApiError(404, `${config.name} update not found`);
+  }
 
-  return {
-    asset: {
-      id,
-      platform,
-      title: titleOf(filename),
-      filename,
-      size: null,
-      sha256: null,
-      install_mode: "file" as const,
-      install_name: titleOf(filename),
-      romset_version: romsetUpdate.version,
-    },
-    downloadUrl: archiveFileUrl(romsetUpdate.identifier, objectKey),
-    expiresAt,
-  };
+  return authorizeIndexedAsset(user, config.id, asset, clientVersion);
 }
