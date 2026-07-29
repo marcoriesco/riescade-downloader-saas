@@ -30,7 +30,6 @@
 			"extensions": [".zip", ".7z"],
 			"romset_update": {
 				"version": "v0.288",
-				"platforms": ["mame", "arcade"],
 				"archive": {
 					"identifier": "mame-roms-non-merged",
 					"metadata_url": "https://archive.org/metadata/mame-roms-non-merged",
@@ -3290,7 +3289,6 @@
 			"extensions": [".zip", ".7z"],
 			"romset_update": {
 				"version": "v0.288",
-				"platforms": ["mame", "arcade"],
 				"archive": {
 					"identifier": "mame-roms-non-merged",
 					"metadata_url": "https://archive.org/metadata/mame-roms-non-merged",

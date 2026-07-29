@@ -38,7 +38,6 @@ Platforms that support updating installed arcade ROMs declare a
 ```json
 {
   "version": "v0.288",
-  "platforms": ["mame", "arcade"],
   "archive": {
     "identifier": "mame-roms-non-merged",
     "metadata_url": "https://archive.org/metadata/mame-roms-non-merged",

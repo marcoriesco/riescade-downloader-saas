@@ -27,7 +27,6 @@ interface PlatformConfig {
   install_extension?: string;
   romset_update?: {
     version: string;
-    platforms: string[];
     archive: {
       identifier: string;
       metadata_url: string;
