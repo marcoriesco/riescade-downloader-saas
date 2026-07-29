@@ -351,11 +351,12 @@ async function authorizeIndexedAsset(
   };
 }
 
-export async function authorizePlatformDownload(
+async function authorizeIndexedPlatformDownload(
   user: User,
   platform: unknown,
   requestedAssetId: string,
-  clientVersion?: string
+  clientVersion: string | undefined,
+  configuredLimit?: number
 ) {
   await assertDownloadAccess(user);
 
@@ -367,12 +368,7 @@ export async function authorizePlatformDownload(
   }
 
   const config = getPlatformConfig(platform);
-  await assertRateLimit(
-    user.id,
-    config.romset
-      ? Number(process.env.ROMSET_UPDATE_REQUESTS_PER_MINUTE ?? "2000")
-      : undefined
-  );
+  await assertRateLimit(user.id, configuredLimit);
 
   const asset = await findIndexedAsset(config.id, requestedAssetId);
   if (!asset) {
@@ -380,6 +376,35 @@ export async function authorizePlatformDownload(
   }
 
   return authorizeIndexedAsset(user, config.id, asset, clientVersion);
+}
+
+export async function authorizePlatformDownload(
+  user: User,
+  platform: unknown,
+  requestedAssetId: string,
+  clientVersion?: string
+) {
+  return authorizeIndexedPlatformDownload(
+    user,
+    platform,
+    requestedAssetId,
+    clientVersion
+  );
+}
+
+export async function authorizeFullPlatformDownloadAsset(
+  user: User,
+  platform: unknown,
+  requestedAssetId: string,
+  clientVersion?: string
+) {
+  return authorizeIndexedPlatformDownload(
+    user,
+    platform,
+    requestedAssetId,
+    clientVersion,
+    Number(process.env.PLATFORM_DOWNLOAD_REQUESTS_PER_MINUTE ?? "2000")
+  );
 }
 
 export async function authorizeBiosDownload(
