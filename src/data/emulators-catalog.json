@@ -406,6 +406,9 @@
     },
     "libretro": {
       "name": "RetroArch",
+      "aliases": [
+        "retroarch"
+      ],
       "installDir": "retroarch",
       "executable": "retroarch/retroarch.exe",
       "updateMode": "manual",
@@ -1011,5 +1014,4 @@
     }
   }
 }
-
 

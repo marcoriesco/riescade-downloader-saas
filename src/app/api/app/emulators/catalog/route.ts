@@ -4,7 +4,7 @@ import {
   AppApiError,
   authenticateAppRequest,
 } from "@/lib/server/app-auth";
-import { assertDownloadAccess } from "@/services/download-service";
+import { assertDownloadAccess, listEmulatorPackages } from "@/services/download-service";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +13,18 @@ export async function GET(request: Request) {
     const user = await authenticateAppRequest(request);
     await assertDownloadAccess(user);
 
-    return NextResponse.json(emulatorsCatalog, {
+    const packages = await listEmulatorPackages();
+    const packageById = new Map(packages.map((item) => [item.emulatorId, item]));
+    const configured = emulatorsCatalog.emulators as Record<string, { aliases?: string[] } & Record<string, unknown>>;
+    const emulators = Object.fromEntries(
+      Object.entries(configured).map(([id, entry]) => {
+        const packageInfo = packageById.get(id) ||
+          (entry.aliases || []).map((alias) => packageById.get(alias)).find(Boolean);
+        return [id, packageInfo ? { ...entry, package: packageInfo } : entry];
+      })
+    );
+
+    return NextResponse.json({ ...emulatorsCatalog, emulators }, {
       headers: {
         "Cache-Control": "private, no-store",
       },

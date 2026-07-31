@@ -10,6 +10,10 @@ index of downloadable files.
 ```text
 RIESCADE/
 ├── bios/
+├── emulators/
+│   ├── eden.zip
+│   ├── retroarch.zip
+│   └── ryujinx.zip
 └── roms/
     ├── snes/
     ├── megadrive/
@@ -21,6 +25,12 @@ Only the shared-drive ID is configured. On every synchronization, the server
 finds `bios` and `roms` at the drive root and matches each direct child of
 `roms` to the platform `id` in `games-catalog.json`, ignoring letter case.
 Folder names are therefore part of the catalog contract.
+
+Emulator packages live directly under `emulators` and must use the normalized
+emulator ID as their filename. Only `.zip` files whose names exist in
+`emulators-catalog.json` (or match one of its aliases) are indexed. Google
+Drive's modification timestamp is used as the package version and its MD5 is
+validated by the desktop app before installation.
 
 The service account must be a member of the shared drive and only needs
 read-only access. Its email and private key are server-only environment
@@ -103,6 +113,8 @@ GET  /api/app/catalog?platform=snes
 POST /api/app/downloads/{assetId}
 GET  /api/app/bios/catalog
 POST /api/app/bios/downloads/{assetId}
+GET  /api/app/emulators/catalog
+POST /api/app/emulators/downloads/{assetId}
 ```
 
 The files must be configured so that the intended app users can open the

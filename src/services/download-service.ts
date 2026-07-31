@@ -31,7 +31,7 @@ interface DownloadAssetRow {
   id: string;
   drive_file_id: string;
   drive_folder_id: string;
-  category: "bios" | "rom";
+  category: "bios" | "rom" | "emulator";
   platform: string | null;
   filename: string;
   title: string;
@@ -42,6 +42,7 @@ interface DownloadAssetRow {
   install_mode: InstallMode;
   install_name: string;
   romset_version: string | null;
+  drive_modified_at?: string | null;
   active: boolean;
 }
 
@@ -229,6 +230,42 @@ async function findIndexedBiosAsset(
     throw new Error(`Failed to find Google Drive BIOS asset: ${error.message}`);
   }
   return (data as DownloadAssetRow | null) ?? null;
+}
+
+async function findIndexedEmulatorAsset(
+  emulatorId: string,
+  assetId?: string
+): Promise<DownloadAssetRow | null> {
+  let query = getSupabaseAdmin()
+    .from("download_assets")
+    .select(
+      "id,drive_file_id,drive_folder_id,category,platform,filename,title,mime_type,file_size,md5_checksum,web_content_link,install_mode,install_name,romset_version,active,drive_modified_at"
+    )
+    .eq("category", "emulator")
+    .eq("platform", emulatorId)
+    .eq("active", true);
+  if (assetId) query = query.eq("id", assetId);
+  const { data, error } = await query.maybeSingle();
+  if (error) throw new Error(`Failed to find emulator package: ${error.message}`);
+  return (data as DownloadAssetRow | null) ?? null;
+}
+
+export async function listEmulatorPackages() {
+  const { data, error } = await getSupabaseAdmin()
+    .from("download_assets")
+    .select("id,platform,filename,file_size,md5_checksum,drive_modified_at")
+    .eq("category", "emulator")
+    .eq("active", true)
+    .order("platform", { ascending: true });
+  if (error) throw new Error(`Failed to load emulator packages: ${error.message}`);
+  return (data ?? []).map((asset) => ({
+    assetId: asset.id,
+    emulatorId: asset.platform,
+    fileName: asset.filename,
+    fileSize: asset.file_size,
+    md5: asset.md5_checksum,
+    version: asset.drive_modified_at || asset.md5_checksum || "unknown",
+  }));
 }
 
 export function hasActiveSubscription(
@@ -482,6 +519,25 @@ export async function authorizeBiosDownload(
   }
 
   return authorizeIndexedAsset(user, "bios", asset, clientVersion);
+}
+
+export async function authorizeEmulatorDownload(
+  user: User,
+  emulatorId: unknown,
+  requestedAssetId: string,
+  clientVersion?: string
+) {
+  await assertDownloadAccess(user);
+  if (typeof emulatorId !== "string" || !/^[a-z0-9_-]{1,64}$/.test(emulatorId)) {
+    throw new AppApiError(400, "Invalid emulator");
+  }
+  if (!/^[a-f0-9]{64}$/.test(requestedAssetId)) {
+    throw new AppApiError(400, "Invalid asset");
+  }
+  await assertRateLimit(user.id);
+  const asset = await findIndexedEmulatorAsset(emulatorId, requestedAssetId);
+  if (!asset) throw new AppApiError(404, "Emulator download not found");
+  return authorizeIndexedAsset(user, emulatorId, asset, clientVersion);
 }
 
 export async function authorizePlatformMediaDownload(

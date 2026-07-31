@@ -2,6 +2,7 @@ import "server-only";
 
 import { createHash } from "node:crypto";
 import gamesCatalogJson from "@/data/games-catalog.json";
+import emulatorsCatalogJson from "@/data/emulators-catalog.json";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 import {
   findUniqueGoogleDriveFolder,
@@ -35,7 +36,7 @@ interface DownloadAssetRow {
   id: string;
   drive_file_id: string;
   drive_folder_id: string;
-  category: "bios" | "rom";
+  category: "bios" | "rom" | "emulator";
   platform: string | null;
   filename: string;
   title: string;
@@ -62,9 +63,18 @@ export interface GoogleDriveSyncResult {
     skipped: number;
   }>;
   unmappedFolders: string[];
+  emulators?: { folderId: string; assets: number; skipped: number };
 }
 
 const gamesCatalog = gamesCatalogJson as GamesCatalog;
+const emulatorEntries = (emulatorsCatalogJson as {
+  emulators: Record<string, { aliases?: string[] }>;
+}).emulators;
+const emulatorIds = new Set(
+  Object.entries(emulatorEntries).flatMap(([id, entry]) =>
+    [id, ...(entry.aliases || [])].map((value) => value.toLocaleLowerCase())
+  )
+);
 const UPSERT_BATCH_SIZE = 500;
 
 function assetId(fileId: string): string {
@@ -93,7 +103,8 @@ function toAssetRow(
   file: GoogleDriveFile,
   folderId: string,
   platform: PlatformConfig | null,
-  syncedAt: string
+  syncedAt: string,
+  category: "bios" | "rom" | "emulator" = platform ? "rom" : "bios"
 ): DownloadAssetRow | null {
   if (
     isGoogleDriveFolder(file) ||
@@ -111,8 +122,8 @@ function toAssetRow(
     id: assetId(file.id),
     drive_file_id: file.id,
     drive_folder_id: folderId,
-    category: platform ? "rom" : "bios",
-    platform: platform?.id ?? null,
+    category,
+    platform: category === "emulator" ? title.toLocaleLowerCase() : platform?.id ?? null,
     filename: file.name,
     title,
     mime_type: file.mimeType,
@@ -159,7 +170,8 @@ async function replaceFolderAssets(
 
 async function syncFolder(
   folderId: string,
-  platform: PlatformConfig | null
+  platform: PlatformConfig | null,
+  category: "bios" | "rom" | "emulator" = platform ? "rom" : "bios"
 ): Promise<{ assets: number; skipped: number }> {
   const files = await listGoogleDriveFolder(folderId);
   const allowedExtensions = platform
@@ -170,6 +182,7 @@ async function syncFolder(
   let skipped = 0;
 
   for (const file of files) {
+    const emulatorId = titleOf(file.name).toLocaleLowerCase();
     if (
       allowedExtensions &&
       !allowedExtensions.has(extensionOf(file.name))
@@ -178,7 +191,12 @@ async function syncFolder(
       continue;
     }
 
-    const row = toAssetRow(file, folderId, platform, syncedAt);
+    if (category === "emulator" && (extensionOf(file.name) !== ".zip" || !emulatorIds.has(emulatorId))) {
+      skipped += 1;
+      continue;
+    }
+
+    const row = toAssetRow(file, folderId, platform, syncedAt, category);
     if (!row) {
       skipped += 1;
       continue;
@@ -242,6 +260,17 @@ export async function syncGoogleDriveCatalog(
     result.folders += 1;
     result.assets += bios.assets;
     result.skipped += bios.skipped;
+
+    const emulatorsFolder = await findUniqueGoogleDriveFolder(rootFolderId, "emulators");
+    const emulators = await syncFolder(emulatorsFolder.id, null, "emulator");
+    result.folders += 1;
+    result.assets += emulators.assets;
+    result.skipped += emulators.skipped;
+    result.emulators = {
+      folderId: emulatorsFolder.id,
+      assets: emulators.assets,
+      skipped: emulators.skipped,
+    };
   }
 
   for (const platform of selectedPlatforms) {
