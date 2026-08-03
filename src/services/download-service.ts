@@ -1,5 +1,6 @@
 import type { User } from "@supabase/supabase-js";
 import gamesCatalogJson from "@/data/games-catalog.json";
+import mameCatalogJson from "@/data/mame.json";
 import { AppApiError, isDownloadTester } from "@/lib/server/app-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 
@@ -27,6 +28,10 @@ interface GamesCatalog {
   platforms: PlatformConfig[];
 }
 
+interface MameCatalog {
+  games: Record<string, { title: string }>;
+}
+
 interface DownloadAssetRow {
   id: string;
   drive_file_id: string;
@@ -47,6 +52,7 @@ interface DownloadAssetRow {
 }
 
 const gamesCatalog = gamesCatalogJson as GamesCatalog;
+const mameCatalog = mameCatalogJson as MameCatalog;
 
 export function isReservedPlatformAsset(filename: string): boolean {
   return RESERVED_PLATFORM_FILENAMES.has(filename.toLocaleLowerCase("pt-BR"));
@@ -63,10 +69,19 @@ function getPlatformConfig(platform: string): PlatformConfig {
   };
 }
 
-function mapAsset(asset: DownloadAssetRow) {
+function resolveAssetTitle(asset: DownloadAssetRow, config: PlatformConfig): string {
+  if (config.romset?.catalog === "mame.json") {
+    const romName = asset.filename.replace(/\.[^/.]+$/, "").toLowerCase();
+    const mameTitle = mameCatalog.games[romName]?.title?.trim();
+    if (mameTitle) return mameTitle;
+  }
+  return asset.title;
+}
+
+function mapAsset(asset: DownloadAssetRow, config?: PlatformConfig) {
   return {
     id: asset.id,
-    title: asset.title,
+    title: config ? resolveAssetTitle(asset, config) : asset.title,
     download_name: asset.filename,
     file_size: asset.file_size,
     sha256: null,
@@ -323,7 +338,7 @@ export async function listSnesAssets() {
 export async function listBiosAssets() {
   const assets = await listIndexedBiosAssets();
   return {
-    assets: assets.map(mapAsset),
+    assets: assets.map((asset) => mapAsset(asset)),
   };
 }
 
@@ -338,7 +353,7 @@ export async function listPlatformAssets(
   return {
     assets: page.assets
       .filter((asset) => !isReservedPlatformAsset(asset.filename))
-      .map(mapAsset),
+      .map((asset) => mapAsset(asset, config)),
     total: page.total,
     offset,
     limit,
@@ -374,7 +389,7 @@ export async function listRomsetCatalog(
   const filtered = normalizedSearch
     ? downloadableAssets.filter(
         (asset) =>
-          asset.title.toLocaleLowerCase("pt-BR").includes(normalizedSearch) ||
+          resolveAssetTitle(asset, config).toLocaleLowerCase("pt-BR").includes(normalizedSearch) ||
           asset.filename.toLocaleLowerCase("pt-BR").includes(normalizedSearch)
       )
     : downloadableAssets;
@@ -389,7 +404,7 @@ export async function listRomsetCatalog(
     limit: safeLimit,
     assets: filtered.slice(safeOffset, safeOffset + safeLimit).map((asset) => ({
       id: asset.id,
-      title: asset.title,
+      title: resolveAssetTitle(asset, config),
       download_name: asset.filename,
       file_size: asset.file_size,
       md5: asset.md5_checksum,
