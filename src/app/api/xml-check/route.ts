@@ -14,6 +14,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  if (!/^[a-z0-9][a-z0-9_-]{0,63}$/i.test(platform)) {
+    return NextResponse.json(
+      { exists: false, error: "Plataforma inválida" },
+      { status: 400 }
+    );
+  }
+
   try {
     // Caminho para o arquivo XML
     const xmlFilePath = path.join(
