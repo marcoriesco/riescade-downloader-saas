@@ -3,6 +3,7 @@ import "server-only";
 import { createHash } from "node:crypto";
 import gamesCatalogJson from "@/data/games-catalog.json";
 import emulatorsCatalogJson from "@/data/emulators-catalog.json";
+import { downloadPackageTitle, isExtractPackage } from "@/lib/download-package";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 import {
   findUniqueGoogleDriveFolder,
@@ -18,8 +19,6 @@ interface PlatformConfig {
   id: string;
   name: string;
   extensions: string[];
-  install_mode?: InstallMode;
-  install_extension?: string;
   romset?: {
     version: string;
     catalog: string;
@@ -88,11 +87,6 @@ function extensionOf(filename: string): string {
   return dot >= 0 ? filename.slice(dot).toLowerCase() : "";
 }
 
-function titleOf(filename: string): string {
-  const dot = filename.lastIndexOf(".");
-  return dot > 0 ? filename.slice(0, dot) : filename;
-}
-
 function parseFileSize(value?: string): number | null {
   if (!value || !/^\d+$/.test(value)) return null;
   const parsed = Number(value);
@@ -114,9 +108,9 @@ function toAssetRow(
     return null;
   }
 
+  const title = downloadPackageTitle(file.name);
   const installMode: InstallMode =
-    platform?.install_mode === "extract" ? "extract" : "file";
-  const title = titleOf(file.name);
+    category === "rom" && isExtractPackage(file.name) ? "extract" : "file";
 
   return {
     id: assetId(file.id),
@@ -131,7 +125,7 @@ function toAssetRow(
     md5_checksum: file.md5Checksum?.toLowerCase() ?? null,
     web_content_link: file.webContentLink,
     install_mode: installMode,
-    install_name: `${title}${platform?.install_extension ?? ""}`,
+    install_name: title,
     romset_version: platform?.romset?.version ?? null,
     drive_modified_at: file.modifiedTime ?? null,
     active: true,
@@ -182,9 +176,10 @@ async function syncFolder(
   let skipped = 0;
 
   for (const file of files) {
-    const emulatorId = titleOf(file.name).toLocaleLowerCase();
+    const emulatorId = downloadPackageTitle(file.name).toLocaleLowerCase();
     if (
       allowedExtensions &&
+      !isExtractPackage(file.name) &&
       !allowedExtensions.has(extensionOf(file.name))
     ) {
       skipped += 1;

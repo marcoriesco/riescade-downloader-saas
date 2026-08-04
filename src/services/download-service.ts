@@ -3,6 +3,7 @@ import gamesCatalogJson from "@/data/games-catalog.json";
 import mameCatalogJson from "@/data/mame.json";
 import { AppApiError, isDownloadTester } from "@/lib/server/app-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
+import { downloadPackageTitle, isExtractPackage } from "@/lib/download-package";
 
 const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["active", "trialing"]);
 const DATABASE_PAGE_SIZE = 1000;
@@ -14,8 +15,6 @@ interface PlatformConfig {
   id: string;
   name: string;
   extensions: string[];
-  install_mode?: InstallMode;
-  install_extension?: string;
   romset?: {
     version: string;
     catalog: string;
@@ -63,19 +62,22 @@ function getPlatformConfig(platform: string): PlatformConfig {
     (item) => item.id.toLowerCase() === platform.toLowerCase()
   );
   if (!config) throw new AppApiError(404, "Platform not found");
-  return {
-    ...config,
-    install_mode: config.install_mode === "extract" ? "extract" : "file",
-  };
+  return config;
 }
 
 function resolveAssetTitle(asset: DownloadAssetRow, config: PlatformConfig): string {
   if (config.romset?.catalog === "mame.json") {
-    const romName = asset.filename.replace(/\.[^/.]+$/, "").toLowerCase();
+    const romName = downloadPackageTitle(asset.filename).toLowerCase();
     const mameTitle = mameCatalog.games[romName]?.title?.trim();
     if (mameTitle) return mameTitle;
   }
-  return asset.title;
+  return downloadPackageTitle(asset.filename);
+}
+
+function resolvedInstallMode(asset: DownloadAssetRow): InstallMode {
+  return asset.category === "rom" && isExtractPackage(asset.filename)
+    ? "extract"
+    : "file";
 }
 
 function mapAsset(asset: DownloadAssetRow, config?: PlatformConfig) {
@@ -86,8 +88,8 @@ function mapAsset(asset: DownloadAssetRow, config?: PlatformConfig) {
     file_size: asset.file_size,
     sha256: null,
     md5: asset.md5_checksum,
-    install_mode: asset.install_mode,
-    install_name: asset.install_name,
+    install_mode: resolvedInstallMode(asset),
+    install_name: downloadPackageTitle(asset.filename),
     romset_version: asset.romset_version,
   };
 }
@@ -452,8 +454,8 @@ async function authorizeIndexedAsset(
       size: asset.file_size,
       sha256: null,
       md5: asset.md5_checksum,
-      install_mode: asset.install_mode,
-      install_name: asset.install_name,
+      install_mode: resolvedInstallMode(asset),
+      install_name: downloadPackageTitle(asset.filename),
       romset_version: asset.romset_version,
     },
     downloadUrl: asset.web_content_link,

@@ -7,4 +7,4 @@ alter table public.download_requests
 drop table if exists public.game_assets;
 
 comment on table public.download_requests is
-  'Audit trail for Archive.org download authorizations issued to the app.';
+  'Audit trail for download authorizations issued to the app.';

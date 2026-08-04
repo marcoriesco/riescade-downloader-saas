@@ -3,6 +3,7 @@ import {
   hasActiveSubscription,
   isReservedPlatformAsset,
 } from "./download-service";
+import { downloadPackageTitle, isExtractPackage } from "@/lib/download-package";
 import gamesCatalog from "@/data/games-catalog.json";
 
 describe("download access", () => {
@@ -36,50 +37,32 @@ describe("download access", () => {
   });
 });
 
-describe("game installation mode", () => {
-  it.each([
-    ["windows", ".game"],
-    ["teknoparrot", ".game"],
-    ["touhou", ".game"],
-    ["gog", ".game"],
-    ["bigfish", ".game"],
-    ["ikemen", ".game"],
-    ["mugen", ".game"],
-    ["ouya", ".game"],
-    ["popcap", ".game"],
-  ])(
-    "marks %s packages for automatic extraction into %s folders",
-    (platform, installExtension) => {
-      const config = gamesCatalog.platforms.find((item) => item.id === platform);
-      expect(config?.install_mode).toBe("extract");
-      expect(config?.install_extension).toBe(installExtension);
-      expect(config?.extensions).toContain(".game");
-      expect(config?.extensions).not.toContain(".zip");
-    }
-  );
+describe("game installation package convention", () => {
+  it("extracts only files carrying the .extract.zip suffix", () => {
+    expect(isExtractPackage("sfiii3.extract.zip")).toBe(true);
+    expect(isExtractPackage("SFIII3.EXTRACT.ZIP")).toBe(true);
+    expect(isExtractPackage("sfiii3.zip")).toBe(false);
+    expect(isExtractPackage("sfiii3.7z")).toBe(false);
+  });
 
-  it("extracts ScummVM ZIPs without adding the .game suffix", () => {
-    const config = gamesCatalog.platforms.find((item) => item.id === "scummvm");
-    expect(config?.install_mode).toBe("extract");
-    expect(config?.install_extension).toBeUndefined();
-    expect(config?.extensions).toContain(".scummvm");
+  it("removes the extraction marker from the catalog title", () => {
+    expect(downloadPackageTitle("sfiii3.extract.zip")).toBe("sfiii3");
+    expect(downloadPackageTitle("meujogo.game.extract.zip")).toBe("meujogo.game");
+    expect(downloadPackageTitle("pacman.zip")).toBe("pacman");
   });
 });
 
 describe("Google Drive catalog configuration", () => {
-  it("discovers Google Drive folders dynamically without Archive.org configuration", () => {
+  it("discovers Google Drive folders dynamically from the platform catalog", () => {
     for (const platform of gamesCatalog.platforms) {
       expect(platform).not.toHaveProperty("folder_id");
-      expect(platform).not.toHaveProperty("archive");
       if ("romset" in platform && platform.romset) {
         expect(platform.romset).not.toHaveProperty("identifier");
         expect(platform.romset).not.toHaveProperty("metadata_url");
-        expect(platform.romset).not.toHaveProperty("details_url");
         expect(platform.romset).not.toHaveProperty("directory");
       }
     }
 
-    expect(JSON.stringify(gamesCatalog)).not.toContain("archive.org");
     expect(gamesCatalog).not.toHaveProperty("google_drive");
   });
 

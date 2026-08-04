@@ -112,12 +112,12 @@
 		{
 			"id": "naomi",
 			"name": "Naomi",
-			"extensions": [".bin", ".dat", ".lst", ".zip", ".7z"]
+			"extensions": [".zip"]
 		},
 		{
 			"id": "naomi2",
 			"name": "Naomi 2",
-			"extensions": [".zip", ".7z"]
+			"extensions": [".zip"]
 		},
 		{
 			"id": "hikaru",
@@ -142,7 +142,6 @@
 		{
 			"id": "lindbergh",
 			"name": "Sega Lindbergh",
-			"install_mode": "extract",
 			"extensions": [".game", ".zip"]
 		},
 		{
@@ -1132,7 +1131,6 @@
 		{
 			"id": "scummvm",
 			"name": "ScummVM",
-			"install_mode": "extract",
 			"extensions": [".scummvm", ".7z", ".zip", ".rar", ".squashfs"]
 		},
 		{
@@ -1228,15 +1226,11 @@
 		{
 			"id": "ikemen",
 			"name": "IKEMEN",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game", ".zip"]
 		},
 		{
 			"id": "mugen",
 			"name": "MUGEN",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game"]
 		},
 		{
@@ -1252,8 +1246,6 @@
 		{
 			"id": "teknoparrot",
 			"name": "TeknoParrot",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game", ".zip"]
 		},
 		{
@@ -1313,8 +1305,6 @@
 		{
 			"id": "gog",
 			"name": "GOG.com",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game"]
 		},
 		{
@@ -1330,8 +1320,6 @@
 		{
 			"id": "windows",
 			"name": "Games for Windows",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game"]
 		},
 		{
@@ -1844,8 +1832,6 @@
 		{
 			"id": "bigfish",
 			"name": "BigFish Games",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game"]
 		},
 		{
@@ -2003,8 +1989,6 @@
 		{
 			"id": "ouya",
 			"name": "OUYA",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game"]
 		},
 		{
@@ -2025,8 +2009,6 @@
 		{
 			"id": "popcap",
 			"name": "Popcap",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game"]
 		},
 		{
@@ -2221,8 +2203,6 @@
 		{
 			"id": "touhou",
 			"name": "Touhou Project",
-			"install_mode": "extract",
-			"install_extension": ".game",
 			"extensions": [".game"]
 		},
 		{
