@@ -208,6 +208,11 @@
 			"installDir": "fbneo",
 			"executable": "fbneo/fbneo64.exe"
 		},
+		"fightcade": {
+			"name": "Fightcade",
+			"installDir": "fightcade",
+			"executable": "fightcade/fc2-electron/fc2-electron.exe"
+		},
 		"flycast": {
 			"name": "Flycast",
 			"installDir": "flycast",
