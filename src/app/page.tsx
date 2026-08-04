@@ -154,13 +154,16 @@ export default function Home() {
 			<main>
 				{/* HERO SECTION */}
 				<section className="relative overflow-hidden border-b border-white/10 bg-black pt-28 lg:h-[100svh] lg:min-h-[820px] lg:pt-0">
-					<Image
-						src="/images/hero-riescade-cyber.png"
-						alt=""
-						fill
-						priority
-						sizes="100vw"
-						className="object-contain object-[68%_center] !w-auto !left-auto !h-auto"
+					<video
+						src="/video/riescade-os.mp4"
+						autoPlay
+						muted
+						loop
+						playsInline
+						preload="auto"
+						poster="/images/hero-riescade-cyber.png"
+						aria-hidden="true"
+						className="absolute inset-y-0 right-0 h-full w-auto max-w-none object-contain object-[68%_center]"
 					/>
 					<div className="absolute inset-0 bg-gradient-to-r from-black via-black/45 to-transparent lg:via-black/15" />
 					<div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
