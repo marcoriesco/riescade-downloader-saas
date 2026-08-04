@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { getSupabaseAdmin } from "./supabase-admin";
 
 export const LATEST_APP_DOWNLOAD_URL =
-  "https://github.com/marcoriesco/RIESCADE-OS/releases/latest/download/RIESCADE_OS.7z";
+  "https://github.com/marcoriesco/RIESCADE-OS-ARCADE/releases/latest/download/RIESCADE_OS.7z";
 
 export async function syncStripeSubscription(
   subscription: Stripe.Subscription,

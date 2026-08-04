@@ -13,7 +13,7 @@ Site de autenticação, assinatura e gerenciamento de conta do aplicativo RIESCA
 
 Download permanente da versão mais recente:
 
-`https://github.com/marcoriesco/RIESCADE-OS/releases/latest/download/RIESCADE_OS.7z`
+`https://github.com/marcoriesco/RIESCADE-OS-ARCADE/releases/latest/download/RIESCADE_OS.7z`
 
 ## Desenvolvimento
 

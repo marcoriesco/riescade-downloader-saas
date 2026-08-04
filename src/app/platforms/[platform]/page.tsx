@@ -82,7 +82,7 @@ export default function PlatformPage({
   // O download dos jogos acontece exclusivamente dentro do aplicativo.
   const handleRedirectToUrl = () => {
     window.location.href =
-      "https://github.com/marcoriesco/RIESCADE-OS/releases/latest/download/RIESCADE_OS.7z";
+      "https://github.com/marcoriesco/RIESCADE-OS-ARCADE/releases/latest/download/RIESCADE_OS.7z";
   };
 
   useEffect(() => {
