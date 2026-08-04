@@ -1881,7 +1881,7 @@
 		{
 			"id": "fightcade",
 			"name": "Fightcade",
-			"extensions": [".bat", ".pc", ".wsquashfs"]
+			"extensions": [".fightcade"]
 		},
 		{
 			"id": "fruit",
