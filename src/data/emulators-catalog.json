@@ -339,7 +339,8 @@
 		},
 		"mednafen": {
 			"name": "mednafen",
-			"installDir": "mednafen"
+			"installDir": "mednafen",
+			"executable": "mednafen/mednafen.exe"
 		},
 		"melonds": {
 			"name": "melonds",
