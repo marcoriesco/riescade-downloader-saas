@@ -431,7 +431,7 @@
 		{
 			"id": "ps4",
 			"name": "Playstation 4",
-			"extensions": [".ps4", ".m3u", ".lnk"]
+			"extensions": [".game"]
 		},
 		{
 			"id": "xbox",

@@ -139,9 +139,7 @@
 			"name": "Dolphin",
 			"installDir": "dolphin-emu",
 			"executable": "dolphin-emu/Dolphin.exe",
-			"preserve": [
-				"User"
-			]
+			"preserve": ["User"]
 		},
 		"dolphin-triforce": {
 			"name": "dolphin-triforce",
@@ -177,17 +175,13 @@
 			"name": "Eden",
 			"installDir": "eden",
 			"executable": "eden/eden.exe",
-			"preserve": [
-				"user"
-			]
+			"preserve": ["user"]
 		},
 		"eden-nightly": {
 			"name": "Eden Nightly",
 			"installDir": "eden-nightly",
 			"executable": "eden-nightly/eden.exe",
-			"preserve": [
-				"user"
-			]
+			"preserve": ["user"]
 		},
 		"eduke32": {
 			"name": "eduke32",
@@ -299,9 +293,7 @@
 		},
 		"libretro": {
 			"name": "RetroArch",
-			"aliases": [
-				"retroarch"
-			],
+			"aliases": ["retroarch"],
 			"installDir": "retroarch",
 			"executable": "retroarch/retroarch.exe",
 			"preserve": [
@@ -318,11 +310,7 @@
 			"name": "Linux Loader",
 			"installDir": "linuxloader",
 			"executable": "linuxloader/linuxloader.exe",
-			"preserve": [
-				"controls.ini",
-				"linuxloader.ini",
-				"ll-deps"
-			]
+			"preserve": ["controls.ini", "linuxloader.ini", "ll-deps"]
 		},
 		"love": {
 			"name": "love",
@@ -342,11 +330,7 @@
 			"name": "MAME",
 			"installDir": "mame",
 			"executable": "mame/mame.exe",
-			"preserve": [
-				"cfg",
-				"nvram",
-				"ini"
-			]
+			"preserve": ["cfg", "nvram", "ini"]
 		},
 		"mandarine": {
 			"name": "mandarine",
@@ -425,31 +409,19 @@
 			"name": "PCSX2",
 			"installDir": "pcsx2",
 			"executable": "pcsx2/pcsx2-qt.exe",
-			"preserve": [
-				"inis",
-				"bios",
-				"memcards"
-			]
+			"preserve": ["inis", "bios", "memcards"]
 		},
 		"pcsx2-nightly": {
 			"name": "PCSX2 Nightly",
 			"installDir": "pcsx2-nightly",
 			"executable": "pcsx2-nightly/pcsx2.exe",
-			"preserve": [
-				"inis",
-				"bios",
-				"memcards"
-			]
+			"preserve": ["inis", "bios", "memcards"]
 		},
 		"pcsx2x6": {
 			"name": "PCSX2x6",
 			"installDir": "pcsx2x6",
 			"executable": "pcsx2x6/pcsx2-qt.exe",
-			"preserve": [
-				"inis",
-				"bios",
-				"memcards"
-			]
+			"preserve": ["inis", "bios", "memcards"]
 		},
 		"pdark": {
 			"name": "pdark",
@@ -478,9 +450,7 @@
 			"name": "PPSSPP",
 			"installDir": "ppsspp",
 			"executable": "ppsspp/PPSSPPWindows64.exe",
-			"preserve": [
-				"memstick"
-			]
+			"preserve": ["memstick"]
 		},
 		"project64": {
 			"name": "project64",
@@ -531,12 +501,7 @@
 			"name": "Ryujinx",
 			"installDir": "ryujinx",
 			"executable": "ryujinx/Ryujinx.exe",
-			"preserve": [
-				"portable",
-				"bis",
-				"sdcard",
-				"system"
-			]
+			"preserve": ["portable", "bis", "sdcard", "system"]
 		},
 		"scummvm": {
 			"name": "scummvm",
@@ -624,10 +589,7 @@
 			"name": "Supermodel",
 			"installDir": "supermodel",
 			"executable": "supermodel/Supermodel.exe",
-			"preserve": [
-				"Config",
-				"NVRAM"
-			]
+			"preserve": ["Config", "NVRAM"]
 		},
 		"suyu": {
 			"name": "suyu",
@@ -651,6 +613,11 @@
 		"uniplayer": {
 			"name": "uniplayer",
 			"installDir": "uniplayer"
+		},
+		"unity": {
+			"name": "unity",
+			"installDir": "unity",
+			"executable": "unity/UniPlayer.exe"
 		},
 		"vita3k": {
 			"name": "Vita3K",
@@ -709,7 +676,7 @@
 		"xenia-manager": {
 			"name": "xenia-manager",
 			"installDir": "xenia-manager",
-			"executable": "xenia-manager/xenia-manager.exe"
+			"executable": "xenia-manager/XeniaManager.exe"
 		},
 		"xm6pro": {
 			"name": "xm6pro",
