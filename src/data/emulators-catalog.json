@@ -415,7 +415,7 @@
 		"pcsx2-nightly": {
 			"name": "PCSX2 Nightly",
 			"installDir": "pcsx2-nightly",
-			"executable": "pcsx2-nightly/pcsx2.exe",
+			"executable": "pcsx2-nightly/pcsx2-qt.exe",
 			"preserve": ["inis", "bios", "memcards"]
 		},
 		"pcsx2x6": {
