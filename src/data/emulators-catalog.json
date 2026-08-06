@@ -8,8 +8,9 @@
 			"executable": "2ship/2ship.exe"
 		},
 		"3dsen": {
-			"name": "3dsen",
-			"installDir": "3dsen"
+			"name": "3dSen",
+			"installDir": "3dsen",
+			"executable": "3dsen/3dSen.exe"
 		},
 		"altirra": {
 			"name": "altirra",

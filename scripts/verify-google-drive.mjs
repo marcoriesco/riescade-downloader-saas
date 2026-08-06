@@ -24,7 +24,7 @@ const auth = new GoogleAuth({
 });
 const client = await auth.getClient();
 
-async function listFolders(parentId) {
+async function listEntries(parentId) {
   const response = await client.request({
     url: "https://www.googleapis.com/drive/v3/files",
     params: {
@@ -38,7 +38,11 @@ async function listFolders(parentId) {
     },
   });
 
-  return (response.data.files ?? []).filter(
+  return response.data.files ?? [];
+}
+
+async function listFolders(parentId) {
+  return (await listEntries(parentId)).filter(
     (file) => file.mimeType === FOLDER_MIME_TYPE
   );
 }
@@ -46,7 +50,7 @@ async function listFolders(parentId) {
 const rootFolders = await listFolders(driveId);
 console.log(`root_folders=${rootFolders.map((folder) => folder.name).join(",")}`);
 
-for (const expectedName of ["bios", "roms"]) {
+for (const expectedName of ["bios", "roms", "emulators"]) {
   const folder = rootFolders.find(
     (item) => item.name.toLocaleLowerCase() === expectedName
   );
@@ -56,6 +60,13 @@ for (const expectedName of ["bios", "roms"]) {
     const platforms = await listFolders(folder.id);
     console.log(
       `rom_platforms=${platforms.map((item) => item.name).join(",")}`
+    );
+  }
+
+  if (expectedName === "emulators" && folder) {
+    const emulatorPackages = await listEntries(folder.id);
+    console.log(
+      `emulator_packages=${emulatorPackages.map((item) => item.name).join(",")}`
     );
   }
 }
