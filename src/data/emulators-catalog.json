@@ -365,7 +365,7 @@
 		"mupen64": {
 			"name": "mupen64",
 			"installDir": "mupen64",
-			"executable": "mupen64/RMG.exe"
+			"executable": "mupen64/mupen64plus-ui-console.exe"
 		},
 		"n64recomplauncher": {
 			"name": "n64recomplauncher",
