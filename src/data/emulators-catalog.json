@@ -142,11 +142,6 @@
 			"executable": "dolphin-emu/Dolphin.exe",
 			"preserve": ["User"]
 		},
-		"dolphin-triforce": {
-			"name": "dolphin-triforce",
-			"installDir": "dolphin-triforce",
-			"executable": "dolphin-triforce/Dolphin.exe"
-		},
 		"dosbox": {
 			"name": "dosbox",
 			"installDir": "dosbox",
