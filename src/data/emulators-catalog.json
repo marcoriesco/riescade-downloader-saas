@@ -714,11 +714,6 @@
 			"name": "zesarux",
 			"installDir": "zesarux",
 			"executable": "zesarux/zesarux.exe"
-		},
-		"zinc": {
-			"name": "zinc",
-			"installDir": "zinc",
-			"executable": "zinc/ZiNc.exe"
 		}
 	}
 }
