@@ -160,7 +160,7 @@
 		"duckstation": {
 			"name": "DuckStation",
 			"installDir": "duckstation",
-			"executable": "duckstation/duckstation-qt-x64-ReleaseLTC.exe"
+			"executable": "duckstation/duckstation-qt-x64-ReleaseLTCG.exe"
 		},
 		"dusklight": {
 			"name": "dusklight",
