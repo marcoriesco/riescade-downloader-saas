@@ -431,12 +431,17 @@
 		{
 			"id": "ps4",
 			"name": "Playstation 4",
-			"extensions": [".game"]
+			"extensions": [".game", ".zar", ".zip"]
 		},
 		{
 			"id": "xbox",
 			"name": "Xbox",
 			"extensions": [".xbe", ".iso"]
+		},
+		{
+			"id": "xboxone",
+			"name": "Xbox One",
+			"extensions": [".xvc", ".xvd", ".xex", ".zip"]
 		},
 		{
 			"id": "xbox360",
