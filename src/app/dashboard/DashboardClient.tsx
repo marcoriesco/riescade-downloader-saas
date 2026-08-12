@@ -711,7 +711,7 @@ export default function DashboardClient() {
 
                       <button
                         onClick={() =>
-                          handleOpenLink("https://github.com/marcoriesco/RIESCADE-OS-ARCADE/releases/latest/download/RIESCADE_OS.7z")
+                          handleOpenLink("/api/app/update/download")
                         }
                         className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-none text-white bg-[#ff0884] hover:bg-[#ff0884]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-colors duration-200 shadow-[0_0_10px_rgba(255,8,132,0.4)]"
                       >
