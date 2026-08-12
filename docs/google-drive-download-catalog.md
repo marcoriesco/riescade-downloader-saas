@@ -131,3 +131,24 @@ Google download quotas with the SNES pilot before migrating the full library.
 6. Set `GOOGLE_SHARED_DRIVE_ID` to the shared-drive root ID.
 7. Run the synchronization endpoint.
 8. Test catalog and download authorization with a pilot account.
+
+## Desktop application releases
+
+Application releases use a separate `releases` folder in Google Drive. The
+desktop release script uploads the versioned archive with the Drive resumable
+upload API and then publishes its signed manifest to:
+
+```text
+POST /api/internal/releases/publish
+Authorization: Bearer RELEASE_PUBLISH_SECRET
+```
+
+The public updater reads only the latest signed manifest:
+
+```text
+GET /api/app/update/latest
+```
+
+Release metadata is stored in the private `app_releases` table. RLS is enabled
+without `anon` or `authenticated` policies; only the server-side service role
+can read or insert releases. Published versions are immutable.

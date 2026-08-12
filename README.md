@@ -11,9 +11,9 @@ Site de autenticação, assinatura e gerenciamento de conta do aplicativo RIESCA
 5. No aplicativo, acessa **Configurações → Minha conta** e entra com a mesma conta Google.
 6. Os downloads de jogos são feitos exclusivamente dentro do aplicativo.
 
-Download permanente da versão mais recente:
-
-`https://github.com/marcoriesco/RIESCADE-OS-ARCADE/releases/latest/download/RIESCADE_OS.7z`
+O manifesto assinado da versão mais recente é servido por
+`/api/app/update/latest`. Os pacotes são publicados automaticamente no Google
+Drive pelo pipeline privado do aplicativo.
 
 ## Desenvolvimento
 
