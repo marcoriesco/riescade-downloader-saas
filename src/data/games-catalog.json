@@ -1261,12 +1261,12 @@
 		{
 			"id": "namco2x6",
 			"name": "Namco 246/256",
-			"extensions": [".acgame"]
+			"extensions": [".acgame", ".zip"]
 		},
 		{
 			"id": "namco3xx",
 			"name": "Namco 357/369",
-			"extensions": [".game"]
+			"extensions": [".game", ".zip"]
 		},
 		{
 			"id": "dos",
