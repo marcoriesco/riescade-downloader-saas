@@ -52,7 +52,7 @@
 		{
 			"id": "daphne",
 			"name": "Laserdisc",
-			"extensions": [".daphne", ".hypseus", ".7z", ".rar", ".squashfs"]
+			"extensions": [".daphne", ".zip"]
 		},
 		{
 			"id": "singe",
@@ -62,7 +62,7 @@
 		{
 			"id": "actionmax",
 			"name": "Actionmax",
-			"extensions": [".actionmax"]
+			"extensions": [".actionmax", ".zip"]
 		},
 		{
 			"id": "cps1",
