@@ -177,8 +177,10 @@ async function syncFolder(
 
   for (const file of files) {
     const emulatorId = downloadPackageTitle(file.name).toLocaleLowerCase();
+    // Full media packs are ZIPs even when the platform's games use other formats.
     if (
       allowedExtensions &&
+      file.name.toLowerCase() !== "_media.zip" &&
       !isExtractPackage(file.name) &&
       !allowedExtensions.has(extensionOf(file.name))
     ) {
