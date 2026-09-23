@@ -132,7 +132,7 @@
 		{
 			"id": "chihiro",
 			"name": "Chihiro",
-			"extensions": [".xbe", ".iso"]
+			"extensions": [".bin"]
 		},
 		{
 			"id": "triforce",

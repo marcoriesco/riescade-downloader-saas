@@ -81,10 +81,10 @@
 			"installDir": "cgenius",
 			"executable": "cgenius/CGenius.exe"
 		},
-		"chihiro": {
-			"name": "chihiro",
-			"installDir": "chihiro",
-			"executable": "chihiro/cxbxr-ldr.exe"
+		"xemu-chihiro": {
+			"name": "xemu-chihiro",
+			"installDir": "xemu-chihiro",
+			"executable": "xemu-chihiro/xemu.exe"
 		},
 		"chihiro-gun": {
 			"name": "chihiro-gun",
