@@ -8,7 +8,7 @@ export default function Dashboard() {
       fallback={
         <div className="flex site-page min-h-screen flex-col bg-background">
           <Header />
-          <div className="flex-1 flex items-center justify-center">
+          <div id="main-content" role="main" tabIndex={-1} className="flex-1 flex items-center justify-center">
             <div className="text-center">
               <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
               <p className="text-lg text-foreground/80">Carregando...</p>

@@ -110,7 +110,7 @@ export default function PlatformsPage() {
     return (
       <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
-        <div className="flex-1 flex items-center justify-center">
+        <div id="main-content" role="main" tabIndex={-1} className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
             <p className="text-lg text-foreground/80">
@@ -128,7 +128,7 @@ export default function PlatformsPage() {
     return (
       <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
-        <div className="flex-1 flex items-center justify-center">
+        <div id="main-content" role="main" tabIndex={-1} className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
             <p className="text-lg text-foreground/80">Verificando autenticação...</p>
@@ -144,7 +144,7 @@ export default function PlatformsPage() {
     return (
       <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
-        <div className="flex-1 flex items-center justify-center">
+        <div id="main-content" role="main" tabIndex={-1} className="flex-1 flex items-center justify-center">
           <div className="text-center p-8 bg-black/30 rounded-lg border border-primary/30 max-w-md">
             <Gamepad2 className="h-12 w-12 text-primary mx-auto mb-4" />
             <h1 className="font-display text-3xl font-bold uppercase text-white mb-2">
