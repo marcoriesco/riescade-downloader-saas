@@ -1,11 +1,11 @@
 .markdown {
-  @apply text-gray-300;
+  @apply text-foreground/80;
 }
 
 /* Styling for automatic platform links */
 .platformLink,
 .markdown :global(.platform-link) {
-  @apply text-[#ff0884] font-semibold relative inline-block;
+  @apply text-primary font-semibold relative inline-block;
   text-decoration: none;
   background-image: linear-gradient(
     to right,
@@ -25,11 +25,11 @@
 }
 
 .markdown h1 {
-  @apply text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-[#ff0884];
+  @apply text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-primary;
 }
 
 .markdown h2 {
-  @apply text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent;
+  @apply text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
 }
 
 .markdown h3 {
@@ -53,11 +53,11 @@
 }
 
 .markdown a {
-  @apply text-[#ff0884] hover:underline;
+  @apply text-primary hover:underline;
 }
 
 .markdown blockquote {
-  @apply border-l-4 border-[#ff0884]/50 pl-4 py-2 my-6 bg-gray-800/50 rounded-r-lg;
+  @apply border-l-4 border-primary/50 pl-4 py-2 my-6 bg-gray-800/50 rounded-r-lg;
 }
 
 .markdown img {
@@ -71,7 +71,7 @@
 }
 
 .codeHeader {
-  @apply flex justify-between items-center px-4 py-2 font-mono text-sm font-medium text-gray-300 border-b border-gray-700;
+  @apply flex justify-between items-center px-4 py-2 font-mono text-sm font-medium text-foreground/80 border-b border-gray-700;
   background-color: rgb(30, 34, 42);
 }
 

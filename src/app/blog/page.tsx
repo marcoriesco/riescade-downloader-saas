@@ -1,3 +1,4 @@
+import { PageIntro, ExploreLink } from "@/components/PageIntro";
 import React, { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,7 +18,7 @@ export default function Blog({
   const category = resolvedParams.category as string;
   const tag = resolvedParams.tag as string;
   const search = resolvedParams.search as string;
-  const page = parseInt((resolvedParams.page as string) || "1");
+  const page = Math.max(1, Number.parseInt(String(resolvedParams.page || "1"), 10) || 1);
 
   // Fetch blog posts with filters
   const { data: posts, count } = use(
@@ -35,29 +36,20 @@ export default function Blog({
   const totalPages = Math.ceil(count / 9);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col site-page min-h-screen bg-background text-white">
       <Header />
 
-      <main className="flex-grow">
+      <main id="main-content" tabIndex={-1} className="flex-grow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="flex flex-col md:flex-row justify-between items-start mb-12">
-            <div>
-              <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-white">
-                Blog RIESCADE
-              </h1>
-              <p className="text-xl text-gray-400 max-w-2xl">
-                Novidades, guias e dicas sobre games retro e emulação
-              </p>
-            </div>
-          </div>
+          <PageIntro eyebrow="Blog" title={<>Continue no <span className="text-gradient-primary">jogo.</span></>} description="Novidades, histórias e guias para explorar o universo dos games e da emulação."><ExploreLink href="/tutorial">Guia de instalação</ExploreLink></PageIntro>
 
           {/* Filter Information */}
           {(category || tag || search) && (
-            <div className="bg-gray-800/40 rounded-none p-4 mb-8 flex items-center justify-between border border-gray-700">
+            <div className="bg-card/40 rounded-2xl p-4 mb-8 flex flex-wrap gap-3 items-center justify-between border border-border">
               <div className="flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2 text-[#ff0884]"
+                  className="h-5 w-5 mr-2 text-primary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -71,24 +63,24 @@ export default function Blog({
                 </svg>
                 <span className="font-medium mr-2">Filtros:</span>
                 {category && (
-                  <span className="bg-[#ff0884]/20 text-[#ff0884] px-2 py-1 rounded-none text-sm mr-2">
+                  <span className="bg-primary/20 text-primary px-2 py-1 rounded-2xl text-sm mr-2">
                     Categoria: {category}
                   </span>
                 )}
                 {tag && (
-                  <span className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded-none text-sm mr-2">
+                  <span className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded-2xl text-sm mr-2">
                     Tag: #{tag}
                   </span>
                 )}
                 {search && (
-                  <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-none text-sm">
+                  <span className="bg-blue-500/20 text-blue-400 px-2 py-1 rounded-2xl text-sm">
                     Busca: {search}
                   </span>
                 )}
               </div>
               <Link
                 href="/blog"
-                className="text-gray-400 hover:text-white transition-colors text-sm flex items-center"
+                className="text-muted-foreground hover:text-white transition-colors text-sm flex items-center"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -109,15 +101,15 @@ export default function Blog({
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Blog posts grid */}
-            <div className="md:col-span-3">
+            <div className="lg:col-span-3">
               {posts && posts.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                   {posts.map((post) => (
                     <article
                       key={post.id}
-                      className="bg-gray-800 rounded-none overflow-hidden shadow-lg hover:shadow-xl hover:shadow-[#ff0884]/5 transition-all duration-300 border border-gray-700 hover:border-[#ff0884]/30 h-full flex flex-col"
+                      className="bg-card rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-[#ff0884]/5 transition-all duration-300 border border-border hover:border-primary/30 h-full flex flex-col"
                     >
                       <a href={`/blog/${post.slug}`} className="block">
                         <div className="relative h-48 w-full">
@@ -130,12 +122,12 @@ export default function Blog({
                             />
                           ) : (
                             <div className="h-full w-full bg-gradient-to-r from-gray-700 to-gray-600 flex items-center justify-center">
-                              <span className="text-gray-400">Sem imagem</span>
+                              <span className="text-muted-foreground">Sem imagem</span>
                             </div>
                           )}
                           <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
                           <div className="absolute bottom-4 left-4">
-                            <span className="bg-[#ff0884]/20 text-[#ff0884] px-2 py-1 rounded-none text-xs font-bold">
+                            <span className="bg-primary/20 text-primary px-2 py-1 rounded-2xl text-xs font-bold">
                               {post.category}
                             </span>
                           </div>
@@ -145,16 +137,16 @@ export default function Blog({
                       <div className="p-6 flex-grow flex flex-col">
                         <div className="flex-grow">
                           <a href={`/blog/${post.slug}`} className="block">
-                            <h2 className="text-xl font-bold mb-3 hover:text-[#ff0884] transition-colors line-clamp-2 cursor-pointer">
+                            <h2 className="text-xl font-bold mb-3 hover:text-primary transition-colors line-clamp-2 cursor-pointer">
                               {post.title}
                             </h2>
                           </a>
-                          <p className="text-gray-400 mb-4 line-clamp-3">
+                          <p className="text-muted-foreground mb-4 line-clamp-3">
                             {post.excerpt}
                           </p>
                         </div>
 
-                        <div className="flex items-center justify-between mt-4 text-sm text-gray-400">
+                        <div className="flex items-center justify-between mt-4 text-sm text-muted-foreground">
                           <div className="flex items-center">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +196,7 @@ export default function Blog({
                   ))}
                 </div>
               ) : (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-none p-12 text-center">
+                <div className="bg-card/50 border border-border rounded-2xl p-12 text-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-16 w-16 mx-auto mb-6 text-gray-600"
@@ -222,12 +214,12 @@ export default function Blog({
                   <h3 className="text-2xl font-bold mb-2">
                     Nenhum post encontrado
                   </h3>
-                  <p className="text-gray-400 mb-6">
+                  <p className="text-muted-foreground mb-6">
                     Não encontramos posts com os filtros selecionados.
                   </p>
                   <Link
                     href="/blog"
-                    className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-none text-white bg-[#ff0884] hover:bg-[#ff0884]/90"
+                    className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-2xl text-white bg-primary hover:bg-primary/90"
                   >
                     Ver todos os posts
                   </Link>
@@ -237,15 +229,15 @@ export default function Blog({
               {/* Pagination */}
               {totalPages > 1 && (
                 <div className="flex justify-center mt-12">
-                  <div className="flex space-x-2">
+                  <div className="flex flex-wrap justify-center gap-2">
                     {page > 1 && (
                       <Link
                         href={`/blog?page=${page - 1}${
-                          category ? `&category=${category}` : ""
-                        }${tag ? `&tag=${tag}` : ""}${
-                          search ? `&search=${search}` : ""
+                          category ? `&category=${encodeURIComponent(category)}` : ""
+                        }${tag ? `&tag=${encodeURIComponent(tag)}` : ""}${
+                          search ? `&search=${encodeURIComponent(search)}` : ""
                         }`}
-                        className="px-4 py-2 bg-gray-800 text-white rounded-none hover:bg-gray-700 transition-colors"
+                        className="px-4 py-2 bg-card text-white rounded-2xl hover:bg-panel transition-colors"
                       >
                         Anterior
                       </Link>
@@ -256,14 +248,14 @@ export default function Blog({
                         <Link
                           key={pageNum}
                           href={`/blog?page=${pageNum}${
-                            category ? `&category=${category}` : ""
-                          }${tag ? `&tag=${tag}` : ""}${
-                            search ? `&search=${search}` : ""
+                            category ? `&category=${encodeURIComponent(category)}` : ""
+                          }${tag ? `&tag=${encodeURIComponent(tag)}` : ""}${
+                            search ? `&search=${encodeURIComponent(search)}` : ""
                           }`}
-                          className={`px-4 py-2 rounded-none ${
+                          className={`px-4 py-2 rounded-2xl ${
                             pageNum === page
-                              ? "bg-[#ff0884] text-white"
-                              : "bg-gray-800 text-white hover:bg-gray-700"
+                              ? "bg-primary text-white"
+                              : "bg-card text-white hover:bg-panel"
                           } transition-colors`}
                         >
                           {pageNum}
@@ -274,11 +266,11 @@ export default function Blog({
                     {page < totalPages && (
                       <Link
                         href={`/blog?page=${page + 1}${
-                          category ? `&category=${category}` : ""
-                        }${tag ? `&tag=${tag}` : ""}${
-                          search ? `&search=${search}` : ""
+                          category ? `&category=${encodeURIComponent(category)}` : ""
+                        }${tag ? `&tag=${encodeURIComponent(tag)}` : ""}${
+                          search ? `&search=${encodeURIComponent(search)}` : ""
                         }`}
-                        className="px-4 py-2 bg-gray-800 text-white rounded-none hover:bg-gray-700 transition-colors"
+                        className="px-4 py-2 bg-card text-white rounded-2xl hover:bg-panel transition-colors"
                       >
                         Próximo
                       </Link>
@@ -289,25 +281,27 @@ export default function Blog({
             </div>
 
             {/* Sidebar */}
-            <div className="md:col-span-1">
+            <div className="lg:col-span-1">
               <div className="sticky top-24 space-y-8">
                 {/* Search Box */}
                 <div className="p-0">
                   <form
-                    className="flex border border-gray-800 rounded-none overflow-hidden bg-gray-800"
+                    className="flex border border-border rounded-2xl overflow-hidden bg-card"
                     action="/blog"
                     method="get"
                   >
                     <input
                       type="text"
                       name="search"
+                      aria-label="Buscar artigos"
                       placeholder="Buscar no blog..."
                       defaultValue={search || ""}
                       className="px-4 py-2 bg-transparent w-full focus:outline-none text-white"
                     />
                     <button
                       type="submit"
-                      className="bg-[#ff0884] px-4 flex items-center"
+                      aria-label="Buscar"
+                      className="bg-primary px-4 flex items-center"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -328,7 +322,7 @@ export default function Blog({
                 </div>
 
                 {/* Categories */}
-                <div className="p-6 bg-gray-800 rounded-none border border-gray-700">
+                <div className="p-6 bg-card rounded-2xl border border-border">
                   <h3 className="text-2xl font-medium mb-4">Categorias</h3>
                   <div className="flex flex-wrap gap-2">
                     {categories && categories.length > 0 ? (
@@ -336,20 +330,20 @@ export default function Blog({
                         <Link
                           key={item.name}
                           href={`/blog?category=${encodeURIComponent(item.name)}`}
-                          className={`inline-block px-3 py-1 rounded-none text-sm transition-colors ${
+                          className={`inline-block px-3 py-1 rounded-2xl text-sm transition-colors ${
                             category === item.name
-                              ? "bg-[#ff0884] text-white"
-                              : "bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884]"
+                              ? "bg-primary text-white"
+                              : "bg-panel hover:bg-primary/20 hover:text-primary"
                           }`}
                         >
                           {item.name}
-                          <span className="ml-2 text-xs bg-gray-600 text-gray-300 px-1.5 py-0.5 rounded-full">
+                          <span className="ml-2 text-xs bg-gray-600 text-foreground/80 px-1.5 py-0.5 rounded-full">
                             {item.count}
                           </span>
                         </Link>
                       ))
                     ) : (
-                      <p className="text-gray-400">
+                      <p className="text-muted-foreground">
                         Nenhuma categoria encontrada
                       </p>
                     )}
@@ -357,17 +351,17 @@ export default function Blog({
                 </div>
 
                 {/* Popular Tags */}
-                <div className="p-6 bg-gray-800 rounded-none border border-gray-700">
+                <div className="p-6 bg-card rounded-2xl border border-border">
                   <h3 className="text-2xl font-medium mb-4">Tags Populares</h3>
                   <div className="flex flex-wrap gap-2">
                     {tags.map((item) => (
                       <Link
                         key={item.name}
                         href={`/blog?tag=${encodeURIComponent(item.name)}`}
-                        className={`inline-block px-3 py-1 rounded-none text-sm transition-colors ${
+                        className={`inline-block px-3 py-1 rounded-2xl text-sm transition-colors ${
                           tag === item.name
-                            ? "bg-[#ff0884] text-white"
-                            : "bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884]"
+                            ? "bg-primary text-white"
+                            : "bg-panel hover:bg-primary/20 hover:text-primary"
                         }`}
                       >
                         #{item.name}

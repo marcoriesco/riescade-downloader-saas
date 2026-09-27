@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, User, Menu, X } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { User as SupabaseUser } from "@supabase/supabase-js";
@@ -17,6 +17,17 @@ export function Header() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    const close = (event: KeyboardEvent) => { if (event.key === "Escape") setIsMenuOpen(false); };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, []);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -97,7 +108,10 @@ export function Header() {
 
         {/* Botão de menu para mobile */}
         <button
-          className="lg:hidden text-foreground focus:outline-none"
+          className="lg:hidden p-2 text-foreground"
+          aria-label={isMenuOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-navigation"
           onClick={toggleMenu}
         >
           {isMenuOpen ? (
@@ -109,7 +123,7 @@ export function Header() {
 
         {/* Menu para desktop */}
         <div className="hidden lg:flex items-center gap-9">
-          <nav className="flex items-center gap-6 lg:gap-9">
+          <nav aria-label="Navegação principal" className="flex items-center gap-6 lg:gap-9">
             <Link
               href="/#features"
               className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary"
@@ -118,7 +132,7 @@ export function Header() {
               <ChevronDown className="h-3.5 w-3.5" />
             </Link>
             <Link
-              href="/#platforms"
+              href="/platforms"
               className="text-sm text-muted-foreground transition-colors hover:text-primary"
             >
               Plataformas
@@ -130,16 +144,16 @@ export function Header() {
               Blog
             </Link>
             <Link
-              href="/#support"
+              href="/tutorial"
               className="text-sm text-muted-foreground transition-colors hover:text-primary"
             >
-              Suporte
+              Tutorial
             </Link>
             <Link
               href="/#about"
               className="text-sm text-muted-foreground transition-colors hover:text-primary"
             >
-              Sobre
+              Assinatura
             </Link>
           </nav>
 
@@ -151,7 +165,7 @@ export function Header() {
                     <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/50 flex items-center justify-center mr-2">
                       <User className="h-4 w-4 text-primary" />
                     </div>
-                    <span className="text-muted-foreground text-sm">
+                    <span className="text-muted-foreground text-sm max-w-32 truncate">
                       {user.email}
                     </span>
                   </div>
@@ -199,9 +213,9 @@ export function Header() {
 
       {/* Menu mobile */}
       {isMenuOpen && (
-        <div className="header-backdrop mx-auto mt-2 max-w-7xl rounded-2xl border border-white/10 lg:hidden">
+        <div id="mobile-navigation" className="max-h-[calc(100svh-110px)] overflow-y-auto header-backdrop mx-auto mt-2 max-w-7xl rounded-2xl border border-white/10 lg:hidden">
           <div className="px-4 pt-2 pb-6 space-y-4">
-            <nav className="flex flex-col space-y-4 mb-6">
+            <nav aria-label="Navegação mobile" className="flex flex-col space-y-4 mb-6">
               {/* O Dashboard só aparece quando o usuário está logado */}
               {user && (
                 <Link
@@ -220,7 +234,7 @@ export function Header() {
                 Recursos
               </Link>
               <Link
-                href="/#platforms"
+                href="/platforms"
                 className="text-muted-foreground hover:text-primary transition-colors py-2 border-b border-border"
                 onClick={handleLinkClick}
               >
@@ -234,18 +248,18 @@ export function Header() {
                 Blog
               </Link>
               <Link
-                href="/#support"
+                href="/tutorial"
                 className="text-muted-foreground hover:text-primary transition-colors py-2 border-b border-border"
                 onClick={handleLinkClick}
               >
-                Suporte
+                Tutorial
               </Link>
               <Link
                 href="/#about"
                 className="text-muted-foreground hover:text-primary transition-colors py-2 border-b border-border"
                 onClick={handleLinkClick}
               >
-                Sobre
+                Assinatura
               </Link>
             </nav>
 

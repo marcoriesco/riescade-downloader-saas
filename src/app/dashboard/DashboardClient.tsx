@@ -1,4 +1,5 @@
 "use client";
+import { PageIntro, ExploreLink } from "@/components/PageIntro";
 
 import { useState, useEffect, useCallback } from "react";
 import { supabase, type Subscription } from "@/lib/supabase";
@@ -312,12 +313,12 @@ export default function DashboardClient() {
   // Show loading state while checking auth
   if (loading) {
     return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
+      <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-gray-300">Verificando autenticação...</p>
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-foreground/80">Verificando autenticação...</p>
           </div>
         </div>
       </div>
@@ -327,12 +328,12 @@ export default function DashboardClient() {
   // Show redirecting state when auth is in progress
   if (authRedirecting) {
     return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
+      <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-gray-300">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-foreground/80">
               Redirecionando para autenticação...
             </p>
           </div>
@@ -344,22 +345,22 @@ export default function DashboardClient() {
   // Show "Acesso Negado" message if not authenticated
   if (!user) {
     return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
+      <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-center p-8 bg-black/30 rounded-lg border border-[#ff0884]/30 max-w-md">
-            <Gamepad2 className="h-12 w-12 text-[#ff0884] mx-auto mb-4" />
+          <div className="text-center p-8 bg-black/30 rounded-lg border border-primary/30 max-w-md">
+            <Gamepad2 className="h-12 w-12 text-primary mx-auto mb-4" />
             <h2 className="text-xl font-bold text-white mb-2">
               Área Exclusiva
             </h2>
-            <p className="text-gray-300 mb-6">
+            <p className="text-foreground/80 mb-6">
               Faça login para acessar seu dashboard e desfrutar de todos os
               recursos disponíveis para membros.
             </p>
             <button
               onClick={handleSignIn}
               disabled={authRedirecting}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-white bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
             >
               <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
               Entrar com Google
@@ -372,9 +373,9 @@ export default function DashboardClient() {
 
   // Main dashboard content - only shown when authenticated
   return (
-    <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
+    <div className="site-page min-h-screen bg-background bg-grid-white/5 relative">
       {/* Background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gamer-dark via-black to-black opacity-90 z-0"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background opacity-90 z-0"></div>
 
       <Header />
 
@@ -387,7 +388,8 @@ export default function DashboardClient() {
         isSubmitting={cancellingSubscription}
       />
 
-      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main id="main-content" tabIndex={-1} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <PageIntro eyebrow="Minha conta" title={<>Seu próximo <span className="text-gradient-primary">play.</span></>} description="Gerencie sua conta, acompanhe sua assinatura e acesse o RIESCADE OS."><ExploreLink href="/tutorial">Como começar</ExploreLink></PageIntro>
         {success && (
           <div className="mb-8 p-4 bg-green-900/20 border border-green-500/30 rounded-md backdrop-blur-sm animate-fade-in">
             <p className="text-green-400 flex items-start">
@@ -443,9 +445,9 @@ export default function DashboardClient() {
 
         <div className="grid grid-cols-1 xl:grid-cols-5 gap-6">
           {/* Player Profile Card */}
-          <div className="xl:col-span-2 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-700 bg-gradient-to-r from-[#ff0884]/10 to-transparent flex items-center">
-              <UserIcon className="w-5 h-5 text-[#ff0884] mr-2" />
+          <div className="xl:col-span-2 bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden">
+            <div className="px-6 py-5 border-b border-border bg-gradient-to-r from-primary/10 to-transparent flex items-center">
+              <UserIcon className="w-5 h-5 text-primary mr-2" />
               <h2 className="text-lg font-medium text-white">
                 Minha Conta
               </h2>
@@ -454,12 +456,12 @@ export default function DashboardClient() {
             <div className="p-6">
               {user && (
                 <div className="space-y-6">
-                  <div className="flex items-center gap-4 border-b border-gray-700/70 pb-6">
-                    <div className="w-16 h-16 rounded-full bg-[#ff0884]/15 border border-[#ff0884]/50 flex items-center justify-center shrink-0 shadow-[0_0_24px_rgba(255,8,132,0.18)]">
-                      <UserIcon className="h-8 w-8 text-[#ff0884]" />
+                  <div className="flex items-center gap-4 border-b border-border/70 pb-6">
+                    <div className="w-16 h-16 rounded-full bg-primary/15 border border-primary/50 flex items-center justify-center shrink-0 shadow-[0_0_24px_rgba(255,8,132,0.18)]">
+                      <UserIcon className="h-8 w-8 text-primary" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[#ff0884]">Perfil RIESCADE</p>
+                      <p className="text-xs uppercase tracking-[0.18em] text-primary">Perfil RIESCADE</p>
                       <h3 className="truncate text-xl text-white font-bold mt-1">
                         {user.user_metadata?.full_name || "Usuário"}
                       </h3>
@@ -468,45 +470,45 @@ export default function DashboardClient() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-3">
-                    <div className="flex items-start gap-3 rounded-lg border border-gray-700/80 bg-black/25 p-4">
-                      <Mail className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
+                    <div className="flex items-start gap-3 rounded-lg border border-border/80 bg-black/25 p-4">
+                      <Mail className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                       <div className="min-w-0">
-                        <p className="text-xs text-gray-400">Email da conta</p>
+                        <p className="text-xs text-muted-foreground">Email da conta</p>
                         <p className="truncate text-sm text-white">{user.email}</p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-3 rounded-lg border border-gray-700/80 bg-black/25 p-4">
-                      <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
+                    <div className="flex items-start gap-3 rounded-lg border border-border/80 bg-black/25 p-4">
+                      <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                       <div>
-                        <p className="text-xs text-gray-400">Usuário desde</p>
+                        <p className="text-xs text-muted-foreground">Usuário desde</p>
                         <p className="text-sm text-white">
                           {formatAccountDate(user.created_at)}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-muted-foreground">
                           Há {formatAccountAge(user.created_at)}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-3 rounded-lg border border-gray-700/80 bg-black/25 p-4">
-                      <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
+                    <div className="flex items-start gap-3 rounded-lg border border-border/80 bg-black/25 p-4">
+                      <Clock3 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                       <div>
-                        <p className="text-xs text-gray-400">Último acesso</p>
+                        <p className="text-xs text-muted-foreground">Último acesso</p>
                         <p className="text-sm text-white">
                           {formatAccountDateTime(user.last_sign_in_at)}
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-3 rounded-lg border border-gray-700/80 bg-black/25 p-4">
-                      <Shield className="mt-0.5 h-4 w-4 shrink-0 text-[#ff0884]" />
+                    <div className="flex items-start gap-3 rounded-lg border border-border/80 bg-black/25 p-4">
+                      <Shield className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                       <div>
-                        <p className="text-xs text-gray-400">Plano atual</p>
+                        <p className="text-xs text-muted-foreground">Plano atual</p>
                         <p className="text-sm text-white">
                           {subscription?.status === "active"
                             ? "RIESCADE Membro — Ativo"
                             : "Sem assinatura ativa"}
                         </p>
                         {subscription && (
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             Assinante desde{" "}
                             {formatAccountDate(subscription.created_at)}
                           </p>
@@ -520,9 +522,9 @@ export default function DashboardClient() {
           </div>
 
           {/* Subscription Card */}
-          <div className="xl:col-span-3 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
-            <div className="px-6 py-5 border-b border-gray-700 bg-gradient-to-r from-[#ff0884]/10 to-transparent flex items-center">
-              <Shield className="w-5 h-5 text-[#ff0884] mr-2" />
+          <div className="xl:col-span-3 bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden">
+            <div className="px-6 py-5 border-b border-border bg-gradient-to-r from-primary/10 to-transparent flex items-center">
+              <Shield className="w-5 h-5 text-primary mr-2" />
               <h2 className="text-lg font-medium text-white">
                 Status da Assinatura
               </h2>
@@ -531,10 +533,10 @@ export default function DashboardClient() {
             <div className="p-6 pb-0">
               {subscription ? (
                 <div className="space-y-6">
-                  <div className="bg-gradient-to-br from-black/35 to-[#ff0884]/5 p-5 rounded-lg border border-gray-700">
+                  <div className="bg-gradient-to-br from-black/35 to-[#ff0884]/5 p-5 rounded-lg border border-border">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
                       <div>
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Plano atual</p>
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Plano atual</p>
                         <h3 className="text-2xl font-bold text-white mt-1">
                         RIESCADE MEMBRO
                         </h3>
@@ -552,15 +554,15 @@ export default function DashboardClient() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div className="bg-black/35 rounded-lg p-4 border border-gray-700/80">
-                        <h4 className="text-xs uppercase tracking-wider text-gray-500 mb-2">Assinante desde</h4>
+                      <div className="bg-black/35 rounded-lg p-4 border border-border/80">
+                        <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Assinante desde</h4>
                         <p className="text-white font-medium">{formatAccountDate(subscription.created_at)}</p>
                       </div>
-                      <div className="bg-black/35 rounded-lg p-4 border border-gray-700/80">
-                        <h4 className="text-xs uppercase tracking-wider text-gray-500 mb-2">Período atual</h4>
+                      <div className="bg-black/35 rounded-lg p-4 border border-border/80">
+                        <h4 className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Período atual</h4>
                         <p className="text-white font-medium">
                           {new Date(subscription.start_date).toLocaleDateString()}{" "}
-                          <span className="text-gray-500">—</span>{" "}
+                          <span className="text-muted-foreground">—</span>{" "}
                           {new Date(subscription.end_date).toLocaleDateString()}
                         </p>
                       </div>
@@ -573,7 +575,7 @@ export default function DashboardClient() {
                         {/* Botão Cancelar Assinatura */}
                         <button
                           onClick={() => setShowCancelModal(true)}
-                          className="w-full sm:w-auto bg-gray-800 hover:bg-red-900/70 text-gray-300 hover:text-white font-medium py-3 px-6 rounded-none focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 flex items-center justify-center border border-gray-700 hover:border-red-800"
+                          className="w-full sm:w-auto bg-card hover:bg-red-900/70 text-foreground/80 hover:text-white font-medium py-3 px-6 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-500/30 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 flex items-center justify-center border border-border hover:border-red-800"
                         >
                           <XCircle className="w-5 h-5 mr-2 text-red-500" />
                           Cancelar Assinatura
@@ -583,7 +585,7 @@ export default function DashboardClient() {
                       <>
                         <button
                           onClick={handleCheckout}
-                          className="w-full sm:w-auto bg-[#ff0884] hover:bg-[#ff0884]/90 text-white font-medium py-3 px-6 rounded-none focus:outline-none focus:ring-2 focus:ring-[#ff0884]/50 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 transform hover:scale-105 flex items-center justify-center shadow-[0_0_15px_rgba(255,8,132,0.3)]"
+                          className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-medium py-3 px-6 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 transform hover:scale-105 flex items-center justify-center shadow-[0_0_15px_rgba(255,8,132,0.3)]"
                         >
                           <Zap className="w-5 h-5 mr-2" />
                           Renovar Assinatura
@@ -604,7 +606,7 @@ export default function DashboardClient() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <div className="bg-black/30 p-6 rounded-lg border border-gray-700 text-center">
+                  <div className="bg-black/30 p-6 rounded-lg border border-border text-center">
                     <Image
                       src="/images/logos.webp"
                       alt="Gaming Logo"
@@ -619,9 +621,9 @@ export default function DashboardClient() {
                       <span className="text-3xl font-bold text-white">
                         R$30
                       </span>
-                      <span className="text-gray-400">/mês</span>
+                      <span className="text-muted-foreground">/mês</span>
                     </div>
-                    <p className="text-gray-300 mb-6">
+                    <p className="text-foreground/80 mb-6">
                       Você ainda não tem uma assinatura ativa. Assine agora para
                       desbloquear recursos exclusivos!
                     </p>
@@ -637,10 +639,10 @@ export default function DashboardClient() {
                       ].map((feature, index) => (
                         <li
                           key={index}
-                          className="flex items-center text-gray-300"
+                          className="flex items-center text-foreground/80"
                         >
                           <svg
-                            className="h-5 w-5 text-[#ff0884] mr-2 flex-shrink-0"
+                            className="h-5 w-5 text-primary mr-2 flex-shrink-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -660,7 +662,7 @@ export default function DashboardClient() {
 
                     <button
                       onClick={handleCheckout}
-                      className="w-full bg-[#ff0884] hover:bg-[#ff0884]/90 text-white font-bold py-3 px-6 rounded-none focus:outline-none focus:ring-2 focus:ring-[#ff0884]/50 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 transform hover:scale-105 flex items-center justify-center shadow-[0_0_15px_rgba(255,8,132,0.3)] animate-pulse-glow"
+                      className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-300 transform hover:scale-105 flex items-center justify-center shadow-[0_0_15px_rgba(255,8,132,0.3)] animate-pulse-glow"
                     >
                       <Zap className="w-5 h-5 mr-2" />
                       ASSINAR AGORA
@@ -673,9 +675,9 @@ export default function DashboardClient() {
         </div>
 
         {/* Download Section - ATUALIZADO */}
-        <div className="mt-8 bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden">
-          <div className="px-6 py-5 border-b border-gray-700 bg-black/30 flex items-center">
-            <Download className="w-5 h-5 text-[#ff0884] mr-2" />
+        <div className="mt-8 bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden">
+          <div className="px-6 py-5 border-b border-border bg-black/30 flex items-center">
+            <Download className="w-5 h-5 text-primary mr-2" />
             <h2 className="text-lg font-medium text-white">
               Downloads Disponíveis
             </h2>
@@ -685,26 +687,26 @@ export default function DashboardClient() {
             {subscription && subscription.status === "active" ? (
               <div className="space-y-8">
                 {/* Banner destacado para Drive de Membro */}
-                <div className="relative overflow-hidden rounded-lg border border-[#ff0884]/30 group">
+                <div className="relative overflow-hidden rounded-lg border border-primary/30 group">
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-900/40 via-[#ff0884]/30 to-blue-900/40 group-hover:opacity-75 transition-opacity duration-300"></div>
                   <div className="absolute inset-0 bg-[url('/images/logos.webp')] bg-no-repeat bg-right-bottom opacity-10"></div>
 
                   <div className="relative z-10 p-6 sm:p-8 flex flex-col sm:flex-row items-center">
-                    <div className="mb-6 sm:mb-0 sm:mr-8 flex-shrink-0 bg-black/30 p-4 rounded-full border border-[#ff0884]/50 shadow-[0_0_15px_rgba(255,8,132,0.3)]">
+                    <div className="mb-6 sm:mb-0 sm:mr-8 flex-shrink-0 bg-black/30 p-4 rounded-full border border-primary/50 shadow-[0_0_15px_rgba(255,8,132,0.3)]">
                       <FontAwesomeIcon
                         icon={faGamepad}
-                        className="h-10 w-10 sm:h-16 sm:w-16 text-[#ff0884]"
+                        className="h-10 w-10 sm:h-16 sm:w-16 text-primary"
                       />
                     </div>
 
                     <div className="text-center sm:text-left flex-grow">
-                      <div className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-[#ff0884]/20 text-[#ff0884] border border-[#ff0884]/30 mb-8">
+                      <div className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary border border-primary/30 mb-8">
                         VERSÃO MAIS RECENTE
                       </div>
                       <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
                         Aplicativo RIESCADE OS
                       </h3>
-                      <p className="text-gray-300 mb-4 max-w-2xl">
+                      <p className="text-foreground/80 mb-4 max-w-2xl">
                         Baixe a versão mais recente do aplicativo e faça os
                         downloads diretamente pela biblioteca integrada.
                       </p>
@@ -713,7 +715,7 @@ export default function DashboardClient() {
                         onClick={() =>
                           handleOpenLink("/api/app/update/download")
                         }
-                        className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-none text-white bg-[#ff0884] hover:bg-[#ff0884]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-colors duration-200 shadow-[0_0_10px_rgba(255,8,132,0.4)]"
+                        className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-2xl text-white bg-primary hover:bg-primary/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200 shadow-[0_0_10px_rgba(255,8,132,0.4)]"
                       >
                         <ExternalLink className="w-5 h-5 mr-2" />
                         Baixar versão mais recente
@@ -723,18 +725,18 @@ export default function DashboardClient() {
                 </div>
 
                 {/* Seção de instruções */}
-                <div className="bg-black/30 rounded-lg border border-gray-700 p-6">
+                <div className="bg-black/30 rounded-lg border border-border p-6">
                   <h3 className="text-xl font-bold text-white mb-4 flex items-center">
-                    <AlertCircle className="w-5 h-5 mr-2 text-[#ff0884]" />
+                    <AlertCircle className="w-5 h-5 mr-2 text-primary" />
                     Instruções para Download
                   </h3>
 
                   <div className="space-y-4">
-                    <div className="bg-black/20 p-4 rounded-md border border-gray-700/50">
+                    <div className="bg-black/20 p-4 rounded-md border border-border/50">
                       <h4 className="text-lg font-medium text-white mb-2">
                         Como acessar o conteúdo:
                       </h4>
-                      <ol className="list-decimal list-inside space-y-2 text-gray-300">
+                      <ol className="list-decimal list-inside space-y-2 text-foreground/80">
                         <li>
                           Baixe e extraia o arquivo RIESCADE_OS.7z
                         </li>
@@ -753,11 +755,11 @@ export default function DashboardClient() {
                       </ol>
                     </div>
 
-                    <div className="bg-[#ff0884]/10 p-4 rounded-md border border-[#ff0884]/30">
+                    <div className="bg-primary/10 p-4 rounded-md border border-primary/30">
                       <h4 className="text-lg font-medium text-white mb-2">
                         Importante:
                       </h4>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300">
+                      <ul className="list-disc list-inside space-y-2 text-foreground/80">
                         <li>
                           O acesso ao conteúdo é exclusivo para membros com
                           assinatura ativa
@@ -772,15 +774,15 @@ export default function DashboardClient() {
             ) : (
               <div className="text-center py-10">
                 <Flame className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-400 mb-2">
+                <h3 className="text-xl font-medium text-muted-foreground mb-2">
                   Acesso Bloqueado
                 </h3>
-                <p className="text-gray-500 mb-6">
+                <p className="text-muted-foreground mb-6">
                   Assine o plano para desbloquear o acesso a todos os downloads.
                 </p>
                 <button
                   onClick={handleCheckout}
-                  className="px-6 py-2 bg-[#ff0884]/20 hover:bg-[#ff0884]/30 text-[#ff0884] rounded-none border border-[#ff0884]/30 transition-colors duration-200"
+                  className="px-6 py-2 bg-primary/20 hover:bg-primary/30 text-primary rounded-2xl border border-primary/30 transition-colors duration-200"
                 >
                   Assinar agora!
                 </button>

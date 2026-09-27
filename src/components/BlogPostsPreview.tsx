@@ -54,7 +54,7 @@ export default function BlogPostsPreview() {
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="border border-border bg-background animate-pulse overflow-hidden"
+            className="rounded-2xl border border-border bg-card animate-pulse overflow-hidden"
           >
             <div className="aspect-video w-full bg-surface/50"></div>
             <div className="p-5">
@@ -71,7 +71,7 @@ export default function BlogPostsPreview() {
 
   if (posts.length === 0) {
     return (
-      <div className="col-span-3 border border-border bg-background/50 p-12 text-center text-muted-foreground font-mono text-sm uppercase tracking-widest">
+      <div className="col-span-full rounded-2xl border border-border bg-card/50 p-12 text-center text-muted-foreground font-mono text-sm uppercase tracking-widest">
         Nenhum post encontrado
       </div>
     );
@@ -83,7 +83,7 @@ export default function BlogPostsPreview() {
         <Link
           key={post.id}
           href={`/blog/${post.slug}`}
-          className="group border border-border bg-background hover:border-primary/50 transition-all duration-300 overflow-hidden flex flex-col"
+          className="group rounded-2xl border border-border bg-card hover:border-primary/50 transition-all duration-300 overflow-hidden flex flex-col"
         >
           <div className="aspect-video overflow-hidden relative">
             {post.cover_image ? (
@@ -91,6 +91,7 @@ export default function BlogPostsPreview() {
                 src={post.cover_image}
                 alt={post.title}
                 fill
+                sizes="(max-width: 768px) 100vw, 33vw"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
               />
             ) : (

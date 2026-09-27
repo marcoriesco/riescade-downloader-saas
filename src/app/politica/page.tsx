@@ -1,7 +1,8 @@
 "use client";
+import { PageIntro } from "@/components/PageIntro";
+
 
 import {
-  Shield,
   Lock,
   Eye,
   Users,
@@ -15,38 +16,26 @@ import Image from "next/image";
 export default function PrivacyPolicy() {
 
   return (
-    <div className="min-h-screen bg-gray-900 bg-grid-white/5 relative">
+    <div className="site-page min-h-screen bg-background bg-grid-white/5 relative">
       {/* Background elements */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gamer-dark via-black to-black opacity-90 z-0"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/5 via-background to-background opacity-90 z-0"></div>
 
       <Header />
 
-      <main className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-10 text-center">
-          <div className="flex justify-center mb-4">
-            <div className="p-3 rounded-full bg-[#ff0884]/20 border border-[#ff0884]/50">
-              <Shield className="h-10 w-10 text-[#ff0884]" />
-            </div>
-          </div>
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Política de Privacidade
-          </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Comprometidos com a proteção e transparência no uso dos seus dados
-          </p>
-        </div>
+      <main id="main-content" tabIndex={-1} className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <PageIntro eyebrow="Privacidade e termos" title="Política de Privacidade" description="Transparência sobre a coleta, o uso e a proteção dos seus dados." />
 
         <div className="space-y-8">
-          <section className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden p-6">
+          <section className="bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden p-6">
             <div className="flex items-start mb-4">
-              <div className="p-2 rounded-full bg-[#ff0884]/20 mr-4">
-                <AlertCircle className="h-6 w-6 text-[#ff0884]" />
+              <div className="p-2 rounded-full bg-primary/20 mr-4">
+                <AlertCircle className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">
                   Última Atualização
                 </h2>
-                <p className="text-gray-300">
+                <p className="text-foreground/80">
                   Esta política de privacidade foi atualizada em 25 de Março de
                   2024.
                 </p>
@@ -54,21 +43,21 @@ export default function PrivacyPolicy() {
             </div>
           </section>
 
-          <section className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden p-6">
+          <section className="bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden p-6">
             <div className="flex items-start mb-4">
-              <div className="p-2 rounded-full bg-[#ff0884]/20 mr-4">
-                <Eye className="h-6 w-6 text-[#ff0884]" />
+              <div className="p-2 rounded-full bg-primary/20 mr-4">
+                <Eye className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">
                   Coleta de Informações
                 </h2>
-                <p className="text-gray-300 mb-4">
+                <p className="text-foreground/80 mb-4">
                   Coletamos informações quando você se registra em nosso site,
                   faz login com sua conta do Google, realiza uma compra ou
                   assina nossos serviços.
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-300 pl-4">
+                <ul className="list-disc list-inside space-y-2 text-foreground/80 pl-4">
                   <li>
                     Informações de identificação pessoal (nome, e-mail, etc.)
                   </li>
@@ -87,19 +76,19 @@ export default function PrivacyPolicy() {
             </div>
           </section>
 
-          <section className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden p-6">
+          <section className="bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden p-6">
             <div className="flex items-start mb-4">
-              <div className="p-2 rounded-full bg-[#ff0884]/20 mr-4">
-                <Users className="h-6 w-6 text-[#ff0884]" />
+              <div className="p-2 rounded-full bg-primary/20 mr-4">
+                <Users className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">
                   Uso das Informações
                 </h2>
-                <p className="text-gray-300 mb-4">
+                <p className="text-foreground/80 mb-4">
                   As informações que coletamos são utilizadas para:
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-300 pl-4">
+                <ul className="list-disc list-inside space-y-2 text-foreground/80 pl-4">
                   <li>Fornecer, operar e manter nossos serviços</li>
                   <li>Processar transações e gerenciar sua conta</li>
                   <li>Enviar informações administrativas</li>
@@ -110,21 +99,21 @@ export default function PrivacyPolicy() {
             </div>
           </section>
 
-          <section className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden p-6">
+          <section className="bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden p-6">
             <div className="flex items-start mb-4">
-              <div className="p-2 rounded-full bg-[#ff0884]/20 mr-4">
-                <Server className="h-6 w-6 text-[#ff0884]" />
+              <div className="p-2 rounded-full bg-primary/20 mr-4">
+                <Server className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">
                   Proteção de Informações
                 </h2>
-                <p className="text-gray-300 mb-4">
+                <p className="text-foreground/80 mb-4">
                   Implementamos uma variedade de medidas de segurança para
                   manter a segurança das suas informações pessoais quando você
                   realiza uma transação ou acessa suas informações pessoais.
                 </p>
-                <p className="text-gray-300">
+                <p className="text-foreground/80">
                   Utilizamos criptografia de ponta a ponta para proteger dados
                   sensíveis transmitidos online, e também protegemos suas
                   informações offline. Apenas funcionários que precisam realizar
@@ -135,23 +124,23 @@ export default function PrivacyPolicy() {
             </div>
           </section>
 
-          <section className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden p-6">
+          <section className="bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden p-6">
             <div className="flex items-start mb-4">
-              <div className="p-2 rounded-full bg-[#ff0884]/20 mr-4">
-                <Lock className="h-6 w-6 text-[#ff0884]" />
+              <div className="p-2 rounded-full bg-primary/20 mr-4">
+                <Lock className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">Cookies</h2>
-                <p className="text-gray-300 mb-4">
+                <p className="text-foreground/80 mb-4">
                   Usamos cookies para melhorar sua experiência em nosso site,
                   incluindo:
                 </p>
-                <ul className="list-disc list-inside space-y-2 text-gray-300 pl-4">
+                <ul className="list-disc list-inside space-y-2 text-foreground/80 pl-4">
                   <li>Manter você conectado durante sua visita</li>
                   <li>Entender como você usa nosso serviço</li>
                   <li>Personalizar o conteúdo com base em suas preferências</li>
                 </ul>
-                <p className="text-gray-300 mt-4">
+                <p className="text-foreground/80 mt-4">
                   Você pode escolher desativar os cookies através das
                   configurações do seu navegador. No entanto, isso pode afetar
                   sua experiência com nossos serviços.
@@ -160,22 +149,22 @@ export default function PrivacyPolicy() {
             </div>
           </section>
 
-          <section className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden p-6">
+          <section className="bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden p-6">
             <div className="flex items-start mb-4">
-              <div className="p-2 rounded-full bg-[#ff0884]/20 mr-4">
-                <Users className="h-6 w-6 text-[#ff0884]" />
+              <div className="p-2 rounded-full bg-primary/20 mr-4">
+                <Users className="h-6 w-6 text-primary" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-white mb-2">
                   Divulgação a Terceiros
                 </h2>
-                <p className="text-gray-300 mb-4">
+                <p className="text-foreground/80 mb-4">
                   Não vendemos, negociamos ou transferimos suas informações de
                   identificação pessoal para terceiros sem o seu consentimento,
                   exceto para fornecer os serviços solicitados, como
                   processamento de pagamentos.
                 </p>
-                <p className="text-gray-300">
+                <p className="text-foreground/80">
                   Podemos divulgar suas informações quando acreditamos que a
                   liberação é apropriada para cumprir a lei, fazer cumprir as
                   políticas do nosso site ou proteger nossos ou outros direitos,
@@ -185,13 +174,13 @@ export default function PrivacyPolicy() {
             </div>
           </section>
 
-          <section className="bg-gray-800/40 backdrop-blur-sm rounded-lg border border-gray-700 shadow-lg overflow-hidden p-6">
+          <section className="bg-card/40 backdrop-blur-sm rounded-lg border border-border shadow-lg overflow-hidden p-6">
             <div className="text-center">
-              <p className="text-gray-400 mb-4">
+              <p className="text-muted-foreground mb-4">
                 Se tiver dúvidas sobre esta política de privacidade, entre em
                 contato conosco.
               </p>
-              <div className="inline-flex mt-2 border border-[#ff0884]/30 rounded-lg overflow-hidden">
+              <div className="inline-flex mt-2 border border-primary/30 rounded-lg overflow-hidden">
                 <Image
                   src="/images/logos.webp"
                   alt="RIESCADE Logo"

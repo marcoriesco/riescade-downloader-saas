@@ -3,15 +3,16 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Blog | RIESCADE",
+  alternates: { canonical: "/blog" },
   description: "Novidades, guias e dicas sobre games retro e emulação",
   openGraph: {
     title: "Blog RIESCADE",
     description: "Novidades, guias e dicas sobre games retro e emulação",
-    url: "https://riescade.com/blog",
+    url: "https://www.riescade.com.br/blog",
     siteName: "RIESCADE Blog",
     images: [
       {
-        url: "/images/blog-og.webp",
+        url: "/images/og-image.webp",
         width: 1200,
         height: 630,
         alt: "RIESCADE Blog",
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Blog RIESCADE",
     description: "Novidades, guias e dicas sobre games retro e emulação",
-    images: ["/images/blog-og.webp"],
+    images: ["/images/og-image.webp"],
   },
 };
 

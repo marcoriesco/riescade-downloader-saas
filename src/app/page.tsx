@@ -151,7 +151,7 @@ export default function Home() {
 		<div className="min-h-screen">
 			<Header />
 
-			<main>
+			<main id="main-content" tabIndex={-1}>
 				{/* HERO SECTION */}
 				<section className="relative overflow-hidden border-b border-white/10 bg-black pt-28 lg:h-[100svh] lg:min-h-[820px] lg:pt-0">
 					<video
@@ -160,7 +160,7 @@ export default function Home() {
 						muted
 						loop
 						playsInline
-						preload="auto"
+						preload="metadata"
 						poster="/images/hero-riescade-cyber.png"
 						aria-hidden="true"
 						className="absolute inset-y-0 right-0 h-full w-auto max-w-none object-contain object-[68%_center]"
@@ -168,14 +168,14 @@ export default function Home() {
 					<div className="absolute inset-0 bg-gradient-to-r from-black via-black/45 to-transparent lg:via-black/15" />
 					<div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/90" />
 
-					<div className="relative z-10 mx-auto flex min-h-[700px] max-w-[1380px] items-center px-6 py-16 sm:px-10 lg:h-[calc(100%-180px)] lg:min-h-0 lg:px-0 lg:py-0 lg:pt-28">
+					<div className="relative z-10 mx-auto flex min-h-[700px] max-w-[1380px] items-center px-6 py-16 sm:px-10 lg:h-[calc(100%-180px)] lg:min-h-0 lg:px-10 lg:py-0 lg:pt-28">
 						<div className="max-w-[650px]">
 							<div className="mb-7 inline-flex items-center gap-2 rounded-xl border border-primary/25 bg-primary/[0.08] px-4 py-2 font-mono text-xs font-bold uppercase tracking-[0.12em] text-primary">
 								<Gamepad2 className="h-4 w-4" />
 								Feito para jogadores. Feito para você.
 							</div>
 
-							<h1 className="font-display text- font-bold text-[3.4rem] uppercase leading-[0.98] tracking-[-0.035em] text-white sm:text-7xl">
+							<h1 className="font-display font-bold text-[3.4rem] uppercase leading-[0.98] tracking-[-0.035em] text-white sm:text-7xl">
 								Seu arcade.
 								<span className="mt-2 block text-primary">Do seu jeito.</span>
 							</h1>
@@ -252,7 +252,7 @@ export default function Home() {
 				{/* FEATURES SECTION */}
 				<section
 					id="features"
-					className="relative py-24 overflow-hidden"
+					className="relative scroll-mt-28 py-24 overflow-hidden"
 				>
 					<div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--surface))_0%,transparent_50%)]" />
 					<div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12">
@@ -320,6 +320,7 @@ export default function Home() {
 											src={shot.src}
 											alt={shot.title}
 											fill
+                                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
 											className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 opacity-80 group-hover:opacity-100"
 										/>
 										<div className="absolute inset-0 scanlines pointer-events-none mix-blend-overlay opacity-30" />

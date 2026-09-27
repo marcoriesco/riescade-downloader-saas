@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CheckCircle2, ExternalLink } from "lucide-react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 function validParam(value: string | null): value is string {
@@ -84,34 +85,35 @@ export default function AppLoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white flex items-center justify-center p-6">
-      <section className="w-full max-w-md rounded-xl border border-[#ff0884]/40 bg-black/40 p-8 text-center">
+    <main id="main-content" tabIndex={-1} className="site-page min-h-screen bg-background text-white flex items-center justify-center p-6">
+      <section className="w-full max-w-md rounded-xl border border-primary/40 bg-black/40 p-8 text-center">
+        <Link href="/" className="mb-8 inline-block font-brand-condensed text-2xl font-bold">RIESCADE <span className="text-primary">OS</span></Link>
         {callbackUrl && (
-          <CheckCircle2 className="mx-auto mb-5 h-14 w-14 text-[#ff0884]" />
+          <CheckCircle2 className="mx-auto mb-5 h-14 w-14 text-primary" />
         )}
         <h1 className="text-2xl font-bold mb-3">Entrar no RIESCADE</h1>
-        <p className="text-gray-300 mb-6">{message}</p>
+        <p role="status" aria-live="polite" className="text-foreground/80 mb-6">{message}</p>
         {!busy && message.startsWith("Entre") && (
           <button
             onClick={signIn}
-            className="w-full rounded-md bg-[#ff0884] px-4 py-3 font-semibold hover:bg-[#d9006e]"
+            className="w-full rounded-md bg-primary px-4 py-3 font-semibold hover:bg-[#d9006e]"
           >
             Entrar com Google
           </button>
         )}
         {busy && (
-          <div className="mx-auto h-9 w-9 animate-spin rounded-full border-4 border-[#ff0884]/30 border-t-[#ff0884]" />
+          <div className="mx-auto h-9 w-9 animate-spin rounded-full border-4 border-primary/30 border-t-[#ff0884]" />
         )}
         {!busy && callbackUrl && (
           <>
             <a
               href={callbackUrl}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#ff0884] px-4 py-3 font-semibold transition-colors hover:bg-[#d9006e]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-semibold transition-colors hover:bg-[#d9006e]"
             >
               Abrir RIESCADE
               <ExternalLink className="h-4 w-4" />
             </a>
-            <p className="mt-4 text-sm text-gray-500">
+            <p className="mt-4 text-sm text-muted-foreground">
               Se o aplicativo já abriu, você pode fechar esta página.
             </p>
           </>

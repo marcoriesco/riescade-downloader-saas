@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
-import { Roboto } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
 
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-const roboto = Roboto({ subsets: ['latin'] });
+
 
 export const metadata: Metadata = {
+    metadataBase: new URL('https://www.riescade.com.br'),
 	title: 'RIESCADE Platform - Mais de 250 Plataformas de Retrogames',
 	description:
 		'Acesso à mais de 250 plataformas de games, consoles e arcades clássicos em um único lugar. RIESCADE™ RetroGames e Games, sempre emulando...',
@@ -50,9 +50,7 @@ export const metadata: Metadata = {
 		description: 'Acesso à mais de 250 plataformas de games em um único lugar.',
 		images: ['https://www.riescade.com.br/images/og-image.webp'],
 	},
-	alternates: {
-		canonical: 'https://www.riescade.com.br',
-	},
+
 };
 
 export default function RootLayout({
@@ -74,7 +72,8 @@ export default function RootLayout({
 					content="ca-pub-9318454482729602"
 				/>
 			</head>
-			<body className={`${roboto.className}`}>
+			<body>
+                <a href="#main-content" className="skip-link">Pular para o conteúdo</a>
 				<Analytics />
 				<Providers>{children}</Providers>
 				<SpeedInsights />

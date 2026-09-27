@@ -17,7 +17,6 @@ import {
 } from "@/lib/blog-service";
 import { formatDate } from "@/lib/utils";
 import { Header } from "@/components/Header";
-import { Roboto, Roboto_Condensed } from "next/font/google";
 import styles from "@/styles/markdown.module.css";
 import Footer from "@/components/Footer";
 
@@ -52,16 +51,7 @@ const PLATFORM_KEYWORDS = {
   gb: "/platforms/gb",
 };
 
-const roboto = Roboto({
-  subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  display: "swap",
-});
 
-const robotoCondensed = Roboto_Condensed({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
 
 // Tipos para os dados do blog
 interface BlogPost {
@@ -130,10 +120,10 @@ export default function BlogPost() {
   // Mostrar um loader enquanto carrega
   if (isLoading) {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+      <div className="flex flex-col site-page min-h-screen bg-background text-white">
         <Header />
-        <main className="flex-grow pt-24 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff0884]"></div>
+        <main id="main-content" tabIndex={-1} className="flex-grow pt-24 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </main>
         <Footer />
       </div>
@@ -143,12 +133,12 @@ export default function BlogPost() {
   // Se não temos post após carregar, mostra uma mensagem de erro
   if (!post) {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+      <div className="flex flex-col site-page min-h-screen bg-background text-white">
         <Header />
-        <main className="flex-grow pt-24 flex items-center justify-center">
+        <main id="main-content" tabIndex={-1} className="flex-grow pt-24 flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl mb-4">Erro ao carregar o post</h1>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               Não foi possível carregar o conteúdo solicitado.
             </p>
           </div>
@@ -195,9 +185,9 @@ export default function BlogPost() {
             <domNode.name
               className={
                 domNode.name === "h1"
-                  ? "text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-[#ff0884]"
+                  ? "text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-primary"
                   : domNode.name === "h2"
-                    ? "text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent"
+                    ? "text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
                     : "text-2xl md:text-3xl font-bold mb-4 mt-8 text-white"
               }
             >
@@ -222,7 +212,7 @@ export default function BlogPost() {
         if (domNode.name === "pre") {
           return (
             <pre
-              className={`${styles.codeBlock} my-8 p-4 bg-gray-800 rounded-lg overflow-auto relative`}
+              className={`${styles.codeBlock} my-8 p-4 bg-card rounded-lg overflow-auto relative`}
             >
               {domToReact(domNode.children as DOMNode[], options)}
             </pre>
@@ -234,33 +224,34 @@ export default function BlogPost() {
   };
 
   // Criar slug da categoria a partir do nome da categoria
-  const categorySlug = post.category.toLowerCase().replace(/\s+/g, "-");
+  const categorySlug = encodeURIComponent(post.category);
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col site-page min-h-screen bg-background text-white">
       <Header />
 
-      <main className={`flex-grow ${robotoCondensed.className}`}>
+      <main id="main-content" tabIndex={-1} className={`flex-grow font-sans`}>
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Post Header */}
-          <header className="mb-16">
+          <header className="page-intro">
+            <Link href="/blog" className="mb-8 inline-flex text-sm text-muted-foreground hover:text-primary">← Voltar ao blog</Link>
             {/* Category */}
             <div className="mb-6">
               <Link
                 href={`/blog?category=${categorySlug}`}
-                className="inline-block bg-[#ff0884]/20 text-[#ff0884] px-3 py-1 rounded-full text-sm hover:bg-[#ff0884]/30 transition-colors font-medium"
+                className="inline-block bg-primary/20 text-primary px-3 py-1 rounded-full text-sm hover:bg-primary/30 transition-colors font-medium"
               >
                 {post.category}
               </Link>
             </div>
 
             {/* Title */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-10 leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-8 leading-tight tracking-tight text-foreground">
               {post.title}
             </h1>
 
             {/* Meta */}
-            <div className="flex flex-wrap items-center text-gray-400 text-sm mb-10 space-x-6">
+            <div className="flex flex-wrap items-center text-muted-foreground text-sm mb-10 space-x-6">
               <time
                 dateTime={post.published_at || ""}
                 className="flex items-center"
@@ -345,7 +336,7 @@ export default function BlogPost() {
           {/* Post Content */}
           <article className="content-wrapper">
             <div
-              className={`mt-10 prose prose-invert prose-lg max-w-none ${roboto.className} ${styles.markdown}`}
+              className={`mt-10 prose prose-invert prose-lg max-w-none font-sans ${styles.markdown}`}
             >
               {parse(post.content, options)}
             </div>
@@ -353,11 +344,11 @@ export default function BlogPost() {
 
           {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="mt-16 pt-8 border-t border-gray-700 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 bg-[length:100%_1px] bg-no-repeat bg-top">
+            <div className="mt-16 pt-8 border-t border-border bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 bg-[length:100%_1px] bg-no-repeat bg-top">
               <h2 className="text-xl font-bold mb-6 flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-5 w-5 mr-2 text-[#ff0884]"
+                  className="h-5 w-5 mr-2 text-primary"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -376,7 +367,7 @@ export default function BlogPost() {
                   <Link
                     key={tag}
                     href={`/blog?tag=${tag}`}
-                    className="bg-gray-800 text-gray-300 px-4 py-2 rounded-full text-sm hover:bg-gradient-to-r hover:from-[#ff0884]/20 hover:to-purple-500/20 transition-colors hover:text-white border border-gray-700 hover:border-[#ff0884]/40"
+                    className="bg-card text-foreground/80 px-4 py-2 rounded-full text-sm hover:bg-gradient-to-r hover:from-primary/20 hover:to-accent/20 transition-colors hover:text-white border border-border hover:border-primary/40"
                   >
                     #{tag}
                   </Link>
@@ -387,7 +378,7 @@ export default function BlogPost() {
 
           {/* Related Posts */}
           {relatedPosts && relatedPosts.length > 0 && (
-            <div className="mt-16 pt-8 border-t border-gray-800">
+            <div className="mt-16 pt-8 border-t border-border">
               <h2 className="text-2xl font-bold mb-6 text-white">
                 Posts Relacionados
               </h2>
@@ -395,7 +386,7 @@ export default function BlogPost() {
                 {relatedPosts.map((relatedPost) => (
                   <article
                     key={relatedPost.id}
-                    className="bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-700 hover:border-[#ff0884]/30 h-full flex flex-col"
+                    className="bg-card rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-border hover:border-primary/30 h-full flex flex-col"
                   >
                     <a href={`/blog/${relatedPost.slug}`} className="block">
                       <div className="relative h-40 w-full">
@@ -408,7 +399,7 @@ export default function BlogPost() {
                           />
                         ) : (
                           <div className="h-full w-full bg-gradient-to-r from-gray-700 to-gray-600 flex items-center justify-center">
-                            <span className="text-gray-400">Sem imagem</span>
+                            <span className="text-muted-foreground">Sem imagem</span>
                           </div>
                         )}
                         <div className="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent"></div>
@@ -417,11 +408,11 @@ export default function BlogPost() {
 
                     <div className="p-4 flex-grow">
                       <a href={`/blog/${relatedPost.slug}`} className="block">
-                        <h3 className="text-lg font-bold mb-2 hover:text-[#ff0884] transition-colors line-clamp-2 cursor-pointer">
+                        <h3 className="text-lg font-bold mb-2 hover:text-primary transition-colors line-clamp-2 cursor-pointer">
                           {relatedPost.title}
                         </h3>
                       </a>
-                      <div className="text-gray-400 text-sm">
+                      <div className="text-muted-foreground text-sm">
                         {relatedPost.published_at && (
                           <time
                             dateTime={relatedPost.published_at}
@@ -453,11 +444,11 @@ export default function BlogPost() {
           )}
 
           {/* Social Sharing */}
-          <div className="mt-16 pt-8 border-t border-gray-700 bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 bg-[length:100%_1px] bg-no-repeat bg-top">
+          <div className="mt-16 pt-8 border-t border-border bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700 bg-[length:100%_1px] bg-no-repeat bg-top">
             <h3 className="text-xl font-bold mb-6 flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 mr-2 text-[#ff0884]"
+                className="h-5 w-5 mr-2 text-primary"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"

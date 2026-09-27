@@ -17,9 +17,9 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        sans: ["Figtree", "sans-serif"],
-        display: ["Figtree", "sans-serif"],
-        mono: ["JetBrains Mono", "monospace"],
+        sans: ["Arial", "Helvetica", "sans-serif"],
+        display: ["Arial", "Helvetica", "sans-serif"],
+        mono: ["Consolas", "monospace"],
       },
       colors: {
         border: "hsl(var(--border))",

@@ -2,15 +2,10 @@ import React, { use } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { getBlogPosts } from "@/lib/blog-service";
-import { Roboto_Condensed } from "next/font/google";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Metadata } from "next";
 
-const robotoCondensed = Roboto_Condensed({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
 
 export const revalidate = 3600;
 
@@ -103,16 +98,16 @@ export default function CategoryPage({
   );
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col site-page min-h-screen bg-background text-white">
       <Header />
 
-      <main className={`flex-grow pt-20 ${robotoCondensed.className}`}>
+      <main id="main-content" tabIndex={-1} className={`flex-grow font-sans`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           {/* Category Header */}
-          <div className="mb-12">
+          <div className="page-intro">
             <Link
               href="/blog"
-              className="inline-flex items-center text-gray-400 hover:text-[#ff0884] mb-6 transition-colors"
+              className="inline-flex items-center text-muted-foreground hover:text-primary mb-6 transition-colors"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -129,13 +124,13 @@ export default function CategoryPage({
               Voltar para o Blog
             </Link>
 
-            <h1 className="text-4xl md:text-5xl font-extrabold mb-4">
+            <h1 className="font-display uppercase tracking-tight text-4xl md:text-5xl font-bold mb-4">
               <span className="text-white">Categoria: </span>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#ff0884] to-purple-500">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
                 {categoryName}
               </span>
             </h1>
-            <p className="text-xl text-gray-400">{categoryDescription}</p>
+            <p className="text-xl text-muted-foreground">{categoryDescription}</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
@@ -146,14 +141,14 @@ export default function CategoryPage({
                   {posts.map((post) => (
                     <div
                       key={post.id}
-                      className="bg-gray-800 rounded-xl overflow-hidden hover:bg-gray-700 transition-colors"
+                      className="bg-card rounded-xl overflow-hidden hover:bg-panel transition-colors"
                     >
                       <Link href={`/blog/${post.slug}`} className="block">
                         <div className="relative h-64 w-full">
                           <Image
                             src={
                               post.cover_image ||
-                              "/images/blog/default-cover.jpg"
+                              "/images/og-image.webp"
                             }
                             alt={post.title}
                             fill
@@ -161,13 +156,13 @@ export default function CategoryPage({
                           />
                         </div>
                         <div className="p-6">
-                          <h2 className="text-xl font-bold mb-3 line-clamp-2 text-white hover:text-[#ff0884] transition-colors">
+                          <h2 className="text-xl font-bold mb-3 line-clamp-2 text-white hover:text-primary transition-colors">
                             {post.title}
                           </h2>
-                          <p className="text-gray-400 mb-4 line-clamp-3">
+                          <p className="text-muted-foreground mb-4 line-clamp-3">
                             {post.excerpt}
                           </p>
-                          <div className="flex items-center justify-between text-sm text-gray-500">
+                          <div className="flex items-center justify-between text-sm text-muted-foreground">
                             <div className="flex items-center">
                               <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -217,7 +212,7 @@ export default function CategoryPage({
                   ))}
                 </div>
               ) : (
-                <div className="bg-gray-800/50 border border-gray-700 rounded-xl p-12 text-center">
+                <div className="bg-card/50 border border-border rounded-xl p-12 text-center">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-16 w-16 mx-auto mb-6 text-gray-600"
@@ -235,12 +230,12 @@ export default function CategoryPage({
                   <h3 className="text-2xl font-bold mb-2">
                     Nenhum post encontrado
                   </h3>
-                  <p className="text-gray-400 mb-6">
+                  <p className="text-muted-foreground mb-6">
                     Não encontramos posts para esta categoria.
                   </p>
                   <Link
                     href="/blog"
-                    className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-[#ff0884] hover:bg-[#ff0884]/90"
+                    className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90"
                   >
                     Ver todos os posts
                   </Link>
@@ -251,9 +246,9 @@ export default function CategoryPage({
             <div className="lg:col-span-1">
               <div className="sticky top-24">
                 {/* Categories */}
-                <div className="bg-gray-800 rounded-xl p-6 mb-8">
+                <div className="bg-card rounded-xl p-6 mb-8">
                   <h3 className="text-xl font-bold mb-6 flex items-center">
-                    <span className="inline-block w-6 h-1 bg-[#ff0884] mr-2"></span>
+                    <span className="inline-block w-6 h-1 bg-primary mr-2"></span>
                     Categorias
                   </h3>
                   <div className="space-y-4">
@@ -263,12 +258,12 @@ export default function CategoryPage({
                         href={`/blog/category/${cat.slug}`}
                         className={`flex justify-between items-center py-2 px-3 rounded-lg transition-colors ${
                           cat.name === categoryName
-                            ? "bg-[#ff0884]/20 text-[#ff0884] font-medium"
-                            : "hover:bg-gray-700"
+                            ? "bg-primary/20 text-primary font-medium"
+                            : "hover:bg-panel"
                         }`}
                       >
                         <span>{cat.name}</span>
-                        <span className="bg-gray-700 text-gray-300 text-xs rounded-full px-2 py-1">
+                        <span className="bg-panel text-foreground/80 text-xs rounded-full px-2 py-1">
                           {cat.post_count}
                         </span>
                       </Link>
@@ -277,33 +272,33 @@ export default function CategoryPage({
                 </div>
 
                 {/* Return to all posts */}
-                <div className="bg-gray-800 rounded-xl p-6">
+                <div className="bg-card rounded-xl p-6">
                   <h3 className="text-xl font-bold mb-4 flex items-center">
-                    <span className="inline-block w-6 h-1 bg-[#ff0884] mr-2"></span>
+                    <span className="inline-block w-6 h-1 bg-primary mr-2"></span>
                     Tags Populares
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     <Link
                       href="/blog?tag=emulacao"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-panel hover:bg-primary/20 hover:text-primary rounded-md text-sm transition-colors"
                     >
                       #emulacao
                     </Link>
                     <Link
                       href="/blog?tag=retroarch"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-panel hover:bg-primary/20 hover:text-primary rounded-md text-sm transition-colors"
                     >
                       #retroarch
                     </Link>
                     <Link
                       href="/blog?tag=nintendo"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-panel hover:bg-primary/20 hover:text-primary rounded-md text-sm transition-colors"
                     >
                       #nintendo
                     </Link>
                     <Link
                       href="/blog?tag=arcade"
-                      className="inline-block px-3 py-1 bg-gray-700 hover:bg-[#ff0884]/20 hover:text-[#ff0884] rounded-md text-sm transition-colors"
+                      className="inline-block px-3 py-1 bg-panel hover:bg-primary/20 hover:text-primary rounded-md text-sm transition-colors"
                     >
                       #arcade
                     </Link>

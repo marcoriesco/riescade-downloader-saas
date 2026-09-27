@@ -62,7 +62,7 @@ export default function PlatformPage({
   const systemsPath = `/images/platforms/systems/${platform}.webp`;
   const platformPath = platformInfo?.image || "";
   const logoPath = `/images/platforms/logos/${platform}.webp`;
-  const fallbackPath = "/images/platforms/placeholder-console.webp";
+  const fallbackPath = "/images/logo.webp";
 
   // Handle sign in button click
   const handleSignIn = async () => {
@@ -136,13 +136,13 @@ export default function PlatformPage({
   // Show redirecting state when auth is in progress
   if (isRedirecting) {
     return (
-      <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+      <div className="flex flex-col site-page min-h-screen bg-background text-white">
         <Header />
-        <main className="flex-grow flex items-center justify-center p-4">
+        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-4">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#ff0884] mx-auto mb-6"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-6"></div>
             <h1 className="text-2xl font-bold mb-4">Redirecionando...</h1>
-            <p className="text-gray-400">
+            <p className="text-muted-foreground">
               Abrindo o aplicativo RIESCADE OS para {platformInfo.fullName}
             </p>
           </div>
@@ -153,28 +153,29 @@ export default function PlatformPage({
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col site-page min-h-screen bg-background text-white">
       <Header />
 
-      <main className="flex-grow">
+      <main id="main-content" tabIndex={-1} className="flex-grow">
         {/* Hero Section with Platform Info */}
         <div
-          className="relative pt-16 px-4 sm:px-6 lg:px-8"
+          className="relative border-b border-border py-10 px-6 lg:px-8"
           style={{ background: backgroundGradient }}
         >
           <div className="max-w-7xl mx-auto">
+            <Link href="/platforms" className="mb-8 inline-flex text-sm text-muted-foreground hover:text-primary">← Todas as plataformas</Link>
             {/* Platform Header */}
             <div className="flex flex-col items-center justify-center text-center">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-8 leading-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
+              <h1 className="font-display uppercase tracking-tight text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight text-foreground">
                 {platformInfo.fullName || platform}
               </h1>
 
               {/* Platform buttons */}
-              <div className="flex flex-wrap gap-4 justify-center md:justify-start mb-16">
+              <div className="flex flex-wrap gap-4 justify-center mb-4">
                 {isAuthenticated ? (
                   <button
                     onClick={handleRedirectToUrl}
-                    className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
+                    className="bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
                   >
                     <FontAwesomeIcon
                       icon={faDownload}
@@ -185,7 +186,7 @@ export default function PlatformPage({
                 ) : (
                   <button
                     onClick={handleSignIn}
-                    className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
+                    className="bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
                   >
                     <FontAwesomeIcon
                       icon={faDownload}
@@ -207,7 +208,7 @@ export default function PlatformPage({
                 {/* Left column: Image and Description */}
                 <div className="space-y-8">
                   {/* System Image - if available */}
-                  <div className="bg-gray-800/40 rounded-xl p-6 shadow-xl border border-gray-700 flex items-center justify-center">
+                  <div className="bg-card/40 rounded-xl p-6 shadow-xl border border-border flex items-center justify-center">
                     <div className="relative w-full aspect-square max-h-[400px] flex items-center justify-center">
                       <Image
                         src={imageSrc}
@@ -242,11 +243,11 @@ export default function PlatformPage({
                   </div>
 
                   <div>
-                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                       Sobre {metadata.systemName}
                     </h2>
-                    <div className="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700/50">
-                      <p className="text-gray-300 leading-relaxed">
+                    <div className="bg-card rounded-xl p-6 shadow-xl border border-border/50">
+                      <p className="text-foreground/80 leading-relaxed">
                         {metadata.systemDescription}
                       </p>
                     </div>
@@ -256,14 +257,14 @@ export default function PlatformPage({
                 {/* Right column: Details and Colors */}
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                       Detalhes da Plataforma
                     </h2>
-                    <div className="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700/50">
+                    <div className="bg-card rounded-xl p-6 shadow-xl border border-border/50">
                       <dl className="space-y-4">
                         {metadata.systemManufacturer && (
                           <div className="grid grid-cols-2">
-                            <dt className="font-semibold text-gray-400">
+                            <dt className="font-semibold text-muted-foreground">
                               Fabricante
                             </dt>
                             <dd>{metadata.systemManufacturer}</dd>
@@ -272,7 +273,7 @@ export default function PlatformPage({
 
                         {metadata.systemReleaseDateFormated && (
                           <div className="grid grid-cols-2">
-                            <dt className="font-semibold text-gray-400">
+                            <dt className="font-semibold text-muted-foreground">
                               Data de Lançamento
                             </dt>
                             <dd>{metadata.systemReleaseDateFormated}</dd>
@@ -281,14 +282,14 @@ export default function PlatformPage({
 
                         {metadata.systemReleaseYear && (
                           <div className="grid grid-cols-2">
-                            <dt className="font-semibold text-gray-400">Ano</dt>
+                            <dt className="font-semibold text-muted-foreground">Ano</dt>
                             <dd>{metadata.systemReleaseYear}</dd>
                           </div>
                         )}
 
                         {metadata.systemHardwareType && (
                           <div className="grid grid-cols-2">
-                            <dt className="font-semibold text-gray-400">
+                            <dt className="font-semibold text-muted-foreground">
                               Tipo
                             </dt>
                             <dd>{metadata.systemHardwareType}</dd>
@@ -300,11 +301,11 @@ export default function PlatformPage({
 
                   {/* Additional information */}
                   <div>
-                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-[#ff0884] to-purple-600 bg-clip-text text-transparent">
+                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                       Informações Adicionais
                     </h2>
-                    <div className="bg-gray-800 rounded-xl p-6 shadow-xl border border-gray-700/50">
-                      <p className="text-gray-300 mb-4">
+                    <div className="bg-card rounded-xl p-6 shadow-xl border border-border/50">
+                      <p className="text-foreground/80 mb-4">
                         Esta plataforma faz parte da coleção RIESCADE de jogos
                         retro. Acesse nossa comunidade para mais informações e
                         suporte.
@@ -312,7 +313,7 @@ export default function PlatformPage({
                       <div className="flex flex-wrap gap-3">
                         <Link
                           href="/blog"
-                          className="bg-gray-700 hover:bg-gray-600 transition-colors px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2"
+                          className="bg-panel hover:bg-gray-600 transition-colors px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +333,7 @@ export default function PlatformPage({
                         </Link>
                         <Link
                           href="/platforms"
-                          className="bg-gray-700 hover:bg-gray-600 transition-colors px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2"
+                          className="bg-panel hover:bg-gray-600 transition-colors px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -356,10 +357,10 @@ export default function PlatformPage({
                 </div>
               </>
             ) : (
-              <div className="bg-gray-800/50 p-10 rounded-xl text-center shadow-xl border border-gray-700/50 relative">
+              <div className="bg-card/50 p-10 rounded-xl text-center shadow-xl border border-border/50 relative">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-16 w-16 mx-auto mb-4 text-gray-500"
+                  className="h-16 w-16 mx-auto mb-4 text-muted-foreground"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -374,7 +375,7 @@ export default function PlatformPage({
                 <h2 className="text-2xl font-bold mb-4">
                   Informações da Plataforma em Breve
                 </h2>
-                <p className="text-gray-400 mb-6 text-lg max-w-2xl mx-auto">
+                <p className="text-muted-foreground mb-6 text-lg max-w-2xl mx-auto">
                   Ainda não temos metadados detalhados para esta plataforma.
                   Nossa equipe está trabalhando para adicionar mais informações
                   sobre {platformInfo.fullName}. Enquanto isso, você pode
@@ -387,7 +388,7 @@ export default function PlatformPage({
                     alt={`${platformInfo.fullName} Console`}
                     width={300}
                     height={300}
-                    className="mx-auto object-contain bg-gray-900/50 p-6 rounded-xl"
+                    className="mx-auto object-contain bg-background/50 p-6 rounded-xl"
                     onError={() => {
                       console.log(`Failed to load fallback image: ${imageSrc}`);
 
@@ -414,12 +415,12 @@ export default function PlatformPage({
                     <h3 className="text-xl font-bold">
                       {platformInfo.fullName}
                     </h3>
-                    <p className="text-gray-400">
+                    <p className="text-muted-foreground">
                       Esta plataforma está disponível em nossa coleção.
                     </p>
                     <button
                       onClick={handleRedirectToUrl}
-                      className="bg-gradient-to-r from-[#ff0884] to-purple-600 text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity font-medium self-center"
+                      className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity font-medium self-center"
                     >
                       Baixar RIESCADE OS
                     </button>
@@ -435,7 +436,7 @@ export default function PlatformPage({
 
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-gray-800 p-6 rounded-lg shadow-lg max-w-md w-full">
+          <div className="bg-card p-6 rounded-lg shadow-lg max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">Metadata Not Found</h2>
             <p className="mb-4">
               This platform does not have an XML metadata file yet.

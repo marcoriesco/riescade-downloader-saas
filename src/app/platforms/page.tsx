@@ -1,10 +1,11 @@
 "use client";
+import { PageIntro } from "@/components/PageIntro";
+
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/Header";
-import { Roboto_Condensed } from "next/font/google";
 import platformsData from "@/data/platforms.json";
 import Footer from "@/components/Footer";
 import { supabase } from "@/lib/supabase";
@@ -13,10 +14,6 @@ import { Gamepad2, Search } from "lucide-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
-const robotoCondensed = Roboto_Condensed({
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
 
 // Define PlatformData interface
 interface PlatformData {
@@ -111,12 +108,12 @@ export default function PlatformsPage() {
   // Show redirecting state when auth is in progress
   if (authRedirecting) {
     return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
+      <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-gray-300">
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-foreground/80">
               Redirecionando para autenticação...
             </p>
           </div>
@@ -129,12 +126,12 @@ export default function PlatformsPage() {
   // Mostrar loader enquanto verifica autenticação
   if (authChecking) {
     return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
+      <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-[#ff0884] border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-gray-300">Verificando autenticação...</p>
+            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
+            <p className="text-lg text-foreground/80">Verificando autenticação...</p>
           </div>
         </div>
         <Footer />
@@ -145,22 +142,22 @@ export default function PlatformsPage() {
   // Show "Acesso Negado" message if not authenticated
   if (!user) {
     return (
-      <div className="flex min-h-screen flex-col bg-gamer-dark">
+      <div className="flex site-page min-h-screen flex-col bg-background">
         <Header />
         <div className="flex-1 flex items-center justify-center">
-          <div className="text-center p-8 bg-black/30 rounded-lg border border-[#ff0884]/30 max-w-md">
-            <Gamepad2 className="h-12 w-12 text-[#ff0884] mx-auto mb-4" />
-            <h2 className="text-xl font-bold text-white mb-2">
-              Área Exclusiva
-            </h2>
-            <p className="text-gray-300 mb-6">
+          <div className="text-center p-8 bg-black/30 rounded-lg border border-primary/30 max-w-md">
+            <Gamepad2 className="h-12 w-12 text-primary mx-auto mb-4" />
+            <h1 className="font-display text-3xl font-bold uppercase text-white mb-2">
+              Sua biblioteca começa aqui
+            </h1>
+            <p className="text-foreground/80 mb-6">
               Faça login para acessar nossa coleção completa de plataformas de
               jogos e desfrutar de todos os recursos disponíveis para membros.
             </p>
             <button
               onClick={handleSignIn}
               disabled={authRedirecting}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-[#ff0884] text-sm font-medium rounded-md shadow-sm text-white bg-[#ff0884]/20 hover:bg-[#ff0884]/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#ff0884] transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-white bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
             >
               <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
               Entrar com Google
@@ -173,54 +170,35 @@ export default function PlatformsPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-900 text-white">
+    <div className="flex flex-col site-page min-h-screen bg-background text-white">
       <Header />
 
-      <main className={`flex-grow ${robotoCondensed.className}`}>
-        {/* Hero banner */}
-        <div
-          className="w-full h-[30vh] relative bg-cover bg-center"
-          style={{
-            background:
-              "linear-gradient(to right, rgba(255, 8, 132, 0.8), rgba(128, 0, 255, 0.8))",
-            backgroundImage: "url(/images/platforms-banner.webp)",
-            backgroundBlendMode: "overlay",
-          }}
-        >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center p-8">
-              <h1 className="text-4xl md:text-6xl font-bold mb-4">
-                RIESCADE Platforms
-              </h1>
-              <p className="text-xl md:text-2xl max-w-3xl">
-                Descubra nossa coleção completa de plataformas de jogos retrô e
-                modernas
-              </p>
-            </div>
-          </div>
-        </div>
+      <main id="main-content" tabIndex={-1} className={`flex-grow font-sans`}>
+        <div className="mx-auto max-w-7xl px-6 pt-10"><PageIntro eyebrow="Plataformas" title={<>Uma biblioteca. <span className="text-gradient-primary">Gerações de jogos.</span></>} description="Explore os sistemas, encontre seus favoritos e descubra seu próximo clássico." /></div>
 
         <div className="max-w-7xl mx-auto px-4 py-12">
           {/* Search Bar */}
-          <div className="sticky top-20 bg-gray-900/90 backdrop-blur-sm z-10 py-4 mb-8 shadow-md rounded-lg">
+          <div className="sticky top-28 bg-background/90 backdrop-blur-sm z-10 py-4 mb-8 shadow-md rounded-lg">
             <div className="flex items-center justify-center max-w-2xl mx-auto">
               <div className="relative w-full">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-gray-400" />
+                  <Search className="h-5 w-5 text-muted-foreground" />
                 </div>
                 <input
                   type="text"
-                  className="block w-full pl-10 pr-3 py-3 bg-gray-800 border border-gray-700 placeholder-gray-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#ff0884] focus:border-transparent"
+                  className="block w-full pl-10 pr-3 py-3 bg-card border border-border placeholder-gray-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="Pesquisar plataformas..."
+                  aria-label="Pesquisar plataformas"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
                 {searchTerm && (
                   <button
                     className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    aria-label="Limpar pesquisa"
                     onClick={() => setSearchTerm("")}
                   >
-                    <span className="text-gray-400 hover:text-white">×</span>
+                    <span className="text-muted-foreground hover:text-white">×</span>
                   </button>
                 )}
               </div>
@@ -234,7 +212,7 @@ export default function PlatformsPage() {
                 {filteredPlatforms.map((platform) => (
                   <div
                     key={platform.name}
-                    className="bg-gray-800 rounded-lg p-4 flex flex-col items-center text-center hover:bg-gray-700 transition-all hover:shadow-lg hover:shadow-[#ff0884]/10 transform hover:-translate-y-1 group"
+                    className="bg-card rounded-lg p-4 flex flex-col items-center text-center hover:bg-panel transition-all hover:shadow-lg hover:shadow-[#ff0884]/10 transform hover:-translate-y-1 group"
                   >
                     <div className="relative w-24 h-24 mb-4">
                       <Image
@@ -252,13 +230,13 @@ export default function PlatformsPage() {
                         }}
                       />
                     </div>
-                    <h3 className="text-lg font-semibold group-hover:text-[#ff0884] mb-4">
+                    <h3 className="text-lg font-semibold group-hover:text-primary mb-4">
                       {platform.fullName}
                     </h3>
                     <div className="flex flex-col gap-2 w-full mt-auto">
                       <Link
                         href={`/platforms/${platform.name}`}
-                        className="w-full bg-[#ff0884]/90 hover:bg-[#ff0884] text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-1 transition-colors"
+                        className="w-full bg-primary/90 hover:bg-primary text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-1 transition-colors"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -280,7 +258,7 @@ export default function PlatformsPage() {
                         href={platform.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="w-full bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-1 transition-colors"
+                        className="w-full bg-panel hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-1 transition-colors"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -298,13 +276,13 @@ export default function PlatformsPage() {
               </div>
             ) : (
               <div className="text-center py-12">
-                <div className="inline-block p-3 rounded-full bg-gray-800 mb-4">
-                  <Search className="h-8 w-8 text-[#ff0884]" />
+                <div className="inline-block p-3 rounded-full bg-card mb-4">
+                  <Search className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold mb-2">
                   Nenhuma plataforma encontrada
                 </h3>
-                <p className="text-gray-400">
+                <p className="text-muted-foreground">
                   Não encontramos nenhuma plataforma com &quot;{searchTerm}
                   &quot;. Tente outro termo.
                 </p>
