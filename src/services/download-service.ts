@@ -603,12 +603,14 @@ export async function authorizeThemeDownload(
   if (typeof themeId !== "string" || !/^[a-z0-9_-]{1,64}$/.test(themeId)) {
     throw new AppApiError(400, "Invalid theme");
   }
-  if (!/^[a-f0-9]{64}$/.test(requestedAssetId)) {
-    throw new AppApiError(400, "Invalid asset");
-  }
+  const isHash = /^[a-f0-9]{64}$/.test(requestedAssetId);
   await assertRateLimit(user.id);
-  const asset = await findIndexedThemeAsset(themeId, requestedAssetId);
-  if (!asset) throw new AppApiError(404, "Theme download not found");
+  const asset = isHash
+    ? await findIndexedThemeAsset(themeId, requestedAssetId)
+    : await findIndexedThemeAsset(themeId);
+  if (!asset) {
+    throw new AppApiError(404, `O pacote do tema "${themeId}" ainda não foi indexado na pasta 'themes' do Google Drive.`);
+  }
   return authorizeIndexedAsset(user, themeId, asset, clientVersion);
 }
 

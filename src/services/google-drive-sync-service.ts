@@ -219,6 +219,24 @@ export async function syncGoogleDriveCatalog(
     (platform) => !normalizedFilter || platform.id === normalizedFilter
   );
 
+  if (normalizedFilter === "theme" || normalizedFilter === "themes") {
+    const rootFolderId = getGoogleSharedDriveId();
+    const themesFolder = await findUniqueGoogleDriveFolder(rootFolderId, "themes");
+    const themes = await syncFolder(themesFolder.id, null, "theme");
+    return {
+      folders: 1,
+      assets: themes.assets,
+      skipped: themes.skipped,
+      platforms: [],
+      unmappedFolders: [],
+      themes: {
+        folderId: themesFolder.id,
+        assets: themes.assets,
+        skipped: themes.skipped,
+      },
+    };
+  }
+
   if (normalizedFilter && selectedPlatforms.length === 0) {
     throw new Error(`Platform ${normalizedFilter} is not in the game catalog`);
   }
@@ -274,6 +292,21 @@ export async function syncGoogleDriveCatalog(
       assets: emulators.assets,
       skipped: emulators.skipped,
     };
+
+    try {
+      const themesFolder = await findUniqueGoogleDriveFolder(rootFolderId, "themes");
+      const themes = await syncFolder(themesFolder.id, null, "theme");
+      result.folders += 1;
+      result.assets += themes.assets;
+      result.skipped += themes.skipped;
+      result.themes = {
+        folderId: themesFolder.id,
+        assets: themes.assets,
+        skipped: themes.skipped,
+      };
+    } catch (err) {
+      console.warn("Themes folder sync skipped:", err);
+    }
   }
 
   for (const platform of selectedPlatforms) {
