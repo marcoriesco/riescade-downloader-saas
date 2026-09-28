@@ -1,0 +1,22 @@
+{
+  "$schema": "riescade-themes-catalog-v1",
+  "version": 1,
+  "themes": {
+    "switch2": {
+      "id": "switch2",
+      "name": "Switch 2 (by RIESCADE)",
+      "author": "RIESCADE",
+      "description": "Interface inspirada no visual de próxima geração do Nintendo Switch 2 com suporte a Modo Claro e Modo Escuro, carrossel dinâmico 1:1 e fanart imersiva.",
+      "previewUrl": "/themes/switch2.webp",
+      "installDir": "switch2"
+    },
+    "deck": {
+      "id": "deck",
+      "name": "Steam Deck Experience",
+      "author": "RIESCADE",
+      "description": "Interface minimalista e imersiva inspirada na experiência portátil do Steam Deck com foco em navegação rápida.",
+      "previewUrl": "/themes/deck.webp",
+      "installDir": "deck"
+    }
+  }
+}

@@ -35,7 +35,7 @@ interface DownloadAssetRow {
   id: string;
   drive_file_id: string;
   drive_folder_id: string;
-  category: "bios" | "rom" | "emulator";
+  category: "bios" | "rom" | "emulator" | "theme";
   platform: string | null;
   filename: string;
   title: string;
@@ -63,6 +63,7 @@ export interface GoogleDriveSyncResult {
   }>;
   unmappedFolders: string[];
   emulators?: { folderId: string; assets: number; skipped: number };
+  themes?: { folderId: string; assets: number; skipped: number };
 }
 
 const gamesCatalog = gamesCatalogJson as GamesCatalog;
@@ -98,7 +99,7 @@ function toAssetRow(
   folderId: string,
   platform: PlatformConfig | null,
   syncedAt: string,
-  category: "bios" | "rom" | "emulator" = platform ? "rom" : "bios"
+  category: "bios" | "rom" | "emulator" | "theme" = platform ? "rom" : "bios"
 ): DownloadAssetRow | null {
   if (
     isGoogleDriveFolder(file) ||
@@ -117,7 +118,7 @@ function toAssetRow(
     drive_file_id: file.id,
     drive_folder_id: folderId,
     category,
-    platform: category === "emulator" ? title.toLocaleLowerCase() : platform?.id ?? null,
+    platform: category === "emulator" || category === "theme" ? title.toLocaleLowerCase() : platform?.id ?? null,
     filename: file.name,
     title,
     mime_type: file.mimeType,
@@ -165,7 +166,7 @@ async function replaceFolderAssets(
 async function syncFolder(
   folderId: string,
   platform: PlatformConfig | null,
-  category: "bios" | "rom" | "emulator" = platform ? "rom" : "bios"
+  category: "bios" | "rom" | "emulator" | "theme" = platform ? "rom" : "bios"
 ): Promise<{ assets: number; skipped: number }> {
   const files = await listGoogleDriveFolder(folderId);
   const allowedExtensions = platform
@@ -188,6 +189,11 @@ async function syncFolder(
       continue;
     }
 
+
+    if (category === "theme" && extensionOf(file.name) !== ".zip") {
+      skipped += 1;
+      continue;
+    }
     if (category === "emulator" && (extensionOf(file.name) !== ".zip" || !emulatorIds.has(emulatorId))) {
       skipped += 1;
       continue;
