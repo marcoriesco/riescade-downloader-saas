@@ -4,7 +4,7 @@
   "themes": {
     "switch2": {
       "id": "switch2",
-      "name": "Switch 2 (by RIESCADE)",
+      "name": "Switch 2 RIESCADE",
       "author": "RIESCADE",
       "description": "Interface inspirada no visual de próxima geração do Nintendo Switch 2 com suporte a Modo Claro e Modo Escuro, carrossel dinâmico 1:1 e fanart imersiva.",
       "previewUrl": "/themes/switch2.webp",
@@ -12,7 +12,7 @@
     },
     "deck": {
       "id": "deck",
-      "name": "Steam Deck Experience",
+      "name": "Steam Deck RIESCADE",
       "author": "RIESCADE",
       "description": "Interface minimalista e imersiva inspirada na experiência portátil do Steam Deck com foco em navegação rápida.",
       "previewUrl": "/themes/deck.webp",
@@ -20,11 +20,19 @@
     },
     "hyperspin": {
       "id": "hyperspin",
-      "name": "HyperSpin Arcade",
+      "name": "HyperSpin RIESCADE",
       "author": "RIESCADE",
       "description": "O clássico frontend arcade HyperSpin: roleta circular em ângulo 3D com inércia, caixa de vídeo CRT neon e clique mecânico autêntico.",
       "previewUrl": "/themes/hyperspin.webp",
       "installDir": "hyperspin"
+    },
+    "ps5": {
+      "id": "ps5",
+      "name": "Playstation 5 RIESCADE",
+      "author": "RIESCADE",
+      "description": "A interface moderna do Playstation 5.",
+      "previewUrl": "/themes/ps5.webp",
+      "installDir": "ps5"
     }
   }
 }
