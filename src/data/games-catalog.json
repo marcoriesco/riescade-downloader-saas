@@ -2297,7 +2297,7 @@
 		{
 			"id": "zeebo",
 			"name": "Zeebo",
-			"extensions": [".zip", ".ZIP"]
+			"extensions": [".zip", ".ZIP", ".mod", ".MOD"]
 		},
 		{
 			"id": "zmachine",

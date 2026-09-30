@@ -7,6 +7,12 @@
 			"installDir": "2ship",
 			"executable": "2ship/2ship.exe"
 		},
+		"zeebx": {
+			"name": "Zeebx",
+			"installDir": "zeebx",
+			"executable": "zeebx/zeebx-headless.exe",
+			"preserve": ["config.ini"]
+		},
 		"3dsen": {
 			"name": "3dSen",
 			"installDir": "3dsen",
