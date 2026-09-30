@@ -434,6 +434,11 @@
 			"extensions": [".game", ".zar", ".zip"]
 		},
 		{
+			"id": "ps5",
+			"name": "Playstation 5",
+			"extensions": [".game", ".zar", ".zip"]
+		},
+		{
 			"id": "xbox",
 			"name": "Xbox",
 			"extensions": [".xbe", ".iso"]

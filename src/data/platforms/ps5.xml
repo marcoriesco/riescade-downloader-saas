@@ -1,0 +1,17 @@
+<theme>
+   <variables>
+      <systemName>PlayStation 5</systemName>
+      <systemDescription>The PlayStation 5 (PS5) is a home video game console developed by Sony Interactive Entertainment. Announced as the successor to the PlayStation 4 in April 2019, it was launched on November 12, 2020, in Australia, Japan, New Zealand, North America, and South Korea, and November 19, 2020, in the rest of the world. A console of the ninth generation, it competes with Microsoft's Xbox Series X/S and Nintendo Switch.</systemDescription>
+      <systemManufacturer>Sony</systemManufacturer>
+      <systemReleaseYear>2020</systemReleaseYear>
+      <systemReleaseDate>2020-11-12</systemReleaseDate>
+      <systemReleaseDateFormated>November 12, 2020</systemReleaseDateFormated>
+      <systemHardwareType>Console</systemHardwareType>
+      <systemCoverSize>3-4</systemCoverSize>
+      <systemColor>00439C</systemColor>
+      <systemColorPalette1>003791</systemColorPalette1>
+      <systemColorPalette2>FFFFFF</systemColorPalette2>
+      <systemColorPalette3>000000</systemColorPalette3>
+      <systemColorPalette4>1F222D</systemColorPalette4>
+	  <systemCartSize>1-1</systemCartSize>    </variables>
+</theme>

@@ -100,6 +100,11 @@
     "fullName": "PlayStation 4"
   },
   {
+    "name": "ps5",
+    "image": "/images/platform/ps5.webp",
+    "fullName": "PlayStation 5"
+  },
+  {
     "name": "ps2br",
     "image": "/images/platform/ps2br.webp",
     "fullName": "PlayStation 2 Brazil"

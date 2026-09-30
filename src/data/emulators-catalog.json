@@ -505,6 +505,11 @@
 			"installDir": "scummvm",
 			"executable": "scummvm/scummvm.exe"
 		},
+		"kytyps5": {
+			"name": "Kyty PS5",
+			"installDir": "kytyps5",
+			"executable": "kytyps5/kyty_emulator.exe"
+		},
 		"shadps4": {
 			"name": "shadPS4",
 			"installDir": "shadps4",

@@ -17,6 +17,14 @@
       "description": "Interface minimalista e imersiva inspirada na experiência portátil do Steam Deck com foco em navegação rápida.",
       "previewUrl": "/themes/deck.webp",
       "installDir": "deck"
+    },
+    "hyperspin": {
+      "id": "hyperspin",
+      "name": "HyperSpin Arcade",
+      "author": "RIESCADE",
+      "description": "O clássico frontend arcade HyperSpin: roleta circular em ângulo 3D com inércia, caixa de vídeo CRT neon e clique mecânico autêntico.",
+      "previewUrl": "/themes/hyperspin.webp",
+      "installDir": "hyperspin"
     }
   }
 }
