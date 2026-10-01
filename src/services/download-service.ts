@@ -52,6 +52,7 @@ interface DownloadAssetRow {
 
 const gamesCatalog = gamesCatalogJson as GamesCatalog;
 const mameCatalog = mameCatalogJson as MameCatalog;
+const MAME_NAME_PLATFORMS = new Set(['model', 'model2', 'model3', 'naomi', 'naomi2']);
 
 export function isReservedPlatformAsset(filename: string): boolean {
   return RESERVED_PLATFORM_FILENAMES.has(filename.toLocaleLowerCase("pt-BR"));
@@ -66,7 +67,7 @@ function getPlatformConfig(platform: string): PlatformConfig {
 }
 
 function resolveAssetTitle(asset: DownloadAssetRow, config: PlatformConfig): string {
-  if (config.romset?.catalog === "mame.json") {
+  if (config.romset?.catalog === "mame.json" || MAME_NAME_PLATFORMS.has(config.id.toLowerCase())) {
     const romName = downloadPackageTitle(asset.filename).toLowerCase();
     const mameTitle = mameCatalog.games[romName]?.title?.trim();
     if (mameTitle) return mameTitle;
