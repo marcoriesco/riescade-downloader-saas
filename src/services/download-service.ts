@@ -52,7 +52,7 @@ interface DownloadAssetRow {
 
 const gamesCatalog = gamesCatalogJson as GamesCatalog;
 const mameCatalog = mameCatalogJson as MameCatalog;
-const MAME_NAME_PLATFORMS = new Set(['model', 'model2', 'model3', 'naomi', 'naomi2']);
+const MAME_NAME_PLATFORMS = new Set(['model', 'model2', 'model3', 'naomi', 'naomi2', 'neogeo', 'neogeoaes']);
 
 export function isReservedPlatformAsset(filename: string): boolean {
   return RESERVED_PLATFORM_FILENAMES.has(filename.toLocaleLowerCase("pt-BR"));
