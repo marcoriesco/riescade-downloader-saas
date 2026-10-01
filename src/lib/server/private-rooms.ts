@@ -9,6 +9,13 @@ function secret() {
   if (!key || key.length<32) throw new AppApiError(503,'Relay ainda não configurado.');
   return key;
 }
+function relayEndpoint() {
+  const host=process.env.RIESCADE_RELAY_HOST,port=Number(process.env.RIESCADE_RELAY_PORT);
+  const protocol=process.env.RIESCADE_RELAY_PROTOCOL || 'tls';
+  if(!host || !/^[a-z0-9.-]+$/i.test(host) || !Number.isInteger(port) || port<1 || port>65535
+    || !['tls','wss'].includes(protocol)) throw new AppApiError(503,'Relay ainda não configurado.');
+  return {host,port,protocol};
+}
 export function signRelayTicket(claims: RelayClaims) {
   const payload = Buffer.from(JSON.stringify(claims)).toString('base64url');
   return `${payload}.${createHmac('sha256',secret()).update(payload).digest('base64url')}`;
@@ -31,17 +38,15 @@ export async function roomStep(db: SupabaseClient, actor: string, body: Record<s
   if (!['get','ready','claim','session','connected','end','fail'].includes(String(body.step))) throw new AppApiError(400,'Ação de sala inválida.');
   if(body.step==='claim') {
     secret();
-    const host=process.env.RIESCADE_RELAY_HOST,port=Number(process.env.RIESCADE_RELAY_PORT);
-    if(!host || !/^[a-z0-9.-]+$/i.test(host) || !Number.isInteger(port) || port<1 || port>65535) throw new AppApiError(503,'Relay ainda não configurado.');
+    relayEndpoint();
   }
   const {data,error}=await db.rpc('social_room_step',{p_actor:actor,p_room:room,p_device:device,p_action:body.step,p_data:body.data || {}});
   checkDatabaseError(error);
   if (!data) throw new AppApiError(404,'Sala indisponível.');
   if (body.step==='claim' && data.launch) {
-    const host=process.env.RIESCADE_RELAY_HOST, port=Number(process.env.RIESCADE_RELAY_PORT);
-    if (!host || !/^[a-z0-9.-]+$/i.test(host) || !Number.isInteger(port) || port<1 || port>65535) throw new AppApiError(503,'Relay ainda não configurado.');
+    const endpoint=relayEndpoint();
     const ticket=signRelayTicket({room,actor,device,role:data.role,exp:Math.floor(Date.now()/1000)+120,aud:'riescade-relay-v1'});
-    return {...data,transport:{host,port,ticket}};
+    return {...data,transport:{...endpoint,ticket}};
   }
   return data;
 }
