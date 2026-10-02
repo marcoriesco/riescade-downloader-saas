@@ -80,7 +80,7 @@ export function checkDatabaseError(error: { message: string } | null) {
     SOCIAL_INVALID_REQUEST: [409, "Este convite já foi enviado com outros dados."],
     SOCIAL_ROOM_BUSY: [409, "Um dos jogadores já está preparando uma partida."],
     SOCIAL_INVITATION_PENDING: [409, "Já existe um convite pendente entre vocês."],
-    SOCIAL_INCOMPATIBLE: [409, "Jogo, core ou RetroArch diferentes. Use NES/FCEUmm com os mesmos arquivos."],
+    SOCIAL_INCOMPATIBLE: [409, "Jogo, núcleo ou RetroArch diferentes. Use os mesmos arquivos nos dois computadores."],
   };
   const mapped = messages[error.message];
   if (mapped) throw new AppApiError(...mapped);

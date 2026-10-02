@@ -22,7 +22,7 @@ beforeAll(async () => {
   await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
     create schema auth; create table auth.users(id uuid primary key);
     insert into auth.users values('${A}'),('${B}'),('${C}');`);
-  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql']) {
+  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql']) {
     await db.exec(readFileSync(resolve('supabase/migrations',filename),'utf8'));
   }
 },30000);
@@ -39,6 +39,15 @@ describe('native invitation coordination in local Postgres', () => {
   const step=(actor:string,room:string,device:string,action:string,data:object={})=>scalar<{phase:string;launch:boolean;session?:string;role:string}>('public.social_room_step($1,$2,$3,$4,$5)',[actor,room,device,action,data]);
   const manifest={...game,profile:'nes-fceumm-v1'};
   const createRoom=async()=>{const id=await invite();return (await respond(B,id,'accept')).room_id!};
+  it('accepts generalized RetroArch manifests and rejects a different system or core', async () => {
+    const descriptor={...game,title:'SNES test',system:'snes',core:'snes9x'};
+    const id=await invite(A,B,randomUUID(),descriptor);
+    const room=(await respond(B,id,'accept')).room_id!;
+    await expect(step(A,room,A,'ready',{...descriptor,profile:'retroarch-v1',core:'fceumm'})).rejects.toThrow('SOCIAL_INCOMPATIBLE');
+    await expect(step(A,room,A,'ready',{...descriptor,profile:'retroarch-v1',system:'nes'})).rejects.toThrow('SOCIAL_INCOMPATIBLE');
+    await step(A,room,A,'ready',{...descriptor,profile:'retroarch-v1'});
+    expect((await step(B,room,B,'ready',{...descriptor,profile:'retroarch-v1'})).phase).toBe('waiting');
+  });
   it('runs readiness, claims, session and playing only in authorized order',async()=>{
     const room=await createRoom();
     await expect(step(A,room,A,'claim')).rejects.toThrow('SOCIAL_FORBIDDEN');
@@ -57,9 +66,9 @@ describe('native invitation coordination in local Postgres', () => {
     expect((await step(A,room,A,'end')).phase).toBe('ended');
     expect((await step(B,room,B,'claim')).phase).toBe('ended');
   });
-  it('rejects missing profile, content differences and wrong devices',async()=>{
+  it('accepts any profile and rejects content differences and wrong devices',async()=>{
     const room=await createRoom();
-    await expect(step(A,room,A,'ready',game)).rejects.toThrow('SOCIAL_INCOMPATIBLE');
+    await step(A,room,A,'ready',game);
     await expect(step(A,room,A,'ready',{...manifest,content_hash:'d'.repeat(64)})).rejects.toThrow('SOCIAL_INCOMPATIBLE');
     await step(A,room,A,'ready',manifest);
     await expect(step(A,room,D,'claim')).rejects.toThrow('SOCIAL_DEVICE_LIMIT');
