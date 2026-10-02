@@ -2,6 +2,7 @@
 	"$schema": "riescade-emulators-catalog-v2",
 	"version": 2,
 	"emulators": {
+		"touchhle": {"name":"touchHLE","installDir":"touchHLE","executable":"touchHLE/touchHLE.exe","preserve":["touchHLE_options.txt","touchHLE_sandbox","touchHLE_apps"]},
 		"2ship": {
 			"name": "2ship",
 			"installDir": "2ship",
