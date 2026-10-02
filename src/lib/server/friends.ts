@@ -3,8 +3,37 @@ import { AppApiError } from "./app-errors";
 
 export const FRIEND_ACTIONS = ["request", "accept", "decline", "cancel", "remove", "block", "unblock"] as const;
 export type FriendAction = (typeof FRIEND_ACTIONS)[number];
-export type SocialProfile = { user_id: string; friend_code: string; display_name: string };
+export type SocialProfile = { user_id: string; friend_code: string; display_name: string; avatar_url?: string | null };
 const PROFILE_FIELDS = "user_id,friend_code,display_name";
+
+// Server-only enrichment: expose just a public image URL, never Auth metadata.
+const avatarCaches = new WeakMap<SupabaseClient, Map<string, { expires: number; value: Promise<string | null> }>>();
+export function safeAvatarUrl(value: unknown): string | null {
+  if(typeof value!=='string' || value.length>2048)return null;
+  try {const url=new URL(value);return url.protocol==='https:' && !url.username && !url.password ? url.href : null;} catch {return null;}
+}
+async function withAvatar(db: SupabaseClient, profile: SocialProfile): Promise<SocialProfile> {
+  let cache=avatarCaches.get(db);if(!cache){cache=new Map();avatarCaches.set(db,cache);}
+  const now=Date.now();let entry=cache.get(profile.user_id);
+  if(!entry || entry.expires<=now){
+    for(const [id,item] of cache)if(item.expires<=now)cache.delete(id);
+    if(cache.size>=2048)cache.delete(cache.keys().next().value!);
+    const value=(async()=>{try {
+      const {data,error}=await db.auth.admin.getUserById(profile.user_id);
+      if(error)return null;
+      const metadata=data.user?.user_metadata;
+      return safeAvatarUrl(metadata?.avatar_url) || safeAvatarUrl(metadata?.picture);
+    }catch{return null;}})();
+    entry={expires:now+5*60_000,value};cache.set(profile.user_id,entry);
+  }
+  return {...profile,avatar_url:await entry.value};
+}
+async function withAvatars(db: SupabaseClient, profiles: SocialProfile[]) {
+  const result: SocialProfile[]=new Array(profiles.length);let next=0;
+  await Promise.all(Array.from({length:Math.min(8,profiles.length)},async()=>{
+    while(next<profiles.length){const index=next++;result[index]=await withAvatar(db,profiles[index]);}
+  }));return result;
+}
 
 export function assertFriendsEnabled() {
   if (process.env.RIESCADE_FRIENDS_ENABLED !== "true") {
@@ -84,7 +113,7 @@ export async function findFriendProfile(db: SupabaseClient, actorId: string, cod
   ).limit(1);
   checkDatabaseError(error);
   if (data?.length) throw new AppApiError(404, "Jogador indisponível.");
-  return target;
+  return withAvatar(db,target);
 }
 
 export async function applyFriendAction(db: SupabaseClient, actorId: string, action: FriendAction, code: string) {
@@ -128,9 +157,10 @@ export async function getFriendsPage(db: SupabaseClient, actorId: string, page: 
     checkDatabaseError(result.error);
     profiles = (result.data || []) as SocialProfile[];
   }
+  profiles=await withAvatars(db,profiles);
   const byId = new Map(profiles.map(person => [person.user_id, person]));
   return {
-    profile,
+    profile:await withAvatar(db,profile),
     relationships: visible.map(row => ({
       id: row.id, status: row.status, direction: row.requester_id === actorId ? "outgoing" : "incoming",
       profile: byId.get(row.requester_id === actorId ? row.recipient_id : row.requester_id),
