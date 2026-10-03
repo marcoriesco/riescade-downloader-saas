@@ -127,3 +127,18 @@ pelo menos 32 caracteres. Host/porta são configuração administrativa, nunca
 argumentos livres fornecidos pelo renderer. A chave de assinatura não existe no
 relay; a control key do relay permite validar tickets junto à API. As três
 migrações continuam locais, sem aplicação remota ou publicação.
+
+
+## Feedback no histórico de convites
+
+A migração `20261003194522_invitation_history_feedback.sql` salva mensagens de
+falha de até 400 caracteres em `social_invitation_progress.message`. O servidor
+aceita o campo opcional `message` na ação `progress`; o RPC antigo de três
+argumentos continua funcionando. Somente `service_role` pode registrar as etapas,
+e cada chamada verifica se o autor participa do convite.
+
+Convites cancelados, recusados, expirados e partidas encerradas podem ser ocultados
+individualmente. Falhas de preparação em uma sala ainda ativa mantêm a opção de
+acompanhar. O card mostra sistema, mensagem de falha e autor do cancelamento quando
+registrado nas etapas. Mensagens antigas não podem ser recuperadas retroativamente.
+O botão Apagar mostra loading enquanto a exclusão individual está em andamento.

@@ -95,7 +95,8 @@ export async function invitationPreferences(db: SupabaseClient, actor: string, b
 }
 export async function invitationProgress(db: SupabaseClient, actor: string, body: Record<string,unknown>) {
   if(!['checking','needs_download','missing_game','downloading','installing','preparing','connecting','playing','failed','cancelled'].includes(String(body.phase))) throw new AppApiError(400,'Etapa inválida.');
-  const {error}=await db.rpc('social_set_invitation_progress',{p_actor:actor,p_invitation:validateUuid(body.invitationId),p_phase:body.phase});
+  if(body.message !== undefined && body.message !== null && (typeof body.message !== 'string' || body.message.length>400 || /[\x00-\x1f\x7f]/.test(body.message))) throw new AppApiError(400,'Mensagem inválida.');
+  const {error}=await db.rpc('social_set_invitation_progress',{p_actor:actor,p_invitation:validateUuid(body.invitationId),p_phase:body.phase,p_message:body.message || null});
   checkDatabaseError(error);return {ok:true};
 }
 export async function hostedSession(db: SupabaseClient,actor:string,body:Record<string,unknown>) {

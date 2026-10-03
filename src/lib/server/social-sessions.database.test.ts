@@ -18,6 +18,7 @@ interface SessionSnapshot {
     status: 'pending' | 'accepted' | 'declined' | 'cancelled' | 'expired';
     phase: string | null;
     created_at: string;
+    progress: Array<{ actor_id: string; phase: string; message: string | null }>;
   }>;
 }
 interface HostedConnection {
@@ -41,7 +42,7 @@ beforeAll(async () => {
     create schema auth; create table auth.users(id uuid primary key);
     create schema storage; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
     insert into auth.users values('${A}'),('${B}'),('${C}');`);
-  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql','20261003040342_online_profile_identity.sql']) {
+  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql','20261003040342_online_profile_identity.sql','20261003194522_invitation_history_feedback.sql']) {
     await db.exec(readFileSync(resolve('supabase/migrations',filename),'utf8'));
   }
 },30000);
@@ -302,4 +303,39 @@ it('keeps online overrides private with Google as the new account default',async
  expect(await scalar("(select avatar_url from public.social_profiles where user_id=$1)",[A])).toBeNull();
  await expect(db.query("update public.social_profiles set avatar_url='file:///private' where user_id=$1",[A])).rejects.toThrow('social_profiles_avatar_url_format');
  expect(await scalar("pg_catalog.has_table_privilege('authenticated','public.social_profiles','update')",[])).toBe(false);
+});
+
+
+describe('invitation history feedback', () => {
+  it.each(['cancel','decline'])('dismisses %s invitations only for the requesting participant', async action => {
+    const id=await invite();
+    await respond(action==='cancel'?A:B,id,action);
+    await scalar('public.social_dismiss_invitation($1,$2)',[A,id]);
+    expect((await snapshot(A)).invitation_history).toEqual([]);
+    expect((await snapshot(B)).invitation_history).toHaveLength(1);
+    await expect(scalar('public.social_dismiss_invitation($1,$2)',[C,id])).rejects.toThrow('SOCIAL_FORBIDDEN');
+  });
+  it('preserves the failure message after a room ends, without hiding an active preparation', async () => {
+    const id=await invite();
+    const room=(await respond(B,id,'accept')).room_id!;
+    await scalar('public.social_set_invitation_progress($1,$2,$3,$4)',[A,id,'failed','The relay did not authorize this match.']);
+    await expect(scalar('public.social_dismiss_invitation($1,$2)',[A,id])).rejects.toThrow('SOCIAL_MATCH_ACTIVE');
+    await db.query("update public.social_rooms set state='cancelled' where id=$1",[room]);
+    const item=(await snapshot(B)).invitation_history[0];
+    expect(item.phase).toBe('failed');
+    expect(item.progress).toContainEqual({actor_id:A,phase:'failed',message:'The relay did not authorize this match.'});
+    await scalar('public.social_dismiss_invitation($1,$2)',[B,id]);
+    expect((await snapshot(B)).invitation_history).toEqual([]);
+    expect((await snapshot(A)).invitation_history).toHaveLength(1);
+  });
+  it('records who cancelled an accepted invitation and rejects forged or oversized feedback', async () => {
+    const id=await invite();await respond(B,id,'accept');
+    await expect(scalar('public.social_set_invitation_progress($1,$2,$3,$4)',[C,id,'failed','Forged'])).rejects.toThrow('SOCIAL_UNAVAILABLE');
+    await expect(scalar('public.social_set_invitation_progress($1,$2,$3,$4)',[A,id,'failed','x'.repeat(401)])).rejects.toThrow('SOCIAL_INVALID_REQUEST');
+    await scalar('public.social_set_invitation_progress($1,$2,$3)',[B,id,'cancelled']);
+    const item=(await snapshot(A)).invitation_history[0];
+    expect(item.phase).toBe('cancelled');
+    expect(item.progress).toContainEqual({actor_id:B,phase:'cancelled',message:null});
+    await scalar('public.social_dismiss_invitation($1,$2)',[A,id]);
+  });
 });
