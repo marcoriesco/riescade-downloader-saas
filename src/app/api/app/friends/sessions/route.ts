@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { authenticateAppRequest, AppApiError } from "@/lib/server/app-auth";
 import { assertFriendsEnabled } from "@/lib/server/friends";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
-import { socialSnapshot, heartbeat, setPresenceMode, createInvitation, respondInvitation, closeRoom } from "@/lib/server/social-sessions";
+import { socialSnapshot, heartbeat, setPresenceMode, createInvitation, respondInvitation, closeRoom, invitationPreferences, invitationProgress, hostedSession, hostedConnection } from "@/lib/server/social-sessions";
 import { roomStep } from '@/lib/server/private-rooms';
 
 export const dynamic = "force-dynamic";
@@ -39,6 +39,10 @@ export async function POST(request: Request) {
       case "invite": data = await createInvitation(db, user.id, body); break;
       case "respond": data = await respondInvitation(db, user.id, body); break;
       case "close": data = await closeRoom(db, user.id, body); break;
+      case "preferences": data=await invitationPreferences(db,user.id,body); break;
+      case "progress": data=await invitationProgress(db,user.id,body); break;
+      case "hosted": data=await hostedSession(db,user.id,body); break;
+      case "hosted-connection": data=await hostedConnection(db,user.id,body); break;
       case "room": data = await roomStep(db, user.id, body); break;
       default: throw new AppApiError(400, "Ação de sessão inválida.");
     }

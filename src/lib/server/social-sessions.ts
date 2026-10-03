@@ -4,7 +4,7 @@ import { checkDatabaseError, ensureSocialProfile, profileByCode, validateFriendC
 
 export interface InvitationGame {
   title: string; system: string; core: string;
-  content_hash: string; core_hash: string; emulator_hash: string;
+  content_hash: string; core_hash: string; emulator_hash: string; asset_id?: string; hosted_session_id?: string;
 }
 
 export function validateUuid(value: unknown): string {
@@ -27,7 +27,9 @@ export function validateInvitationGame(value: unknown): InvitationGame {
   };
   // Explicit projection: never persist user-supplied paths, URLs or launch args.
   return { title: game.title.trim(), system: game.system, core: game.core,
-    content_hash: hash("content_hash"), core_hash: hash("core_hash"), emulator_hash: hash("emulator_hash") };
+    content_hash: hash("content_hash"), core_hash: hash("core_hash"), emulator_hash: hash("emulator_hash"),
+    ...(typeof game.asset_id === 'string' && /^[a-f0-9]{64}$/i.test(game.asset_id) ? {asset_id:game.asset_id.toLowerCase()} : {}),
+    ...(game.hosted_session_id !== undefined ? {hosted_session_id:validateUuid(game.hosted_session_id)} : {}) };
 }
 
 export async function socialSnapshot(db: SupabaseClient, actor: string) {
@@ -49,7 +51,7 @@ export async function heartbeat(db: SupabaseClient, actor: string, body: Record<
 export async function setPresenceMode(db: SupabaseClient, actor: string, mode: unknown) {
   if (!['available', 'away', 'invisible'].includes(String(mode))) throw new AppApiError(400, "Estado de presença inválido.");
   await ensureSocialProfile(db, actor);
-  const { error } = await db.from("social_profiles").update({ presence_mode: mode }).eq("user_id", actor);
+  const { error } = await db.rpc("social_set_invitation_preferences", {p_actor:actor,p_mode:mode});
   checkDatabaseError(error);
   return { ok: true };
 }
@@ -77,4 +79,29 @@ export async function closeRoom(db: SupabaseClient, actor: string, body: Record<
   const { error } = await db.rpc("social_close_room", { p_actor: actor, p_room: validateUuid(body.roomId) });
   checkDatabaseError(error);
   return { ok: true };
+}
+
+export async function invitationPreferences(db: SupabaseClient, actor: string, body: Record<string,unknown>) {
+  if(typeof body.receive !== 'boolean') throw new AppApiError(400,'Preferência inválida.');
+  await ensureSocialProfile(db,actor);
+  const {error}=await db.rpc('social_set_invitation_preferences',{p_actor:actor,p_receive:body.receive});
+  checkDatabaseError(error);return {ok:true};
+}
+export async function invitationProgress(db: SupabaseClient, actor: string, body: Record<string,unknown>) {
+  if(!['checking','needs_download','missing_game','downloading','installing','preparing','connecting','playing','failed','cancelled'].includes(String(body.phase))) throw new AppApiError(400,'Etapa inválida.');
+  const {error}=await db.rpc('social_set_invitation_progress',{p_actor:actor,p_invitation:validateUuid(body.invitationId),p_phase:body.phase});
+  checkDatabaseError(error);return {ok:true};
+}
+export async function hostedSession(db: SupabaseClient,actor:string,body:Record<string,unknown>) {
+  const id=validateUuid(body.sessionId);
+  const game=body.close===true ? null : validateInvitationGame(body.game);
+  const raw=body.connection as Record<string,unknown>|undefined;
+  if(body.close!==true && (!raw || typeof raw.host!=='string' || !/^[A-Za-z0-9.-]{1,255}$/.test(raw.host) || !Number.isInteger(raw.port) || Number(raw.port)<1 || Number(raw.port)>65535 || typeof raw.session!=='string' || !/^[A-Za-z0-9+/]{16}$/.test(raw.session) || (raw.password!==undefined && (typeof raw.password!=='string' || raw.password.length>64 || /[\x00-\x1f\x7f]/.test(raw.password))))) throw new AppApiError(400,'Sala inválida.');
+  const connection=body.close===true ? null : {host:raw!.host,port:raw!.port,session:raw!.session,...(raw!.password ? {password:raw!.password}: {})};
+  const {data,error}=await db.rpc('social_publish_hosted_session',{p_actor:actor,p_id:id,p_game:game,p_connection:connection,p_close:body.close===true});
+  checkDatabaseError(error);return {sessionId:data};
+}
+export async function hostedConnection(db:SupabaseClient,actor:string,body:Record<string,unknown>) {
+  const {data,error}=await db.rpc('social_hosted_invitation_connection',{p_actor:actor,p_invitation:validateUuid(body.invitationId)});
+  checkDatabaseError(error);return data;
 }
