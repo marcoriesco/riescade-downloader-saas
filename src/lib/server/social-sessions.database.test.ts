@@ -8,6 +8,23 @@ const B = '00000000-0000-4000-8000-000000000002';
 const C = '00000000-0000-4000-8000-000000000003';
 const D = '00000000-0000-4000-8000-000000000004';
 const game = { title: 'Test NES', system: 'nes', core: 'fceumm', content_hash: 'a'.repeat(64), core_hash: 'b'.repeat(64), emulator_hash: 'c'.repeat(64) };
+interface SessionSnapshot {
+  presence_mode: string;
+  presence: Array<{ user_id: string; state: string; can_invite: boolean }>;
+  invitations: Array<{ id: string }>;
+  rooms: Array<{ id: string }>;
+  invitation_history: Array<{
+    id: string;
+    status: 'pending' | 'accepted' | 'declined' | 'cancelled' | 'expired';
+    phase: string | null;
+  }>;
+}
+interface HostedConnection {
+  host: string;
+  port: number;
+  session: string;
+  password?: string;
+}
 let db: PGlite;
 async function scalar<T>(sql: string, parameters: unknown[]): Promise<T> {
   const { rows } = await db.query<{ value: T }>(`select ${sql} as value`, parameters);
@@ -15,7 +32,7 @@ async function scalar<T>(sql: string, parameters: unknown[]): Promise<T> {
 }
 const invite = (actor = A, target = B, nonce = randomUUID(), descriptor = game) => scalar<string>('public.social_create_invitation($1,$2,$3,$4)', [actor,target,nonce,descriptor]);
 const respond = (actor: string, id: string, action: string) => scalar<{ status: string; room_id: string | null }>('public.social_respond_invitation($1,$2,$3)', [actor,id,action]);
-const snapshot = (actor: string) => scalar<{ presence_mode: string; presence: Array<{user_id: string;state: string}>; invitations: Array<{id: string}>; rooms: Array<{id: string}> }>('public.social_session_snapshot($1)', [actor]);
+const snapshot = (actor: string) => scalar<SessionSnapshot>('public.social_session_snapshot($1)', [actor]);
 const heartbeat = (actor: string, device = D, state = 'available') => scalar('public.social_heartbeat($1,$2,$3)', [actor,device,state]);
 beforeAll(async () => {
   db = await PGlite.create();
@@ -196,9 +213,9 @@ it('invitation preferences cancel pending delivery and survive later heartbeats'
 });
 it('records invitation outcomes without delivering completed invitations',async()=>{
  const id=await invite();await respond(B,id,'decline');
- const result=await scalar<any>('public.social_session_snapshot($1)',[A]);
+ const result=await snapshot(A);
  expect(result.invitations).toEqual([]);
- expect(result.invitation_history.find((i:any)=>i.id===id).status).toBe('declined');
+ expect(result.invitation_history.find(item=>item.id===id)?.status).toBe('declined');
 });
 
 it('existing host invitations reuse the host without creating a second private room',async()=>{
@@ -207,15 +224,15 @@ it('existing host invitations reuse the host without creating a second private r
  const id=await invite(A,B,randomUUID(),{...game,hosted_session_id:session} as typeof game);
  expect(await respond(B,id,'accept')).toEqual({status:'accepted',room_id:null});
  expect((await db.query('select * from public.social_rooms')).rows).toHaveLength(0);
- const guest=await scalar<any>('public.social_hosted_invitation_connection($1,$2)',[B,id]);
+ const guest=await scalar<HostedConnection>('public.social_hosted_invitation_connection($1,$2)',[B,id]);
  expect(guest).toEqual(connection);
  await expect(scalar('public.social_hosted_invitation_connection($1,$2)',[C,id])).rejects.toThrow('SOCIAL_UNAVAILABLE');
- const result=await scalar<any>('public.social_session_snapshot($1)',[B]);
+ const result=await snapshot(B);
  expect(JSON.stringify(result)).not.toContain('secret');
  await scalar('public.social_publish_hosted_session($1,$2,$3,$4,$5)',[A,session,null,null,true]);
  await expect(scalar('public.social_hosted_invitation_connection($1,$2)',[B,id])).rejects.toThrow('SOCIAL_UNAVAILABLE');
  await expect(scalar('public.social_publish_hosted_session($1,$2,$3,$4,$5)',[A,session,game,connection,false])).rejects.toThrow('SOCIAL_UNAVAILABLE');
- expect((await scalar<any>('public.social_session_snapshot($1)',[B])).invitation_history[0].phase).toBe('ended');
+ expect((await snapshot(B)).invitation_history[0].phase).toBe('ended');
 });
 it('an existing-session invite cannot impersonate another host or change its game',async()=>{
  const session=randomUUID();await scalar('public.social_publish_hosted_session($1,$2,$3,$4,$5)',[A,session,game,{host:'relay.example',port:55435,session:'a'.repeat(16)},false]);
