@@ -3,11 +3,11 @@ import { AppApiError } from "./app-errors";
 
 export const FRIEND_ACTIONS = ["request", "accept", "decline", "cancel", "remove", "block", "unblock"] as const;
 export type FriendAction = (typeof FRIEND_ACTIONS)[number];
-export type SocialProfile = { user_id: string; friend_code: string; display_name: string; avatar_url?: string | null };
-const PROFILE_FIELDS = "user_id,friend_code,display_name";
+export type SocialProfile = { user_id: string; friend_code: string; display_name: string; avatar_url?: string | null; name_source?: "google" | "custom" };
+const PROFILE_FIELDS = "user_id,friend_code,display_name,avatar_url,name_source";
 
 // Server-only enrichment: expose just a public image URL, never Auth metadata.
-const avatarCaches = new WeakMap<SupabaseClient, Map<string, { expires: number; value: Promise<string | null> }>>();
+const avatarCaches = new WeakMap<SupabaseClient, Map<string, { expires: number; value: Promise<{ avatar: string | null; name: string | null }> }>>();
 export function safeAvatarUrl(value: unknown): string | null {
   if(typeof value!=='string' || value.length>2048)return null;
   try {const url=new URL(value);return url.protocol==='https:' && !url.username && !url.password ? url.href : null;} catch {return null;}
@@ -20,13 +20,16 @@ async function withAvatar(db: SupabaseClient, profile: SocialProfile): Promise<S
     if(cache.size>=2048)cache.delete(cache.keys().next().value!);
     const value=(async()=>{try {
       const {data,error}=await db.auth.admin.getUserById(profile.user_id);
-      if(error)return null;
+      if(error)return {avatar:null,name:null};
       const metadata=data.user?.user_metadata;
-      return safeAvatarUrl(metadata?.avatar_url) || safeAvatarUrl(metadata?.picture);
-    }catch{return null;}})();
+      const rawName=metadata?.full_name || metadata?.name;
+      const name=typeof rawName==='string' ? [...rawName.trim().replace(/[\x00-\x1f\x7f]/g,'')].slice(0,40).join('') || null : null;
+      return {avatar:safeAvatarUrl(metadata?.avatar_url) || safeAvatarUrl(metadata?.picture),name};
+    }catch{return {avatar:null,name:null};}})();
     entry={expires:now+5*60_000,value};cache.set(profile.user_id,entry);
   }
-  return {...profile,avatar_url:await entry.value};
+  const identity=await entry.value;
+  return {...profile,display_name:profile.name_source==='google' && identity.name ? identity.name : profile.display_name,avatar_url:safeAvatarUrl(profile.avatar_url) || identity.avatar};
 }
 async function withAvatars(db: SupabaseClient, profiles: SocialProfile[]) {
   const result: SocialProfile[]=new Array(profiles.length);let next=0;
@@ -97,7 +100,12 @@ export async function ensureSocialProfile(db: SupabaseClient, actorId: string): 
   const { data, error } = await db.from("social_profiles").select(PROFILE_FIELDS).eq("user_id", actorId).single();
   checkDatabaseError(error);
   if (!data) throw new Error("Perfil social não encontrado.");
-  return data as SocialProfile;
+  const profile=await withAvatar(db,data as SocialProfile);
+  if(profile.name_source==='google' && profile.display_name!==data.display_name){
+    const {error:syncError}=await db.from("social_profiles").update({display_name:profile.display_name}).eq("user_id",actorId).eq("name_source","google");
+    checkDatabaseError(syncError);
+  }
+  return profile;
 }
 
 export async function profileByCode(db: SupabaseClient, code: string): Promise<SocialProfile> {
@@ -128,11 +136,29 @@ export async function applyFriendAction(db: SupabaseClient, actorId: string, act
 }
 
 export async function updateSocialProfile(db: SupabaseClient, actorId: string, displayName: string) {
-  await ensureSocialProfile(db, actorId);
-  const { data, error } = await db.from("social_profiles").update({ display_name: displayName })
+  const current=await ensureSocialProfile(db, actorId);
+  if(current.display_name===displayName)return current;
+  const { data, error } = await db.from("social_profiles").update({ display_name: displayName, name_source: "custom" })
     .eq("user_id", actorId).select(PROFILE_FIELDS).single();
   checkDatabaseError(error);
-  return data as SocialProfile;
+  return withAvatar(db,data as SocialProfile);
+}
+
+export async function resetSocialName(db: SupabaseClient, actorId: string) {
+  await ensureSocialProfile(db,actorId);
+  const {data,error}=await db.from("social_profiles").update({name_source:"google"}).eq("user_id",actorId).select(PROFILE_FIELDS).single();
+  checkDatabaseError(error);
+  const profile=await withAvatar(db,data as SocialProfile);
+  const {error:syncError}=await db.from("social_profiles").update({display_name:profile.display_name}).eq("user_id",actorId).eq("name_source","google");
+  checkDatabaseError(syncError);
+  return profile;
+}
+
+export async function updateSocialAvatar(db: SupabaseClient, actorId: string, url: string | null) {
+  await ensureSocialProfile(db,actorId);
+  const {data,error}=await db.from("social_profiles").update({avatar_url:url}).eq("user_id",actorId).select(PROFILE_FIELDS).single();
+  checkDatabaseError(error);
+  return withAvatar(db,data as SocialProfile);
 }
 
 export async function getFriendsPage(db: SupabaseClient, actorId: string, page: number) {

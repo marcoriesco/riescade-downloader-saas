@@ -39,8 +39,9 @@ beforeAll(async () => {
   db = await PGlite.create();
   await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
     create schema auth; create table auth.users(id uuid primary key);
+    create schema storage; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
     insert into auth.users values('${A}'),('${B}'),('${C}');`);
-  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql']) {
+  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql','20261003040342_online_profile_identity.sql']) {
     await db.exec(readFileSync(resolve('supabase/migrations',filename),'utf8'));
   }
 },30000);
@@ -294,4 +295,11 @@ it('returns the actual creation timestamp in invitation history', async () => {
   expect(item.id).toBe(id);
   expect(Number.isFinite(Date.parse(item.created_at))).toBe(true);
   expect(Date.now()-Date.parse(item.created_at)).toBeGreaterThan(7*60*1000);
+});
+
+it('keeps online overrides private with Google as the new account default',async()=>{
+ expect(await scalar("(select name_source from public.social_profiles where user_id=$1)",[A])).toBe('google');
+ expect(await scalar("(select avatar_url from public.social_profiles where user_id=$1)",[A])).toBeNull();
+ await expect(db.query("update public.social_profiles set avatar_url='file:///private' where user_id=$1",[A])).rejects.toThrow('social_profiles_avatar_url_format');
+ expect(await scalar("pg_catalog.has_table_privilege('authenticated','public.social_profiles','update')",[])).toBe(false);
 });

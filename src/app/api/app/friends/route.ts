@@ -3,7 +3,7 @@ import { authenticateAppRequest, AppApiError } from "@/lib/server/app-auth";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
 import {
   assertFriendsEnabled, getFriendsPage, findFriendProfile, applyFriendAction,
-  updateSocialProfile, validateFriendCode, validateFriendAction, validateDisplayName,
+  updateSocialProfile, resetSocialName, validateFriendCode, validateFriendAction, validateDisplayName,
 } from "@/lib/server/friends";
 
 export const dynamic = "force-dynamic";
@@ -59,7 +59,7 @@ export async function PUT(request: Request) {
     assertFriendsEnabled();
     const user = await authenticateAppRequest(request);
     const body = await readBody(request);
-    const profile = await updateSocialProfile(getSupabaseAdmin(), user.id, validateDisplayName(body.displayName));
+    const profile = body.useGoogleName === true ? await resetSocialName(getSupabaseAdmin(),user.id) : await updateSocialProfile(getSupabaseAdmin(), user.id, validateDisplayName(body.displayName));
     return NextResponse.json({ profile }, { headers });
   } catch (error) { return failure(error); }
 }
