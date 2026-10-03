@@ -17,6 +17,7 @@ interface SessionSnapshot {
     id: string;
     status: 'pending' | 'accepted' | 'declined' | 'cancelled' | 'expired';
     phase: string | null;
+    created_at: string;
   }>;
 }
 interface HostedConnection {
@@ -39,7 +40,7 @@ beforeAll(async () => {
   await db.exec(`create role anon; create role authenticated; create role service_role bypassrls;
     create schema auth; create table auth.users(id uuid primary key);
     insert into auth.users values('${A}'),('${B}'),('${C}');`);
-  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql']) {
+  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql']) {
     await db.exec(readFileSync(resolve('supabase/migrations',filename),'utf8'));
   }
 },30000);
@@ -255,4 +256,42 @@ it('downloads renew preparation beyond the old forty-five-minute limit',async()=
  await db.query("update public.social_rooms set created_at=now()-interval '46 minutes',expires_at=now()+interval '1 second' where id=$1",[accepted.room_id]);
  await scalar('public.social_set_invitation_progress($1,$2,$3)',[B,id,'downloading']);
  expect(await scalar<boolean>("(select expires_at>now()+interval '100 seconds' from public.social_rooms where id=$1)",[accepted.room_id])).toBe(true);
+});
+
+
+describe('finished invitation history', () => {
+  const dismiss = (actor: string, id: string) => scalar('public.social_dismiss_invitation($1,$2)', [actor,id]);
+  it('rejects pending, live matches and unrelated users', async () => {
+    const id=await invite();
+    await expect(dismiss(A,id)).rejects.toThrow('SOCIAL_MATCH_ACTIVE');
+    await respond(B,id,'accept');
+    await expect(dismiss(A,id)).rejects.toThrow('SOCIAL_MATCH_ACTIVE');
+    await expect(dismiss(C,id)).rejects.toThrow('SOCIAL_FORBIDDEN');
+  });
+  it('persists removal for one participant without deleting the shared match', async () => {
+    const id=await invite();
+    const room=(await respond(B,id,'accept')).room_id;
+    await scalar('public.social_close_room($1,$2)',[A,room]);
+    expect((await snapshot(A)).invitation_history[0].phase).toBe('ended');
+    await dismiss(A,id); await dismiss(A,id);
+    expect((await snapshot(A)).invitation_history).toEqual([]);
+    expect((await snapshot(B)).invitation_history[0].id).toBe(id);
+    expect(await scalar('(select count(*) from public.social_invitations where id=$1)',[id])).toBe(1);
+    await dismiss(B,id);
+    expect((await snapshot(B)).invitation_history).toEqual([]);
+  });
+  it('does not expose history removal to public client roles', async () => {
+    expect(await scalar("pg_catalog.has_function_privilege('anon','public.social_dismiss_invitation(uuid,uuid)','execute')",[])).toBe(false);
+    expect(await scalar("pg_catalog.has_function_privilege('authenticated','public.social_dismiss_invitation(uuid,uuid)','execute')",[])).toBe(false);
+    expect(await scalar("(select relrowsecurity from pg_catalog.pg_class where oid='public.social_invitation_dismissals'::regclass)",[])).toBe(true);
+  });
+});
+
+it('returns the actual creation timestamp in invitation history', async () => {
+  const id=await invite();
+  await db.query("update public.social_invitations set created_at=now()-interval '8 minutes' where id=$1",[id]);
+  const item=(await snapshot(A)).invitation_history[0];
+  expect(item.id).toBe(id);
+  expect(Number.isFinite(Date.parse(item.created_at))).toBe(true);
+  expect(Date.now()-Date.parse(item.created_at)).toBeGreaterThan(7*60*1000);
 });

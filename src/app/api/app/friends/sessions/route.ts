@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { authenticateAppRequest, AppApiError } from "@/lib/server/app-auth";
 import { assertFriendsEnabled } from "@/lib/server/friends";
 import { getSupabaseAdmin } from "@/lib/server/supabase-admin";
-import { socialSnapshot, heartbeat, setPresenceMode, createInvitation, respondInvitation, closeRoom, invitationPreferences, invitationProgress, hostedSession, hostedConnection } from "@/lib/server/social-sessions";
+import { socialSnapshot, heartbeat, setPresenceMode, createInvitation, respondInvitation, dismissInvitation, closeRoom, invitationPreferences, invitationProgress, hostedSession, hostedConnection } from "@/lib/server/social-sessions";
 import { roomStep } from '@/lib/server/private-rooms';
 
 export const dynamic = "force-dynamic";
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
       case "presence": data = await setPresenceMode(db, user.id, body.mode); break;
       case "invite": data = await createInvitation(db, user.id, body); break;
       case "respond": data = await respondInvitation(db, user.id, body); break;
+      case "dismiss": data = await dismissInvitation(db, user.id, body); break;
       case "close": data = await closeRoom(db, user.id, body); break;
       case "preferences": data=await invitationPreferences(db,user.id,body); break;
       case "progress": data=await invitationProgress(db,user.id,body); break;

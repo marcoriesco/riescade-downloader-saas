@@ -78,6 +78,7 @@ export function checkDatabaseError(error: { message: string } | null) {
     SOCIAL_INVALID_PRESENCE: [400, "Estado de presença inválido."],
     SOCIAL_DEVICE_LIMIT: [409, "Limite de dispositivos ativos atingido."],
     SOCIAL_INVALID_REQUEST: [409, "Este convite já foi enviado com outros dados."],
+    SOCIAL_MATCH_ACTIVE: [409, "Você pode apagar a partida depois que ela for encerrada."],
     SOCIAL_ROOM_BUSY: [409, "Um dos jogadores já está preparando uma partida."],
     SOCIAL_INVITATION_PENDING: [409, "Já existe um convite pendente entre vocês."],
     SOCIAL_INCOMPATIBLE: [409, "Jogo, núcleo ou RetroArch diferentes. Use os mesmos arquivos nos dois computadores."],

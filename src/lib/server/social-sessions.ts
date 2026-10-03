@@ -75,6 +75,12 @@ export async function respondInvitation(db: SupabaseClient, actor: string, body:
   return data;
 }
 
+export async function dismissInvitation(db: SupabaseClient, actor: string, body: Record<string, unknown>) {
+  const { error } = await db.rpc("social_dismiss_invitation", { p_actor: actor, p_invitation: validateUuid(body.invitationId) });
+  checkDatabaseError(error);
+  return { ok: true };
+}
+
 export async function closeRoom(db: SupabaseClient, actor: string, body: Record<string, unknown>) {
   const { error } = await db.rpc("social_close_room", { p_actor: actor, p_room: validateUuid(body.roomId) });
   checkDatabaseError(error);

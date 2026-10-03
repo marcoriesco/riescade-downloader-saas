@@ -1,18 +1,18 @@
 import { beforeEach, afterEach, expect, it, vi } from 'vitest';
 import { AppApiError } from '@/lib/server/app-errors';
-const mocks = vi.hoisted(() => ({ auth: vi.fn(), snapshot: vi.fn(), heartbeat: vi.fn(), presence: vi.fn(), invite: vi.fn(), respond: vi.fn(), close: vi.fn(),room:vi.fn(),preferences:vi.fn(),progress:vi.fn(),hosted:vi.fn(),hostedConnection:vi.fn() }));
+const mocks = vi.hoisted(() => ({ auth: vi.fn(), snapshot: vi.fn(), heartbeat: vi.fn(), presence: vi.fn(), invite: vi.fn(), respond: vi.fn(), close: vi.fn(), dismiss: vi.fn(),room:vi.fn(),preferences:vi.fn(),progress:vi.fn(),hosted:vi.fn(),hostedConnection:vi.fn() }));
 vi.mock('@/lib/server/private-rooms',()=>({roomStep:mocks.room}));
 vi.mock('@/lib/server/app-auth', async original => ({ ...await original<typeof import('@/lib/server/app-auth')>(), authenticateAppRequest: mocks.auth }));
 vi.mock('@/lib/server/supabase-admin', () => ({ getSupabaseAdmin: () => ({}) }));
-vi.mock('@/lib/server/social-sessions', () => ({ socialSnapshot: mocks.snapshot, heartbeat: mocks.heartbeat, setPresenceMode: mocks.presence, createInvitation: mocks.invite, respondInvitation: mocks.respond, closeRoom: mocks.close,invitationPreferences:mocks.preferences,invitationProgress:mocks.progress,hostedSession:mocks.hosted,hostedConnection:mocks.hostedConnection }));
+vi.mock('@/lib/server/social-sessions', () => ({ socialSnapshot: mocks.snapshot, heartbeat: mocks.heartbeat, setPresenceMode: mocks.presence, createInvitation: mocks.invite, respondInvitation: mocks.respond, closeRoom: mocks.close, dismissInvitation: mocks.dismiss,invitationPreferences:mocks.preferences,invitationProgress:mocks.progress,hostedSession:mocks.hosted,hostedConnection:mocks.hostedConnection }));
 import { GET, POST } from './route';
 const flag = process.env.RIESCADE_FRIENDS_ENABLED;
 const request = (body: unknown) => new Request('https://test/api/app/friends/sessions', { method: 'POST', body: JSON.stringify(body) });
 beforeEach(() => { vi.resetAllMocks(); process.env.RIESCADE_FRIENDS_ENABLED = 'true'; mocks.auth.mockResolvedValue({ id: 'real-actor' }); });
 afterEach(() => { if (flag === undefined) delete process.env.RIESCADE_FRIENDS_ENABLED; else process.env.RIESCADE_FRIENDS_ENABLED = flag; });
-it.each(['heartbeat', 'invite', 'respond', 'close','room','preferences','progress','hosted'])('authenticates %s independently of body actor', async action => {
+it.each(['heartbeat', 'invite', 'respond', 'dismiss', 'close','room','preferences','progress','hosted'])('authenticates %s independently of body actor', async action => {
   const body = { action, actorId: 'victim' };
-  const mock = mocks[action as 'heartbeat' | 'invite' | 'respond' | 'close' | 'room' | 'preferences' | 'progress' | 'hosted'];
+  const mock = mocks[action as 'heartbeat' | 'invite' | 'respond' | 'dismiss' | 'close' | 'room' | 'preferences' | 'progress' | 'hosted'];
   mock.mockResolvedValue({ ok: true });
   expect((await POST(request(body))).status).toBe(200);
   expect(mock).toHaveBeenCalledWith({}, 'real-actor', body);
