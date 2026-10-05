@@ -1,6 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { syncGoogleDriveCatalog } from "@/services/google-drive-sync-service";
+import { generateRetrobatCatalog } from "@/services/retrobat-catalog-service";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -46,3 +47,12 @@ export async function POST(request: Request) {
   }
 }
 
+export async function GET(request: Request) {
+  if (!isAuthorized(request))return NextResponse.json({error:"Unauthorized"},{status:401});
+  try {
+    return NextResponse.json(await generateRetrobatCatalog(),{headers:{"Cache-Control":"no-store"}});
+  }catch(error){
+    console.error("RetroBat catalog export error:",error);
+    return NextResponse.json({error:"Unable to export RetroBat catalog"},{status:500});
+  }
+}

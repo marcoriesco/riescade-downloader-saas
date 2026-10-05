@@ -1,5 +1,7 @@
 import { spawn } from "node:child_process";
 import dotenv from "dotenv";
+import { mkdir, writeFile, rename, rm } from "node:fs/promises";
+import { resolve, dirname } from "node:path";
 
 dotenv.config({ path: ".env.local" });
 
@@ -7,7 +9,9 @@ const PORT = 3100;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 const SYNC_URL = `${BASE_URL}/api/internal/google-drive/sync`;
 const secret = process.env.GOOGLE_DRIVE_SYNC_SECRET?.trim();
-const platform = process.argv[2]?.trim().toLocaleLowerCase();
+const args=process.argv.slice(2);
+const catalogOnly=args.includes("--catalog-only");
+const platform = args.find(arg=>arg!=="--catalog-only")?.trim().toLocaleLowerCase();
 
 if (!secret) {
   throw new Error("GOOGLE_DRIVE_SYNC_SECRET is not configured");
@@ -68,12 +72,13 @@ async function stopServer() {
 
 try {
   console.log(
-    platform
+    catalogOnly ? "Exporting the existing catalog without synchronizing Google Drive" : platform
       ? `Synchronizing Google Drive platform: ${platform}`
       : "Synchronizing the complete Google Drive catalog"
   );
 
   await waitForServer();
+  if (!catalogOnly) {
   const response = await fetch(SYNC_URL, {
     method: "POST",
     headers: {
@@ -89,6 +94,18 @@ try {
   }
 
   console.log(JSON.stringify(result, null, 2));
+  }
+  console.log("Generating the complete RetroBat marker catalog");
+  const exported=await fetch(SYNC_URL,{headers:{Authorization:`Bearer ${secret}`}});
+  if(!exported.ok)throw new Error(`Catalog export failed (${exported.status})`);
+  const catalog=await exported.json();
+  if(catalog.schema_version!==1 || !Array.isArray(catalog.assets) || catalog.total!==catalog.assets.length)throw new Error("Invalid exported catalog");
+  const destination=resolve("public/catalogs/retrobat.json");
+  const temporary=`${destination}.${process.pid}.tmp`;
+  await mkdir(dirname(destination),{recursive:true});
+  try {await writeFile(temporary,JSON.stringify(catalog));await rename(temporary,destination);}
+  finally {await rm(temporary,{force:true});}
+  console.log(`RetroBat catalog: ${catalog.total} games, ${catalog.platforms.length} systems. Saved to ${destination}`);
 } finally {
   await stopServer();
 }
