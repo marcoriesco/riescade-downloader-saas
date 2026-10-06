@@ -1,8 +1,17 @@
 import {describe,it,expect} from "vitest";
 import {buildRetrobatCatalog,type CatalogRow} from "./retrobat-catalog";
+import extractPaths from "./retrobat-extract-paths.json";
 const row:CatalogRow={id:"a".repeat(64),platform:"snes",filename:"Mario.zip",title:"Mario",file_size:3,md5_checksum:"b".repeat(32)};
 const platforms=[{id:"snes",extensions:[".zip"]},{id:"nes",extensions:[".nes"]}];
 describe("RetroBat marker snapshot",()=>{
+  it("uses all verified Lindbergh paths and rejects outdated package mappings",()=>{
+    const rows=Object.entries(extractPaths).map(([key,value],index)=>({...row,id:index.toString(16).padStart(64,"0"),platform:"lindbergh",filename:key.split("/")[1],file_size:value.file_size,md5_checksum:value.md5}));
+    const result=buildRetrobatCatalog(rows,[{id:"lindbergh",extensions:[".game"]}]);
+    expect(result.assets).toHaveLength(26);
+    for(const asset of result.assets){expect(asset.launch_path).toBe(extractPaths[`lindbergh/${asset.download_name}` as keyof typeof extractPaths].launch_path);}
+    const stale=buildRetrobatCatalog([{...rows.find(row=>row.filename==="vtennis3.extract.zip")!,md5_checksum:"f".repeat(32)}],[{id:"lindbergh",extensions:[".game"]}]);
+    expect(stale.assets[0].launch_path).toBe("vtennis3.game");
+  });
   it("exports only populated platforms and sanitized metadata",()=>{
     const result=buildRetrobatCatalog([{...row,web_content_link:"secret",drive_file_id:"secret"} as CatalogRow],platforms);
     expect(result.platforms).toEqual(["snes"]);expect(result.total).toBe(1);

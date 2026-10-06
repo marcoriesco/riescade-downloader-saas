@@ -1,0 +1,200 @@
+{
+  "lindbergh/rambo.extract.zip": {
+    "launch_path": "rambo/elf/rambo.game",
+    "file_size": 2668006253,
+    "md5": "f2816e32306b82645f21f7964ed468c5",
+    "launch_size": 21
+  },
+  "lindbergh/hotdex.extract.zip": {
+    "launch_path": "hotdex/elf/hotdex.game",
+    "file_size": 1305357090,
+    "md5": "bd2fd20429590f79b49ab13ac481974b",
+    "launch_size": 22
+  },
+  "lindbergh/vtennis3.extract.zip": {
+    "launch_path": "vtennis3/vt3_Lindbergh/vtennis3.game",
+    "file_size": 1040055205,
+    "md5": "4012d6568b8bbf1b999fb2b9dd837058",
+    "launch_size": 24
+  },
+  "lindbergh/hotd4sp.extract.zip": {
+    "launch_path": "hotd4sp/elf/hotd4sp.game",
+    "file_size": 1431766914,
+    "md5": "417ebe70911a29e1652dcbcadab01190",
+    "launch_size": 23
+  },
+  "lindbergh/outr2sdxg.extract.zip": {
+    "launch_path": "outr2sdxg/Jennifer/outr2sdxg.game",
+    "file_size": 804442042,
+    "md5": "e37c45963d2c15a5926107d72370a05c",
+    "launch_size": 25
+  },
+  "lindbergh/initiad4b.extract.zip": {
+    "launch_path": "initiad4b/initiad4b.game",
+    "file_size": 2139762227,
+    "md5": "a285c2c8e33359803a9cc91450bde06e",
+    "launch_size": 25
+  },
+  "lindbergh/hummerxt.extract.zip": {
+    "launch_path": "hummerxt/hummerxt.game",
+    "file_size": 860369167,
+    "md5": "94710b7f0c87d7ffb0d58ec8af6c9521",
+    "launch_size": 24
+  },
+  "lindbergh/hotd4a.extract.zip": {
+    "launch_path": "hotd4a/elf/hotd4a.game",
+    "file_size": 2278836284,
+    "md5": "aea00fdc0bef4124d0c18bd25cd5c2df",
+    "launch_size": 22
+  },
+  "lindbergh/2spicy.extract.zip": {
+    "launch_path": "2spicy/elf/2spicy.game",
+    "file_size": 1280668587,
+    "md5": "f97781a491fd87ad8e2e32376084bb51",
+    "launch_size": 22
+  },
+  "lindbergh/vf5fsb1.extract.zip": {
+    "launch_path": "vf5fsb1/vf5fsb1.game",
+    "file_size": 5773684806,
+    "md5": "f831126a3ca4279a44ec10f496e01db5",
+    "launch_size": 0,
+    "probes": [
+      {
+        "path": "vf5fsb1/rom/movie/vf5adv.sfd",
+        "size": 216244224
+      },
+      {
+        "path": "vf5fsb1/rom/objset/lauitm.farc",
+        "size": 174141184
+      },
+      {
+        "path": "vf5fsb1/rom/objset/mskitm.farc",
+        "size": 166919414
+      }
+    ]
+  },
+  "lindbergh/initiad4ex.extract.zip": {
+    "launch_path": "initiad4ex/initiad4ex.game",
+    "file_size": 2156828564,
+    "md5": "903587147c7609bf783e0721e4a4237e",
+    "launch_size": 26
+  },
+  "lindbergh/vf5e.extract.zip": {
+    "launch_path": "vf5e/vf5e.game",
+    "file_size": 3059482423,
+    "md5": "f9dd711dfcee7ada56d0e8de43d8e1cf",
+    "launch_size": 20
+  },
+  "lindbergh/hummer.extract.zip": {
+    "launch_path": "hummer/hummer.game",
+    "file_size": 948698933,
+    "md5": "3cf841850448219ff3afd12d8727ee20",
+    "launch_size": 0,
+    "probes": [
+      {
+        "path": "hummer/a.elf",
+        "size": 80797790
+      },
+      {
+        "path": "hummer/data-hummer/stage_2/jun_bkg.lto",
+        "size": 55906068
+      },
+      {
+        "path": "hummer/data-global/sound/se/landform_01.csb",
+        "size": 27836646
+      }
+    ]
+  },
+  "lindbergh/vf5.extract.zip": {
+    "launch_path": "vf5/vf5.game",
+    "file_size": 3203470227,
+    "md5": "31ea5b13ea626394ad65c0986d130c46",
+    "launch_size": 19
+  },
+  "lindbergh/letsgojusp.extract.zip": {
+    "launch_path": "letsgojusp/letsgojusp.game",
+    "file_size": 1310671135,
+    "md5": "52781dea35d5fd401436e9697aa6cead",
+    "launch_size": 26
+  },
+  "lindbergh/rtuned.extract.zip": {
+    "launch_path": "rtuned/rtuned.game",
+    "file_size": 866182856,
+    "md5": "263d5d1797816d68365d49b0fca699da",
+    "launch_size": 22
+  },
+  "lindbergh/ghostsev.extract.zip": {
+    "launch_path": "ghostsev/vsg_l/ghostsev.game",
+    "file_size": 367354262,
+    "md5": "de5b47080379bd017ca5412ff21d4ead",
+    "launch_size": 24
+  },
+  "lindbergh/initiad5exa.extract.zip": {
+    "launch_path": "initiad5exa/initiad5exa.game",
+    "file_size": 3023730284,
+    "md5": "a7602b5745ebf9579fb8c2b755df497e",
+    "launch_size": 27
+  },
+  "lindbergh/primevah.extract.zip": {
+    "launch_path": "primevah/prog/primevah.game",
+    "file_size": 351438004,
+    "md5": "24f2f98d79bfae7d2a9c5395c2990d70",
+    "launch_size": 24
+  },
+  "lindbergh/vf5r.extract.zip": {
+    "launch_path": "vf5r/vf5r.game",
+    "file_size": 4476466414,
+    "md5": "dd22bcbd9caa3a052ec1618f9e34a54f",
+    "launch_size": 20
+  },
+  "lindbergh/initiad5ex.extract.zip": {
+    "launch_path": "initiad5ex/initiad5ex.game",
+    "file_size": 3020627787,
+    "md5": "1bdcb46e4dad94864d8a3216bdb5c980",
+    "launch_size": 0,
+    "probes": [
+      {
+        "path": "initiad5ex/data/COURSE.xaf",
+        "size": 822374400
+      },
+      {
+        "path": "initiad5ex/data/SOUND/inid5.afs",
+        "size": 589056000
+      },
+      {
+        "path": "initiad5ex/data/DEMO/DEMO.xaf",
+        "size": 502374400
+      }
+    ]
+  },
+  "lindbergh/abclisdx.extract.zip": {
+    "launch_path": "abclisdx/abclisdx.game",
+    "file_size": 735657042,
+    "md5": "e85cf0e2e6b9be9c331d49d8c5674618",
+    "launch_size": 24
+  },
+  "lindbergh/segartv.extract.zip": {
+    "launch_path": "segartv/segartv.game",
+    "file_size": 2198438735,
+    "md5": "ec9ef92256977690994ceb05c276178d",
+    "launch_size": 23
+  },
+  "lindbergh/vf5fsa2.extract.zip": {
+    "launch_path": "vf5fsa2/vf5fsa2.game",
+    "file_size": 5329624803,
+    "md5": "a254b861e9da652bb2c73cb2a0ff21bd",
+    "launch_size": 23
+  },
+  "lindbergh/hdkotr.extract.zip": {
+    "launch_path": "hdkotr/elf/hdkotr.game",
+    "file_size": 6157277613,
+    "md5": "174d73dee0be70c6cd9e9aa64ab3113f",
+    "launch_size": 22
+  },
+  "lindbergh/outr2sdx.extract.zip": {
+    "launch_path": "outr2sdx/Jennifer/outr2sdx.game",
+    "file_size": 841532682,
+    "md5": "ac0f2c1a10899ecb156493bbc43ed560",
+    "launch_size": 24
+  }
+}
