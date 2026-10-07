@@ -1,6 +1,13 @@
 import DashboardClient from "./DashboardClient";
 import { Suspense } from "react";
 import { Header } from "@/components/Header";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Minha conta",
+  description: "Gerencie sua assinatura RIESCADE e baixe o RIESCADE OS, o RIESCADE RetroBat e o pack de BIOS.",
+  robots: { index: false, follow: true },
+};
 
 export default function Dashboard() {
   return (

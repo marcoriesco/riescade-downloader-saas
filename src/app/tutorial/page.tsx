@@ -21,9 +21,10 @@ import {
 } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Tutorial de instalação | RIESCADE",
+  title: "Como instalar o RIESCADE OS e o RIESCADE RetroBat",
   description:
-    "Como instalar e começar a jogar com o RIESCADE OS ou o RIESCADE RetroBat: download, login, pack de BIOS e download de jogos.",
+    "Passo a passo para instalar o RIESCADE OS ou o RIESCADE RetroBat no Windows: download, login, pack de BIOS, emuladores e download de jogos.",
+  alternates: { canonical: "/tutorial" },
 };
 
 interface Step {
@@ -256,6 +257,20 @@ export default function TutorialPage() {
     <div className="site-page relative flex min-h-screen flex-col bg-background">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.10)_0%,transparent_60%)]" />
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: faqs.map((faq) => ({
+              "@type": "Question",
+              name: faq.q,
+              acceptedAnswer: { "@type": "Answer", text: faq.a },
+            })),
+          }).replace(/</g, "\\u003c"),
+        }}
+      />
 
       <main id="main-content" tabIndex={-1} className="relative z-10 mx-auto w-full max-w-5xl flex-grow px-6 pb-24 pt-32 md:px-12">
         <PageIntro

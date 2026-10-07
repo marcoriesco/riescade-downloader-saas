@@ -1,6 +1,7 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
 Allow: /
+Allow: /api/og-fallback
+Disallow: /api/
 
-# Sitemap
-Sitemap: https://www.riescade.com.br/sitemap.xml 
+Sitemap: https://www.riescade.com.br/sitemap.xml

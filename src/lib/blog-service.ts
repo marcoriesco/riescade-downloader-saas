@@ -5,6 +5,7 @@ import {
   BlogStats,
   QueryParams,
 } from "../types/blog";
+import { withLocalCover } from "./blog-covers";
 
 // Initialize Supabase client (client-side safe)
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
@@ -109,7 +110,7 @@ export async function getBlogPosts(
       return { data: [], count: 0 };
     }
 
-    return { data: (data as BlogPost[]) || [], count: count || 0 };
+    return { data: ((data as BlogPost[]) || []).map(withLocalCover), count: count || 0 };
   } catch (error) {
     console.error("Error in getBlogPosts:", error);
     return { data: [], count: 0 };
@@ -182,7 +183,7 @@ export async function getBlogPostBySlug(
         return null;
       }
 
-      return data as BlogPost;
+      return withLocalCover(data as BlogPost);
     } catch (error) {
       console.error("Error in getBlogPostBySlug:", error);
       return null;
@@ -198,20 +199,40 @@ export async function getRelatedPosts(
 
   return throttledRequest(cacheKey, async () => {
     try {
-      const { data, error } = await supabase
+      const columns =
+        "id,title,slug,excerpt,cover_image,published_at,category,reading_time,tags";
+      // Shared tags first (ranked by overlap), then the same category to fill the gaps.
+      const byTags = post.tags?.length
+        ? await supabase
+            .from("blog_posts")
+            .select(columns)
+            .eq("status", "published")
+            .overlaps("tags", post.tags)
+            .neq("id", post.id)
+            .limit(30)
+        : { data: [], error: null };
+      const byCategory = await supabase
         .from("blog_posts")
-        .select("*")
+        .select(columns)
         .eq("status", "published")
         .eq("category", post.category)
         .neq("id", post.id)
+        .order("published_at", { ascending: false })
         .limit(limit);
 
-      if (error) {
-        console.error("Error fetching related posts:", error);
-        return [];
+      if (byTags.error || byCategory.error) {
+        console.error("Error fetching related posts:", byTags.error ?? byCategory.error);
       }
 
-      return data as BlogPost[];
+      const tags = new Set(post.tags ?? []);
+      const overlap = (other: { tags?: string[] | null }) =>
+        (other.tags ?? []).filter((tag) => tags.has(tag)).length;
+      const ranked = [...(byTags.data ?? [])].sort((a, b) => overlap(b) - overlap(a));
+      const seen = new Set<string>();
+      return [...ranked, ...(byCategory.data ?? [])]
+        .filter((item) => !seen.has(item.id) && seen.add(item.id))
+        .slice(0, limit)
+        .map(withLocalCover) as BlogPost[];
     } catch (error) {
       console.error("Error in getRelatedPosts:", error);
       return [];
@@ -234,7 +255,7 @@ export async function getFeaturedPosts(limit = 5): Promise<BlogPost[]> {
       return [];
     }
 
-    return data as BlogPost[];
+    return (data as BlogPost[]).map(withLocalCover);
   } catch (error) {
     console.error("Error in getFeaturedPosts:", error);
     return [];

@@ -1,295 +1,127 @@
-"use client";
-import { PageIntro } from "@/components/PageIntro";
-
-
-import React, { useState, useEffect } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { PageIntro, ExploreLink } from "@/components/PageIntro";
 import { Header } from "@/components/Header";
-import platformsData from "@/data/platforms.json";
 import Footer from "@/components/Footer";
-import { supabase } from "@/lib/supabase";
-import { User } from "@supabase/supabase-js";
-import { Gamepad2, Search } from "lucide-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { KIND_ORDER, PLATFORMS, getPlatformGameCounts } from "@/lib/platforms";
+import { PLATFORM_KIND_LABELS } from "@/data/platform-content";
 
+export const revalidate = 86400;
 
-// Define PlatformData interface
-interface PlatformData {
-  name: string;
-  image: string;
-  url: string;
-  fullName: string;
-}
+export const metadata: Metadata = {
+  title: "Mais de 250 consoles, arcades e computadores para jogar no PC",
+  description:
+    "Todas as plataformas do RIESCADE OS: Super Nintendo, Mega Drive, PlayStation, Nintendo 64, arcades Neo Geo e CPS, computadores clássicos e muito mais, para jogar no Windows.",
+  alternates: { canonical: "/platforms" },
+};
 
-// Metadata is defined outside of the component since this is a client component
-// It will be picked up by the layout
+const SECTION_LABELS: Record<string, string> = {
+  console: "Consoles de mesa",
+  portable: "Portáteis",
+  arcade: "Arcades",
+  computer: "Computadores",
+  peripheral: "Acessórios e expansões",
+  engine: "Engines e fantasy consoles",
+  system: "Sistemas",
+  collection: "Coleções",
+};
 
-export default function PlatformsPage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [authChecking, setAuthChecking] = useState(true);
-  const [authRedirecting, setAuthRedirecting] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filteredPlatforms, setFilteredPlatforms] = useState<PlatformData[]>(
-    []
-  );
-
-  // Handle sign in with OAuth
-  const handleSignIn = async () => {
-    setAuthRedirecting(true);
-    try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: "google",
-        options: {
-          redirectTo: window.location.origin + "/platforms",
-        },
-      });
-
-      if (error) {
-        console.error("Erro ao iniciar login:", error);
-        setAuthRedirecting(false);
-      } else if (data) {
-        console.log("Login iniciado com sucesso, URL:", data.url);
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error("Error signing in:", error);
-      setAuthRedirecting(false);
-    }
-  };
-
-  // Filter platforms based on search term
-  useEffect(() => {
-    if (!searchTerm.trim()) {
-      setFilteredPlatforms(platformsData as PlatformData[]);
-    } else {
-      const term = searchTerm.toLowerCase();
-      const filtered = (platformsData as PlatformData[]).filter(
-        (platform) =>
-          platform.fullName.toLowerCase().includes(term) ||
-          platform.name.toLowerCase().includes(term)
-      );
-      setFilteredPlatforms(filtered);
-    }
-  }, [searchTerm]);
-
-  // Initialize filtered platforms with all platforms
-  useEffect(() => {
-    setFilteredPlatforms(platformsData as PlatformData[]);
-  }, []);
-
-  // Verificar autenticação ao carregar a página
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-
-        if (session?.user) {
-          console.log("User authenticated:", session.user.email);
-          setUser(session.user);
-          setAuthChecking(false);
-        } else {
-          console.log("No authenticated user found");
-          setUser(null);
-          setAuthChecking(false);
-        }
-      } catch (error) {
-        console.error("Error checking user session:", error);
-        setAuthChecking(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
-
-  // Show redirecting state when auth is in progress
-  if (authRedirecting) {
-    return (
-      <div className="flex site-page min-h-screen flex-col bg-background">
-        <Header />
-        <div id="main-content" role="main" tabIndex={-1} className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-foreground/80">
-              Redirecionando para autenticação...
-            </p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  // Mostrar loader enquanto verifica autenticação
-  if (authChecking) {
-    return (
-      <div className="flex site-page min-h-screen flex-col bg-background">
-        <Header />
-        <div id="main-content" role="main" tabIndex={-1} className="flex-1 flex items-center justify-center">
-          <div className="text-center">
-            <div className="mb-4 h-12 w-12 animate-spin rounded-full border-t-4 border-primary border-opacity-50 mx-auto"></div>
-            <p className="text-lg text-foreground/80">Verificando autenticação...</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
-  // Show "Acesso Negado" message if not authenticated
-  if (!user) {
-    return (
-      <div className="flex site-page min-h-screen flex-col bg-background">
-        <Header />
-        <div id="main-content" role="main" tabIndex={-1} className="flex-1 flex items-center justify-center">
-          <div className="text-center p-8 bg-black/30 rounded-lg border border-primary/30 max-w-md">
-            <Gamepad2 className="h-12 w-12 text-primary mx-auto mb-4" />
-            <h1 className="font-display text-3xl font-bold uppercase text-white mb-2">
-              Sua biblioteca começa aqui
-            </h1>
-            <p className="text-foreground/80 mb-6">
-              Faça login para acessar nossa coleção completa de plataformas de
-              jogos e desfrutar de todos os recursos disponíveis para membros.
-            </p>
-            <button
-              onClick={handleSignIn}
-              disabled={authRedirecting}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 border border-primary text-sm font-medium rounded-md shadow-sm text-white bg-primary/20 hover:bg-primary/40 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-all duration-300 hover:shadow-[0_0_15px_rgba(255,8,132,0.6)]"
-            >
-              <FontAwesomeIcon icon={faGoogle} size="xl" className="h-4 w-4" />
-              Entrar com Google
-            </button>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+export default async function PlatformsPage() {
+  const counts = await getPlatformGameCounts();
+  const featured = PLATFORMS.filter((p) => p.indexable);
+  const others = PLATFORMS.filter((p) => !p.indexable);
+  const sections = KIND_ORDER.map((kind) => ({
+    kind,
+    items: featured
+      .filter((p) => p.content?.kind === kind)
+      .sort((a, b) => (a.content?.year ?? 9999) - (b.content?.year ?? 9999)),
+  })).filter((section) => section.items.length > 0);
 
   return (
-    <div className="flex flex-col site-page min-h-screen bg-background text-white">
+    <div className="site-page relative flex min-h-screen flex-col bg-background">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.10)_0%,transparent_60%)]" />
       <Header />
 
-      <main id="main-content" tabIndex={-1} className={`flex-grow font-sans`}>
-        <div className="mx-auto max-w-7xl px-6 pt-10"><PageIntro eyebrow="Plataformas" title={<>Uma biblioteca. <span className="text-gradient-primary">Gerações de jogos.</span></>} description="Explore os sistemas, encontre seus favoritos e descubra seu próximo clássico." /></div>
+      <main id="main-content" tabIndex={-1} className="relative z-10 mx-auto w-full max-w-7xl flex-grow px-6 pb-24 pt-32 md:px-12">
+        <PageIntro
+          eyebrow="Plataformas"
+          title={<>Mais de 250 <span className="text-gradient-primary">sistemas.</span></>}
+          description="Consoles, portáteis, arcades e computadores clássicos reunidos em uma única biblioteca para jogar no PC com controle."
+        >
+          <ExploreLink href="/tutorial">Como começar</ExploreLink>
+        </PageIntro>
 
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          {/* Search Bar */}
-          <div className="sticky top-28 bg-background/90 backdrop-blur-sm z-10 py-4 mb-8 shadow-md rounded-lg">
-            <div className="flex items-center justify-center max-w-2xl mx-auto">
-              <div className="relative w-full">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-muted-foreground" />
-                </div>
-                <input
-                  type="text"
-                  className="block w-full pl-10 pr-3 py-3 bg-card border border-border placeholder-gray-400 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Pesquisar plataformas..."
-                  aria-label="Pesquisar plataformas"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                {searchTerm && (
-                  <button
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                    aria-label="Limpar pesquisa"
-                    onClick={() => setSearchTerm("")}
+        <nav aria-label="Tipos de plataforma" className="mb-12 flex flex-wrap gap-2">
+          {sections.map(({ kind, items }) => (
+            <a
+              key={kind}
+              href={`#${kind}`}
+              className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-card/60 px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+            >
+              {SECTION_LABELS[kind]}
+              <span className="font-mono text-[10px]">{items.length}</span>
+            </a>
+          ))}
+        </nav>
+
+        {sections.map(({ kind, items }) => (
+          <section key={kind} id={kind} aria-labelledby={`${kind}-title`} className="mb-16 scroll-mt-28">
+            <h2 id={`${kind}-title`} className="mb-6 font-display text-2xl font-bold uppercase tracking-tight text-foreground">
+              {SECTION_LABELS[kind] ?? PLATFORM_KIND_LABELS[kind]}
+            </h2>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+              {items.map((platform) => {
+                const games = counts[platform.slug] ?? 0;
+                return (
+                  <Link
+                    key={platform.slug}
+                    href={`/platforms/${platform.slug}`}
+                    className="group flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-card to-primary/[0.035] transition-all duration-300 hover:-translate-y-1 hover:border-primary/40"
                   >
-                    <span className="text-muted-foreground hover:text-white">×</span>
-                  </button>
-                )}
-              </div>
+                    <div className="relative aspect-[4/3] bg-black/30">
+                      {(platform.image ?? platform.logo) && (
+                        <Image
+                          src={(platform.image ?? platform.logo)!}
+                          alt=""
+                          fill
+                          sizes="(max-width: 640px) 50vw, (max-width: 1280px) 25vw, 20vw"
+                          className="object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+                        />
+                      )}
+                    </div>
+                    <div className="flex flex-grow flex-col p-4">
+                      <h3 className="text-sm font-semibold leading-snug text-foreground group-hover:text-primary">{platform.name}</h3>
+                      <p className="mt-auto pt-2 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                        {[platform.content?.maker, platform.content?.year].filter(Boolean).join(" · ")}
+                        {games > 0 && <span className="block text-primary">{games.toLocaleString("pt-BR")} jogos</span>}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
-          </div>
+          </section>
+        ))}
 
-          {/* Platforms grid */}
-          <div className="mb-12">
-            {filteredPlatforms.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {filteredPlatforms.map((platform) => (
-                  <div
-                    key={platform.name}
-                    className="bg-card rounded-lg p-4 flex flex-col items-center text-center hover:bg-panel transition-all hover:shadow-lg hover:shadow-[#ff0884]/10 transform hover:-translate-y-1 group"
-                  >
-                    <div className="relative w-24 h-24 mb-4">
-                      <Image
-                        src={platform.image.replace(
-                          "/images/platform/",
-                          "/images/platforms/logos/"
-                        )}
-                        alt={platform.fullName}
-                        fill
-                        sizes="100px"
-                        className="object-contain transition-transform group-hover:scale-110"
-                        onError={(e) => {
-                          // Fallback para a imagem original se a versão em /logos/ não existir
-                          (e.target as HTMLImageElement).src = platform.image;
-                        }}
-                      />
-                    </div>
-                    <h3 className="text-lg font-semibold group-hover:text-primary mb-4">
-                      {platform.fullName}
-                    </h3>
-                    <div className="flex flex-col gap-2 w-full mt-auto">
-                      <Link
-                        href={`/platforms/${platform.name}`}
-                        className="w-full bg-primary/90 hover:bg-primary text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-1 transition-colors"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-4 w-4 mr-1"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                        <span>Info</span>
-                      </Link>
-                      <a
-                        href={platform.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-full bg-panel hover:bg-gray-600 text-white px-3 py-2 rounded-lg text-sm font-medium flex items-center justify-center space-x-1 transition-colors"
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="w-4 h-4 mr-1"
-                        >
-                          <path d="M15.545 6.558a9.42 9.42 0 0 1 .139 1.626c0 2.434-.87 4.492-2.384 5.885h.002C11.978 15.292 10.158 16 8 16A8 8 0 1 1 8 0a7.689 7.689 0 0 1 5.352 2.082l-2.284 2.284A4.347 4.347 0 0 0 8 3.166c-2.087 0-3.86 1.408-4.492 3.304a4.792 4.792 0 0 0 0 3.063h.003c.635 1.893 2.405 3.301 4.492 3.301 1.078 0 2.004-.276 2.722-.764h-.003a3.702 3.702 0 0 0 1.599-2.431H8v-3.08h7.545z" />
-                        </svg>
-                        <span>Drive</span>
-                      </a>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="inline-block p-3 rounded-full bg-card mb-4">
-                  <Search className="h-8 w-8 text-primary" />
-                </div>
-                <h3 className="text-xl font-bold mb-2">
-                  Nenhuma plataforma encontrada
-                </h3>
-                <p className="text-muted-foreground">
-                  Não encontramos nenhuma plataforma com &quot;{searchTerm}
-                  &quot;. Tente outro termo.
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
+        {others.length > 0 && (
+          <section aria-labelledby="others-title" className="border-t border-border pt-10">
+            <h2 id="others-title" className="mb-5 font-mono text-xs font-bold uppercase tracking-[0.3em] text-primary">
+              Ports, hacks e outros sistemas
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {others.map((platform) => (
+                <Link
+                  key={platform.slug}
+                  href={`/platforms/${platform.slug}`}
+                  className="rounded-xl border border-white/10 bg-card/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                >
+                  {platform.name}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />

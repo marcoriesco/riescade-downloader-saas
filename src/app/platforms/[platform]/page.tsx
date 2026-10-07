@@ -1,457 +1,341 @@
-"use client";
-
-import React, { useState, useEffect, use } from "react";
-import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { notFound } from "next/navigation";
+import {
+  ArrowUpRight,
+  CalendarDays,
+  Check,
+  ChevronRight,
+  CircleHelp,
+  Cpu,
+  Download,
+  Factory,
+  Gamepad2,
+  Library,
+  LogIn,
+  Play,
+} from "lucide-react";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
+import {
+  PLATFORMS,
+  getPlatform,
+  getPlatformGameCounts,
+  relatedPlatforms,
+  type Platform,
+} from "@/lib/platforms";
 
-// Import platform data
-import platformsData from "@/data/platforms.json";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+export const revalidate = 86400;
 
-interface PlatformData {
-  name: string;
-  image: string;
-  fullName: string;
+const SITE_URL = "https://www.riescade.com.br";
+
+export function generateStaticParams() {
+  return PLATFORMS.map((platform) => ({ platform: platform.slug }));
 }
 
-interface PlatformMetadata {
-  systemName?: string;
-  systemDescription?: string;
-  systemManufacturer?: string;
-  systemReleaseYear?: string;
-  systemReleaseDate?: string;
-  systemReleaseDateFormated?: string;
-  systemHardwareType?: string;
-  systemColor?: string;
-  systemColorPalette1?: string;
-  systemColorPalette2?: string;
-  systemColorPalette3?: string;
-  systemColorPalette4?: string;
+function describe(platform: Platform) {
+  const year = platform.content?.year ? ` (${platform.content.year})` : "";
+  return `Jogue ${platform.name}${year} no PC com o RIESCADE OS: emulador configurado, biblioteca com capas e downloads integrados. Funciona com controle no Windows.`;
 }
 
-export default function PlatformPage({
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ platform: string }>;
+}): Promise<Metadata> {
+  const platform = getPlatform((await params).platform);
+  if (!platform) return { title: "Plataforma não encontrada", robots: { index: false } };
+
+  const title = `Jogue ${platform.name} no PC`;
+  const description = describe(platform);
+  const image = platform.image ?? platform.logo ?? "/images/og-image.webp";
+  return {
+    title,
+    description,
+    alternates: { canonical: `/platforms/${platform.slug}` },
+    robots: { index: platform.indexable, follow: true },
+    openGraph: { type: "website", url: `/platforms/${platform.slug}`, title, description, images: [image] },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
+  };
+}
+
+function faqFor(platform: Platform) {
+  const bios = platform.content?.bios;
+  return [
+    {
+      q: `Dá para jogar ${platform.name} no PC?`,
+      a: `Sim. O RIESCADE OS reúne o emulador de ${platform.name} já configurado, organiza seus jogos com capas e informações e inicia tudo com um clique, usando controle, teclado ou mouse no Windows.`,
+    },
+    {
+      q: `Preciso de BIOS para jogar ${platform.name}?`,
+      a: bios
+        ? `Sim, ${platform.name} precisa de arquivos de BIOS ou firmware. No RIESCADE OS, os membros instalam o pacote completo de BIOS com um clique em Configurações → Downloads.`
+        : `Na maioria dos casos, não. Os jogos de ${platform.name} rodam direto no emulador, sem arquivos de BIOS adicionais.`,
+    },
+    {
+      q: "Posso jogar com controle?",
+      a: "Sim. O RIESCADE OS detecta controles XInput, DirectInput e HID automaticamente e configura cada emulador, sem precisar mapear botões manualmente.",
+    },
+    {
+      q: "Quanto custa?",
+      a: "O RIESCADE OS é gratuito. A assinatura de R$ 30 por mês, sem fidelidade, libera os downloads de jogos e mídias dentro do aplicativo, o pacote de BIOS e o suporte VIP.",
+    },
+  ];
+}
+
+export default async function PlatformPage({
   params,
 }: {
   params: Promise<{ platform: string }>;
 }) {
-  // Extract platform from the URL
-  const resolvedParams = use(params);
-  const platform = resolvedParams.platform;
+  const platform = getPlatform((await params).platform);
+  if (!platform) notFound();
 
-  // Get platform info from the JSON file
-  const platformInfo: PlatformData =
-    platformsData.find((p: PlatformData) => p.name === platform) ||
-    ({} as PlatformData);
+  const counts = await getPlatformGameCounts();
+  const games = counts[platform.slug] ?? 0;
+  const related = relatedPlatforms(platform);
+  const faqs = faqFor(platform);
+  const art = platform.image ?? platform.logo;
+  const facts = [
+    platform.content?.maker && { icon: Factory, label: "Fabricante", value: platform.content.maker },
+    platform.content?.year && { icon: CalendarDays, label: "Lançamento", value: String(platform.content.year) },
+    platform.kindLabel && { icon: Gamepad2, label: "Tipo", value: platform.kindLabel },
+    games > 0 && { icon: Library, label: "No catálogo", value: `${games.toLocaleString("pt-BR")} jogos` },
+    { icon: Cpu, label: "BIOS", value: platform.content?.bios ? "Necessária" : "Não precisa" },
+  ].filter(Boolean) as { icon: typeof Factory; label: string; value: string }[];
 
-  // Initialize state
-  const [metadata, setMetadata] = useState<PlatformMetadata | null>(null);
-  const [showModal, setShowModal] = useState(false);
-  const [isRedirecting, setIsRedirecting] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Image path state with fallbacks
-  const [imageSrc, setImageSrc] = useState(
-    `/images/platforms/systems/${platform}.webp`
-  );
-
-  // Define all possible image paths to try
-  const systemsPath = `/images/platforms/systems/${platform}.webp`;
-  const platformPath = platformInfo?.image || "";
-  const logoPath = `/images/platforms/logos/${platform}.webp`;
-  const fallbackPath = "/images/logo.webp";
-
-  // Handle sign in button click
-  const handleSignIn = async () => {
-    setIsRedirecting(true);
-    try {
-      // Implement your authentication logic here
-      // For demo, just simulate a redirect
-      setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 1500);
-    } catch (error) {
-      console.error("Authentication error:", error);
-      setIsRedirecting(false);
-    }
-  };
-
-  // O download dos jogos acontece exclusivamente dentro do aplicativo.
-  const handleRedirectToUrl = () => {
-    window.location.href = "/api/app/update/download";
-  };
-
-  useEffect(() => {
-    // Check if the user is authenticated
-    const checkAuth = async () => {
-      // Implement your actual auth check logic here
-      // For demo purposes, the logic will instantly say they are authorized
-      setIsAuthenticated(true);
-    };
-
-    checkAuth();
-
-    // Check for XML metadata file using the API
-    async function checkXmlFile() {
-      console.log(`Fetching XML metadata for platform: ${platform}`);
-      try {
-        const response = await fetch(`/api/xml-check?platform=${platform}`);
-        if (response.ok) {
-          const data = await response.json();
-          console.log("API response data:", data);
-
-          if (data.exists && data.metadata) {
-            console.log("Metadata found in response, setting state");
-            setMetadata(data.metadata);
-          } else {
-            console.log("No metadata in response, showing modal");
-            setShowModal(true);
-          }
-        } else {
-          console.log("API returned error, showing modal");
-          setShowModal(true);
-        }
-      } catch (error) {
-        console.error("Error checking XML metadata:", error);
-        setShowModal(true);
-      }
-    }
-
-    checkXmlFile();
-  }, [platform]);
-
-  // If the platform doesn't exist, return 404
-  if (!platformInfo.name) {
-    notFound();
-  }
-
-  // Generate background color gradient from platform metadata or use default
-  const backgroundGradient = metadata?.systemColor
-    ? `linear-gradient(to bottom, #${metadata.systemColor}33, #121212)`
-    : "linear-gradient(to bottom, rgba(255, 8, 132, 0.2), #121212)";
-
-  // Show redirecting state when auth is in progress
-  if (isRedirecting) {
-    return (
-      <div className="flex flex-col site-page min-h-screen bg-background text-white">
-        <Header />
-        <main id="main-content" tabIndex={-1} className="flex-grow flex items-center justify-center p-4">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto mb-6"></div>
-            <h1 className="text-2xl font-bold mb-4">Redirecionando...</h1>
-            <p className="text-muted-foreground">
-              Abrindo o aplicativo RIESCADE OS para {platformInfo.fullName}
-            </p>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Início", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Plataformas", item: `${SITE_URL}/platforms` },
+        { "@type": "ListItem", position: 3, name: platform.name, item: `${SITE_URL}/platforms/${platform.slug}` },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    },
+  ];
 
   return (
-    <div className="flex flex-col site-page min-h-screen bg-background text-white">
+    <div className="site-page relative flex min-h-screen flex-col bg-background">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[600px] bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.10)_0%,transparent_60%)]" />
       <Header />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
+      />
 
-      <main id="main-content" tabIndex={-1} className="flex-grow">
-        {/* Hero Section with Platform Info */}
-        <div
-          className="relative border-b border-border py-10 px-6 lg:px-8"
-          style={{ background: backgroundGradient }}
-        >
-          <div className="max-w-7xl mx-auto">
-            <Link href="/platforms" className="mb-8 inline-flex text-sm text-muted-foreground hover:text-primary">← Todas as plataformas</Link>
-            {/* Platform Header */}
-            <div className="flex flex-col items-center justify-center text-center">
-              <h1 className="font-display uppercase tracking-tight text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight text-foreground">
-                {platformInfo.fullName || platform}
-              </h1>
+      <main id="main-content" tabIndex={-1} className="relative z-10 mx-auto w-full max-w-7xl flex-grow px-6 pb-24 pt-32 md:px-12">
+        <nav aria-label="Navegação estrutural" className="mb-8 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <Link href="/" className="hover:text-primary">Início</Link>
+          <ChevronRight aria-hidden="true" className="size-3" />
+          <Link href="/platforms" className="hover:text-primary">Plataformas</Link>
+          <ChevronRight aria-hidden="true" className="size-3" />
+          <span>{platform.name}</span>
+        </nav>
 
-              {/* Platform buttons */}
-              <div className="flex flex-wrap gap-4 justify-center mb-4">
-                {isAuthenticated ? (
-                  <button
-                    onClick={handleRedirectToUrl}
-                    className="bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
-                  >
-                    <FontAwesomeIcon
-                      icon={faDownload}
-                      className="mr-2 h-5 w-5"
-                    />
-                    Baixar RIESCADE OS
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleSignIn}
-                    className="bg-gradient-to-r from-primary to-accent text-white px-6 py-3 rounded-lg hover:shadow-lg hover:shadow-[#ff0884]/20 transition-all duration-300 transform hover:-translate-y-1 font-medium flex items-center"
-                  >
-                    <FontAwesomeIcon
-                      icon={faDownload}
-                      className="mr-2 h-5 w-5"
-                    />
-                    Fazer Login para Acessar
-                  </button>
-                )}
-              </div>
+        {/* HERO */}
+        <section className="grid items-center gap-10 lg:grid-cols-[1.1fr_1fr]">
+          <div>
+            {platform.kindLabel && (
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-primary">
+                {platform.kindLabel}
+              </span>
+            )}
+            <h1 className="mt-4 font-display text-4xl font-bold uppercase leading-[1.05] tracking-tight text-foreground sm:text-5xl">
+              Jogue <span className="text-gradient-primary">{platform.name}</span> no PC
+            </h1>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+              {platform.content?.summary ??
+                `Os jogos de ${platform.name} organizados na biblioteca do RIESCADE OS, prontos para jogar no Windows com controle.`}
+            </p>
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/dashboard"
+                className="inline-flex h-14 items-center justify-center gap-3 rounded-xl border border-primary bg-primary px-8 font-display text-sm font-bold uppercase tracking-[0.12em] text-white shadow-[0_12px_45px_hsl(var(--primary)/0.36)] transition-all hover:-translate-y-1 hover:bg-accent"
+              >
+                <Download className="size-5" />
+                Baixar RIESCADE OS
+              </Link>
+              <Link
+                href="/tutorial"
+                className="inline-flex h-14 items-center justify-center gap-3 rounded-xl border border-white/30 bg-black/40 px-8 font-display text-sm font-bold uppercase tracking-[0.12em] text-white transition-all hover:-translate-y-1 hover:border-primary hover:bg-primary/10"
+              >
+                <Play className="size-5" />
+                Como instalar
+              </Link>
             </div>
           </div>
-        </div>
 
-        {/* Main Content Section */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-1 gap-12">
-            {metadata && !showModal ? (
-              <>
-                {/* Left column: Image and Description */}
-                <div className="space-y-8">
-                  {/* System Image - if available */}
-                  <div className="bg-card/40 rounded-xl p-6 shadow-xl border border-border flex items-center justify-center">
-                    <div className="relative w-full aspect-square max-h-[400px] flex items-center justify-center">
-                      <Image
-                        src={imageSrc}
-                        alt={`${platformInfo.fullName} Console`}
-                        fill
-                        className="object-contain p-16"
-                        sizes="(max-width: 768px) 100vw, 500px"
-                        onError={() => {
-                          console.log(`Failed to load image: ${imageSrc}`);
-
-                          // Try different paths in sequence
-                          if (imageSrc === systemsPath && platformPath) {
-                            console.log("Trying platform path", platformPath);
-                            setImageSrc(platformPath);
-                          } else if (
-                            (imageSrc === systemsPath ||
-                              imageSrc === platformPath) &&
-                            logoPath
-                          ) {
-                            console.log("Trying logo path", logoPath);
-                            setImageSrc(logoPath);
-                          } else {
-                            // Final fallback
-                            console.log("Using fallback placeholder");
-                            setImageSrc(fallbackPath);
-                          }
-                        }}
-                        priority={false}
-                        loading="lazy"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                      Sobre {metadata.systemName}
-                    </h2>
-                    <div className="bg-card rounded-xl p-6 shadow-xl border border-border/50">
-                      <p className="text-foreground/80 leading-relaxed">
-                        {metadata.systemDescription}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Right column: Details and Colors */}
-                <div className="space-y-8">
-                  <div>
-                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                      Detalhes da Plataforma
-                    </h2>
-                    <div className="bg-card rounded-xl p-6 shadow-xl border border-border/50">
-                      <dl className="space-y-4">
-                        {metadata.systemManufacturer && (
-                          <div className="grid grid-cols-2">
-                            <dt className="font-semibold text-muted-foreground">
-                              Fabricante
-                            </dt>
-                            <dd>{metadata.systemManufacturer}</dd>
-                          </div>
-                        )}
-
-                        {metadata.systemReleaseDateFormated && (
-                          <div className="grid grid-cols-2">
-                            <dt className="font-semibold text-muted-foreground">
-                              Data de Lançamento
-                            </dt>
-                            <dd>{metadata.systemReleaseDateFormated}</dd>
-                          </div>
-                        )}
-
-                        {metadata.systemReleaseYear && (
-                          <div className="grid grid-cols-2">
-                            <dt className="font-semibold text-muted-foreground">Ano</dt>
-                            <dd>{metadata.systemReleaseYear}</dd>
-                          </div>
-                        )}
-
-                        {metadata.systemHardwareType && (
-                          <div className="grid grid-cols-2">
-                            <dt className="font-semibold text-muted-foreground">
-                              Tipo
-                            </dt>
-                            <dd>{metadata.systemHardwareType}</dd>
-                          </div>
-                        )}
-                      </dl>
-                    </div>
-                  </div>
-
-                  {/* Additional information */}
-                  <div>
-                    <h2 className="text-2xl font-bold mb-4 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                      Informações Adicionais
-                    </h2>
-                    <div className="bg-card rounded-xl p-6 shadow-xl border border-border/50">
-                      <p className="text-foreground/80 mb-4">
-                        Esta plataforma faz parte da coleção RIESCADE de jogos
-                        retro. Acesse nossa comunidade para mais informações e
-                        suporte.
-                      </p>
-                      <div className="flex flex-wrap gap-3">
-                        <Link
-                          href="/blog"
-                          className="bg-panel hover:bg-gray-600 transition-colors px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
-                            />
-                          </svg>
-                          <span>Ver Artigos do Blog</span>
-                        </Link>
-                        <Link
-                          href="/platforms"
-                          className="bg-panel hover:bg-gray-600 transition-colors px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                            />
-                          </svg>
-                          <span>Todas as Plataformas</span>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="bg-card/50 p-10 rounded-xl text-center shadow-xl border border-border/50 relative">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-16 w-16 mx-auto mb-4 text-muted-foreground"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                <h2 className="text-2xl font-bold mb-4">
-                  Informações da Plataforma em Breve
-                </h2>
-                <p className="text-muted-foreground mb-6 text-lg max-w-2xl mx-auto">
-                  Ainda não temos metadados detalhados para esta plataforma.
-                  Nossa equipe está trabalhando para adicionar mais informações
-                  sobre {platformInfo.fullName}. Enquanto isso, você pode
-                  acessar os jogos desta plataforma pelo aplicativo RIESCADE OS.
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mt-8">
-                  <Image
-                    src={imageSrc}
-                    alt={`${platformInfo.fullName} Console`}
-                    width={300}
-                    height={300}
-                    className="mx-auto object-contain bg-background/50 p-6 rounded-xl"
-                    onError={() => {
-                      console.log(`Failed to load fallback image: ${imageSrc}`);
-
-                      // Try different paths in sequence
-                      if (imageSrc === systemsPath && platformPath) {
-                        console.log("Trying platform path", platformPath);
-                        setImageSrc(platformPath);
-                      } else if (
-                        (imageSrc === systemsPath ||
-                          imageSrc === platformPath) &&
-                        logoPath
-                      ) {
-                        console.log("Trying logo path", logoPath);
-                        setImageSrc(logoPath);
-                      } else {
-                        // Final fallback
-                        console.log("Using fallback placeholder");
-                        setImageSrc(fallbackPath);
-                      }
-                    }}
-                    loading="lazy"
-                  />
-                  <div className="flex flex-col justify-center space-y-4">
-                    <h3 className="text-xl font-bold">
-                      {platformInfo.fullName}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Esta plataforma está disponível em nossa coleção.
-                    </p>
-                    <button
-                      onClick={handleRedirectToUrl}
-                      className="bg-gradient-to-r from-primary to-accent text-white px-4 py-2 rounded-lg hover:opacity-90 transition-opacity font-medium self-center"
-                    >
-                      Baixar RIESCADE OS
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-card to-primary/[0.06] p-8">
+            <div className="grid-overlay absolute inset-0 opacity-30" />
+            <div className="relative flex aspect-[4/3] items-center justify-center">
+              {art ? (
+                <Image
+                  src={art}
+                  alt={platform.name}
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 560px"
+                  className="object-contain drop-shadow-[0_20px_50px_rgba(0,0,0,0.6)]"
+                />
+              ) : (
+                <Gamepad2 className="size-24 text-primary" />
+              )}
+            </div>
           </div>
-        </div>
+        </section>
+
+        {/* FICHA */}
+        <section aria-label={`Ficha do ${platform.name}`} className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-5">
+          {facts.map((fact) => (
+            <div key={fact.label} className="rounded-2xl border border-white/10 bg-gradient-to-br from-card to-primary/[0.035] p-5">
+              <fact.icon className="size-4 text-primary" />
+              <p className="mt-3 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">{fact.label}</p>
+              <p className="mt-1 font-display text-lg font-bold text-foreground">{fact.value}</p>
+            </div>
+          ))}
+        </section>
+
+        {/* COMO JOGAR */}
+        <section className="mt-20">
+          <span className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-primary">Passo a passo</span>
+          <h2 className="mt-3 font-display text-3xl font-bold uppercase tracking-tight text-foreground md:text-4xl">
+            Como jogar {platform.name} <span className="text-gradient-primary">no PC</span>
+          </h2>
+          <ol className="mt-8 grid gap-4 md:grid-cols-3">
+            {[
+              { icon: Download, title: "Baixe o RIESCADE OS", text: "Gratuito para Windows. Extraia o arquivo e abra o RIESCADE.exe." },
+              {
+                icon: LogIn,
+                title: "Entre com sua conta",
+                text: platform.content?.bios
+                  ? `Entre com Google e instale o pacote de BIOS em Configurações → Downloads. ${platform.name} precisa dele.`
+                  : "Entre com sua conta Google em Configurações → Minha Conta para liberar os downloads.",
+              },
+              { icon: Gamepad2, title: `Escolha e jogue`, text: `Abra ${platform.name} na biblioteca, baixe o jogo e jogue com controle. O emulador é configurado automaticamente.` },
+            ].map((step, index) => (
+              <li key={step.title} className="rounded-2xl border border-white/10 bg-gradient-to-br from-card to-primary/[0.035] p-6">
+                <div className="flex items-center gap-3">
+                  <span className="glow-primary flex size-10 items-center justify-center rounded-xl border border-primary/30 bg-primary/10 font-display font-bold text-primary">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <step.icon className="size-4 text-primary" />
+                </div>
+                <h3 className="mt-4 font-display text-lg font-bold uppercase text-foreground">{step.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{step.text}</p>
+              </li>
+            ))}
+          </ol>
+
+          {platform.extensions.length > 0 && (
+            <p className="mt-6 text-sm text-muted-foreground">
+              <span className="font-semibold text-foreground">Formatos reconhecidos:</span>{" "}
+              {platform.extensions.map((ext) => (
+                <code key={ext} className="mr-1.5 rounded-md border border-border bg-black/40 px-1.5 py-0.5 font-mono text-xs text-foreground">
+                  {ext}
+                </code>
+              ))}
+            </p>
+          )}
+        </section>
+
+        {/* CTA */}
+        <section className="relative mt-20 overflow-hidden rounded-3xl border-2 border-primary/50 bg-gradient-to-b from-primary/[0.07] to-background/90 p-8 md:p-12">
+          <div className="absolute left-0 top-0 h-4 w-4 border-l-2 border-t-2 border-primary" />
+          <div className="absolute right-0 top-0 h-4 w-4 border-r-2 border-t-2 border-primary" />
+          <div className="absolute bottom-0 left-0 h-4 w-4 border-b-2 border-l-2 border-primary" />
+          <div className="absolute bottom-0 right-0 h-4 w-4 border-b-2 border-r-2 border-primary" />
+          <div className="grid items-center gap-8 md:grid-cols-[1.4fr_1fr]">
+            <div>
+              <h2 className="font-display text-3xl font-bold uppercase text-foreground">
+                {games > 0 ? `${games.toLocaleString("pt-BR")} jogos de ${platform.name}` : platform.name}{" "}
+                <span className="text-gradient-primary">a um clique</span>
+              </h2>
+              <ul className="mt-6 space-y-3">
+                {["Downloads de jogos e mídias dentro do aplicativo", "Pacote completo de BIOS", "Mais de 250 plataformas na mesma biblioteca", "Suporte VIP no WhatsApp e no Telegram"].map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm text-foreground/80">
+                    <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border border-primary/50 bg-primary/10">
+                      <Check className="size-3 text-primary" />
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="text-center md:text-right">
+              <p className="font-display text-5xl font-bold text-foreground">
+                R$ 30<span className="font-mono text-sm font-normal text-muted-foreground">/mês</span>
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">Sem fidelidade. Cancele quando quiser.</p>
+              <Link
+                href="/dashboard"
+                className="mt-6 inline-flex h-14 w-full items-center justify-center rounded-xl bg-primary font-display text-lg font-bold uppercase tracking-[0.15em] text-white transition-all hover:scale-[1.02] hover:bg-accent md:w-auto md:px-10"
+              >
+                Assinar agora
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section aria-labelledby="faq-title" className="mt-20 max-w-4xl">
+          <span className="font-mono text-xs font-bold uppercase tracking-[0.3em] text-primary">Dúvidas</span>
+          <h2 id="faq-title" className="mb-8 mt-3 font-display text-3xl font-bold uppercase tracking-tight text-foreground">
+            Perguntas <span className="text-gradient-primary">frequentes</span>
+          </h2>
+          <div className="space-y-3">
+            {faqs.map((faq) => (
+              <details key={faq.q} className="group rounded-2xl border border-white/10 bg-gradient-to-br from-card to-primary/[0.035] p-5 open:border-primary/40">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-semibold text-foreground">
+                  <span className="flex items-center gap-3">
+                    <CircleHelp className="size-4 shrink-0 text-primary" />
+                    {faq.q}
+                  </span>
+                  <span className="text-primary transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+                </summary>
+                <p className="mt-3 pl-7 text-sm leading-relaxed text-muted-foreground">{faq.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* RELACIONADAS */}
+        {related.length > 0 && (
+          <section aria-labelledby="related-title" className="mt-20">
+            <h2 id="related-title" className="mb-6 font-mono text-xs font-bold uppercase tracking-[0.3em] text-primary">
+              Veja também
+            </h2>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
+              {related.map((other) => (
+                <Link
+                  key={other.slug}
+                  href={`/platforms/${other.slug}`}
+                  className="group flex flex-col justify-between rounded-2xl border border-white/10 bg-card/60 p-4 transition-colors hover:border-primary/40"
+                >
+                  <span className="text-sm font-semibold text-foreground group-hover:text-primary">{other.name}</span>
+                  <span className="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
+                    {other.content?.year ?? other.kindLabel}
+                    <ArrowUpRight className="size-3.5" />
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
 
       <Footer />
-
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-card p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h2 className="text-xl font-bold mb-4">Metadata Not Found</h2>
-            <p className="mb-4">
-              This platform does not have an XML metadata file yet.
-            </p>
-            <div className="flex justify-end">
-              <button
-                onClick={() => setShowModal(false)}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

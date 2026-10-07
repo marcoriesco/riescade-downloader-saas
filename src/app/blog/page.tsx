@@ -5,6 +5,7 @@ import { getBlogFilters, getBlogPosts } from "@/lib/blog-service";
 import { Header } from "@/components/Header";
 import Footer from "@/components/Footer";
 import { FeaturedPostCard, PostCard } from "@/components/blog/PostCard";
+import type { Metadata } from "next";
 
 export const revalidate = 3600;
 
@@ -34,20 +35,45 @@ const chip =
 const chipIdle = `${chip} border-white/10 bg-card/60 text-muted-foreground hover:border-primary/40 hover:text-foreground`;
 const chipActive = `${chip} border-primary bg-primary/15 text-primary`;
 
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+function readParams(params: Awaited<SearchParams>) {
+  const pick = (value: string | string[] | undefined) =>
+    (Array.isArray(value) ? value[0] : value)?.trim() || undefined;
+  return {
+    filters: { category: pick(params.category), tag: pick(params.tag), search: pick(params.search) } as Filters,
+    page: Math.max(1, Number.parseInt(pick(params.page) || "1", 10) || 1),
+  };
+}
+
+const BLOG_DESCRIPTION =
+  "Histórias, curiosidades e guias sobre games retrô, arcades, consoles clássicos e emulação no PC.";
+
+export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
+  const { filters, page } = readParams(await searchParams);
+  const base = filters.category ? `Blog: ${filters.category}` : "Blog de games retrô e emulação";
+  const title = page > 1 ? `${base} — página ${page}` : base;
+  const description = filters.category
+    ? `Artigos sobre ${filters.category} no blog da RIESCADE: games retrô, arcades e emulação.`
+    : BLOG_DESCRIPTION;
+  // Search results and tag listings are thin duplicates of the archive.
+  const indexable = !filters.search && !filters.tag;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: blogHref({ category: filters.category }, page) },
+    robots: { index: indexable, follow: true },
+    openGraph: { type: "website", url: blogHref({ category: filters.category }, page), title, description },
+  };
+}
+
 export default async function Blog({
   searchParams,
 }: {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: SearchParams;
 }) {
-  const params = await searchParams;
-  const pick = (value: string | string[] | undefined) =>
-    (Array.isArray(value) ? value[0] : value)?.trim() || undefined;
-  const filters: Filters = {
-    category: pick(params.category),
-    tag: pick(params.tag),
-    search: pick(params.search),
-  };
-  const page = Math.max(1, Number.parseInt(pick(params.page) || "1", 10) || 1);
+  const { filters, page } = readParams(await searchParams);
   const filtered = Boolean(filters.category || filters.tag || filters.search);
 
   const [{ data: posts, count }, { categories, tags }] = await Promise.all([

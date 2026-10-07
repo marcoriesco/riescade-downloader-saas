@@ -108,3 +108,15 @@
 .markdown td {
   @apply border-b border-border px-4 py-3;
 }
+
+.markdown :global(.read-also) {
+  @apply my-10 flex flex-col gap-1 rounded-2xl border border-primary/30 bg-primary/[0.06] px-6 py-5;
+}
+
+.markdown :global(.read-also) span {
+  @apply font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary;
+}
+
+.markdown :global(.read-also) a {
+  @apply font-display text-lg font-bold leading-snug text-foreground no-underline hover:text-primary;
+}

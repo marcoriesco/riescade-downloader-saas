@@ -1,0 +1,924 @@
+{
+  "fc": {
+    "logo": "/images/platforms/logos/fc.webp"
+  },
+  "p2000t": {
+    "logo": "/images/platforms/logos/p2000t.webp"
+  },
+  "starship": {
+    "logo": "/images/platforms/logos/starship.webp"
+  },
+  "nesh": {
+    "system": "/images/platforms/systems/nesh.webp",
+    "logo": "/images/platforms/logos/nesh.webp"
+  },
+  "nesb": {
+    "logo": "/images/platforms/logos/nesb.webp"
+  },
+  "fruit": {
+    "logo": "/images/platforms/logos/fruit.webp"
+  },
+  "cdogs": {
+    "logo": "/images/platforms/logos/cdogs.webp"
+  },
+  "aquarius": {
+    "logo": "/images/platforms/logos/aquarius.webp"
+  },
+  "openjazz": {
+    "logo": "/images/platforms/logos/openjazz.webp"
+  },
+  "pdark": {
+    "logo": "/images/platforms/logos/pdark.webp"
+  },
+  "wiih": {
+    "logo": "/images/platforms/logos/wiih.webp"
+  },
+  "vg5k": {
+    "logo": "/images/platforms/logos/vg5k.webp"
+  },
+  "soh": {
+    "logo": "/images/platforms/logos/soh.webp"
+  },
+  "raze": {
+    "logo": "/images/platforms/logos/raze.webp"
+  },
+  "cgenius": {
+    "logo": "/images/platforms/logos/cgenius.webp"
+  },
+  "vircon32": {
+    "logo": "/images/platforms/logos/vircon32.webp"
+  },
+  "ps3br": {
+    "logo": "/images/platforms/logos/ps3br.webp"
+  },
+  "ps2h": {
+    "logo": "/images/platforms/logos/ps2h.webp"
+  },
+  "ps4": {
+    "system": "/images/platforms/systems/ps4.webp",
+    "logo": "/images/platforms/logos/ps4.webp"
+  },
+  "ps5": {
+    "system": "/images/platforms/systems/ps5.webp",
+    "logo": "/images/platforms/logos/ps5.webp"
+  },
+  "ps2br": {
+    "logo": "/images/platforms/logos/ps2br.webp"
+  },
+  "prboom": {
+    "logo": "/images/platforms/logos/prboom.webp"
+  },
+  "ports": {
+    "system": "/images/platforms/systems/ports.webp",
+    "logo": "/images/platforms/logos/ports.webp"
+  },
+  "tic80": {
+    "system": "/images/platforms/systems/tic80.webp",
+    "logo": "/images/platforms/logos/tic80.webp"
+  },
+  "ti99": {
+    "system": "/images/platforms/systems/ti99.webp",
+    "logo": "/images/platforms/logos/ti99.webp"
+  },
+  "thomson": {
+    "logo": "/images/platforms/logos/thomson.webp"
+  },
+  "theforceengine": {
+    "logo": "/images/platforms/logos/theforceengine.webp"
+  },
+  "tg16cd": {
+    "logo": "/images/platforms/logos/tg16cd.webp"
+  },
+  "tg16": {
+    "system": "/images/platforms/systems/tg16.webp",
+    "logo": "/images/platforms/logos/tg16.webp"
+  },
+  "sgb": {
+    "system": "/images/platforms/systems/sgb.webp",
+    "logo": "/images/platforms/logos/sgb.webp"
+  },
+  "sg1000": {
+    "logo": "/images/platforms/logos/sg1000.webp"
+  },
+  "sfc": {
+    "system": "/images/platforms/systems/sfc.webp",
+    "logo": "/images/platforms/logos/sfc.webp"
+  },
+  "segastv": {
+    "logo": "/images/platforms/logos/segastv.webp"
+  },
+  "segacd": {
+    "system": "/images/platforms/systems/segacd.webp",
+    "logo": "/images/platforms/logos/segacd.webp"
+  },
+  "sega32x": {
+    "system": "/images/platforms/systems/sega32x.webp",
+    "logo": "/images/platforms/logos/sega32x.webp"
+  },
+  "scv": {
+    "system": "/images/platforms/systems/scv.webp",
+    "logo": "/images/platforms/logos/scv.webp"
+  },
+  "neogeoaes": {
+    "logo": "/images/platforms/logos/neogeoaes.webp"
+  },
+  "pokemini": {
+    "system": "/images/platforms/systems/pokemini.webp",
+    "logo": "/images/platforms/logos/pokemini.webp"
+  },
+  "pinballm": {
+    "logo": "/images/platforms/logos/pinballm.webp"
+  },
+  "pinballfx2": {
+    "logo": "/images/platforms/logos/pinballfx2.webp"
+  },
+  "pinballfx": {
+    "logo": "/images/platforms/logos/pinballfx.webp"
+  },
+  "pico8": {
+    "system": "/images/platforms/systems/pico8.webp",
+    "logo": "/images/platforms/logos/pico8.webp"
+  },
+  "pegasus": {
+    "logo": "/images/platforms/logos/pegasus.webp"
+  },
+  "pcfx": {
+    "system": "/images/platforms/systems/pcfx.webp",
+    "logo": "/images/platforms/logos/pcfx.webp"
+  },
+  "pcenginecd": {
+    "system": "/images/platforms/systems/pcenginecd.webp",
+    "logo": "/images/platforms/logos/pcenginecd.webp"
+  },
+  "pcengine": {
+    "system": "/images/platforms/systems/pcengine.webp",
+    "logo": "/images/platforms/logos/pcengine.webp"
+  },
+  "pc98": {
+    "system": "/images/platforms/systems/pc98.webp",
+    "logo": "/images/platforms/logos/pc98.webp"
+  },
+  "pc88": {
+    "system": "/images/platforms/systems/pc88.webp",
+    "logo": "/images/platforms/logos/pc88.webp"
+  },
+  "palm": {
+    "system": "/images/platforms/systems/palm.webp",
+    "logo": "/images/platforms/logos/palm.webp"
+  },
+  "oricatmos": {
+    "logo": "/images/platforms/logos/oricatmos.webp"
+  },
+  "openbor": {
+    "system": "/images/platforms/systems/openbor.webp",
+    "logo": "/images/platforms/logos/openbor.webp"
+  },
+  "o2em": {
+    "logo": "/images/platforms/logos/o2em.webp"
+  },
+  "ngpc": {
+    "system": "/images/platforms/systems/ngpc.webp",
+    "logo": "/images/platforms/logos/ngpc.webp"
+  },
+  "ngp": {
+    "system": "/images/platforms/systems/ngp.webp",
+    "logo": "/images/platforms/logos/ngp.webp"
+  },
+  "neshd": {
+    "logo": "/images/platforms/logos/neshd.webp"
+  },
+  "nes3d": {
+    "logo": "/images/platforms/logos/nes3d.webp"
+  },
+  "neogeoh": {
+    "logo": "/images/platforms/logos/neogeoh.webp"
+  },
+  "nds": {
+    "system": "/images/platforms/systems/nds.webp",
+    "logo": "/images/platforms/logos/nds.webp"
+  },
+  "naomi2": {
+    "system": "/images/platforms/systems/naomi2.webp",
+    "logo": "/images/platforms/logos/naomi2.webp"
+  },
+  "teknoparrot": {
+    "logo": "/images/platforms/logos/teknoparrot.webp"
+  },
+  "thextech": {
+    "logo": "/images/platforms/logos/thextech.webp"
+  },
+  "tiger": {
+    "logo": "/images/platforms/logos/tiger.webp"
+  },
+  "namco2x6": {
+    "logo": "/images/platforms/logos/namco2x6.webp"
+  },
+  "n64j": {
+    "logo": "/images/platforms/logos/n64j.webp"
+  },
+  "n64h": {
+    "logo": "/images/platforms/logos/n64h.webp"
+  },
+  "multivision": {
+    "system": "/images/platforms/systems/multivision.webp",
+    "logo": "/images/platforms/logos/multivision.webp"
+  },
+  "msxturbor": {
+    "system": "/images/platforms/systems/msxturbor.webp",
+    "logo": "/images/platforms/logos/msxturbor.webp"
+  },
+  "msx2+": {
+    "logo": "/images/platforms/logos/msx2+.webp"
+  },
+  "msx2": {
+    "system": "/images/platforms/systems/msx2.webp",
+    "logo": "/images/platforms/logos/msx2.webp"
+  },
+  "msx1": {
+    "system": "/images/platforms/systems/msx1.webp",
+    "logo": "/images/platforms/logos/msx1.webp"
+  },
+  "megaduck": {
+    "system": "/images/platforms/systems/megaduck.webp",
+    "logo": "/images/platforms/logos/megaduck.webp"
+  },
+  "megadrive-msu": {
+    "logo": "/images/platforms/logos/megadrive-msu.webp"
+  },
+  "megadriveh": {
+    "logo": "/images/platforms/logos/megadriveh.webp"
+  },
+  "mastersystemfm": {
+    "logo": "/images/platforms/logos/mastersystemfm.webp"
+  },
+  "magazine": {
+    "logo": "/images/platforms/logos/magazine.webp"
+  },
+  "lutro": {
+    "system": "/images/platforms/systems/lutro.webp",
+    "logo": "/images/platforms/logos/lutro.webp"
+  },
+  "love": {
+    "logo": "/images/platforms/logos/love.webp"
+  },
+  "lcdgames": {
+    "system": "/images/platforms/systems/lcdgames.webp",
+    "logo": "/images/platforms/logos/lcdgames.webp"
+  },
+  "konamih": {
+    "logo": "/images/platforms/logos/konamih.webp"
+  },
+  "karaoke": {
+    "logo": "/images/platforms/logos/karaoke.webp"
+  },
+  "namco357": {
+    "logo": "/images/platforms/logos/namco357.webp"
+  },
+  "ouya": {
+    "logo": "/images/platforms/logos/ouya.webp"
+  },
+  "mugen": {
+    "system": "/images/platforms/systems/mugen.webp",
+    "logo": "/images/platforms/logos/mugen.webp"
+  },
+  "opengoal": {
+    "logo": "/images/platforms/logos/opengoal.webp"
+  },
+  "ngage": {
+    "system": "/images/platforms/systems/ngage.webp",
+    "logo": "/images/platforms/logos/ngage.webp"
+  },
+  "naomi": {
+    "system": "/images/platforms/systems/naomi.webp",
+    "logo": "/images/platforms/logos/naomi.webp"
+  },
+  "pet": {
+    "logo": "/images/platforms/logos/pet.webp"
+  },
+  "openlara": {
+    "logo": "/images/platforms/logos/openlara.webp"
+  },
+  "mastersystemh": {
+    "logo": "/images/platforms/logos/mastersystemh.webp"
+  },
+  "mame": {
+    "system": "/images/platforms/systems/mame.webp",
+    "logo": "/images/platforms/logos/mame.webp"
+  },
+  "lynx": {
+    "logo": "/images/platforms/logos/lynx.webp"
+  },
+  "lowresnx": {
+    "system": "/images/platforms/systems/lowresnx.webp",
+    "logo": "/images/platforms/logos/lowresnx.webp"
+  },
+  "ique": {
+    "logo": "/images/platforms/logos/ique.webp"
+  },
+  "intellivision": {
+    "system": "/images/platforms/systems/intellivision.webp",
+    "logo": "/images/platforms/logos/intellivision.webp"
+  },
+  "hikaru": {
+    "logo": "/images/platforms/logos/hikaru.webp"
+  },
+  "gzdoom": {
+    "logo": "/images/platforms/logos/gzdoom.webp"
+  },
+  "gx4000": {
+    "system": "/images/platforms/systems/gx4000.webp",
+    "logo": "/images/platforms/logos/gx4000.webp"
+  },
+  "gp32": {
+    "logo": "/images/platforms/logos/gp32.webp"
+  },
+  "gmaster": {
+    "system": "/images/platforms/systems/gmaster.webp",
+    "logo": "/images/platforms/logos/gmaster.webp"
+  },
+  "genesis": {
+    "system": "/images/platforms/systems/genesis.webp",
+    "logo": "/images/platforms/logos/genesis.webp"
+  },
+  "gb-msu": {
+    "logo": "/images/platforms/logos/gb-msu.webp"
+  },
+  "gbc2players": {
+    "logo": "/images/platforms/logos/gbc2players.webp"
+  },
+  "gbc": {
+    "system": "/images/platforms/systems/gbc.webp",
+    "logo": "/images/platforms/logos/gbc.webp"
+  },
+  "gba2players": {
+    "logo": "/images/platforms/logos/gba2players.webp"
+  },
+  "gb2players": {
+    "logo": "/images/platforms/logos/gb2players.webp"
+  },
+  "gamepock": {
+    "logo": "/images/platforms/logos/gamepock.webp"
+  },
+  "gamegear": {
+    "system": "/images/platforms/systems/gamegear.webp",
+    "logo": "/images/platforms/logos/gamegear.webp"
+  },
+  "gamecom": {
+    "system": "/images/platforms/systems/gamecom.webp",
+    "logo": "/images/platforms/logos/gamecom.webp"
+  },
+  "cinematronics": {
+    "logo": "/images/platforms/logos/cinematronics.webp"
+  },
+  "channelf": {
+    "system": "/images/platforms/systems/channelf.webp",
+    "logo": "/images/platforms/logos/channelf.webp"
+  },
+  "cavestory": {
+    "system": "/images/platforms/systems/cavestory.webp",
+    "logo": "/images/platforms/logos/cavestory.webp"
+  },
+  "ikemen": {
+    "logo": "/images/platforms/logos/ikemen.webp"
+  },
+  "hbmame": {
+    "logo": "/images/platforms/logos/hbmame.webp"
+  },
+  "gemrb": {
+    "logo": "/images/platforms/logos/gemrb.webp"
+  },
+  "gba": {
+    "system": "/images/platforms/systems/gba.webp",
+    "logo": "/images/platforms/logos/gba.webp"
+  },
+  "gb": {
+    "system": "/images/platforms/systems/gb.webp",
+    "logo": "/images/platforms/logos/gb.webp"
+  },
+  "gamecube": {
+    "logo": "/images/platforms/logos/gamecube.webp"
+  },
+  "dreamcast": {
+    "system": "/images/platforms/systems/dreamcast.webp",
+    "logo": "/images/platforms/logos/dreamcast.webp"
+  },
+  "chero": {
+    "logo": "/images/platforms/logos/chero.webp"
+  },
+  "cave": {
+    "logo": "/images/platforms/logos/cave.webp"
+  },
+  "cannonball": {
+    "logo": "/images/platforms/logos/cannonball.webp"
+  },
+  "camplynx": {
+    "logo": "/images/platforms/logos/camplynx.webp"
+  },
+  "c128": {
+    "logo": "/images/platforms/logos/c128.webp"
+  },
+  "c64": {
+    "system": "/images/platforms/systems/c64.webp",
+    "logo": "/images/platforms/logos/c64.webp"
+  },
+  "windows": {
+    "system": "/images/platforms/systems/windows.webp",
+    "logo": "/images/platforms/logos/windows.webp"
+  },
+  "c20": {
+    "logo": "/images/platforms/logos/c20.webp"
+  },
+  "boom3": {
+    "logo": "/images/platforms/logos/boom3.webp"
+  },
+  "3do": {
+    "system": "/images/platforms/systems/3do.webp",
+    "logo": "/images/platforms/logos/3do.webp"
+  },
+  "arcade": {
+    "system": "/images/platforms/systems/arcade.webp",
+    "logo": "/images/platforms/logos/arcade.webp"
+  },
+  "xbla": {
+    "logo": "/images/platforms/logos/xbla.webp"
+  },
+  "xbox": {
+    "system": "/images/platforms/systems/xbox.webp",
+    "logo": "/images/platforms/logos/xbox.webp"
+  },
+  "xbox360": {
+    "system": "/images/platforms/systems/xbox360.webp",
+    "logo": "/images/platforms/logos/xbox360.webp"
+  },
+  "snes": {
+    "system": "/images/platforms/systems/snes.webp",
+    "logo": "/images/platforms/logos/snes.webp"
+  },
+  "ps2": {
+    "system": "/images/platforms/systems/ps2.webp",
+    "logo": "/images/platforms/logos/ps2.webp"
+  },
+  "ps3": {
+    "system": "/images/platforms/systems/ps3.webp",
+    "logo": "/images/platforms/logos/ps3.webp"
+  },
+  "psx": {
+    "system": "/images/platforms/systems/psx.webp",
+    "logo": "/images/platforms/logos/psx.webp"
+  },
+  "wiiu": {
+    "system": "/images/platforms/systems/wiiu.webp",
+    "logo": "/images/platforms/logos/wiiu.webp"
+  },
+  "switch": {
+    "system": "/images/platforms/systems/switch.webp",
+    "logo": "/images/platforms/logos/switch.webp"
+  },
+  "3ds": {
+    "logo": "/images/platforms/logos/3ds.webp"
+  },
+  "nes": {
+    "system": "/images/platforms/systems/nes.webp",
+    "logo": "/images/platforms/logos/nes.webp"
+  },
+  "mastersystem": {
+    "system": "/images/platforms/systems/mastersystem.webp",
+    "logo": "/images/platforms/logos/mastersystem.webp"
+  },
+  "megadrive": {
+    "system": "/images/platforms/systems/megadrive.webp",
+    "logo": "/images/platforms/logos/megadrive.webp"
+  },
+  "wiiware": {
+    "logo": "/images/platforms/logos/wiiware.webp"
+  },
+  "scummvm": {
+    "system": "/images/platforms/systems/scummvm.webp",
+    "logo": "/images/platforms/logos/scummvm.webp"
+  },
+  "saturn": {
+    "system": "/images/platforms/systems/saturn.webp",
+    "logo": "/images/platforms/logos/saturn.webp"
+  },
+  "satellaview": {
+    "system": "/images/platforms/systems/satellaview.webp",
+    "logo": "/images/platforms/logos/satellaview.webp"
+  },
+  "samcoupe": {
+    "system": "/images/platforms/systems/samcoupe.webp",
+    "logo": "/images/platforms/logos/samcoupe.webp"
+  },
+  "reminiscence": {
+    "logo": "/images/platforms/logos/reminiscence.webp"
+  },
+  "pv1000": {
+    "system": "/images/platforms/systems/pv1000.webp",
+    "logo": "/images/platforms/logos/pv1000.webp"
+  },
+  "psxh": {
+    "logo": "/images/platforms/logos/psxh.webp"
+  },
+  "pspminis": {
+    "logo": "/images/platforms/logos/pspminis.webp"
+  },
+  "popcap": {
+    "logo": "/images/platforms/logos/popcap.webp"
+  },
+  "pinballfx3": {
+    "logo": "/images/platforms/logos/pinballfx3.webp"
+  },
+  "psvita": {
+    "system": "/images/platforms/systems/psvita.webp",
+    "logo": "/images/platforms/logos/psvita.webp"
+  },
+  "psp": {
+    "system": "/images/platforms/systems/psp.webp",
+    "logo": "/images/platforms/logos/psp.webp"
+  },
+  "supracan": {
+    "system": "/images/platforms/systems/supracan.webp",
+    "logo": "/images/platforms/logos/supracan.webp"
+  },
+  "supervision": {
+    "system": "/images/platforms/systems/supervision.webp",
+    "logo": "/images/platforms/logos/supervision.webp"
+  },
+  "supergrafx": {
+    "system": "/images/platforms/systems/supergrafx.webp",
+    "logo": "/images/platforms/logos/supergrafx.webp"
+  },
+  "superbroswar": {
+    "logo": "/images/platforms/logos/superbroswar.webp"
+  },
+  "sufami": {
+    "system": "/images/platforms/systems/sufami.webp",
+    "logo": "/images/platforms/logos/sufami.webp"
+  },
+  "spectravideo": {
+    "system": "/images/platforms/systems/spectravideo.webp",
+    "logo": "/images/platforms/logos/spectravideo.webp"
+  },
+  "sonicretro": {
+    "logo": "/images/platforms/logos/sonicretro.webp"
+  },
+  "solarus": {
+    "system": "/images/platforms/systems/solarus.webp",
+    "logo": "/images/platforms/logos/solarus.webp"
+  },
+  "snes-msu": {
+    "logo": "/images/platforms/logos/snes-msu.webp"
+  },
+  "snesh": {
+    "system": "/images/platforms/systems/snesh.webp",
+    "logo": "/images/platforms/logos/snesh.webp"
+  },
+  "wasm4": {
+    "system": "/images/platforms/systems/wasm4.webp",
+    "logo": "/images/platforms/logos/wasm4.webp"
+  },
+  "vsmile": {
+    "system": "/images/platforms/systems/vsmile.webp",
+    "logo": "/images/platforms/logos/vsmile.webp"
+  },
+  "vpinball": {
+    "system": "/images/platforms/systems/vpinball.webp",
+    "logo": "/images/platforms/logos/vpinball.webp"
+  },
+  "vitaquake2": {
+    "logo": "/images/platforms/logos/vitaquake2.webp"
+  },
+  "virtualboy": {
+    "system": "/images/platforms/systems/virtualboy.webp",
+    "logo": "/images/platforms/logos/virtualboy.webp"
+  },
+  "vectrex": {
+    "system": "/images/platforms/systems/vectrex.webp",
+    "logo": "/images/platforms/logos/vectrex.webp"
+  },
+  "vc4000": {
+    "logo": "/images/platforms/logos/vc4000.webp"
+  },
+  "uzebox": {
+    "system": "/images/platforms/systems/uzebox.webp",
+    "logo": "/images/platforms/logos/uzebox.webp"
+  },
+  "unity": {
+    "logo": "/images/platforms/logos/unity.webp"
+  },
+  "tyrquake": {
+    "logo": "/images/platforms/logos/tyrquake.webp"
+  },
+  "tvgames": {
+    "logo": "/images/platforms/logos/tvgames.webp"
+  },
+  "tutor": {
+    "logo": "/images/platforms/logos/tutor.webp"
+  },
+  "triforce": {
+    "system": "/images/platforms/systems/triforce.webp",
+    "logo": "/images/platforms/logos/triforce.webp"
+  },
+  "tigerrz": {
+    "logo": "/images/platforms/logos/tigerrz.webp"
+  },
+  "wii": {
+    "system": "/images/platforms/systems/wii.webp",
+    "logo": "/images/platforms/logos/wii.webp"
+  },
+  "xegs": {
+    "logo": "/images/platforms/logos/xegs.webp"
+  },
+  "x68000": {
+    "system": "/images/platforms/systems/x68000.webp",
+    "logo": "/images/platforms/logos/x68000.webp"
+  },
+  "x1": {
+    "system": "/images/platforms/systems/x1.webp",
+    "logo": "/images/platforms/logos/x1.webp"
+  },
+  "wswanc": {
+    "logo": "/images/platforms/logos/wswanc.webp"
+  },
+  "turboduo": {
+    "logo": "/images/platforms/logos/turboduo.webp"
+  },
+  "wiiu-sky": {
+    "logo": "/images/platforms/logos/wiiu-sky.webp"
+  },
+  "wswan": {
+    "logo": "/images/platforms/logos/wswan.webp"
+  },
+  "zxspectrum": {
+    "system": "/images/platforms/systems/zxspectrum.webp",
+    "logo": "/images/platforms/logos/zxspectrum.webp"
+  },
+  "zx81": {
+    "system": "/images/platforms/systems/zx81.webp",
+    "logo": "/images/platforms/logos/zx81.webp"
+  },
+  "zinc": {
+    "logo": "/images/platforms/logos/zinc.webp"
+  },
+  "zeebo": {
+    "logo": "/images/platforms/logos/zeebo.webp"
+  },
+  "zaccariapinball": {
+    "logo": "/images/platforms/logos/zaccariapinball.webp"
+  },
+  "gameandwatch": {
+    "system": "/images/platforms/systems/gameandwatch.webp",
+    "logo": "/images/platforms/logos/gameandwatch.webp"
+  },
+  "gamate": {
+    "system": "/images/platforms/systems/gamate.webp",
+    "logo": "/images/platforms/logos/gamate.webp"
+  },
+  "gaelco": {
+    "logo": "/images/platforms/logos/gaelco.webp"
+  },
+  "fpinball": {
+    "system": "/images/platforms/systems/fpinball.webp",
+    "logo": "/images/platforms/logos/fpinball.webp"
+  },
+  "fmtowns": {
+    "system": "/images/platforms/systems/fmtowns.webp",
+    "logo": "/images/platforms/logos/fmtowns.webp"
+  },
+  "fm7": {
+    "system": "/images/platforms/systems/fm7.webp",
+    "logo": "/images/platforms/logos/fm7.webp"
+  },
+  "fds": {
+    "system": "/images/platforms/systems/fds.webp",
+    "logo": "/images/platforms/logos/fds.webp"
+  },
+  "fbneo": {
+    "system": "/images/platforms/systems/fbneo.webp",
+    "logo": "/images/platforms/logos/fbneo.webp"
+  },
+  "elektronika": {
+    "logo": "/images/platforms/logos/elektronika.webp"
+  },
+  "electron": {
+    "system": "/images/platforms/systems/electron.webp",
+    "logo": "/images/platforms/logos/electron.webp"
+  },
+  "eduke32": {
+    "logo": "/images/platforms/logos/eduke32.webp"
+  },
+  "ecwolf": {
+    "logo": "/images/platforms/logos/ecwolf.webp"
+  },
+  "easyrpg": {
+    "system": "/images/platforms/systems/easyrpg.webp",
+    "logo": "/images/platforms/logos/easyrpg.webp"
+  },
+  "dragon32": {
+    "system": "/images/platforms/systems/dragon32.webp",
+    "logo": "/images/platforms/logos/dragon32.webp"
+  },
+  "fightcade": {
+    "logo": "/images/platforms/logos/fightcade.webp"
+  },
+  "flash": {
+    "system": "/images/platforms/systems/flash.webp",
+    "logo": "/images/platforms/logos/flash.webp"
+  },
+  "dos": {
+    "system": "/images/platforms/systems/dos.webp",
+    "logo": "/images/platforms/logos/dos.webp"
+  },
+  "dinothawr": {
+    "logo": "/images/platforms/logos/dinothawr.webp"
+  },
+  "devilutionx": {
+    "logo": "/images/platforms/logos/devilutionx.webp"
+  },
+  "singe": {
+    "logo": "/images/platforms/logos/singe.webp"
+  },
+  "crvision": {
+    "system": "/images/platforms/systems/crvision.webp",
+    "logo": "/images/platforms/logos/crvision.webp"
+  },
+  "cps3": {
+    "system": "/images/platforms/systems/cps3.webp",
+    "logo": "/images/platforms/logos/cps3.webp"
+  },
+  "cps2": {
+    "system": "/images/platforms/systems/cps2.webp",
+    "logo": "/images/platforms/logos/cps2.webp"
+  },
+  "cps1": {
+    "system": "/images/platforms/systems/cps1.webp",
+    "logo": "/images/platforms/logos/cps1.webp"
+  },
+  "cplus4": {
+    "logo": "/images/platforms/logos/cplus4.webp"
+  },
+  "coco": {
+    "system": "/images/platforms/systems/coco.webp",
+    "logo": "/images/platforms/logos/coco.webp"
+  },
+  "chihiro": {
+    "logo": "/images/platforms/logos/chihiro.webp"
+  },
+  "casloopy": {
+    "logo": "/images/platforms/logos/casloopy.webp"
+  },
+  "daphne": {
+    "system": "/images/platforms/systems/daphne.webp",
+    "logo": "/images/platforms/logos/daphne.webp"
+  },
+  "cdi": {
+    "logo": "/images/platforms/logos/cdi.webp"
+  },
+  "colecovision": {
+    "system": "/images/platforms/systems/colecovision.webp",
+    "logo": "/images/platforms/logos/colecovision.webp"
+  },
+  "bbcmicro": {
+    "system": "/images/platforms/systems/bbcmicro.webp",
+    "logo": "/images/platforms/logos/bbcmicro.webp"
+  },
+  "atomiswave": {
+    "system": "/images/platforms/systems/atomiswave.webp",
+    "logo": "/images/platforms/logos/atomiswave.webp"
+  },
+  "atom": {
+    "logo": "/images/platforms/logos/atom.webp"
+  },
+  "astrocade": {
+    "system": "/images/platforms/systems/astrocade.webp",
+    "logo": "/images/platforms/logos/astrocade.webp"
+  },
+  "arduboy": {
+    "system": "/images/platforms/systems/arduboy.webp",
+    "logo": "/images/platforms/logos/arduboy.webp"
+  },
+  "archimedes": {
+    "system": "/images/platforms/systems/archimedes.webp",
+    "logo": "/images/platforms/logos/archimedes.webp"
+  },
+  "arcadia": {
+    "system": "/images/platforms/systems/arcadia.webp",
+    "logo": "/images/platforms/logos/arcadia.webp"
+  },
+  "apple2gs": {
+    "system": "/images/platforms/systems/apple2gs.webp",
+    "logo": "/images/platforms/logos/apple2gs.webp"
+  },
+  "apple2": {
+    "system": "/images/platforms/systems/apple2.webp",
+    "logo": "/images/platforms/logos/apple2.webp"
+  },
+  "apfm1000": {
+    "logo": "/images/platforms/logos/apfm1000.webp"
+  },
+  "amstradcpc": {
+    "system": "/images/platforms/systems/amstradcpc.webp",
+    "logo": "/images/platforms/logos/amstradcpc.webp"
+  },
+  "amigacdtv": {
+    "logo": "/images/platforms/logos/amigacdtv.webp"
+  },
+  "amigacd32": {
+    "system": "/images/platforms/systems/amigacd32.webp",
+    "logo": "/images/platforms/logos/amigacd32.webp"
+  },
+  "amiga4000": {
+    "logo": "/images/platforms/logos/amiga4000.webp"
+  },
+  "amiga1200": {
+    "system": "/images/platforms/systems/amiga1200.webp",
+    "logo": "/images/platforms/logos/amiga1200.webp"
+  },
+  "amiga500": {
+    "logo": "/images/platforms/logos/amiga500.webp"
+  },
+  "advision": {
+    "logo": "/images/platforms/logos/advision.webp"
+  },
+  "adam": {
+    "system": "/images/platforms/systems/adam.webp",
+    "logo": "/images/platforms/logos/adam.webp"
+  },
+  "actionmax": {
+    "logo": "/images/platforms/logos/actionmax.webp"
+  },
+  "aae": {
+    "logo": "/images/platforms/logos/aae.webp"
+  },
+  "bigfish": {
+    "logo": "/images/platforms/logos/bigfish.webp"
+  },
+  "3doj": {
+    "system": "/images/platforms/systems/3doj.webp",
+    "logo": "/images/platforms/logos/3doj.webp"
+  },
+  "3dnes": {
+    "logo": "/images/platforms/logos/3dnes.webp"
+  },
+  "jaguarcd": {
+    "logo": "/images/platforms/logos/jaguarcd.webp"
+  },
+  "jaguar": {
+    "logo": "/images/platforms/logos/jaguar.webp"
+  },
+  "model3": {
+    "system": "/images/platforms/systems/model3.webp",
+    "logo": "/images/platforms/logos/model3.webp"
+  },
+  "model2": {
+    "system": "/images/platforms/systems/model2.webp",
+    "logo": "/images/platforms/logos/model2.webp"
+  },
+  "n64dd": {
+    "system": "/images/platforms/systems/n64dd.webp",
+    "logo": "/images/platforms/logos/n64dd.webp"
+  },
+  "jakks": {
+    "logo": "/images/platforms/logos/jakks.webp"
+  },
+  "locomalito": {
+    "logo": "/images/platforms/logos/locomalito.webp"
+  },
+  "n64": {
+    "system": "/images/platforms/systems/n64.webp",
+    "logo": "/images/platforms/logos/n64.webp"
+  },
+  "neogeocd": {
+    "system": "/images/platforms/systems/neogeocd.webp",
+    "logo": "/images/platforms/logos/neogeocd.webp"
+  },
+  "neogeo": {
+    "system": "/images/platforms/systems/neogeo.webp",
+    "logo": "/images/platforms/logos/neogeo.webp"
+  },
+  "neogeo64": {
+    "logo": "/images/platforms/logos/neogeo64.webp"
+  },
+  "atarist": {
+    "system": "/images/platforms/systems/atarist.webp",
+    "logo": "/images/platforms/logos/atarist.webp"
+  },
+  "atari7800": {
+    "system": "/images/platforms/systems/atari7800.webp",
+    "logo": "/images/platforms/logos/atari7800.webp"
+  },
+  "atari2600": {
+    "system": "/images/platforms/systems/atari2600.webp",
+    "logo": "/images/platforms/logos/atari2600.webp"
+  },
+  "atari5200": {
+    "system": "/images/platforms/systems/atari5200.webp",
+    "logo": "/images/platforms/logos/atari5200.webp"
+  },
+  "atari800": {
+    "system": "/images/platforms/systems/atari800.webp",
+    "logo": "/images/platforms/logos/atari800.webp"
+  },
+  "corsixth": {
+    "logo": "/images/platforms/logos/corsixth.webp"
+  }
+}

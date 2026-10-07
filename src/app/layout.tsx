@@ -8,49 +8,41 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 
 export const metadata: Metadata = {
-    metadataBase: new URL('https://www.riescade.com.br'),
-	title: 'RIESCADE Platform - Mais de 250 Plataformas de Retrogames',
+	metadataBase: new URL('https://www.riescade.com.br'),
+	title: {
+		default: 'RIESCADE OS — Central de jogos retrô e emuladores para PC',
+		template: '%s | RIESCADE',
+	},
 	description:
-		'Acesso à mais de 250 plataformas de games, consoles e arcades clássicos em um único lugar. RIESCADE™ RetroGames e Games, sempre emulando...',
-	keywords: [
-		'retrogames',
-		'arcade',
-		'emulador',
-		'jogos clássicos',
-		'jogos retro',
-		'Nintendo',
-		'PlayStation',
-		'Atari',
-		'SEGA',
-	],
+		'Transforme seu PC em uma central de jogos: mais de 250 consoles, arcades e computadores clássicos com emuladores, BIOS e downloads integrados. Para Windows.',
+	applicationName: 'RIESCADE OS',
 	authors: [{ name: 'RIESCADE', url: 'https://www.riescade.com.br' }],
 	creator: 'RIESCADE',
 	publisher: 'RIESCADE',
-	robots: 'index, follow',
+	robots: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1 },
 	openGraph: {
 		type: 'website',
 		locale: 'pt_BR',
 		url: 'https://www.riescade.com.br',
-		siteName: 'RIESCADE Platform',
-		title: 'RIESCADE - A Maior Plataforma de Retrogames do Brasil',
+		siteName: 'RIESCADE',
+		title: 'RIESCADE OS — Central de jogos retrô e emuladores para PC',
 		description:
-			'Acesso à mais de 250 plataformas de games, consoles e arcades clássicos em um único lugar.',
+			'Mais de 250 consoles, arcades e computadores clássicos em uma única central de jogos para Windows.',
 		images: [
 			{
-				url: 'https://www.riescade.com.br/images/og-image.webp',
+				url: '/images/og-image.webp',
 				width: 1200,
 				height: 630,
-				alt: 'RIESCADE Platform',
+				alt: 'RIESCADE OS',
 			},
 		],
 	},
 	twitter: {
 		card: 'summary_large_image',
-		title: 'RIESCADE - A Maior Plataforma de Retrogames do Brasil',
-		description: 'Acesso à mais de 250 plataformas de games em um único lugar.',
-		images: ['https://www.riescade.com.br/images/og-image.webp'],
+		title: 'RIESCADE OS — Central de jogos retrô e emuladores para PC',
+		description: 'Mais de 250 consoles, arcades e computadores clássicos em uma única central de jogos para Windows.',
+		images: ['/images/og-image.webp'],
 	},
-
 };
 
 export default function RootLayout({
@@ -61,12 +53,6 @@ export default function RootLayout({
 	return (
 		<html lang="pt-BR">
 			<head>
-				{/* GOOGLE ADS */}
-				<script
-					async
-					src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9318454482729602"
-					crossOrigin="anonymous"
-				></script>
 				<meta
 					name="google-adsense-account"
 					content="ca-pub-9318454482729602"

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
+import { withLocalCover } from "@/lib/blog-covers";
 
 interface BlogPost {
   id: string;
@@ -37,7 +38,7 @@ export default function BlogPostsPreview() {
           return;
         }
 
-        setPosts(data || []);
+        setPosts((data || []).map(withLocalCover));
       } catch (error) {
         console.error("Erro ao buscar posts:", error);
       } finally {

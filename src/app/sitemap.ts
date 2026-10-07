@@ -1,47 +1,38 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 import { getBlogPosts } from "@/lib/blog-service";
-import { BlogPost } from "@/types/blog";
+import { PLATFORMS } from "@/lib/platforms";
+
+const SITE_URL = "https://www.riescade.com.br";
+
+export const revalidate = 3600;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  // Obter todos os posts do blog
-  const { data: blogPosts } = await getBlogPosts({ limit: 1000 });
+  const { data: posts } = await getBlogPosts({ limit: 5000 });
+  const latestPost = posts[0]?.updated_at || posts[0]?.published_at || undefined;
 
-  // Criar entradas para cada post do blog
-  const blogEntries = blogPosts.map((post: BlogPost) => ({
-    url: `https://www.riescade.com.br/blog/${post.slug}`,
-    lastModified:
-      post.updated_at || post.published_at || new Date().toISOString(),
-    changeFrequency: "weekly" as const,
+  const pages: MetadataRoute.Sitemap = [
+    { url: SITE_URL, changeFrequency: "weekly", priority: 1 },
+    { url: `${SITE_URL}/platforms`, changeFrequency: "weekly", priority: 0.9 },
+    { url: `${SITE_URL}/tutorial`, changeFrequency: "monthly", priority: 0.8 },
+    { url: `${SITE_URL}/blog`, lastModified: latestPost, changeFrequency: "daily", priority: 0.8 },
+    { url: `${SITE_URL}/termos`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE_URL}/politica`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${SITE_URL}/app-data`, changeFrequency: "yearly", priority: 0.1 },
+  ];
+
+  const platforms: MetadataRoute.Sitemap = PLATFORMS.filter((p) => p.indexable).map((p) => ({
+    url: `${SITE_URL}/platforms/${p.slug}`,
+    changeFrequency: "monthly",
     priority: 0.8,
   }));
 
-  // Excluir explicitamente caminhos de imagens opengraph
-  const filteredEntries = blogEntries.filter(
-    (entry) => !entry.url.includes("opengraph-image")
-  );
+  const articles: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${SITE_URL}/blog/${post.slug}`,
+    lastModified: post.updated_at || post.published_at || undefined,
+    changeFrequency: "monthly",
+    priority: 0.6,
+    images: post.cover_image?.startsWith("/") ? [`${SITE_URL}${post.cover_image}`] : undefined,
+  }));
 
-  // Outras páginas do site
-  const routes = [
-    {
-      url: "https://www.riescade.com.br",
-      lastModified: new Date().toISOString(),
-      changeFrequency: "daily" as const,
-      priority: 1,
-    },
-    {
-      url: "https://www.riescade.com.br/blog",
-      lastModified: new Date().toISOString(),
-      changeFrequency: "daily" as const,
-      priority: 0.9,
-    },
-    {
-      url: "https://www.riescade.com.br/sobre",
-      lastModified: new Date().toISOString(),
-      changeFrequency: "monthly" as const,
-      priority: 0.7,
-    },
-    // Adicione outras páginas importantes do seu site
-  ];
-
-  return [...routes, ...filteredEntries];
+  return [...pages, ...platforms, ...articles];
 }

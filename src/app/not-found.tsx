@@ -2,6 +2,12 @@ import Link from 'next/link';
 import { Header } from '@/components/Header';
 import Footer from '@/components/Footer';
 import { PageIntro } from '@/components/PageIntro';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Página não encontrada',
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (

@@ -11,8 +11,17 @@ import Footer from "@/components/Footer";
 import { PostCard, formatPostDate } from "@/components/blog/PostCard";
 import { PostViewTracker } from "@/components/blog/PostViewTracker";
 import styles from "@/styles/markdown.module.css";
+import { PLATFORMS } from "@/lib/platforms";
+import { insertReadAlso, linkPlatformMentions } from "@/lib/blog-links";
+
+const LINKABLE_PLATFORMS = new Set(PLATFORMS.filter((p) => p.indexable).map((p) => p.slug));
 
 export const revalidate = 3600;
+
+// Posts are rendered on first request and then cached (ISR) instead of on every visit.
+export function generateStaticParams() {
+  return [];
+}
 
 const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ||
@@ -29,7 +38,8 @@ export default async function BlogPostPage({
   const post = await getBlogPostBySlug(slug);
   if (!post) notFound();
 
-  const relatedPosts = await getRelatedPosts(post, 3);
+  const [readAlso, ...relatedPosts] = await getRelatedPosts(post, 4);
+  const content = insertReadAlso(linkPlatformMentions(post.content, LINKABLE_PLATFORMS), readAlso);
   const url = `${SITE_URL}/blog/${post.slug}`;
   const shareLinks = [
     { label: "WhatsApp", icon: faWhatsapp, href: `https://api.whatsapp.com/send?text=${encodeURIComponent(`${post.title} - ${url}`)}` },
@@ -124,7 +134,7 @@ export default async function BlogPostPage({
 
         {/* CONTEÚDO */}
         <article className={`mx-auto mt-12 max-w-[720px] px-6 ${styles.markdown}`}>
-          {parse(post.content)}
+          {parse(content)}
         </article>
 
         <div className="mx-auto mt-14 max-w-[720px] space-y-10 px-6">
