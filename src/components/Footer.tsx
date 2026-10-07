@@ -34,7 +34,6 @@ export default function Footer() {
           <div className="mb-8 md:mb-0">
             <h4 className="text-lg font-display font-semibold mb-4 uppercase">Explore a RIESCADE</h4>
             <div className="flex flex-col space-y-3 text-sm">
-              <Link href="/platforms" className="text-muted-foreground hover:text-primary">Plataformas</Link>
               <Link href="/blog" className="text-muted-foreground hover:text-primary">Blog</Link>
               <Link href="/tutorial" className="text-muted-foreground hover:text-primary">Instalação e suporte</Link>
               <Link href="/app-politica" className="text-muted-foreground hover:text-primary">Privacidade do Quiz Gamer</Link>

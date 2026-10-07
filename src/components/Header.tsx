@@ -132,12 +132,6 @@ export function Header() {
               <ChevronDown className="h-3.5 w-3.5" />
             </Link>
             <Link
-              href="/platforms"
-              className="text-sm text-muted-foreground transition-colors hover:text-primary"
-            >
-              Plataformas
-            </Link>
-            <Link
               href="/blog"
               className="text-sm text-muted-foreground transition-colors hover:text-primary"
             >
@@ -232,13 +226,6 @@ export function Header() {
                 onClick={handleLinkClick}
               >
                 Recursos
-              </Link>
-              <Link
-                href="/platforms"
-                className="text-muted-foreground hover:text-primary transition-colors py-2 border-b border-border"
-                onClick={handleLinkClick}
-              >
-                Plataformas
               </Link>
               <Link
                 href="/blog"

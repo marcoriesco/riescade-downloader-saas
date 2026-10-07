@@ -1,109 +1,110 @@
+/* Reading typography for blog post HTML (h2, h3, p, ul/ol, strong, em, ...). */
 .markdown {
-  @apply text-foreground/80;
+  @apply text-[1.0625rem] leading-[1.85] text-foreground/80;
 }
 
-/* Styling for automatic platform links */
-.platformLink,
-.markdown :global(.platform-link) {
-  @apply text-primary font-semibold relative inline-block;
-  text-decoration: none;
-  background-image: linear-gradient(
-    to right,
-    rgba(255, 8, 132, 0.2),
-    rgba(255, 8, 132, 0.2)
-  );
-  background-position: 0 100%;
-  background-repeat: no-repeat;
-  background-size: 100% 1px;
-  transition: background-size 0.2s, color 0.2s;
+.markdown > :first-child {
+  @apply mt-0;
 }
 
-.markdown :global(.platform-link:hover),
-.platformLink:hover {
-  @apply text-[#ff6eb7];
-  background-size: 100% 40%;
-}
-
-.markdown h1 {
-  @apply text-4xl md:text-5xl font-bold mb-6 mt-12 relative pl-3 border-l-4 border-primary;
-}
-
+.markdown h1,
 .markdown h2 {
-  @apply text-3xl md:text-4xl font-bold mb-5 mt-10 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  @apply mb-5 mt-14 font-display text-2xl font-bold uppercase leading-tight tracking-tight text-foreground md:text-3xl;
+}
+
+.markdown h2::before {
+  content: "";
+  @apply mb-4 block h-1 w-10 rounded-full bg-primary;
 }
 
 .markdown h3 {
-  @apply text-2xl md:text-3xl font-bold mb-4 mt-8 text-white;
+  @apply mb-4 mt-10 font-display text-xl font-bold leading-snug text-foreground md:text-2xl;
 }
 
 .markdown h4 {
-  @apply text-xl md:text-2xl font-bold mb-3 mt-6 text-gray-100;
+  @apply mb-3 mt-8 font-display text-lg font-bold text-foreground;
 }
 
 .markdown p {
-  @apply mb-6 leading-relaxed;
+  @apply mb-6;
 }
 
-.markdown ul {
-  @apply list-disc pl-6 mb-6 space-y-2;
+.markdown strong {
+  @apply font-semibold text-foreground;
 }
 
-.markdown ol {
-  @apply list-decimal pl-6 mb-6 space-y-2;
+.markdown em {
+  @apply text-foreground/90;
 }
 
 .markdown a {
-  @apply text-primary hover:underline;
+  @apply font-medium text-primary underline decoration-primary/40 underline-offset-4 transition-colors hover:text-accent hover:decoration-accent;
+}
+
+.markdown ul,
+.markdown ol {
+  @apply mb-8 space-y-3 pl-0;
+}
+
+.markdown ul > li {
+  @apply relative list-none pl-7;
+}
+
+.markdown ul > li::before {
+  content: "";
+  @apply absolute left-1 top-[0.7em] size-2 rotate-45 rounded-[2px] bg-primary;
+}
+
+.markdown ol {
+  counter-reset: item;
+}
+
+.markdown ol > li {
+  @apply relative list-none pl-10;
+  counter-increment: item;
+}
+
+.markdown ol > li::before {
+  content: counter(item);
+  @apply absolute left-0 top-[0.15em] flex size-7 items-center justify-center rounded-lg border border-primary/40 bg-primary/10 font-mono text-xs font-bold text-primary;
 }
 
 .markdown blockquote {
-  @apply border-l-4 border-primary/50 pl-4 py-2 my-6 bg-gray-800/50 rounded-r-lg;
+  @apply my-10 rounded-r-2xl border-l-4 border-primary bg-primary/[0.06] px-6 py-5 text-lg italic text-foreground/90;
+}
+
+.markdown blockquote p:last-child {
+  @apply mb-0;
 }
 
 .markdown img {
-  @apply rounded-lg shadow-lg my-8 max-w-full h-auto;
+  @apply my-10 h-auto max-w-full rounded-2xl border border-white/10;
 }
 
-.codeBlock {
-  @apply my-8 rounded-lg overflow-auto relative;
-  background-color: rgb(40, 44, 52);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+.markdown hr {
+  @apply my-12 border-t border-border;
 }
 
-.codeHeader {
-  @apply flex justify-between items-center px-4 py-2 font-mono text-sm font-medium text-foreground/80 border-b border-gray-700;
-  background-color: rgb(30, 34, 42);
+.markdown code {
+  @apply rounded-md border border-border bg-black/40 px-1.5 py-0.5 font-mono text-[0.85em] text-foreground;
 }
 
-.codeContent {
-  @apply p-4 overflow-x-auto;
+.markdown pre {
+  @apply my-8 overflow-x-auto rounded-2xl border border-border bg-black/50 p-5 text-sm;
 }
 
-.codeContent code {
-  @apply font-mono text-sm;
-  color: #e6e6e6;
+.markdown pre code {
+  @apply border-0 bg-transparent p-0;
 }
 
-.table {
-  @apply min-w-full border-collapse my-6;
+.markdown table {
+  @apply my-8 w-full border-collapse text-sm;
 }
 
-.table th {
-  @apply bg-gray-800 text-left px-4 py-2 border border-gray-700;
+.markdown th {
+  @apply border-b border-primary/40 px-4 py-3 text-left font-display font-bold uppercase text-foreground;
 }
 
-.table td {
-  @apply px-4 py-2 border border-gray-700;
-}
-
-.hr {
-  @apply my-8 border-t border-gray-700;
-}
-
-.kbd {
-  @apply px-2 py-1 text-xs font-semibold text-gray-900 bg-gray-100 border border-gray-200 rounded-lg;
-}
-
-.codeInline {
-  @apply px-2 py-1 text-sm font-mono bg-gray-800 rounded text-gray-200;
+.markdown td {
+  @apply border-b border-border px-4 py-3;
 }

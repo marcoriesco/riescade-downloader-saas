@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
-import { Star } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 
 import "swiper/css";
 import "swiper/css/navigation";
@@ -92,7 +92,8 @@ export function GoogleReviews({
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={30}
-        navigation
+        // Swiper's default arrows use a data: icon font that the site CSP blocks.
+        navigation={{ prevEl: ".reviews-prev", nextEl: ".reviews-next" }}
         pagination={{ clickable: true }}
         autoplay={
           autoplay ? { delay: 5000, disableOnInteraction: false } : false
@@ -136,25 +137,22 @@ export function GoogleReviews({
         ))}
       </Swiper>
 
+      <button
+        type="button"
+        aria-label="Depoimento anterior"
+        className="reviews-prev absolute left-1 top-32 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-xl border border-primary/40 bg-background/90 text-primary backdrop-blur-sm transition-colors hover:border-primary hover:bg-primary hover:text-white lg:-left-12"
+      >
+        <ChevronLeft className="size-5" />
+      </button>
+      <button
+        type="button"
+        aria-label="Próximo depoimento"
+        className="reviews-next absolute right-1 top-32 z-10 flex size-11 -translate-y-1/2 items-center justify-center rounded-xl border border-primary/40 bg-background/90 text-primary backdrop-blur-sm transition-colors hover:border-primary hover:bg-primary hover:text-white lg:-right-12"
+      >
+        <ChevronRight className="size-5" />
+      </button>
+
       <style jsx global>{`
-        .swiper-button-next,
-        .swiper-button-prev {
-          color: hsl(var(--primary)) !important;
-          background: rgba(0, 0, 0, 0.3);
-          width: 40px !important;
-          height: 40px !important;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .swiper-button-next:after,
-        .swiper-button-prev:after {
-          font-size: 18px !important;
-          font-weight: bold;
-        }
-
         .swiper-pagination-bullet {
           background: hsl(var(--muted-foreground));
           opacity: 0.7;
