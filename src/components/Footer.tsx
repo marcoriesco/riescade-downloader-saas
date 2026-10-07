@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer className="relative bg-background text-foreground py-12 border-t border-border z-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_1fr_1.4fr]">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:items-center">
           <div className="mb-8 md:mb-0">
             <div className="flex items-center space-x-2">
               <Image
@@ -30,37 +30,9 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Links Legais */}
-          <div className="mb-8 md:mb-0">
-            <h4 className="text-lg font-display font-semibold mb-4 uppercase">Explore a RIESCADE</h4>
-            <div className="flex flex-col space-y-3 text-sm">
-              <Link href="/blog" className="text-muted-foreground hover:text-primary">Blog</Link>
-              <Link href="/tutorial" className="text-muted-foreground hover:text-primary">Instalação e suporte</Link>
-              <Link href="/app-politica" className="text-muted-foreground hover:text-primary">Privacidade do Quiz Gamer</Link>
-              <Link
-                href="/politica"
-                className="text-muted-foreground hover:text-primary transition-colors duration-200"
-              >
-                Política de Privacidade
-              </Link>
-              <Link
-                href="/termos"
-                className="text-muted-foreground hover:text-primary transition-colors duration-200"
-              >
-                Termos e Condições
-              </Link>
-              <Link
-                href="/app-data"
-                className="text-muted-foreground hover:text-primary transition-colors duration-200"
-              >
-                Exclusão de Dados
-              </Link>
-            </div>
-          </div>
-
           {/* Redes Sociais */}
-          <div className="mt-8 flex flex-col space-y-4">
-            <div className="flex flex-wrap gap-x-5 gap-y-4">
+          <div className="flex flex-col space-y-4 lg:items-end">
+            <div className="flex flex-wrap gap-x-5 gap-y-4 lg:justify-end">
               <Link
                 href="https://t.me/riescade"
                 className="flex items-center text-muted-foreground hover:text-primary transition-colors duration-200"
@@ -136,6 +108,21 @@ export default function Footer() {
               </Link>
             </div>
           </div>
+        </div>
+
+        <div className="mt-10 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+          <p>© {new Date().getFullYear()} RIESCADE. Todos os direitos reservados.</p>
+          <nav aria-label="Links legais" className="flex flex-wrap gap-x-4 gap-y-2">
+            {[
+              ["/politica", "Privacidade"],
+              ["/termos", "Termos"],
+              ["/app-data", "Exclusão de dados"],
+            ].map(([href, label]) => (
+              <Link key={href} href={href} className="transition-colors hover:text-primary">
+                {label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
     </footer>
