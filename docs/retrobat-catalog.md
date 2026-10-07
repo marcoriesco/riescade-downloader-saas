@@ -1,3 +1,12 @@
+# Comando unico para catalogos e releases
+
+Na instalacao de desenvolvimento do RetroBat, execute `Atualizar-RetroBat.cmd` na raiz.
+Ele sincroniza o Drive, publica o site, confere o catalogo online, atualiza as copias
+locais e cria/envia/publica as duas releases. Nao e necessario executar os auxiliares
+separadamente. O fluxo interrompe as etapas seguintes se uma verificacao falhar.
+
+As instrucoes abaixo descrevem os auxiliares para desenvolvimento e diagnostico.
+
 # Catálogo para RetroBat
 
 `npm run sync-google-drive` sincroniza o índice do Drive e depois exporta todas

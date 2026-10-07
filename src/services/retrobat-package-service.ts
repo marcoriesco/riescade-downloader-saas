@@ -5,7 +5,7 @@ import {
   type GoogleDriveFile,
 } from "@/services/google-drive-service";
 
-// Created by Criar-Release.ps1 in the RIESCADE RetroBat installation.
+// Published by Atualizar-RetroBat.cmd in the RIESCADE RetroBat installation.
 const PACKAGE_PATTERN = /^RIESCADE-RetroBat-(\d+)\.(\d+)\.(\d+)\.7z$/;
 
 export interface RetroBatPackage {
