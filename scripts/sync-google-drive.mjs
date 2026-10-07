@@ -1,6 +1,6 @@
 import { spawn } from "node:child_process";
 import dotenv from "dotenv";
-import { mkdir, writeFile, rename, rm } from "node:fs/promises";
+import { mkdir, readFile, writeFile, rename, rm } from "node:fs/promises";
 import { resolve, dirname } from "node:path";
 
 dotenv.config({ path: ".env.local" });
@@ -101,11 +101,17 @@ try {
   const catalog=await exported.json();
   if(catalog.schema_version!==1 || !Array.isArray(catalog.assets) || catalog.total!==catalog.assets.length)throw new Error("Invalid exported catalog");
   const destination=resolve("public/catalogs/retrobat.json");
+  const serialized=JSON.stringify(catalog);
+  const previous=await readFile(destination,"utf8").catch(error=>{if(error.code==="ENOENT")return null;throw error;});
+  if(previous===serialized){
+    console.log(`RetroBat catalog unchanged: ${catalog.total} games. Existing file preserved.`);
+  }else{
   const temporary=`${destination}.${process.pid}.tmp`;
   await mkdir(dirname(destination),{recursive:true});
-  try {await writeFile(temporary,JSON.stringify(catalog));await rename(temporary,destination);}
+  try {await writeFile(temporary,serialized);await rename(temporary,destination);}
   finally {await rm(temporary,{force:true});}
   console.log(`RetroBat catalog: ${catalog.total} games, ${catalog.platforms.length} systems. Saved to ${destination}`);
+  }
 } finally {
   await stopServer();
 }

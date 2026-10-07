@@ -12,6 +12,7 @@ export function buildRetrobatCatalog(rows: CatalogRow[], platforms: {id:string;e
     const name=row.filename;
     const extension=name.slice(name.lastIndexOf(".")).toLowerCase();
     return /^[a-f0-9]{64}$/i.test(row.id) && row.platform && supported.has(row.platform)
+      && (row.platform!=="ps5" || extension===".zar")
       && (isExtractPackage(name) || supported.get(row.platform)!.has(extension))
       && !/[\x00-\x1f<>:"/\\|?*]/.test(name) && !/[. ]$/.test(name)
       && !/^(con|prn|aux|nul|com[1-9]|lpt[1-9])\./i.test(name)

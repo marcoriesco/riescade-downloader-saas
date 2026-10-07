@@ -32,3 +32,10 @@ e reutiliza o pacote/preparação nos próximos jogos desse sistema.
 Se o comando for executado em uma máquina de desenvolvimento, publique o
 arquivo gerado junto com o site para atualizar a URL de produção. O comando
 não publica nem faz deploy automaticamente.
+
+Abrir o RetroBat apenas consulta o catálogo publicado ou reutiliza o cache local.
+A geração no projeto do site ocorre pelo comando de sincronização; se o conteúdo
+exportado for idêntico, o arquivo existente não é regravado.
+PS5 exporta somente arquivos `.zar`, com install_mode=file e launch_path igual
+ao nome do download. O cliente renova caches antigos de PS5 e remove somente
+marcadores `.game` vazios ao preparar o `.zar` correspondente.

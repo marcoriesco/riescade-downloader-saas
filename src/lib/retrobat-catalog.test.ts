@@ -4,6 +4,12 @@ import extractPaths from "./retrobat-extract-paths.json";
 const row:CatalogRow={id:"a".repeat(64),platform:"snes",filename:"Mario.zip",title:"Mario",file_size:3,md5_checksum:"b".repeat(32)};
 const platforms=[{id:"snes",extensions:[".zip"]},{id:"nes",extensions:[".nes"]}];
 describe("RetroBat marker snapshot",()=>{
+  it("exports PS5 only as direct ZAR files",()=>{
+    const rows=["Test.zar","Old.game","Old.extract.zip"].map((filename,index)=>({...row,id:index.toString(16).padStart(64,"0"),platform:"ps5",filename}));
+    const result=buildRetrobatCatalog(rows,[{id:"ps5",extensions:[".game",".zar",".zip"]}]);
+    expect(result.assets).toHaveLength(1);
+    expect(result.assets[0]).toMatchObject({download_name:"Test.zar",launch_path:"Test.zar",install_mode:"file"});
+  });
   it("uses all verified Lindbergh paths and rejects outdated package mappings",()=>{
     const rows=Object.entries(extractPaths).map(([key,value],index)=>({...row,id:index.toString(16).padStart(64,"0"),platform:"lindbergh",filename:key.split("/")[1],file_size:value.file_size,md5_checksum:value.md5}));
     const result=buildRetrobatCatalog(rows,[{id:"lindbergh",extensions:[".game"]}]);
