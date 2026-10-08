@@ -42,7 +42,7 @@ beforeAll(async () => {
     create schema auth; create table auth.users(id uuid primary key);
     create schema storage; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
     insert into auth.users values('${A}'),('${B}'),('${C}');`);
-  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql','20261003040342_online_profile_identity.sql','20261003194522_invitation_history_feedback.sql','20261008005302_direct_retroarch_invites.sql']) {
+  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql','20261003040342_online_profile_identity.sql','20261003194522_invitation_history_feedback.sql','20261008005302_direct_retroarch_invites.sql','20261008014207_retroarch_lobby_invites.sql']) {
     await db.exec(readFileSync(resolve('supabase/migrations',filename),'utf8'));
   }
 },30000);
@@ -340,7 +340,7 @@ describe('invitation history feedback', () => {
   });
 });
 
-it("rejects relay sessions and weak or missing passwords at the database boundary", async () => {
+it("rejects obsolete relay sessions and weak or missing passwords at the database boundary", async () => {
   for (const connection of [
     { host: "relay.example", port: 55435, session: "a".repeat(16) },
     { host: "203.0.113.10", port: 55435, transport: "direct" },
@@ -361,4 +361,18 @@ it("rejects relay sessions and weak or missing passwords at the database boundar
       ]),
     ).rejects.toThrow("SOCIAL_INVALID_REQUEST");
   }
+});
+
+it('protects native relay credentials until the recipient accepts',async()=>{
+ const sessionId=randomUUID();const connection={host:'203.0.113.10',port:55435,transport:'retroarch-relay',session:'abcdefghijklmnop',roomId:'42',password:'d'.repeat(48)};
+ await scalar('public.social_publish_hosted_session($1,$2,$3,$4,$5)',[A,sessionId,game,connection,false]);
+ const descriptor={...game,hosted_session_id:sessionId};
+ const id=await invite(A,B,randomUUID(),descriptor);
+ await expect(scalar('public.social_hosted_invitation_connection($1,$2)',[B,id])).rejects.toThrow('SOCIAL_UNAVAILABLE');
+ expect(JSON.stringify(await snapshot(B))).not.toContain(connection.password);
+ await respond(B,id,'accept');
+ expect(await scalar('public.social_hosted_invitation_connection($1,$2)',[B,id])).toEqual(connection);
+ await expect(scalar('public.social_hosted_invitation_connection($1,$2)',[C,id])).rejects.toThrow('SOCIAL_UNAVAILABLE');
+ await scalar('public.social_publish_hosted_session($1,$2,$3,$4,$5)',[A,sessionId,null,null,true]);
+ await expect(scalar('public.social_hosted_invitation_connection($1,$2)',[B,id])).rejects.toThrow('SOCIAL_UNAVAILABLE');
 });

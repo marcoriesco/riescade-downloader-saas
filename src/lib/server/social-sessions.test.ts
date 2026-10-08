@@ -53,7 +53,7 @@ describe("social session input projection", () => {
 
 import { hostedSession, hostedConnection } from "./social-sessions";
 import type { SupabaseClient } from "@supabase/supabase-js";
-it("publishes only direct sessions with automatic credentials", async () => {
+it("publishes native RetroArch sessions with automatic credentials", async () => {
   const game = {
     title: "Test",
     system: "nes",
@@ -91,7 +91,11 @@ it("publishes only direct sessions with automatic credentials", async () => {
   ])
     await expect(
       hostedSession(db, id, { sessionId: id, game, connection: bad }),
-    ).rejects.toThrow("direta");
+    ).rejects.toThrow("RetroArch");
+  const relay = { ...connection, transport: "retroarch-relay", session: "abcdefghijklmnop", roomId: "42" };
+  await hostedSession(db,id,{sessionId:id,game,connection:relay});
+  expect(args?.p_connection).toEqual({host:relay.host,port:relay.port,transport:relay.transport,password:relay.password,session:relay.session,roomId:relay.roomId});
+  for(const session of [undefined,"short","abcdefghijklmnop;--"]) await expect(hostedSession(db,id,{sessionId:id,game,connection:{...relay,session}})).rejects.toThrow("RetroArch");
   const oldDb = {
     rpc: async () => ({ data: { host: "old", session: "old" }, error: null }),
   } as unknown as SupabaseClient;

@@ -121,25 +121,28 @@ export async function hostedSession(
   if (
     body.close !== true &&
     (!raw ||
-      raw.transport !== "direct" ||
+      !["direct", "retroarch-relay"].includes(String(raw.transport)) ||
       typeof raw.host !== "string" ||
       !/^[A-Za-z0-9.-]{1,255}$/.test(raw.host) ||
       !Number.isInteger(raw.port) ||
       Number(raw.port) < 1 ||
       Number(raw.port) > 65535 ||
-      raw.session !== undefined ||
+      (raw.transport === "direct" ? raw.session !== undefined : typeof raw.session !== "string" || !/^[A-Za-z0-9+/]{16}$/.test(raw.session)) ||
+      (raw.roomId !== undefined && (typeof raw.roomId !== "string" || !/^[A-Za-z0-9_-]{1,128}$/.test(raw.roomId))) ||
       typeof raw.password !== "string" ||
       !/^[a-f0-9]{48}$/.test(raw.password))
   )
-    throw new AppApiError(400, "Sala direta inválida.");
+    throw new AppApiError(400, "Sala do RetroArch inválida.");
   const connection =
     body.close === true
       ? null
       : {
           host: raw!.host,
           port: raw!.port,
-          transport: "direct",
+          transport: raw!.transport,
           password: raw!.password,
+          ...(raw!.roomId ? { roomId: raw!.roomId } : {}),
+          ...(raw!.transport === "retroarch-relay" ? { session: raw!.session } : {}),
         };
   const { data, error } = await db.rpc("social_publish_hosted_session", {
     p_actor: actor,
@@ -161,7 +164,7 @@ export async function hostedConnection(
     p_invitation: validateUuid(body.invitationId),
   });
   checkDatabaseError(error);
-  if (!data || data.transport !== "direct" || data.session)
+  if (!data || !["direct", "retroarch-relay"].includes(data.transport) || (data.transport === "retroarch-relay" ? !/^[A-Za-z0-9+/]{16}$/.test(data.session || "") : data.session))
     throw new AppApiError(
       410,
       "Esta sala é de uma versão antiga. Peça um novo convite.",
