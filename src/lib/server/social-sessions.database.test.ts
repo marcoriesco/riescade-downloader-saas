@@ -24,8 +24,8 @@ interface SessionSnapshot {
 interface HostedConnection {
   host: string;
   port: number;
-  session: string;
-  password?: string;
+  transport: 'direct';
+  password: string;
 }
 let db: PGlite;
 async function scalar<T>(sql: string, parameters: unknown[]): Promise<T> {
@@ -42,7 +42,7 @@ beforeAll(async () => {
     create schema auth; create table auth.users(id uuid primary key);
     create schema storage; create table storage.buckets(id text primary key,name text,public boolean,file_size_limit bigint,allowed_mime_types text[]);
     insert into auth.users values('${A}'),('${B}'),('${C}');`);
-  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql','20261003040342_online_profile_identity.sql','20261003194522_invitation_history_feedback.sql']) {
+  for (const filename of ['20261001160000_add_riescade_friends.sql','20261001165952_add_social_presence_and_invitations.sql','20261001175531_add_private_room_runtime.sql','20261002221636_generalize_private_retroarch_rooms.sql','20261002231910_improve_game_invitations.sql','20261003032040_dismiss_ended_game_invitations.sql','20261003033219_add_invitation_timestamps.sql','20261003040342_online_profile_identity.sql','20261003194522_invitation_history_feedback.sql','20261008005302_direct_retroarch_invites.sql']) {
     await db.exec(readFileSync(resolve('supabase/migrations',filename),'utf8'));
   }
 },30000);
@@ -222,7 +222,7 @@ it('records invitation outcomes without delivering completed invitations',async(
 });
 
 it('existing host invitations reuse the host without creating a second private room',async()=>{
- const session=randomUUID();const connection={host:'relay.example',port:55435,session:'a'.repeat(16),password:'secret'};
+ const session=randomUUID();const connection={host:'203.0.113.10',port:55435,transport:'direct',password:'a'.repeat(48)};
  await scalar('public.social_publish_hosted_session($1,$2,$3,$4,$5)',[A,session,game,connection,false]);
  const id=await invite(A,B,randomUUID(),{...game,hosted_session_id:session} as typeof game);
  expect(await respond(B,id,'accept')).toEqual({status:'accepted',room_id:null});
@@ -238,7 +238,7 @@ it('existing host invitations reuse the host without creating a second private r
  expect((await snapshot(B)).invitation_history[0].phase).toBe('ended');
 });
 it('an existing-session invite cannot impersonate another host or change its game',async()=>{
- const session=randomUUID();await scalar('public.social_publish_hosted_session($1,$2,$3,$4,$5)',[A,session,game,{host:'relay.example',port:55435,session:'a'.repeat(16)},false]);
+ const session=randomUUID();await scalar('public.social_publish_hosted_session($1,$2,$3,$4,$5)',[A,session,game,{host:'203.0.113.10',port:55435,transport:'direct',password:'a'.repeat(48)},false]);
  await expect(invite(B,A,randomUUID(),{...game,hosted_session_id:session} as typeof game)).rejects.toThrow('SOCIAL_UNAVAILABLE');
  await expect(invite(A,B,randomUUID(),{...game,title:'Other',hosted_session_id:session} as typeof game)).rejects.toThrow('SOCIAL_UNAVAILABLE');
 });
@@ -338,4 +338,27 @@ describe('invitation history feedback', () => {
     expect(item.progress).toContainEqual({actor_id:B,phase:'cancelled',message:null});
     await scalar('public.social_dismiss_invitation($1,$2)',[A,id]);
   });
+});
+
+it("rejects relay sessions and weak or missing passwords at the database boundary", async () => {
+  for (const connection of [
+    { host: "relay.example", port: 55435, session: "a".repeat(16) },
+    { host: "203.0.113.10", port: 55435, transport: "direct" },
+    {
+      host: "203.0.113.10",
+      port: 55435,
+      transport: "direct",
+      password: "short",
+    },
+  ]) {
+    await expect(
+      scalar("public.social_publish_hosted_session($1,$2,$3,$4,$5)", [
+        A,
+        randomUUID(),
+        game,
+        connection,
+        false,
+      ]),
+    ).rejects.toThrow("SOCIAL_INVALID_REQUEST");
+  }
 });

@@ -42,7 +42,7 @@ it('does not expose internal session errors', async () => {
 });
 
 it('existing-host credentials use the authenticated recipient and are never cached',async()=>{
- mocks.hostedConnection.mockResolvedValue({host:'relay.example',port:55435,session:'abcdefghijklmnop',password:'secret'});
+ mocks.hostedConnection.mockResolvedValue({host:'203.0.113.10',port:55435,transport:'direct',password:'a'.repeat(48)});
  const body={action:'hosted-connection',invitationId:'id',actorId:'victim'};const response=await POST(request(body));
  expect(response.status).toBe(200);expect(response.headers.get('cache-control')).toBe('no-store');expect(mocks.hostedConnection).toHaveBeenCalledWith({},'real-actor',body);
 });

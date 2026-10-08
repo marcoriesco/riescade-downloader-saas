@@ -56,13 +56,24 @@ export async function setPresenceMode(db: SupabaseClient, actor: string, mode: u
   return { ok: true };
 }
 
-export async function createInvitation(db: SupabaseClient, actor: string, body: Record<string, unknown>) {
+export async function createInvitation(
+  db: SupabaseClient,
+  actor: string,
+  body: Record<string, unknown>,
+) {
   const code = validateFriendCode(body.targetCode);
   const requestId = validateUuid(body.requestId);
   const game = validateInvitationGame(body.game);
+  if (!game.hosted_session_id)
+    throw new AppApiError(400, "Crie uma sala direta antes de convidar.");
   await ensureSocialProfile(db, actor);
   const target = await profileByCode(db, code);
-  const { data, error } = await db.rpc("social_create_invitation", { p_actor: actor, p_target: target.user_id, p_request: requestId, p_game: game });
+  const { data, error } = await db.rpc("social_create_invitation", {
+    p_actor: actor,
+    p_target: target.user_id,
+    p_request: requestId,
+    p_game: game,
+  });
   checkDatabaseError(error);
   return { invitationId: data as string };
 }
@@ -99,16 +110,61 @@ export async function invitationProgress(db: SupabaseClient, actor: string, body
   const {error}=await db.rpc('social_set_invitation_progress',{p_actor:actor,p_invitation:validateUuid(body.invitationId),p_phase:body.phase,p_message:body.message || null});
   checkDatabaseError(error);return {ok:true};
 }
-export async function hostedSession(db: SupabaseClient,actor:string,body:Record<string,unknown>) {
-  const id=validateUuid(body.sessionId);
-  const game=body.close===true ? null : validateInvitationGame(body.game);
-  const raw=body.connection as Record<string,unknown>|undefined;
-  if(body.close!==true && (!raw || typeof raw.host!=='string' || !/^[A-Za-z0-9.-]{1,255}$/.test(raw.host) || !Number.isInteger(raw.port) || Number(raw.port)<1 || Number(raw.port)>65535 || typeof raw.session!=='string' || !/^[A-Za-z0-9+/]{16}$/.test(raw.session) || (raw.password!==undefined && (typeof raw.password!=='string' || raw.password.length>64 || /[\x00-\x1f\x7f]/.test(raw.password))))) throw new AppApiError(400,'Sala inválida.');
-  const connection=body.close===true ? null : {host:raw!.host,port:raw!.port,session:raw!.session,...(raw!.password ? {password:raw!.password}: {})};
-  const {data,error}=await db.rpc('social_publish_hosted_session',{p_actor:actor,p_id:id,p_game:game,p_connection:connection,p_close:body.close===true});
-  checkDatabaseError(error);return {sessionId:data};
+export async function hostedSession(
+  db: SupabaseClient,
+  actor: string,
+  body: Record<string, unknown>,
+) {
+  const id = validateUuid(body.sessionId);
+  const game = body.close === true ? null : validateInvitationGame(body.game);
+  const raw = body.connection as Record<string, unknown> | undefined;
+  if (
+    body.close !== true &&
+    (!raw ||
+      raw.transport !== "direct" ||
+      typeof raw.host !== "string" ||
+      !/^[A-Za-z0-9.-]{1,255}$/.test(raw.host) ||
+      !Number.isInteger(raw.port) ||
+      Number(raw.port) < 1 ||
+      Number(raw.port) > 65535 ||
+      raw.session !== undefined ||
+      typeof raw.password !== "string" ||
+      !/^[a-f0-9]{48}$/.test(raw.password))
+  )
+    throw new AppApiError(400, "Sala direta inválida.");
+  const connection =
+    body.close === true
+      ? null
+      : {
+          host: raw!.host,
+          port: raw!.port,
+          transport: "direct",
+          password: raw!.password,
+        };
+  const { data, error } = await db.rpc("social_publish_hosted_session", {
+    p_actor: actor,
+    p_id: id,
+    p_game: game,
+    p_connection: connection,
+    p_close: body.close === true,
+  });
+  checkDatabaseError(error);
+  return { sessionId: data };
 }
-export async function hostedConnection(db:SupabaseClient,actor:string,body:Record<string,unknown>) {
-  const {data,error}=await db.rpc('social_hosted_invitation_connection',{p_actor:actor,p_invitation:validateUuid(body.invitationId)});
-  checkDatabaseError(error);return data;
+export async function hostedConnection(
+  db: SupabaseClient,
+  actor: string,
+  body: Record<string, unknown>,
+) {
+  const { data, error } = await db.rpc("social_hosted_invitation_connection", {
+    p_actor: actor,
+    p_invitation: validateUuid(body.invitationId),
+  });
+  checkDatabaseError(error);
+  if (!data || data.transport !== "direct" || data.session)
+    throw new AppApiError(
+      410,
+      "Esta sala é de uma versão antiga. Peça um novo convite.",
+    );
+  return data;
 }
